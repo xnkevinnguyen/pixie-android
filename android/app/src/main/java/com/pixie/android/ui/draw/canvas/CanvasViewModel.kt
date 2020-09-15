@@ -6,6 +6,4 @@ import com.pixie.android.data.draw.DrawingParametersRepository
 class CanvasViewModel(private val drawingParametersRepository: DrawingParametersRepository) :
     ViewModel() {
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
-
-
 }
