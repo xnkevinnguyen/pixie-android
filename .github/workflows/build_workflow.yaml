@@ -19,8 +19,8 @@ jobs:
           with:
             java-version: 1.8
 
-	- name: Check Android Lint
-	  run: ./android/gradlew lint
+        - name: Check Android Lint
+          run: ./android/gradlew lint
 
         - name: Run Tests
           run: ./android/gradlew test
