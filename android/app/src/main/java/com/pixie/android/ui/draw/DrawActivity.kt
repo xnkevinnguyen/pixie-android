@@ -10,6 +10,7 @@ class DrawActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Instantiates CanvasFragment and DrawToolsFragment
+
         setContentView(R.layout.draw_activity)
     }
 
