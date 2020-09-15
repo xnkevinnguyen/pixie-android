@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/color_picker"
+        android:layout_width="227dp"
+        android:layout_height="261dp"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/holo_purple"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="184dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
