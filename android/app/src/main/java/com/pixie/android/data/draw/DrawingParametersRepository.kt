@@ -8,10 +8,16 @@ import java.util.*
 
 class DrawingParametersRepository {
 
+
+    // non persistent attribute
     private var primaryDrawingColor =
         MutableLiveData<Color>().apply { postValue(Color.valueOf(Color.BLACK)) }
-    private var drawCommandHistory = MutableLiveData<MutableList<DrawCommand>>()
-    private var undoneCommandList : Stack<DrawCommand> = Stack()
+    private var strokeWidth = MutableLiveData<Float>().apply { postValue(12F) }
+    private var cellWidthGrid = MutableLiveData<Int>().apply { postValue(25) }
+    private var erase = MutableLiveData<Boolean>().apply { postValue(false) }
+    private var grid = MutableLiveData<Boolean>().apply { postValue(false) }
+
+
 
     fun getPrimaryDrawingColor(): LiveData<Color> {
         return primaryDrawingColor;
@@ -21,48 +27,39 @@ class DrawingParametersRepository {
         primaryDrawingColor.postValue(newColor)
     }
 
-    fun getDrawCommandHistory(): LiveData<MutableList<DrawCommand>> {
-        return drawCommandHistory
+    fun getStrokeWidth(): LiveData<Float> {
+        return strokeWidth;
     }
 
-    fun popLastDrawCommandFromHistory() {
-        val count = drawCommandHistory.value?.count()
-        if (count != null && count >0) {
-            val commandToRemove = drawCommandHistory.value!!.removeAt(count - 1)
-            addUndoneCommand(commandToRemove)
-            drawCommandHistory.notifyObserver()
-        }
-    }
-    fun popUndoneCommand(){
-        if ( !undoneCommandList.empty()) {
-            val commandToRedo = undoneCommandList.pop()
-            addDrawCommand(commandToRedo)
-            drawCommandHistory.notifyObserver()
-        }
+    fun setCellWidthGrid(width: Int) {
+        cellWidthGrid.postValue(width)
     }
 
+    fun getCellWidthGrid(): LiveData<Int> {
+        return cellWidthGrid;
+    }
 
-    // Add Draw command should not notify the observer
-    fun addDrawCommand(drawCommand: DrawCommand) {
-        if (drawCommandHistory.value == null) {
-            drawCommandHistory.postValue(arrayListOf(drawCommand))
+    fun setStrokeWidth(size: Float) {
+        strokeWidth.postValue(size)
+    }
 
-        } else {
-            drawCommandHistory.value?.add(drawCommand)
-        }
+    fun getErase(): LiveData<Boolean> {
+        return erase;
+    }
+
+    fun setErase(useErase: Boolean) {
+        erase.postValue(useErase)
+    }
+
+    fun getGrid(): LiveData<Boolean> {
+        return grid;
+    }
+
+    fun setGrid(gridOn: Boolean) {
+        grid.postValue(gridOn)
 
     }
 
-    // Should not notify the observer
-    fun addUndoneCommand(command: DrawCommand) {
-        undoneCommandList.add(command)
-    }
-    // Restore undoneCommandList
-    fun restoreUndoneCommandList(){
-        if(! undoneCommandList.isNullOrEmpty()){
-            undoneCommandList.clear()
-        }
-    }
 
     // Singleton
     companion object {
@@ -75,9 +72,4 @@ class DrawingParametersRepository {
         }
     }
 
-    // Function to make sure observer is notified when a data structure is modified
-    // https://stackoverflow.com/questions/47941537/notify-observer-when-item-is-added-to-list-of-livedata
-    fun <T> MutableLiveData<T>.notifyObserver() {
-        this.value = this.value
-    }
 }
