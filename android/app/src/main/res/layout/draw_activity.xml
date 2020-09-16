@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/draw_tools_fragment"
         android:name="com.pixie.android.ui.draw.drawTools.DrawToolsFragment"
-        android:layout_width="163dp"
+        android:layout_width="100dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true" />
 
