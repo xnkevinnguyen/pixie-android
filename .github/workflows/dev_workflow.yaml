@@ -1,0 +1,29 @@
+name: Android  Develop
+
+on:
+  pull_request:
+    branches:
+      - 'dev'
+      - 'develop'
+
+jobs:
+  build:
+
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v1
+
+        - name: Set Up JDK
+          uses: actions/setup-java@v1
+          with:
+            java-version: 1.8
+
+        - name: Check Android Lint
+          run: cd android;./gradlew lint; cd ..
+
+        - name: Run Tests
+          run: cd android; ./gradlew test; cd ..
+
+        - name: Build Project
+          run: cd android; ./gradlew assemble; cd ..
