@@ -36,6 +36,9 @@ class DrawToolsFragment() : Fragment() {
         color_picker.setOnClickListener {
             viewModel.modifyPrimaryColor()
         }
+        undo_button.setOnClickListener {
+            viewModel.undo()
+        }
 
 
         super.onViewCreated(view, savedInstanceState)

@@ -14,4 +14,7 @@ class DrawToolsViewModel(private val drawingParametersRepository: DrawingParamet
         val newColor = Color.valueOf(Color.argb(255, Random.nextInt(256),Random.nextInt(256), Random.nextInt(256)))
         drawingParametersRepository.setPrimaryDrawingColor(newColor)
     }
+    fun undo(){
+        drawingParametersRepository.popLastDrawCommandFromHistory()
+    }
 }
