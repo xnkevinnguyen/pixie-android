@@ -9,9 +9,13 @@ class DrawToolsViewModel(private val drawingParametersRepository: DrawingParamet
 
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
 
-    // TODO Logic to let user pick the color
-    fun modifyPrimaryColor(){
-        val newColor = Color.valueOf(Color.argb(255, Random.nextInt(256),Random.nextInt(256), Random.nextInt(256)))
-        drawingParametersRepository.setPrimaryDrawingColor(newColor)
-    }
+    fun modifyPrimaryColor(color:Color) = drawingParametersRepository.setPrimaryDrawingColor(color)
+
+    fun modifyStrokeWidth(size: Float) = drawingParametersRepository.setStrokeWidth(size)
+
+    fun modifyCellWidthGrid(width: Int) = drawingParametersRepository.setCellWidthGrid(width)
+
+    fun setEraser(erase: Boolean) = drawingParametersRepository.setErase(erase)
+
+    fun setGridValue(grid: Boolean) = drawingParametersRepository.setGrid(grid)
 }

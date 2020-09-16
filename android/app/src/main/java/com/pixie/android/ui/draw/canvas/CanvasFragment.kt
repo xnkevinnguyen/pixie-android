@@ -1,5 +1,6 @@
 package com.pixie.android.ui.draw.canvas
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,34 @@ class CanvasFragment: Fragment() {
             my_canvas.reinitializeDrawingParameters()
         })
 
+        viewModel.getStrokeWidth().observe(viewLifecycleOwner, Observer {
+            my_canvas.drawStroke = it
+            my_canvas.reinitializeDrawingParameters()
+        })
+
+        viewModel.getCellWidthGrid().observe(viewLifecycleOwner, Observer {
+            my_grid.setCellWidth(it)
+        })
+
+        viewModel.getEraser().observe(viewLifecycleOwner, Observer {
+            my_canvas.setErase(it)
+        })
+
+        viewModel.getGridVal().observe(viewLifecycleOwner, Observer {
+            showGrid(it)
+        })
+
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun showGrid(gridOn: Boolean){
+        if(gridOn){
+            my_grid.visibility = View.VISIBLE
+            my_canvas.setBackgroundColor(Color.TRANSPARENT)
+        }
+        else {
+            my_grid.visibility = View.GONE
+            my_canvas.setBackgroundColor(Color.WHITE)
+        }
     }
 }

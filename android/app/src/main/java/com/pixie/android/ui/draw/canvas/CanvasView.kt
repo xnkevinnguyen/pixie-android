@@ -8,13 +8,13 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.pixie.android.R
 
-private const val STROKE_WIDTH = 12f
-
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     // Holds the path you are currently drawing.
     private var path = Path()
+    var drawStroke: Float = 12f
     var drawColor: Int = 0 // Should be replaced at runtime with default BLACK value from repository
-    private val backgroundColor = ResourcesCompat.getColor(resources, R.color.colorBackground, null)
+    private val backgroundColor = Color.TRANSPARENT
+    private var erase = false
 
     private lateinit var canvas: Canvas
     private lateinit var bitmap: Bitmap
@@ -27,6 +27,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
 
+    fun setErase(isErase: Boolean) {
+        erase = isErase
+        if(erase) paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+        else paint.xfermode = null
+    }
+
     fun reinitializeDrawingParameters() {
         // Refresh paint with latest parameters
         paint = generatePaint()
@@ -38,7 +44,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         strokeJoin = Paint.Join.ROUND
         strokeCap = Paint.Cap.ROUND
         strokeWidth =
-            STROKE_WIDTH
+            drawStroke
     }
 
 
