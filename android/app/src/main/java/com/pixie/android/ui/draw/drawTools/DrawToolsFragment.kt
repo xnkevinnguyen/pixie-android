@@ -39,6 +39,10 @@ class DrawToolsFragment() : Fragment() {
         undo_button.setOnClickListener {
             viewModel.undo()
         }
+        redo_button.setOnClickListener{
+            viewModel.redo()
+        }
+
 
 
         super.onViewCreated(view, savedInstanceState)

@@ -17,4 +17,7 @@ class DrawToolsViewModel(private val drawingParametersRepository: DrawingParamet
     fun undo(){
         drawingParametersRepository.popLastDrawCommandFromHistory()
     }
+    fun redo(){
+        drawingParametersRepository.popUndoneCommand()
+    }
 }

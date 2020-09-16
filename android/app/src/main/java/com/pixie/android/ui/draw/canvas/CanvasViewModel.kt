@@ -12,6 +12,8 @@ class CanvasViewModel(private val drawingParametersRepository: DrawingParameters
 
     fun addCommandToHistory(command: DrawCommand) {
         drawingParametersRepository.addDrawCommand(command)
+        // Once user adds a command, they lost redo history
+        drawingParametersRepository.restoreUndoneCommandList()
     }
 
 

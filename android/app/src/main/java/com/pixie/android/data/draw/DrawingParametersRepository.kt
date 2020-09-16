@@ -8,48 +8,73 @@ import java.util.*
 
 class DrawingParametersRepository {
 
-    // non persistent attribute
-    private var  primaryDrawingColor = MutableLiveData<Color>().apply{postValue(Color.valueOf(Color.BLACK))}
+    private var primaryDrawingColor =
+        MutableLiveData<Color>().apply { postValue(Color.valueOf(Color.BLACK)) }
     private var drawCommandHistory = MutableLiveData<MutableList<DrawCommand>>()
-    private var undoneCommandList = MutableLiveData<MutableList<DrawCommand>>()
+    private var undoneCommandList : Stack<DrawCommand> = Stack()
 
-    public fun getPrimaryDrawingColor():LiveData<Color>{
+    fun getPrimaryDrawingColor(): LiveData<Color> {
         return primaryDrawingColor;
     }
 
-    public fun setPrimaryDrawingColor( newColor: Color){
+    fun setPrimaryDrawingColor(newColor: Color) {
         primaryDrawingColor.postValue(newColor)
     }
-    public fun getDrawCommandHistory():LiveData<MutableList<DrawCommand>>{
+
+    fun getDrawCommandHistory(): LiveData<MutableList<DrawCommand>> {
         return drawCommandHistory
     }
-    public fun popLastDrawCommandFromHistory() {
+
+    fun popLastDrawCommandFromHistory() {
         val count = drawCommandHistory.value?.count()
-        if (count != null) {
-            drawCommandHistory.value?.removeAt(count-1)
+        if (count != null && count >0) {
+            val commandToRemove = drawCommandHistory.value!!.removeAt(count - 1)
+            addUndoneCommand(commandToRemove)
+            drawCommandHistory.notifyObserver()
         }
-        drawCommandHistory.notifyObserver()
+    }
+    fun popUndoneCommand(){
+        if ( !undoneCommandList.empty()) {
+            val commandToRedo = undoneCommandList.pop()
+            addDrawCommand(commandToRedo)
+            drawCommandHistory.notifyObserver()
+        }
     }
 
-    public fun addDrawCommand(drawCommand: DrawCommand){
-        if (drawCommandHistory.value == null){
+
+    // Add Draw command should not notify the observer
+    fun addDrawCommand(drawCommand: DrawCommand) {
+        if (drawCommandHistory.value == null) {
             drawCommandHistory.postValue(arrayListOf(drawCommand))
 
-        }else {
+        } else {
             drawCommandHistory.value?.add(drawCommand)
         }
 
-//        drawCommandHistory.notifyObserver()
     }
+
+    // Should not notify the observer
+    fun addUndoneCommand(command: DrawCommand) {
+        undoneCommandList.add(command)
+    }
+    // Restore undoneCommandList
+    fun restoreUndoneCommandList(){
+        if(! undoneCommandList.isNullOrEmpty()){
+            undoneCommandList.clear()
+        }
+    }
+
     // Singleton
-    companion object{
-        @Volatile private var instance:DrawingParametersRepository? = null
-        fun getInstance() = instance?: synchronized(this){
-            instance?: DrawingParametersRepository().also{
+    companion object {
+        @Volatile
+        private var instance: DrawingParametersRepository? = null
+        fun getInstance() = instance ?: synchronized(this) {
+            instance ?: DrawingParametersRepository().also {
                 instance = it
             }
         }
     }
+
     // Function to make sure observer is notified when a data structure is modified
     // https://stackoverflow.com/questions/47941537/notify-observer-when-item-is-added-to-list-of-livedata
     fun <T> MutableLiveData<T>.notifyObserver() {
