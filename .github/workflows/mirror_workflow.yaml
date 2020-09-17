@@ -14,7 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
         with:
-          ref: master 
+          ref: master
+          fetch-depth: 0 
       - name: Push to mirror-android
         run: git push master mirror-android
         
