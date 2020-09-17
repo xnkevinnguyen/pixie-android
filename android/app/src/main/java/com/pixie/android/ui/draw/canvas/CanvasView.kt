@@ -113,7 +113,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun onTouchStop() {
-        completedCommand.postValue(DrawCommand(Path(path), paint))
+        completedCommand.postValue(DrawCommand(Path(path), Paint(paint)))
         path.reset()
     }
 }
