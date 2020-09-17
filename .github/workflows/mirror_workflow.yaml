@@ -3,25 +3,9 @@ name:  Mirror
 on:
   push:
     branches: 
-      - 'master'
+      - 'mirror-android'
 
 jobs:
-
-  copy:
-    name: Copy master branch to Mirror branch
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-        with:
-          ref: master
-          fetch-depth: 0 
-      - name: Push to mirror-android
-        uses: ad-m/github-push-action@master
-        branch: mirror-android
-      
-        
-
   mirror:
     name: Mirror to Gitlab branch
     runs-on: ubuntu-latest
@@ -30,7 +14,6 @@ jobs:
       - uses: actions/checkout@v1
         with:
           ref: mirror-android # name of the remote branch
-
 
       - name: Mirror to gitlab
         uses: spyoungtech/mirror-action@master
