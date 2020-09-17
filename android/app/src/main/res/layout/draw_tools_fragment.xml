@@ -1,18 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
+    <ImageButton
         android:id="@+id/color_picker"
-        android:layout_width="227dp"
-        android:layout_height="261dp"
-        android:layout_alignParentRight="true"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
         android:background="@android:color/holo_purple"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="184dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:src="@drawable/ic_palette" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageButton
+        android:id="@+id/pencil"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray"
+        android:src="@drawable/ic_pencil" />
+
+    <ImageButton
+        android:id="@+id/eraser"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/unselectedButtonColor"
+        android:src="@drawable/ic_eraser" />
+
+    <ImageButton
+        android:id="@+id/grid"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/unselectedButtonColor"
+        android:src="@drawable/ic_grid" />
+
+    <ImageButton
+        android:id="@+id/undo_button"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/unselectedButtonColor"
+        android:src="@drawable/ic_undo" />
+
+    <ImageButton
+        android:id="@+id/redo_button"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/unselectedButtonColor"
+        android:src="@drawable/ic_redo" />
+
+</LinearLayout>

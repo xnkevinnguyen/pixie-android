@@ -6,15 +6,20 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.MutableLiveData
 import com.pixie.android.R
+import com.pixie.android.model.draw.DrawCommand
 
-private const val STROKE_WIDTH = 12f
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     // Holds the path you are currently drawing.
     private var path = Path()
+    var drawStroke: Float = 12f
+    var completedCommand = MutableLiveData<DrawCommand>()
+
     var drawColor: Int = 0 // Should be replaced at runtime with default BLACK value from repository
-    private val backgroundColor = ResourcesCompat.getColor(resources, R.color.colorBackground, null)
+    private val backgroundColor = Color.TRANSPARENT
+    private var erase = false
 
     private lateinit var canvas: Canvas
     private lateinit var bitmap: Bitmap
@@ -27,6 +32,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
 
+    fun setErase(isErase: Boolean) {
+        erase = isErase
+        if(erase) paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+        else paint.xfermode = null
+    }
+
     fun reinitializeDrawingParameters() {
         // Refresh paint with latest parameters
         paint = generatePaint()
@@ -38,7 +49,16 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         strokeJoin = Paint.Join.ROUND
         strokeCap = Paint.Cap.ROUND
         strokeWidth =
-            STROKE_WIDTH
+            drawStroke
+    }
+
+    fun drawFromCommandList(drawCommandList: List<DrawCommand>) {
+
+        canvas.drawColor(backgroundColor,PorterDuff.Mode.CLEAR)
+        drawCommandList.forEach {
+            canvas.drawPath(it.path, it.paint)
+        }
+        invalidate()
     }
 
 
@@ -86,11 +106,14 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         currentX = motionTouchEventX
         currentY = motionTouchEventY
         canvas.drawPath(path, paint)
+
         // Invalidate triggers onDraw from the view
         invalidate()
+
     }
 
     private fun onTouchStop() {
+        completedCommand.postValue(DrawCommand(Path(path), Paint(paint)))
         path.reset()
     }
 }

@@ -2,16 +2,29 @@ package com.pixie.android.ui.draw.drawTools
 
 import android.graphics.Color
 import androidx.lifecycle.ViewModel
+import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
 import kotlin.random.Random
 
-class DrawToolsViewModel(private val drawingParametersRepository: DrawingParametersRepository):ViewModel() {
+class DrawToolsViewModel(private val drawingParametersRepository: DrawingParametersRepository, private val drawCommandHistoryRepository: DrawCommandHistoryRepository):ViewModel() {
 
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
 
-    // TODO Logic to let user pick the color
-    fun modifyPrimaryColor(){
-        val newColor = Color.valueOf(Color.argb(255, Random.nextInt(256),Random.nextInt(256), Random.nextInt(256)))
-        drawingParametersRepository.setPrimaryDrawingColor(newColor)
+
+    fun modifyPrimaryColor(color:Color) = drawingParametersRepository.setPrimaryDrawingColor(color)
+
+    fun modifyStrokeWidth(size: Float) = drawingParametersRepository.setStrokeWidth(size)
+
+    fun modifyCellWidthGrid(width: Int) = drawingParametersRepository.setCellWidthGrid(width)
+
+    fun setEraser(erase: Boolean) = drawingParametersRepository.setErase(erase)
+
+    fun setGridValue(grid: Boolean) = drawingParametersRepository.setGrid(grid)
+
+    fun undo(){
+        drawCommandHistoryRepository.popLastDrawCommandFromHistory()
+    }
+    fun redo(){
+        drawCommandHistoryRepository.popUndoneCommand()
     }
 }

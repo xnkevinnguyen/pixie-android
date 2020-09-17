@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <shape android:shape="oval" android:dither="true" xmlns:android="http://schemas.android.com/apk/res/android">
+    <size android:width="@dimen/large_brush" android:height="@dimen/large_brush"/>
+    <solid android:color="#FF666666"/>
+</shape>
