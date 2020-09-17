@@ -6,6 +6,20 @@ on:
       - 'master'
 
 jobs:
+
+  mirror:
+    name: Copy master branch to Mirror branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: master 
+      - name: Push to mirror-android
+        run: git push master mirror-android
+        
+
+
   mirror:
     name: Mirror to Gitlab branch
     runs-on: ubuntu-latest
