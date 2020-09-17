@@ -3,7 +3,7 @@ name:  Mirror
 on:
   push:
     branches: 
-      - 'master'
+      - 'mirror-android'
 
 jobs:
 
@@ -28,7 +28,6 @@ jobs:
       - uses: actions/checkout@v1
         with:
           ref: mirror-android # name of the remote branch
-
 
       - name: Mirror to gitlab
         uses: spyoungtech/mirror-action@master
