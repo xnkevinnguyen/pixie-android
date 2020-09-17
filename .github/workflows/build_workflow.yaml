@@ -43,20 +43,3 @@ jobs:
         with:
           name: app
           path: android/app/build/outputs/apk/debug/app-debug.apk
-  mirror:
-    name: Mirror to Gitlab branch
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-        with:
-          ref: mirror-android <- name of the remote branch
-
-      - name: Mirror to gitlab
-        uses: spyoungtech/mirror-action@master
-        with:
-          REMOTE: 'https://gitlab.com/polytechnique-montr-al/log3900/20-3/equipe-106/log3900-106.git'
-          GIT_USERNAME: kevinNguyenPolyMTL
-          GIT_PASSWORD: ${{ secrets.GITLAB_TOKEN }}
-          PUSH_ALL_REFS: 'false'
-          GIT_PUSH_ARGS: '-u'
