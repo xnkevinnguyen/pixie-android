@@ -3,7 +3,7 @@ name:  Mirror
 on:
   push:
     branches: 
-      - 'master'
+      - 'mirror-android'
 
 jobs:
   mirror:
