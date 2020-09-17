@@ -17,7 +17,8 @@ jobs:
           ref: master
           fetch-depth: 0 
       - name: Push to mirror-android
-        uses: ad-m/github-push-action@mirror-android
+        uses: ad-m/github-push-action@master
+        branch: mirror-android
       
         
 
