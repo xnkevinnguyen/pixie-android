@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.pixie.android.ui.draw.home.HomeFragment"
+        android:label="home"
+        tools:layout="@layout/home_fragment" />
+
+    <fragment
+        android:id="@+id/nav_drawing"
+        android:name="com.pixie.android.ui.draw.DrawingFragment"
+        android:label="drawing"
+        tools:layout="@layout/draw_fragment" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.pixie.android.ui.draw.profile.ProfileFragment"
+        android:label="profile"
+        tools:layout="@layout/profile_fragment" />
+
+</navigation>

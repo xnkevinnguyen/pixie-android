@@ -16,6 +16,8 @@ class CanvasViewModel(private val drawingParametersRepository: DrawingParameters
         // Once user adds a command, they lose redo history
         drawCommandHistoryRepository.restoreUndoneCommandList()
     }
+    fun resetDrawCommandHistory() = drawCommandHistoryRepository.resetDrawCommandHistory()
+
 
     fun getStrokeWidth() = drawingParametersRepository.getStrokeWidth()
     fun getCellWidthGrid() = drawingParametersRepository.getCellWidthGrid()

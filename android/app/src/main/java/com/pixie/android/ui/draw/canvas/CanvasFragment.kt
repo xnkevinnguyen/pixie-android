@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.canvas_fragment.*
-import kotlinx.android.synthetic.main.draw_activity.*
 
 class CanvasFragment : Fragment() {
     override fun onCreateView(

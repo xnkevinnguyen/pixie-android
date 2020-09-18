@@ -14,6 +14,13 @@ class DrawCommandHistoryRepository {
         return drawCommandHistory
     }
 
+    fun resetDrawCommandHistory() {
+        val count = drawCommandHistory.value?.count()
+        if(count != null && count > 0) {
+            drawCommandHistory = MutableLiveData<MutableList<DrawCommand>>()
+        }
+    }
+
     fun popLastDrawCommandFromHistory() {
         val count = drawCommandHistory.value?.count()
         if (count != null && count > 0) {
