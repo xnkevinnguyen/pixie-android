@@ -23,6 +23,7 @@ import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.ui.draw.canvas.CanvasViewModel
 import com.pixie.android.utilities.InjectorUtils
+import kotlinx.android.synthetic.main.main_activity.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_drawing, R.id.nav_tutorial), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_drawing), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
@@ -47,6 +48,17 @@ class MainActivity : AppCompatActivity() {
         avatar.setOnClickListener {
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
+        }
+
+        settings.setOnClickListener {
+            navController.navigate(R.id.nav_settings)
+            drawerLayout.closeDrawer(GravityCompat.START, false)
+        }
+
+        tutorial.setOnClickListener {
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.tutorial_layout)
+            dialog.show()
         }
 
         // Set DrawCommandHistory whenever you enter the canvas page or else it crashes

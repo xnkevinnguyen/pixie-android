@@ -6,6 +6,7 @@ import com.pixie.android.ui.draw.canvas.CanvasViewModelFactory
 import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
 import com.pixie.android.ui.draw.home.HomeViewModelFactory
 import com.pixie.android.ui.draw.profile.ProfileViewModelFactory
+import com.pixie.android.ui.draw.settings.SettingsViewModelFactory
 
 object InjectorUtils {
     fun provideDrawViewModelFactory(): DrawToolsViewModelFactory {
@@ -30,5 +31,9 @@ object InjectorUtils {
 
     fun provideProfileViewModelFactory(): ProfileViewModelFactory {
         return ProfileViewModelFactory()
+    }
+
+    fun provideSettingsViewModelFactory(): SettingsViewModelFactory {
+        return SettingsViewModelFactory()
     }
 }

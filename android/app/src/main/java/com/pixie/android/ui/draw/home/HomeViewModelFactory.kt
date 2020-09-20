@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 
 @Suppress("UNCHECKED_CAST")
 class HomeViewModelFactory() :
-    ViewModelProvider.NewInstanceFactory() {
+ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return HomeViewModel() as T
     }
