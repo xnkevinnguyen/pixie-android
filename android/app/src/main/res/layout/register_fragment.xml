@@ -5,27 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/register_fragment"
     tools:context=".ui.draw.login.RegisterFragment">
 
     <TextView
         android:id="@+id/tv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="register"
+        android:text="Register"
         android:textAlignment="center"
         android:textSize="50sp"
         android:layout_marginStart="25dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="60dp"/>
-
-    <TextView
-        android:id="@+id/tv_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="tag"
-        android:textSize="17sp"
-        android:layout_marginStart="25dp"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginBottom="25dp" />
 
     <EditText
         android:id="@+id/et_name"
@@ -96,6 +87,7 @@
             android:text="register"/>
 
         <ImageView
+            android:id="@+id/return_login"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_arrow_left"
@@ -106,7 +98,7 @@
             android:id="@+id/swipeLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="swipe right for login"
+            android:text="return to login"
             android:textSize="15sp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"

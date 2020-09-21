@@ -11,13 +11,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.login.LoggedInUserView
 import com.pixie.android.ui.draw.DrawActivity
 import com.pixie.android.utilities.InjectorUtils
-
 
 class LoginFragment : Fragment() {
     override fun onCreateView(
@@ -25,7 +26,13 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.login_activity, container, false)
+        val root =  inflater.inflate(R.layout.login_fragment, container, false)
+        val navController = Navigation.findNavController(requireActivity(), R.id.nav_login_fragment)
+        val toRegister : TextView = root.findViewById(R.id.button_register)
+        toRegister.setOnClickListener {
+            navController.navigate(R.id.nav_register)
+        }
+        return root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val username = view.findViewById<EditText>(R.id.username)
@@ -38,7 +45,6 @@ class LoginFragment : Fragment() {
 
         val factory = InjectorUtils.provideLoginViewModelFactory()
         val loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
-
 
         loginViewModel.getLoginFormState().observe(viewLifecycleOwner, Observer {
             val loginState = it
@@ -93,6 +99,7 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+
         super.onViewCreated(view, savedInstanceState)
     }
 
