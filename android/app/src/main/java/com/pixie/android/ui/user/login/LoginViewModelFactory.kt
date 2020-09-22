@@ -1,9 +1,9 @@
-package com.pixie.android.ui.draw.login
+package com.pixie.android.ui.user.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.pixie.android.data.login.LoginDataSource
-import com.pixie.android.data.login.LoginRepository
+import com.pixie.android.data.user.LoginDataSource
+import com.pixie.android.data.user.LoginRepository
 
 
 /**
@@ -21,7 +21,7 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
             // Should be removed when using DI
             loginDataSource.setLoginRepository(loginRepository)
             return LoginViewModel(
-                    loginRepository = loginRepository
+                loginRepository = loginRepository
             ) as T
 
         }

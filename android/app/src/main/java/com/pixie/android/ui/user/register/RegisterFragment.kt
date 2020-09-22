@@ -1,4 +1,4 @@
-package com.pixie.android.ui.draw.login
+package com.pixie.android.ui.user.register
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import com.pixie.android.R
-import kotlinx.android.synthetic.main.register_fragment.*
 
 
 class RegisterFragment : Fragment() {

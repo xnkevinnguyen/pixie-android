@@ -1,15 +1,10 @@
-package com.pixie.android.data.login
+package com.pixie.android.data.user
 
 import android.util.Log
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.LoginMutation
 import com.pixie.android.apolloClient
-import com.pixie.android.model.login.LoggedInUser
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class LoginDataSource {
     private lateinit var loginRepository: LoginRepository

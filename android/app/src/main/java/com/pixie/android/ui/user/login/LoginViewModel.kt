@@ -1,12 +1,9 @@
-package com.pixie.android.ui.draw.login
+package com.pixie.android.ui.user.login
 
 import androidx.lifecycle.ViewModel
 import com.pixie.android.R
-import com.pixie.android.data.login.LoginRepository
-import com.pixie.android.data.login.Result
-import com.pixie.android.model.login.LoggedInUserView
-import com.pixie.android.model.login.LoginFormState
-import com.pixie.android.model.login.LoginResult
+import com.pixie.android.data.user.LoginRepository
+import com.pixie.android.model.user.LoginFormState
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 

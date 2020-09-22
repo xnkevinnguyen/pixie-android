@@ -2,10 +2,9 @@ package com.pixie.android.utilities
 
 import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
-import com.pixie.android.data.login.LoginRepository
 import com.pixie.android.ui.draw.canvas.CanvasViewModelFactory
 import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
-import com.pixie.android.ui.draw.login.LoginViewModelFactory
+import com.pixie.android.ui.user.login.LoginViewModelFactory
 
 object InjectorUtils {
     fun provideDrawViewModelFactory(): DrawToolsViewModelFactory {

@@ -1,4 +1,4 @@
-package com.pixie.android.model.login
+package com.pixie.android.model.user
 
 data class LoginResult(
         val success: LoggedInUserView? = null,

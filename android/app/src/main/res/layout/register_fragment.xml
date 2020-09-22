@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/register_fragment"
-    tools:context=".ui.draw.login.RegisterFragment">
+    tools:context=".ui.user.register.RegisterFragment">
 
     <TextView
         android:id="@+id/tv_logo"

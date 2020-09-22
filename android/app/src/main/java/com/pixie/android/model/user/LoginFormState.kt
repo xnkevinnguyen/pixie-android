@@ -1,4 +1,4 @@
-package com.pixie.android.model.login
+package com.pixie.android.model.user
 
 data class LoginFormState(val usernameError: Int? = null,
                           val passwordError: Int? = null,

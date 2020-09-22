@@ -1,4 +1,4 @@
-package com.pixie.android.data.login
+package com.pixie.android.data.user
 
 sealed class Result<out T : Any> {
 

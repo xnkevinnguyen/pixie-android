@@ -1,4 +1,4 @@
-package com.pixie.android.ui.draw
+package com.pixie.android.ui.user
 
 import android.app.Activity
 import android.content.Context

@@ -1,22 +1,14 @@
-package com.pixie.android.data.login
+package com.pixie.android.data.user
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
-import com.pixie.android.LoginMutation
 import com.pixie.android.R
-import com.pixie.android.apolloClient
-import com.pixie.android.model.login.LoggedInUser
-import com.pixie.android.model.login.LoggedInUserView
-import com.pixie.android.model.login.LoginFormState
-import com.pixie.android.model.login.LoginResult
+import com.pixie.android.model.user.LoggedInUser
+import com.pixie.android.model.user.LoggedInUserView
+import com.pixie.android.model.user.LoginFormState
+import com.pixie.android.model.user.LoginResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 /**
@@ -60,8 +52,8 @@ class LoginRepository(val dataSource: LoginDataSource) {
             val response = dataSource.login(username, password)
             if (response?.login?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
-                    response?.login?.user?.id.toString(),
-                    response?.login?.user?.username.toString()
+                    response.login.user.id.toString(),
+                    response.login.user.username.toString()
                 )
                 setLoggedInUser(userData)
                 setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.displayName)))
