@@ -8,4 +8,7 @@
     <string name="setting_desc">nav_setting_desc</string>
     <string name="username">Username</string>
     <string name="nav_header_desc">nav_header_desc</string>
+    <string name="home">Home</string>
+    <string name="drawing">Drawing</string>
+    <string name="action_settings">action settings</string>
 </resources>
