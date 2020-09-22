@@ -52,10 +52,8 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.github.duanhong169:colorpicker:1.1.6'
-<<<<<<< HEAD
     implementation 'androidx.viewpager:viewpager:1.0.0'
-=======
->>>>>>> origin/dev
+
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
     testImplementation 'junit:junit:4.12'

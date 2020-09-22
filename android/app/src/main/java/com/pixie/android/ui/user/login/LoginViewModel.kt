@@ -2,27 +2,29 @@ package com.pixie.android.ui.user.login
 
 import androidx.lifecycle.ViewModel
 import com.pixie.android.R
-import com.pixie.android.data.user.LoginRepository
+import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.user.LoginFormState
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    fun getLoginFormState() = loginRepository.getLoginForm()
+    fun getLoginFormState() = userRepository.getLoginForm()
 
-    fun getLoginResultState() = loginRepository.getLoginResult()
+    fun getLoginResultState() = userRepository.getLoginResult()
 
     fun login(username: String, password: String) {
-        loginRepository.login(username, password)
+
+        userRepository.login(username, password)
+
     }
 
     fun loginDataChanged(username: String, password: String) {
         if (!username.isNotBlank()) {
-            loginRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_username))
+            userRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_username))
         }
         else if (!isPasswordValid(password)) {
-            loginRepository.setLoginForm(LoginFormState(passwordError = R.string.invalid_password))
+            userRepository.setLoginForm(LoginFormState(passwordError = R.string.invalid_password))
         } else {
-            loginRepository.setLoginForm(LoginFormState(isDataValid = true))
+            userRepository.setLoginForm(LoginFormState(isDataValid = true))
         }
     }
 

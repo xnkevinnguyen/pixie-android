@@ -50,6 +50,7 @@ class LoginFragment : Fragment() {
 
         val intent = Intent(view.context, MainActivity::class.java)
 
+
         val factory = InjectorUtils.provideLoginViewModelFactory()
         loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
 
@@ -76,6 +77,8 @@ class LoginFragment : Fragment() {
             if (loginResult.error != null) {
                 errorMessage.visibility = View.VISIBLE
                 showLoginFailed(loginResult.error)
+//                error_message.visibility = View.VISIBLE
+
             }
             if (loginResult.success != null) {
                 editor.putBoolean("isLoggedIn", true)
@@ -105,6 +108,7 @@ class LoginFragment : Fragment() {
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
+
             }
         }
 

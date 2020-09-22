@@ -2,8 +2,8 @@ package com.pixie.android.ui.user.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.pixie.android.data.user.LoginDataSource
-import com.pixie.android.data.user.LoginRepository
+import com.pixie.android.data.user.UserDataSource
+import com.pixie.android.data.user.UserRepository
 
 
 /**
@@ -15,13 +15,11 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            val loginDataSource = LoginDataSource()
-            val loginRepository = LoginRepository(loginDataSource)
+            val loginDataSource = UserDataSource()
+            val loginRepository = UserRepository(loginDataSource)
 
-            // Should be removed when using DI
-            loginDataSource.setLoginRepository(loginRepository)
             return LoginViewModel(
-                loginRepository = loginRepository
+                  loginRepository
             ) as T
 
         }

@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: LoginDataSource) {
+class UserRepository(val dataSource: UserDataSource) {
 
     private val loginForm = MutableLiveData<LoginFormState>()
     private val loginResult = MutableLiveData<LoginResult>()
@@ -45,8 +45,6 @@ class LoginRepository(val dataSource: LoginDataSource) {
     }
 
     fun login(username: String, password: String) {
-
-        //REPLACE WITH COROUTINE & API CALL
 
         CoroutineScope(IO).launch {
             val response = dataSource.login(username, password)
