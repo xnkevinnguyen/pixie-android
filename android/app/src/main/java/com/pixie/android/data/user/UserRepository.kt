@@ -21,7 +21,6 @@ class UserRepository(val dataSource: UserDataSource) {
     private val loginForm = MutableLiveData<LoginFormState>()
     private val loginResult = MutableLiveData<LoginResult>()
     var user: LoggedInUser? = null
-        private set
 
     fun getLoginForm(): LiveData<LoginFormState> {
         return loginForm
@@ -51,18 +50,37 @@ class UserRepository(val dataSource: UserDataSource) {
             if (response?.login?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
                     response.login.user.id.toString(),
-                    response.login.user.username.toString()
+                    response.login.user.username,
+                    response.login.user.email
                 )
                 setLoggedInUser(userData)
-                setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.displayName)))
+                setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.username)))
             } else {
                 setLoginResult(LoginResult(error = R.string.login_failed))
             }
 
         }
 
-
     }
+
+    fun register(username: String, email: String, password: String) {
+        CoroutineScope(IO).launch {
+            val response = dataSource.register(username, email, password)
+            if (response?.register?.user?.id != null) {// user needs to exist
+                val userData = LoggedInUser(
+                    response.register.user.id.toString(),
+                    response.register.user.username,
+                    response.register.user.email
+                )
+                setLoggedInUser(userData)
+                setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.username)))
+            } else {
+                setLoginResult(LoginResult(error = R.string.failed_registration))
+            }
+
+        }
+    }
+
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser

@@ -3,6 +3,7 @@ mutation register($user:UsernamePasswordInput!){
         user{
             id
             username
+            email
             createdAt
             updatedAt
         }

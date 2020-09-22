@@ -4,7 +4,9 @@ import android.util.Log
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.LoginMutation
+import com.pixie.android.RegisterMutation
 import com.pixie.android.apolloClient
+import com.pixie.android.type.UsernamePasswordInput
 
 class UserDataSource {
 
@@ -20,20 +22,16 @@ class UserDataSource {
 
     }
 
-    suspend fun register(username:String, email:String, password: String ){
-        var usernamepasswordinput =object {
-            val username=username
-            val email= email
-            val password = password
-        }
-        var response :LoginMutation.Data? =null
+    suspend fun register(username:String, email:String, password: String ):RegisterMutation.Data?{
+        val usernamePasswordInput = UsernamePasswordInput(username,email,password)
+        var response :RegisterMutation.Data? =null
         try{
-            response =  apolloClient.mutate(LoginMutation(username, password)).toDeferred().await().data
+            response =  apolloClient.mutate(RegisterMutation(usernamePasswordInput)).toDeferred().await().data
 
         }catch(e:ApolloException){
             Log.d("apolloException", e.message.toString())
         }
-//        return response
+        return response
     }
 
     fun logout() {
