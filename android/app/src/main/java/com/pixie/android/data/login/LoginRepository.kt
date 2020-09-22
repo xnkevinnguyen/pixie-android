@@ -13,6 +13,8 @@ import com.pixie.android.model.login.LoggedInUser
 import com.pixie.android.model.login.LoggedInUserView
 import com.pixie.android.model.login.LoginFormState
 import com.pixie.android.model.login.LoginResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -53,29 +55,21 @@ class LoginRepository(val dataSource: LoginDataSource) {
     fun login(username: String, password: String) {
 
         //REPLACE WITH COROUTINE & API CALL
-        apolloClient.mutate(LoginMutation(username, password)).enqueue(
-            object : ApolloCall.Callback<LoginMutation.Data>() {
 
-                override fun onResponse(response: Response<LoginMutation.Data>) {
-                    if (response.data?.login?.user?.id != null) {// user needs to exist
-                        val userData = LoggedInUser(
-                            response.data?.login?.user?.id.toString(),
-                            response.data?.login?.user?.username.toString()
-                        )
-                        setLoggedInUser(userData)
-                        setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.displayName)))
-                    } else {
-                        setLoginResult(LoginResult(error = R.string.login_failed))
-                    }
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    Log.d("apolloException", e.message.toString())
-                    setLoginResult(LoginResult(error = R.string.login_failed))
-
-                }
+        CoroutineScope(IO).launch {
+            val response = dataSource.login(username, password)
+            if (response?.login?.user?.id != null) {// user needs to exist
+                val userData = LoggedInUser(
+                    response?.login?.user?.id.toString(),
+                    response?.login?.user?.username.toString()
+                )
+                setLoggedInUser(userData)
+                setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.displayName)))
+            } else {
+                setLoginResult(LoginResult(error = R.string.login_failed))
             }
-        )
+
+        }
 
 
     }
