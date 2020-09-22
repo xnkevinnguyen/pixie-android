@@ -70,6 +70,13 @@ class DrawToolsFragment() : Fragment() {
             strokeSizeDialog(true)
             viewModel.setEraser(true)
         }
+        undo_button.setOnClickListener {
+            viewModel.undo()
+        }
+        redo_button.setOnClickListener{
+            viewModel.redo()
+        }
+
 
         grid.setOnClickListener {
             gridDialog()
