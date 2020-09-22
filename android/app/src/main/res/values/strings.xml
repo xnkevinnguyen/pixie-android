@@ -22,6 +22,7 @@
     <string name="login_user_hint">username/email</string>
     <string name="login_pass_hint">password</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="register_title">Register</string>
     <string name="email">email</string>
     <string name="retype_pass">Re-type password</string>
