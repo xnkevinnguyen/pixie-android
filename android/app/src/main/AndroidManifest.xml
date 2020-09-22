@@ -20,6 +20,8 @@
         </activity>
         <activity
             android:name=".ui.draw.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />    </application>
+
+            android:theme="@style/AppTheme.NoActionBar" />
+    </application>
 
 </manifest>
