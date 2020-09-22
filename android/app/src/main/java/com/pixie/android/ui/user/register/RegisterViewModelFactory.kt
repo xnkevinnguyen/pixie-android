@@ -10,7 +10,7 @@ class RegisterViewModelFactory : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
             val loginDataSource = UserDataSource()
             val registerRepository = UserRepository(loginDataSource)
 
