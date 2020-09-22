@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Pixie</string>
+    <string name="cell_width">Input cell width</string>
+    <string name="cell_hint">50</string>
+    <string name="cancel">Cancel</string>
+    <string name="apply">Apply</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="setting_desc">nav_setting_desc</string>
+    <string name="username">Username</string>
+    <string name="nav_header_desc">nav_header_desc</string>
+    <string name="home">Home</string>
+    <string name="drawing">Drawing</string>
+    <string name="action_settings">action settings</string>
 </resources>
