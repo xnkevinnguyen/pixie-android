@@ -15,7 +15,7 @@ import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.draw_tools_fragment.*
 import top.defaults.colorpicker.ColorPickerPopup
 
-class DrawingFragment : Fragment() {
+class DrawFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,12 +28,12 @@ class DrawingFragment : Fragment() {
         )
     }
 
-    override fun onStop() {
+    override fun onDestroyView() {
         // Set DrawCommandHistory whenever you enter the canvas page or else it crashes
         val factory = InjectorUtils.provideCanvasViewModelFactory()
         val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
 
         viewModel.resetDrawCommandHistory()
-        super.onStop()
+        super.onDestroyView()
     }
 }
