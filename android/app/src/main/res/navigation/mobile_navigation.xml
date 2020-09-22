@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_drawing"
-        android:name="com.pixie.android.ui.draw.DrawingFragment"
+        android:name="com.pixie.android.ui.draw.DrawFragment"
         android:label="drawing"
         tools:layout="@layout/draw_fragment" />
 
