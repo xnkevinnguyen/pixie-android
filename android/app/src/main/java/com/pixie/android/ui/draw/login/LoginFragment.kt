@@ -65,6 +65,8 @@ class LoginFragment : Fragment() {
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
+                startActivity(intent)
+                requireActivity().finish()
                 updateUiWithUser(loginResult.success)
             }
             //setResult(Activity.RESULT_OK)
@@ -89,14 +91,14 @@ class LoginFragment : Fragment() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                val wasLoginSuccessful = loginViewModel.login(username.text.toString(), password.text.toString())
-                if (wasLoginSuccessful){
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
-                else {
-                    error_message.visibility = View.VISIBLE
-                }
+                loginViewModel.login(username.text.toString(), password.text.toString())
+//                if (wasLoginSuccessful){
+//                    startActivity(intent)
+//                    requireActivity().finish()
+//                }
+//                else {
+//                    error_message.visibility = View.VISIBLE
+//                }
             }
         }
 

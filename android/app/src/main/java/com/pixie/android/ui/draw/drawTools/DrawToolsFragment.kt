@@ -19,7 +19,7 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
-import com.pixie.android.LaunchListQuery
+//import com.pixie.android.LaunchListQuery
 import kotlinx.coroutines.CoroutineScope
 import com.pixie.android.R
 import com.pixie.android.apolloClient
@@ -102,28 +102,6 @@ class DrawToolsFragment() : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-
-
-// in your coroutine scope, call `ApolloClient.query(...).toDeferred().await()`
-        lifecycleScope.launchWhenResumed {
-            try{
-            val response = apolloClient.query(LaunchListQuery()).enqueue(
-                object:ApolloCall.Callback<LaunchListQuery.Data>(){
-                    override fun onFailure(e: ApolloException) {
-                        Log.d("onfailure","onfailure")
-                    }
-
-                    override fun onResponse(response: Response<LaunchListQuery.Data>) {
-                        Log.d("onResponse",response.data.toString())
-                    }
-                }
-            )
-            Log.d("LaunchList", "Success ${response?.toString()}")}
-            catch ( e:Exception){
-                val x = e
-
-            }
-        }
     }
 
     private fun strokeSizeDialog(eraserOn: Boolean){
