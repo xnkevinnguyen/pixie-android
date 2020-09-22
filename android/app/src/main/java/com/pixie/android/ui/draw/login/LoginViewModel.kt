@@ -14,15 +14,13 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     fun getLoginResultState() = loginRepository.getLoginResult()
 
-    fun login(username: String, password: String):Boolean {
+    fun login(username: String, password: String) {
         val result = loginRepository.login(username, password)
 
         return if (result is Result.Success) {
             loginRepository.setLoginResult(LoginResult(success = LoggedInUserView(displayName = result.data.displayName)))
-            true
         } else {
             loginRepository.setLoginResult(LoginResult(error = R.string.login_failed))
-            false
         }
     }
 
