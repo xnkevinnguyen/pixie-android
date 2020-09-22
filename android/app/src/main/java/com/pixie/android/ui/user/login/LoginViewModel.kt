@@ -13,7 +13,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     fun login(username: String, password: String) {
         loginRepository.login(username, password)
-
     }
 
     fun loginDataChanged(username: String, password: String) {

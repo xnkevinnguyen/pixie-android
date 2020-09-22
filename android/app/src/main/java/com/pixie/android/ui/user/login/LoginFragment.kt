@@ -1,6 +1,8 @@
 package com.pixie.android.ui.user.login
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,10 +17,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUserView
-import com.pixie.android.ui.draw.DrawActivity
+import com.pixie.android.ui.draw.MainActivity
 import com.pixie.android.utilities.InjectorUtils
 
 class LoginFragment : Fragment() {
+
+    private lateinit var loginViewModel: LoginViewModel
+    private lateinit var preferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,12 +44,19 @@ class LoginFragment : Fragment() {
         val password = view.findViewById<EditText>(R.id.password)
         val login = view.findViewById<Button>(R.id.login)
         val loading = view.findViewById<ProgressBar>(R.id.loading)
-        val error_message = view.findViewById<TextView>(R.id.error_login)
+        val errorMessage = view.findViewById<TextView>(R.id.error_login)
+        preferences = requireContext().getSharedPreferences("Login", Context.MODE_PRIVATE)
+        editor = preferences.edit()
 
-        val intent: Intent = Intent(view.context, DrawActivity::class.java)
+        val intent = Intent(view.context, MainActivity::class.java)
 
         val factory = InjectorUtils.provideLoginViewModelFactory()
-        val loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
+
+        if (preferences.getBoolean("isLoggedIn", false)) {
+            startActivity(intent)
+            requireActivity().finish()
+        }
 
         loginViewModel.getLoginFormState().observe(viewLifecycleOwner, Observer {
             val loginState = it
@@ -60,15 +74,16 @@ class LoginFragment : Fragment() {
 
             loading.visibility = View.GONE
             if (loginResult.error != null) {
+                errorMessage.visibility = View.VISIBLE
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
+                editor.putBoolean("isLoggedIn", true)
+                editor.apply()
                 startActivity(intent)
                 requireActivity().finish()
                 updateUiWithUser(loginResult.success)
             }
-            //setResult(Activity.RESULT_OK)
-
         })
 
         username.afterTextChanged {
@@ -90,13 +105,6 @@ class LoginFragment : Fragment() {
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
-//                if (wasLoginSuccessful){
-//                    startActivity(intent)
-//                    requireActivity().finish()
-//                }
-//                else {
-//                    error_message.visibility = View.VISIBLE
-//                }
             }
         }
 
