@@ -5,6 +5,9 @@ import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.ui.draw.canvas.CanvasViewModelFactory
 import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
 import com.pixie.android.ui.user.login.LoginViewModelFactory
+import com.pixie.android.ui.draw.home.HomeViewModelFactory
+import com.pixie.android.ui.draw.profile.ProfileViewModelFactory
+import com.pixie.android.ui.draw.settings.SettingsViewModelFactory
 
 object InjectorUtils {
     fun provideDrawViewModelFactory(): DrawToolsViewModelFactory {
@@ -23,7 +26,21 @@ object InjectorUtils {
         )
     }
 
+
     fun provideLoginViewModelFactory(): LoginViewModelFactory {
         return LoginViewModelFactory()
+    }
+
+    fun provideHomeViewModelFactory(): HomeViewModelFactory {
+        return HomeViewModelFactory()
+    }
+
+    fun provideProfileViewModelFactory(): ProfileViewModelFactory {
+        return ProfileViewModelFactory()
+    }
+
+    fun provideSettingsViewModelFactory(): SettingsViewModelFactory {
+        return SettingsViewModelFactory()
+
     }
 }
