@@ -8,6 +8,7 @@ import com.pixie.android.ui.user.login.LoginViewModelFactory
 import com.pixie.android.ui.draw.home.HomeViewModelFactory
 import com.pixie.android.ui.draw.profile.ProfileViewModelFactory
 import com.pixie.android.ui.draw.settings.SettingsViewModelFactory
+import com.pixie.android.ui.user.register.RegisterViewModelFactory
 
 object InjectorUtils {
     fun provideDrawViewModelFactory(): DrawToolsViewModelFactory {
@@ -26,9 +27,12 @@ object InjectorUtils {
         )
     }
 
-
     fun provideLoginViewModelFactory(): LoginViewModelFactory {
         return LoginViewModelFactory()
+    }
+
+    fun provideRegisterViewModelFactory(): RegisterViewModelFactory {
+        return RegisterViewModelFactory()
     }
 
     fun provideHomeViewModelFactory(): HomeViewModelFactory {
