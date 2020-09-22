@@ -61,14 +61,6 @@ class MainActivity : AppCompatActivity() {
             dialog.show()
         }
 
-        // Set DrawCommandHistory whenever you enter the canvas page or else it crashes
-        val factory = InjectorUtils.provideCanvasViewModelFactory()
-        val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
-        navController.addOnDestinationChangedListener{_, destination, _ ->
-            if(destination.id == R.id.nav_drawing) {
-                viewModel.resetDrawCommandHistory()
-            }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
