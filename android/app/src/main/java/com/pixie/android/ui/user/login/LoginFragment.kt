@@ -50,7 +50,6 @@ class LoginFragment : Fragment() {
 
         val intent = Intent(view.context, MainActivity::class.java)
 
-
         val factory = InjectorUtils.provideLoginViewModelFactory()
         loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
 
