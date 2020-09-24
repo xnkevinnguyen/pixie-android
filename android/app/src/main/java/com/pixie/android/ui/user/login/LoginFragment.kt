@@ -114,6 +114,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
+
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName

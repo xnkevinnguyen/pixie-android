@@ -6,6 +6,7 @@ import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.LoginMutation
 import com.pixie.android.RegisterMutation
 import com.pixie.android.apolloClient
+import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.type.UsernamePasswordInput
 
 class UserDataSource {
@@ -36,5 +37,15 @@ class UserDataSource {
 
     fun logout() {
         // TODO: revoke authentication
+    }
+    // Singleton
+    companion object {
+        @Volatile
+        private var instance: UserDataSource? = null
+        fun getInstance() = instance ?: synchronized(this) {
+            instance ?: UserDataSource().also {
+                instance = it
+            }
+        }
     }
 }

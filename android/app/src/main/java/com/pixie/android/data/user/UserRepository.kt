@@ -6,6 +6,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.R
+import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.model.user.LoginFormState
@@ -43,10 +44,11 @@ class UserRepository(val dataSource: UserDataSource) {
 
     fun logout() {
         user = null
+        loginResult.postValue(null)
         dataSource.logout()
     }
 
-    fun login(username: String, password: String) {
+    fun login(username: String, password: String, f: () -> Unit) {
 
         CoroutineScope(IO).launch {
             val response = dataSource.login(username, password)
@@ -56,6 +58,7 @@ class UserRepository(val dataSource: UserDataSource) {
                     response.login.user.username,
                     response.login.user.email
                 )
+                f
                 setLoggedInUser(userData)
                 setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.username)))
             } else {
@@ -87,5 +90,17 @@ class UserRepository(val dataSource: UserDataSource) {
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser
+    }
+
+    // Singleton
+    companion object {
+        @Volatile
+        private var instance: UserRepository? = null
+        private var dataSource:UserDataSource = UserDataSource.getInstance()
+        fun getInstance() = instance ?: synchronized(this) {
+            instance ?: UserRepository(dataSource).also {
+                instance = it
+            }
+        }
     }
 }

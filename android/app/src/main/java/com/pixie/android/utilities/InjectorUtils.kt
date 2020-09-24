@@ -2,6 +2,7 @@ package com.pixie.android.utilities
 
 import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
+import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.draw.canvas.CanvasViewModelFactory
 import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
 import com.pixie.android.ui.user.login.LoginViewModelFactory
@@ -28,11 +29,15 @@ object InjectorUtils {
     }
 
     fun provideLoginViewModelFactory(): LoginViewModelFactory {
-        return LoginViewModelFactory()
+        val userRepository = UserRepository.getInstance()
+
+        return LoginViewModelFactory(userRepository)
     }
 
     fun provideRegisterViewModelFactory(): RegisterViewModelFactory {
-        return RegisterViewModelFactory()
+        val userRepository = UserRepository.getInstance()
+
+        return RegisterViewModelFactory(userRepository)
     }
 
     fun provideHomeViewModelFactory(): HomeViewModelFactory {
@@ -40,7 +45,8 @@ object InjectorUtils {
     }
 
     fun provideProfileViewModelFactory(): ProfileViewModelFactory {
-        return ProfileViewModelFactory()
+        val userRepository = UserRepository.getInstance()
+        return ProfileViewModelFactory(userRepository)
     }
 
     fun provideSettingsViewModelFactory(): SettingsViewModelFactory {
