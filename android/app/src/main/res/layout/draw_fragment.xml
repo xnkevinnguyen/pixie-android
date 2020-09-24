@@ -6,19 +6,29 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/canvas_fragment"
-        android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
-        android:layout_width="1073dp"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="44dp"
-        android:layout_toStartOf="@+id/draw_tools_fragment" />
-
-    <fragment
         android:id="@+id/draw_tools_fragment"
         android:name="com.pixie.android.ui.draw.drawTools.DrawToolsFragment"
-        android:layout_width="100dp"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginRight="10dp"
+        android:layout_toStartOf="@+id/canvas_fragment"/>
+
+    <fragment
+        android:id="@+id/canvas_fragment"
+        android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
+        android:layout_width="900dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="300dp"
+        android:layout_alignParentEnd="true"/>
+
+    <fragment
+        android:id="@+id/second_chat_fragment"
+        android:name="com.pixie.android.ui.draw.chat.ChatFragment"
+        android:layout_width="275dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"/>
+
+
 
 
 </RelativeLayout>
