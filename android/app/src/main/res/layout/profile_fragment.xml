@@ -20,6 +20,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logout"
+        tools:ignore="MissingConstraints" />
+
     <include layout="@layout/nav_header_main" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

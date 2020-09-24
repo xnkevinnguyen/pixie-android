@@ -3,10 +3,8 @@ package com.pixie.android.ui.draw.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.pixie.android.data.user.UserRepository
 
-class ProfileViewModel(): ViewModel() {
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is profile Fragment"
-    }
-    val text: LiveData<String> = _text
+class ProfileViewModel(private val userRepository: UserRepository): ViewModel() {
+    fun logout() = userRepository.logout()
 }
