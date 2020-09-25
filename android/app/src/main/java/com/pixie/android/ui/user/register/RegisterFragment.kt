@@ -138,7 +138,8 @@ class RegisterFragment : Fragment() {
         ).show()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showLoginFailed(errorString: String) {
+
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
     }
 }

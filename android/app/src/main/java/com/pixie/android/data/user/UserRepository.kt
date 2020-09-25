@@ -7,6 +7,7 @@ import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.model.user.LoginFormState
 import com.pixie.android.model.user.AuthResult
+import com.pixie.android.utilities.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -45,11 +46,11 @@ class UserRepository(val dataSource: UserDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String, onLoginResult :(authResult: AuthResult)->Unit) {
+    fun login(username: String, password: String, onLoginResult: (authResult: AuthResult) -> Unit) {
 
         CoroutineScope(IO).launch {
             val response = dataSource.login(username, password)
-            lateinit var authResult :AuthResult
+            lateinit var authResult: AuthResult
             if (response?.login?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
                     response.login.user.id.toString(),
@@ -58,10 +59,14 @@ class UserRepository(val dataSource: UserDataSource) {
                 )
 
                 setLoggedInUser(userData)
+                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username))
 
-                authResult=AuthResult(success = LoggedInUserView(displayName = userData.username))
+            } else if (!response?.login?.errors.isNullOrEmpty()) {
+                authResult = AuthResult(error = response?.login?.errors?.last()?.message)
+
             } else {
-                authResult=AuthResult(error = R.string.login_failed)
+                //Abnormal case since server is supposed to give us an error message
+                authResult = AuthResult(error = Constants.PLACEHOLDER_AUTH_ERROR)
             }
             // Put job of updating UI back on main thread
             val uiScope = CoroutineScope(Main)
@@ -74,10 +79,15 @@ class UserRepository(val dataSource: UserDataSource) {
 
     }
 
-    fun register(username: String, email: String, password: String,onLoginResult :(authResult: AuthResult)->Unit) {
+    fun register(
+        username: String,
+        email: String,
+        password: String,
+        onLoginResult: (authResult: AuthResult) -> Unit
+    ) {
         CoroutineScope(IO).launch {
             val response = dataSource.register(username, email, password)
-            lateinit var authResult :AuthResult
+            lateinit var authResult: AuthResult
 
             if (response?.register?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
@@ -86,9 +96,12 @@ class UserRepository(val dataSource: UserDataSource) {
                     response.register.user.email
                 )
                 setLoggedInUser(userData)
-                authResult=AuthResult(success = LoggedInUserView(displayName = userData.username))
+                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username))
+            } else if (!response?.register?.errors.isNullOrEmpty()) {
+                authResult = AuthResult(error = response?.register?.errors?.last()?.message)
+
             } else {
-                authResult=AuthResult(error = R.string.failed_registration)
+                authResult = AuthResult(error = Constants.PLACEHOLDER_REGISTRATION_ERROR)
             }
 
             // Put job of updating UI back on main thread
@@ -109,7 +122,7 @@ class UserRepository(val dataSource: UserDataSource) {
     companion object {
         @Volatile
         private var instance: UserRepository? = null
-        private var dataSource:UserDataSource = UserDataSource.getInstance()
+        private var dataSource: UserDataSource = UserDataSource.getInstance()
         fun getInstance() = instance ?: synchronized(this) {
             instance ?: UserRepository(dataSource).also {
                 instance = it

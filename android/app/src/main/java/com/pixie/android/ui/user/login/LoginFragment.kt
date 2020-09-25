@@ -100,6 +100,7 @@ class LoginFragment : Fragment() {
                         requireActivity().finish()
                         updateUiWithUser(it.success)
                     }else if (it?.error!=null){
+                        errorMessageField.text = it.error
                         errorMessageField.visibility = View.VISIBLE
                         showLoginFailed(it.error)
                     }
@@ -124,7 +125,7 @@ class LoginFragment : Fragment() {
         ).show()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showLoginFailed( errorString: String) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
     }
 }
