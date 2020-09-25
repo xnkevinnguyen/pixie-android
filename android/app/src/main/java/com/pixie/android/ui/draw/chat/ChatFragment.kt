@@ -11,11 +11,11 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.pixie.android.R
-import com.pixie.android.model.draw.MessageData
+import com.pixie.android.model.chat.MessageData
 import kotlinx.android.synthetic.main.chat_fragment.*
 
 
-class ChatFragment() : Fragment() {
+class ChatFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +34,10 @@ class ChatFragment() : Fragment() {
 
         sendMessage.setOnClickListener {
             val message = editText.text.toString()
-            val messageData = MessageData(message, belongsToCurrentUser = true)
+            val messageData = MessageData(
+                message,
+                belongsToCurrentUser = true
+            )
             if(message.isNotBlank()){
                 adapter.add(messageData)
                 editText.text.clear() //clear text line
@@ -44,11 +47,12 @@ class ChatFragment() : Fragment() {
         // when receive message
         // 1. create data MessageData -Text, belongsToCurrentUser=false, Username= ...
         // 2. adapter.add(MessageData created in 1)
+
         return root
     }
 }
 
-class RecipeAdapter(private val context: Context) : BaseAdapter() {
+class RecipeAdapter(context: Context) : BaseAdapter() {
 
     private val inflater: LayoutInflater
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

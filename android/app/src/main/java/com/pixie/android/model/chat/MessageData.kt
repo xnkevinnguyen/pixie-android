@@ -1,4 +1,4 @@
-package com.pixie.android.model.draw
+package com.pixie.android.model.chat
 
 data class MessageData (
     val text: String,
