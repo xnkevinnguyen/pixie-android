@@ -1,18 +1,15 @@
 package com.pixie.android.data.user
 
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.R
-import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.model.user.LoginFormState
-import com.pixie.android.model.user.LoginResult
+import com.pixie.android.model.user.AuthResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 
 /**
@@ -23,7 +20,7 @@ import kotlinx.coroutines.launch
 class UserRepository(val dataSource: UserDataSource) {
 
     private val loginForm = MutableLiveData<LoginFormState>()
-    private val loginResult = MutableLiveData<LoginResult>()
+    private val loginResult = MutableLiveData<AuthResult>()
     var user: LoggedInUser? = null
 
     fun getLoginForm(): LiveData<LoginFormState> {
@@ -34,12 +31,12 @@ class UserRepository(val dataSource: UserDataSource) {
         loginForm.value = loginFormState
     }
 
-    fun getLoginResult(): LiveData<LoginResult> {
+    fun getLoginResult(): LiveData<AuthResult> {
         return loginResult
     }
 
-    fun setLoginResult(loginResultState: LoginResult) {
-        loginResult.postValue(loginResultState)
+    fun setLoginResult(authResultState: AuthResult) {
+        loginResult.postValue(authResultState)
     }
 
     fun logout() {
@@ -48,30 +45,40 @@ class UserRepository(val dataSource: UserDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String, f: () -> Unit) {
+    fun login(username: String, password: String, onLoginResult :(authResult: AuthResult)->Unit) {
 
         CoroutineScope(IO).launch {
             val response = dataSource.login(username, password)
+            lateinit var authResult :AuthResult
             if (response?.login?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
                     response.login.user.id.toString(),
                     response.login.user.username,
                     response.login.user.email
                 )
-                f
+
                 setLoggedInUser(userData)
-                setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.username)))
+
+                authResult=AuthResult(success = LoggedInUserView(displayName = userData.username))
             } else {
-                setLoginResult(LoginResult(error = R.string.login_failed))
+                authResult=AuthResult(error = R.string.login_failed)
+            }
+            // Put job of updating UI back on main thread
+            val uiScope = CoroutineScope(Main)
+            uiScope.launch {
+                onLoginResult(authResult)
+
             }
 
         }
 
     }
 
-    fun register(username: String, email: String, password: String) {
+    fun register(username: String, email: String, password: String,onLoginResult :(authResult: AuthResult)->Unit) {
         CoroutineScope(IO).launch {
             val response = dataSource.register(username, email, password)
+            lateinit var authResult :AuthResult
+
             if (response?.register?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
                     response.register.user.id.toString(),
@@ -79,9 +86,15 @@ class UserRepository(val dataSource: UserDataSource) {
                     response.register.user.email
                 )
                 setLoggedInUser(userData)
-                setLoginResult(LoginResult(success = LoggedInUserView(displayName = userData.username)))
+                authResult=AuthResult(success = LoggedInUserView(displayName = userData.username))
             } else {
-                setLoginResult(LoginResult(error = R.string.failed_registration))
+                authResult=AuthResult(error = R.string.failed_registration)
+            }
+
+            // Put job of updating UI back on main thread
+            val uiScope = CoroutineScope(Main)
+            uiScope.launch {
+                onLoginResult(authResult)
             }
 
         }

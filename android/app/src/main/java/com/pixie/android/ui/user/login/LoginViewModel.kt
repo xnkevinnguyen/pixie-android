@@ -4,16 +4,16 @@ import androidx.lifecycle.ViewModel
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.user.LoginFormState
+import com.pixie.android.model.user.AuthResult
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     fun getLoginFormState() = userRepository.getLoginForm()
 
-    fun getLoginResultState() = userRepository.getLoginResult()
 
-    fun login(username: String, password: String) {
+    fun login(username: String, password: String, onLoginResult :(authResult: AuthResult)->Unit) {
 
-        userRepository.login(username, password, {})
+        userRepository.login(username, password, onLoginResult)
 
     }
 
