@@ -10,8 +10,11 @@ import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
 import com.pixie.android.model.chat.MessageData
+import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.chat_fragment.*
 
 
@@ -30,32 +33,38 @@ class ChatFragment : Fragment() {
         val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
         val messageList = root.findViewById<ListView>(R.id.messages_view)
         val adapter = RecipeAdapter(requireContext())
+        val factory = InjectorUtils.provideChatViewModelFactory()
+
+        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
+
         messageList.adapter = adapter
 
         sendMessage.setOnClickListener {
             val message = editText.text.toString()
-            val messageData = MessageData(
-                message,
-                belongsToCurrentUser = true
-            )
-            if(message.isNotBlank()){
-                adapter.add(messageData)
+
+            if (message.isNotBlank()) {
+                chatViewModel.sendMessageToCurrentChannel(message)
                 editText.text.clear() //clear text line
+
             }
         }
+        val mainChannelMessageList = chatViewModel.getMainChannelMessage()
+        mainChannelMessageList.observe(viewLifecycleOwner, Observer {
+            if (!it.isNullOrEmpty())
+                adapter.add(it.last())
+        })
 
         // when receive message voir click listener
         // 1. create data MessageData -Text, belongsToCurrentUser=false, Username= ...
         // 2. adapter.add(MessageData created in 1)
-
         return root
     }
 }
 
 class RecipeAdapter(context: Context) : BaseAdapter() {
 
-    private val inflater: LayoutInflater
-            = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val inflater: LayoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     private val listOfMessage = ArrayList<MessageData>()
 
@@ -79,7 +88,7 @@ class RecipeAdapter(context: Context) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val message: MessageData = listOfMessage[position]
 
-        return if(message.belongsToCurrentUser){
+        return if (message.belongsToCurrentUser) {
             val rowView = inflater.inflate(R.layout.align_chat_right, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.text_title)
             txtTitle.text = message.text
