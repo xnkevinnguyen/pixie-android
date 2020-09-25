@@ -44,7 +44,7 @@ class ChatFragment : Fragment() {
             }
         }
 
-        // when receive message
+        // when receive message voir click listener
         // 1. create data MessageData -Text, belongsToCurrentUser=false, Username= ...
         // 2. adapter.add(MessageData created in 1)
 
