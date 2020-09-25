@@ -58,6 +58,9 @@ class LoginFragment : Fragment() {
             startActivity(intent)
             requireActivity().finish()
         }
+        //to remove
+        startActivity(intent)
+
 
         loginViewModel.getLoginFormState().observe(viewLifecycleOwner, Observer {
             val loginState = it

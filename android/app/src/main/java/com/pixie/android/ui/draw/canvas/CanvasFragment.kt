@@ -74,4 +74,13 @@ class CanvasFragment : Fragment() {
             my_canvas.setBackgroundColor(Color.WHITE)
         }
     }
+
+    override fun onDestroyView() {
+        // Set DrawCommandHistory whenever you enter the canvas page or else it crashes
+        val factory = InjectorUtils.provideCanvasViewModelFactory()
+        val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
+
+        viewModel.resetDrawCommandHistory()
+        super.onDestroyView()
+    }
 }

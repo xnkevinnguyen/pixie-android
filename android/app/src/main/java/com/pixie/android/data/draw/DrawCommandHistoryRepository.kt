@@ -19,6 +19,7 @@ class DrawCommandHistoryRepository {
         if(count != null && count > 0) {
             drawCommandHistory = MutableLiveData<MutableList<DrawCommand>>()
         }
+        restoreUndoneCommandList()
     }
 
     fun popLastDrawCommandFromHistory() {
