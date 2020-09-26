@@ -7,5 +7,6 @@ class Constants {
         const val PLACEHOLDER_AUTH_ERROR = "Invalid Username or Password"
         const val PLACEHOLDER_REGISTRATION_ERROR = "Error registering"
         const val USER_ID="UserID"
+        const val USERNAME="Username"
     }
 }

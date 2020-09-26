@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.pixie.android.utilities.Constants
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +17,6 @@ import androidx.navigation.Navigation.findNavController
 import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.ui.draw.MainActivity
-import com.pixie.android.ui.user.login.LoginViewModel
 import com.pixie.android.utilities.InjectorUtils
 
 
@@ -124,7 +122,7 @@ class RegisterFragment : Fragment() {
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
+        val displayName = model.username
         Toast.makeText(
             requireContext(),
             "$welcome $displayName",

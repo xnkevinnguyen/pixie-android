@@ -1,0 +1,6 @@
+mutation ExitChannel($exitChannelInput: ExitChannelInput!){
+    exitChannel(input:$exitChannelInput){
+        id
+        name
+    }
+}

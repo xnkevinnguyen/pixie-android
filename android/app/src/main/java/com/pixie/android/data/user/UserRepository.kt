@@ -2,7 +2,6 @@ package com.pixie.android.data.user
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.model.user.LoginFormState
@@ -51,7 +50,7 @@ class UserRepository(val dataSource: UserDataSource) {
                 )
 
                 setLoggedInUser(userData)
-                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username, userID = userData.userId))
+                authResult = AuthResult(success = LoggedInUserView(username = userData.username, userID = userData.userId))
 
             } else if (!response?.login?.errors.isNullOrEmpty()) {
                 authResult = AuthResult(error = response?.login?.errors?.last()?.message)
@@ -86,7 +85,7 @@ class UserRepository(val dataSource: UserDataSource) {
                     response.register.user.username
                 )
                 setLoggedInUser(userData)
-                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username, userID = userData.userId))
+                authResult = AuthResult(success = LoggedInUserView(username = userData.username, userID = userData.userId))
             } else if (!response?.register?.errors.isNullOrEmpty()) {
                 authResult = AuthResult(error = response?.register?.errors?.last()?.message)
 

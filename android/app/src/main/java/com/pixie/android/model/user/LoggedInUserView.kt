@@ -1,6 +1,6 @@
 package com.pixie.android.model.user
 
 data class LoggedInUserView(
-        val displayName: String,
+        val username: String,
         val userID:Double
 )
