@@ -52,19 +52,8 @@ class LoginFragment : Fragment() {
         )
         editor = preferences.edit()
 
-        val intent = Intent(view.context, MainActivity::class.java)
-
         val factory = InjectorUtils.provideLoginViewModelFactory()
         loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
-        val userIDPreference = preferences.getString(Constants.USER_ID, null)
-        val usernamePreference = preferences.getString(Constants.USERNAME, null)
-        if (preferences.getBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, false)
-            && userIDPreference != null && usernamePreference != null
-        ) {
-            startActivity(intent)
-            loginViewModel.userPreviousLogin(userIDPreference.toDouble(), usernamePreference)
-            requireActivity().finish()
-        }
 
 
         loginViewModel.getLoginFormState().observe(viewLifecycleOwner, Observer {

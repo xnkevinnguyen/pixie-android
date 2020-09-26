@@ -2,5 +2,10 @@ mutation EnterChannel ($enterChannelInput:EnterChannelInput!){
     enterChannel(input:$enterChannelInput){
         id
         name
+        participants{
+            id
+            username
+            isOnline
+        }
     }
 }

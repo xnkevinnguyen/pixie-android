@@ -21,21 +21,35 @@ class ChatRepository(
     private var mainChannelMessageList = MutableLiveData<MutableList<MessageData>>().apply {
         this.postValue(arrayListOf(MessageData(CHAT_INTRO, false, "Pixie")))
     }
-    private var mainChannelParticipantList = MutableLiveData<MutableList<ChannelParticipant>>().apply {
-        val userID = userRepository.user?.userId
-        val username = userRepository.user?.username
-        if (userID != null && username != null) {
-            this.postValue(arrayListOf(ChannelParticipant(userID, username, true)))
+    private var mainChannelParticipantList =
+        MutableLiveData<MutableList<ChannelParticipant>>().apply {
+            val userID = userRepository.user?.userId
+            val username = userRepository.user?.username
+            if (userID != null && username != null) {
+                this.postValue(arrayListOf(ChannelParticipant(userID, username, true)))
 
+            }
         }
-    }
 
     fun getMainChannelMessageList(): LiveData<MutableList<MessageData>> {
         return mainChannelMessageList
     }
 
-    fun getMainChannelParticipantList():LiveData<MutableList<ChannelParticipant>>{
+    fun getMainChannelParticipantList(): LiveData<MutableList<ChannelParticipant>> {
         return mainChannelParticipantList
+    }
+
+    fun enterMainChannel() {
+        CoroutineScope(IO).launch {
+            val userId = userRepository.user?.userId
+            if (userId != null) {
+                val channelData = dataSource.enterChannel(MAIN_CHANNEL_ID, userId)
+                if (channelData != null)
+                    mainChannelParticipantList.postValue(channelData.participantList.toMutableList())
+
+            }
+
+        }
     }
 
     fun subscribeChannelMessages() {

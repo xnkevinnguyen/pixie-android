@@ -107,8 +107,7 @@ class ChatFragment : Fragment() {
         val factory = InjectorUtils.provideChatViewModelFactory()
 
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
-        chatViewModel.suscribeToChannelMessages()
-        chatViewModel.suscribeToChannelChanges()
+        chatViewModel.startChannel()
         // Participant list is initially hidden
 
         participant_list.visibility = View.INVISIBLE
