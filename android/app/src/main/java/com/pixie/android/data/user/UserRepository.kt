@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 class UserRepository(val dataSource: UserDataSource) {
 
     private val loginForm = MutableLiveData<LoginFormState>()
-    private val loginResult = MutableLiveData<AuthResult>()
     var user: LoggedInUser? = null
 
     fun getLoginForm(): LiveData<LoginFormState> {
@@ -32,18 +31,11 @@ class UserRepository(val dataSource: UserDataSource) {
         loginForm.value = loginFormState
     }
 
-    fun getLoginResult(): LiveData<AuthResult> {
-        return loginResult
-    }
 
-    fun setLoginResult(authResultState: AuthResult) {
-        loginResult.postValue(authResultState)
-    }
 
 
     fun logout() {
         user = null
-        loginResult.postValue(null)
         dataSource.logout()
     }
 

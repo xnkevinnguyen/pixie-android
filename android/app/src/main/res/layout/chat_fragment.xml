@@ -33,7 +33,7 @@
 
 
         <ListView
-            android:id="@+id/users_list"
+            android:id="@+id/participant_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"

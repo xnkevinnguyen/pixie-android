@@ -1,11 +1,11 @@
-subscription OnNewMessage($channelId: Float!){
-    onNewMessage(channelId:$channelId){
+subscription onChannelChange($channelId:Float!){
+    onChannelChange(channelId:$channelId){
         id
-        content
-        sender{
+        name
+        participants{
             id
             username
+            isOnline
         }
-        postedAt
     }
 }
