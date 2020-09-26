@@ -50,7 +50,6 @@ class RegisterFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val username = view.findViewById<EditText>(R.id.et_name)
-        val email = view.findViewById<EditText>(R.id.et_email)
         val password = view.findViewById<EditText>(R.id.et_password)
         var retypePassword = view.findViewById<EditText>(R.id.et_repassword)
         val register = view.findViewById<Button>(R.id.btn_register)
@@ -71,25 +70,15 @@ class RegisterFragment : Fragment() {
         username.afterTextChanged {
             registerViewModel.registerDataChanged(
                 username.text.toString(),
-                email.text.toString(),
                 password.text.toString(),
                 retypePassword.text.toString()
             )
         }
 
-        email.afterTextChanged {
-            registerViewModel.registerDataChanged(
-                username.text.toString(),
-                email.text.toString(),
-                password.text.toString(),
-                retypePassword.text.toString()
-            )
-        }
 
         password.afterTextChanged {
             registerViewModel.registerDataChanged(
                 username.text.toString(),
-                email.text.toString(),
                 password.text.toString(),
                 retypePassword.text.toString()
             )
@@ -99,7 +88,6 @@ class RegisterFragment : Fragment() {
             afterTextChanged {
                 registerViewModel.registerDataChanged(
                     username.text.toString(),
-                    email.text.toString(),
                     password.text.toString(),
                     retypePassword.text.toString()
                 )
@@ -107,7 +95,7 @@ class RegisterFragment : Fragment() {
 
 
             register.setOnClickListener {
-                registerViewModel.register(username.text.toString(), email.text.toString(), password.text.toString()) {
+                registerViewModel.register(username.text.toString(), password.text.toString()) {
                     val registerResult = it
 
                     if (registerResult.error != null) {

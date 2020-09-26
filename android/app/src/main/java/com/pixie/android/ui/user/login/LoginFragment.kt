@@ -92,7 +92,7 @@ class LoginFragment : Fragment() {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString()) {
                     loading.visibility = View.INVISIBLE
-                    if (it.success != null){
+                    if (it.success != null && activity !=null){
                         val intent = Intent(view?.context, MainActivity::class.java)
 
                         editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN, true)

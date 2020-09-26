@@ -27,4 +27,6 @@
     <string name="email">email</string>
     <string name="retype_pass">Re-type password</string>
     <string name="return_login">Return to login page</string>
+    <string name="active_users">Active Users</string>
+    <string name="messages">Messages</string>
 </resources>

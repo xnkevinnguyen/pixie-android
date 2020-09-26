@@ -74,6 +74,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         canvas = Canvas(bitmap)
         canvas.drawColor(backgroundColor)
 
+
     }
 
     override fun onDraw(canvas: Canvas) {

@@ -25,7 +25,7 @@ class UserDataSource {
 
     }
 
-    suspend fun register(username:String, email:String, password: String ):RegisterMutation.Data?{
+    suspend fun register(username:String, password: String ):RegisterMutation.Data?{
         val usernamePasswordInput = UsernamePasswordInput(username,password)
         var response :RegisterMutation.Data? =null
         try{

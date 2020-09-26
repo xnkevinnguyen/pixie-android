@@ -10,17 +10,14 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
 
     fun getLoginResultState() = userRepository.getLoginResult()
 
-    fun register(username: String, email:String, password: String, onRegisterResult :(authResult: AuthResult)->Unit) {
+    fun register(username: String, password: String, onRegisterResult :(authResult: AuthResult)->Unit) {
 
-        userRepository.register(username, email, password,onRegisterResult)
+        userRepository.register(username, password,onRegisterResult)
 
     }
 
-    fun registerDataChanged(username: String, email: String, password: String, reTypePassword:String) {
+    fun registerDataChanged(username: String, password: String, reTypePassword:String) {
         if (!username.isNotBlank()) {
-            userRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_username))
-        }
-        if (!email.isNotBlank()) {
             userRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_username))
         }
         else if (!isPasswordValid(password)) {
