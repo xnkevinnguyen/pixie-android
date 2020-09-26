@@ -1,4 +1,4 @@
-package com.pixie.android.ui.draw.chat
+package com.pixie.android.ui.chat
 
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository

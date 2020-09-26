@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/second_chat_fragment"
-        android:name="com.pixie.android.ui.draw.chat.ChatFragment"
+        android:name="com.pixie.android.ui.chat.ChatFragment"
         android:layout_width="275dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"/>

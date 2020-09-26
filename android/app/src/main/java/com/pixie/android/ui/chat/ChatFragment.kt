@@ -1,4 +1,4 @@
-package com.pixie.android.ui.draw.chat
+package com.pixie.android.ui.chat
 
 import android.os.Bundle
 import android.view.LayoutInflater
