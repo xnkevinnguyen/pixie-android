@@ -102,7 +102,7 @@ class LoginFragment : Fragment() {
                         val intent = Intent(view?.context, MainActivity::class.java)
 
                         // Store for next time user opens application
-                        editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN, true)
+                        editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
                         editor.putString(Constants.USER_ID,it.success.userID.toString())
                         editor.apply()
                         startActivity(intent)

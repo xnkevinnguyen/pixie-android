@@ -51,32 +51,40 @@ class ChatFragment : Fragment() {
             }
         }
         chatTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                onTabReselected(tab)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                onTabUnselected(tab)
+            }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val fragmentTransaction = parentFragmentManager.beginTransaction()
 
-                // Handle tab select
                 if (tab?.position ==1){ // Active Users
                     messageLayout.visibility= View.INVISIBLE
                     users_list.visibility = View.VISIBLE
-                }else if (tab?.position ==0){
+                }else if (tab?.position ==0){ // Messages
                     messageLayout.visibility= View.VISIBLE
                     users_list.visibility = View.INVISIBLE
                 }
             }
 
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // Handle tab reselect
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // Handle tab unselect
-            }
         })
         val mainChannelMessageList = chatViewModel.getMainChannelMessage()
-        mainChannelMessageList.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty())
-                adapter.add(it.last())
+        mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->
+            if (!messageList.isNullOrEmpty()){
+                if(adapter.isEmpty){
+                    // Repopulating the adapter
+                    messageList.forEach {
+                        adapter.add(it)
+                    }
+
+                }else{
+                    adapter.add(messageList.last())
+                }
+            }
+
         })
 
         return root
