@@ -56,6 +56,12 @@ class LoginFragment : Fragment() {
 
         if (preferences.getBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, false)) {
             startActivity(intent)
+            val userID = preferences.getString(Constants.USER_ID,null)
+            if(userID!=null){
+                loginViewModel.userPreviousLogin(userID.toDouble(),"username")
+
+            }
+
             requireActivity().finish()
         }
 
@@ -95,7 +101,9 @@ class LoginFragment : Fragment() {
                     if (it.success != null && activity !=null){
                         val intent = Intent(view?.context, MainActivity::class.java)
 
+                        // Store for next time user opens application
                         editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN, true)
+                        editor.putString(Constants.USER_ID,it.success.userID.toString())
                         editor.apply()
                         startActivity(intent)
                         requireActivity().finish()

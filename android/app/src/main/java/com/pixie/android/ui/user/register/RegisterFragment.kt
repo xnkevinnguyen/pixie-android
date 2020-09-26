@@ -63,6 +63,12 @@ class RegisterFragment : Fragment() {
 
         if (preferences.getBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, false)) {
             startActivity(intent)
+
+            val userID = preferences.getString(Constants.USER_ID,null)
+            if(userID!=null){
+                registerViewModel.userPreviousLogin(userID.toDouble(),"username")
+
+            }
             requireActivity().finish()
         }
 

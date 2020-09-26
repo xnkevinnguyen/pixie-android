@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.user.AuthResult
+import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoginFormState
 
 class RegisterViewModel (private val userRepository: UserRepository) : ViewModel() {
 
-    fun getLoginResultState() = userRepository.getLoginResult()
+    fun userPreviousLogin(userID:Double, username: String){
+        userRepository.setLoggedInUser(LoggedInUser(userID,username))
+    }
 
     fun register(username: String, password: String, onRegisterResult :(authResult: AuthResult)->Unit) {
 

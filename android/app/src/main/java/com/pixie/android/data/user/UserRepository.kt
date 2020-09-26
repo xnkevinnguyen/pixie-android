@@ -40,6 +40,7 @@ class UserRepository(val dataSource: UserDataSource) {
         loginResult.postValue(authResultState)
     }
 
+
     fun logout() {
         user = null
         loginResult.postValue(null)
@@ -58,7 +59,7 @@ class UserRepository(val dataSource: UserDataSource) {
                 )
 
                 setLoggedInUser(userData)
-                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username))
+                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username, userID = userData.userId))
 
             } else if (!response?.login?.errors.isNullOrEmpty()) {
                 authResult = AuthResult(error = response?.login?.errors?.last()?.message)
@@ -93,7 +94,7 @@ class UserRepository(val dataSource: UserDataSource) {
                     response.register.user.username
                 )
                 setLoggedInUser(userData)
-                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username))
+                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username, userID = userData.userId))
             } else if (!response?.register?.errors.isNullOrEmpty()) {
                 authResult = AuthResult(error = response?.register?.errors?.last()?.message)
 
@@ -111,7 +112,7 @@ class UserRepository(val dataSource: UserDataSource) {
     }
 
 
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
+    fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser
     }
 

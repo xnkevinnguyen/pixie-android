@@ -5,16 +5,18 @@ import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.user.LoginFormState
 import com.pixie.android.model.user.AuthResult
+import com.pixie.android.model.user.LoggedInUser
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     fun getLoginFormState() = userRepository.getLoginForm()
 
 
+    fun userPreviousLogin(userID:Double, username: String){
+        userRepository.setLoggedInUser(LoggedInUser(userID,username))
+    }
     fun login(username: String, password: String, onLoginResult :(authResult: AuthResult)->Unit) {
-
         userRepository.login(username, password, onLoginResult)
-
     }
 
     fun loginDataChanged(username: String, password: String) {

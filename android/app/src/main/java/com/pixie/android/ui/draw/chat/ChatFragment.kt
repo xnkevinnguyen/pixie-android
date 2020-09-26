@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.tabs.TabLayout
 import com.pixie.android.R
 import com.pixie.android.model.chat.MessageData
 import com.pixie.android.utilities.InjectorUtils
@@ -32,6 +33,8 @@ class ChatFragment : Fragment() {
 
         val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
         val messageList = root.findViewById<ListView>(R.id.messages_view)
+        val chatTab = root.findViewById<TabLayout>(R.id.chat_tab)
+
         val adapter = RecipeAdapter(requireContext())
         val factory = InjectorUtils.provideChatViewModelFactory()
 
@@ -48,15 +51,30 @@ class ChatFragment : Fragment() {
 
             }
         }
+        chatTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                // Handle tab select
+                if (tab?.position ==1){ // Active Users
+                    messageList.visibility= View.INVISIBLE
+
+                }
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Handle tab reselect
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // Handle tab unselect
+            }
+        })
         val mainChannelMessageList = chatViewModel.getMainChannelMessage()
         mainChannelMessageList.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty())
                 adapter.add(it.last())
         })
 
-        // when receive message voir click listener
-        // 1. create data MessageData -Text, belongsToCurrentUser=false, Username= ...
-        // 2. adapter.add(MessageData created in 1)
         return root
     }
 

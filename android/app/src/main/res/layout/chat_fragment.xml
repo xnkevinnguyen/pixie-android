@@ -10,6 +10,7 @@
     android:background="@drawable/chat_custom_border">
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/chat_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabMode="fixed">
