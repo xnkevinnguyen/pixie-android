@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -32,7 +30,8 @@ class ChatFragment : Fragment() {
         )
 
         val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
-        val messageList = root.findViewById<ListView>(R.id.messages_view)
+        val messageLayout = root.findViewById<LinearLayout>(R.id.message_layout)
+        val messageList = root.findViewById<ListView>(R.id.messages_list)
         val chatTab = root.findViewById<TabLayout>(R.id.chat_tab)
 
         val adapter = RecipeAdapter(requireContext())
@@ -54,10 +53,15 @@ class ChatFragment : Fragment() {
         chatTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                val fragmentTransaction = parentFragmentManager.beginTransaction()
+
                 // Handle tab select
                 if (tab?.position ==1){ // Active Users
-                    messageList.visibility= View.INVISIBLE
-
+                    messageLayout.visibility= View.INVISIBLE
+                    users_list.visibility = View.VISIBLE
+                }else if (tab?.position ==0){
+                    messageLayout.visibility= View.VISIBLE
+                    users_list.visibility = View.INVISIBLE
                 }
             }
 
