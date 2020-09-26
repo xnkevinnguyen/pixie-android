@@ -1,9 +1,8 @@
 mutation register($user:UsernamePasswordInput!){
-    register(options:$user){
+    register(input:$user){
         user{
             id
             username
-            email
             createdAt
             updatedAt
         }

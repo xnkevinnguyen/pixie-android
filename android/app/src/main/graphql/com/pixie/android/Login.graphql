@@ -1,5 +1,5 @@
-mutation Login ($username:String!,$password:String!){
-    login(usernameOrEmail:$username,password:$password){
+mutation login ($input:LoginInput!){
+    login(input:$input){
         errors{
             field
             message
@@ -7,7 +7,6 @@ mutation Login ($username:String!,$password:String!){
         user{
             id
             username
-            email
             createdAt
         }
     }

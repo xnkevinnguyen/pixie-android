@@ -8,6 +8,9 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
 
     fun getMainChannelMessage() = chatRepository.getMainChannelMessageList()
 
+    fun suscribeToChannel(){
+        chatRepository.subscribeChannelMessages()
+    }
     fun sendMessageToCurrentChannel(message:String){
         chatRepository.sendMessage(message)
     }

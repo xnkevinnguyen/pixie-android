@@ -53,9 +53,8 @@ class UserRepository(val dataSource: UserDataSource) {
             lateinit var authResult: AuthResult
             if (response?.login?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
-                    response.login.user.id.toString(),
-                    response.login.user.username,
-                    response.login.user.email
+                    response.login.user.id,
+                    response.login.user.username
                 )
 
                 setLoggedInUser(userData)
@@ -91,9 +90,8 @@ class UserRepository(val dataSource: UserDataSource) {
 
             if (response?.register?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
-                    response.register.user.id.toString(),
-                    response.register.user.username,
-                    response.register.user.email
+                    response.register.user.id,
+                    response.register.user.username
                 )
                 setLoggedInUser(userData)
                 authResult = AuthResult(success = LoggedInUserView(displayName = userData.username))

@@ -7,6 +7,7 @@ import com.pixie.android.LoginMutation
 import com.pixie.android.RegisterMutation
 import com.pixie.android.apolloClient
 import com.pixie.android.data.draw.DrawCommandHistoryRepository
+import com.pixie.android.type.LoginInput
 import com.pixie.android.type.UsernamePasswordInput
 
 class UserDataSource {
@@ -14,7 +15,8 @@ class UserDataSource {
     suspend fun login(username: String, password: String):LoginMutation.Data? {
         var response :LoginMutation.Data? =null
          try{
-            response =  apolloClient.mutate(LoginMutation(username, password)).toDeferred().await().data
+             val loginInput = LoginInput(username,password)
+            response =  apolloClient.mutate(LoginMutation(loginInput)).toDeferred().await().data
 
         }catch(e:ApolloException){
              Log.d("apolloException", e.message.toString())
@@ -24,7 +26,7 @@ class UserDataSource {
     }
 
     suspend fun register(username:String, email:String, password: String ):RegisterMutation.Data?{
-        val usernamePasswordInput = UsernamePasswordInput(email,username,password)
+        val usernamePasswordInput = UsernamePasswordInput(username,password)
         var response :RegisterMutation.Data? =null
         try{
             response =  apolloClient.mutate(RegisterMutation(usernamePasswordInput)).toDeferred().await().data

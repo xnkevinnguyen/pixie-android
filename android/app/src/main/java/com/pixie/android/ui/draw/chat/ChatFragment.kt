@@ -59,7 +59,16 @@ class ChatFragment : Fragment() {
         // 2. adapter.add(MessageData created in 1)
         return root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val factory = InjectorUtils.provideChatViewModelFactory()
+
+        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
+        chatViewModel.suscribeToChannel()
+        super.onViewCreated(view, savedInstanceState)
+    }
 }
+
 
 class RecipeAdapter(context: Context) : BaseAdapter() {
 

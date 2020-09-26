@@ -1,0 +1,11 @@
+subscription OnNewMessage($channelId: Float!){
+    onNewMessage(channelId:$channelId){
+        id
+        content
+        sender{
+            id
+            username
+        }
+        postedAt
+    }
+}
