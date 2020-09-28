@@ -22,6 +22,9 @@ class UserRepository(val dataSource: UserDataSource) {
     private val loginForm = MutableLiveData<LoginFormState>()
     var user: LoggedInUser? = null
 
+    // Stricly used for operations after logged out
+    var loggedOutUserID :Double?=null
+
     fun getLoginForm(): LiveData<LoginFormState> {
         return loginForm
     }
@@ -34,7 +37,9 @@ class UserRepository(val dataSource: UserDataSource) {
 
 
     fun logout() {
+        loggedOutUserID = user?.userId
         user = null
+
         dataSource.logout()
     }
 

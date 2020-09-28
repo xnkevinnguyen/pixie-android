@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.pixie.android.ui.draw.MainActivity
 import com.pixie.android.ui.user.AuthActivity
 import com.pixie.android.ui.user.login.LoginViewModel
 import com.pixie.android.utilities.Constants

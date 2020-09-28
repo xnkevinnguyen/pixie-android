@@ -104,16 +104,14 @@ class ChatFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val factory = InjectorUtils.provideChatViewModelFactory()
 
-        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
-        chatViewModel.startChannel()
         // Participant list is initially hidden
 
         participant_list.visibility = View.INVISIBLE
 
         super.onViewCreated(view, savedInstanceState)
     }
+
 }
 
 

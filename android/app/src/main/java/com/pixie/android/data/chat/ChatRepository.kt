@@ -2,12 +2,16 @@ package com.pixie.android.data.chat
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.apollographql.apollo.ApolloSubscriptionCall
+import com.pixie.android.OnChannelChangeSubscription
+import com.pixie.android.OnNewMessageSubscription
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class ChatRepository(
@@ -17,19 +21,18 @@ class ChatRepository(
 
 
     val MAIN_CHANNEL_ID = 3.0
-    val CHAT_INTRO = "Welcome to the chat! :)"
     private var mainChannelMessageList = MutableLiveData<MutableList<MessageData>>().apply {
-        this.postValue(arrayListOf(MessageData(CHAT_INTRO, false, "Pixie")))
+        this.postValue(arrayListOf())
     }
     private var mainChannelParticipantList =
         MutableLiveData<MutableList<ChannelParticipant>>().apply {
-            val userID = userRepository.user?.userId
-            val username = userRepository.user?.username
-            if (userID != null && username != null) {
-                this.postValue(arrayListOf(ChannelParticipant(userID, username, true)))
-
-            }
+            val loadingUsername = "Loading ..."
+            val loadingID = 0.0
+            this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
+
+    private lateinit var mainChannelMessageJob : Job
+    private lateinit var mainChannelParticipantJob:Job
 
     fun getMainChannelMessageList(): LiveData<MutableList<MessageData>> {
         return mainChannelMessageList
@@ -51,10 +54,33 @@ class ChatRepository(
 
         }
     }
+    fun clearChannels(){
+        mainChannelMessageList.postValue(arrayListOf())
+        mainChannelParticipantList.postValue(arrayListOf())
+    }
+
+    fun exitMainChannel() {
+        CoroutineScope(IO).launch {
+            val userID = userRepository.user?.userId
+            val loggedOutUserID = userRepository.loggedOutUserID
+            if (userID != null) {
+                dataSource.exitChannel(MAIN_CHANNEL_ID, userID)
+
+            } else if (loggedOutUserID != null) {
+                dataSource.exitChannel(MAIN_CHANNEL_ID, loggedOutUserID)
+            }
+
+        }
+    }
+
+    fun cancelMainChannelSubscriptions() {
+        mainChannelMessageJob.cancel()
+        mainChannelParticipantJob.cancel()
+    }
 
     fun subscribeChannelMessages() {
-        CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID) {
+        mainChannelMessageJob = CoroutineScope(IO).launch {
+            val sub = dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID,onReceiveMessage =  {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
                     if (it.userName != userRepository.user!!.username) {
@@ -63,19 +89,19 @@ class ChatRepository(
                     }
                 }
 
-            }
+            })
         }
     }
 
     fun suscribeChannelUsers() {
-        CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelChange(MAIN_CHANNEL_ID) {
+        mainChannelParticipantJob=CoroutineScope(IO).launch {
+             dataSource.suscribeToChannelChange(MAIN_CHANNEL_ID, onChannelChange = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
                     mainChannelParticipantList.postValue(it.participantList.toMutableList())
                 }
-            }
 
+            })
         }
     }
 

@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.draw.MainActivity"
+            android:name=".ui.MainActivity"
 
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

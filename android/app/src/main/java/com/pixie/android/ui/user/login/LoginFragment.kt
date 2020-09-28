@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUserView
-import com.pixie.android.ui.draw.MainActivity
+import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 

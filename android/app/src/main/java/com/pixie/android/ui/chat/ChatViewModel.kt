@@ -16,6 +16,12 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
         chatRepository.suscribeChannelUsers()
 
     }
+    fun stopChannel(){
+       chatRepository.cancelMainChannelSubscriptions()
+        chatRepository.exitMainChannel()
+        chatRepository.clearChannels()
+
+    }
 
     fun sendMessageToCurrentChannel(message:String){
         chatRepository.sendMessage(message)

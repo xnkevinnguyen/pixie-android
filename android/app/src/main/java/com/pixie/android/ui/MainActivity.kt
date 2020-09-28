@@ -1,4 +1,4 @@
-package com.pixie.android.ui.draw
+package com.pixie.android.ui
 
 
 import android.app.Dialog
@@ -21,6 +21,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
+import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.canvas.CanvasViewModel
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.main_activity.*
@@ -64,6 +65,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+
+        //Start channel subscriptions
+        val factory = InjectorUtils.provideChatViewModelFactory()
+        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
+        chatViewModel.startChannel()
+        super.onPostCreate(savedInstanceState)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
         menuInflater.inflate(R.menu.main, menu)
@@ -78,6 +88,14 @@ class MainActivity : AppCompatActivity() {
     // Disable back press since drawing undo-redo crashes if back pressed to drawing fragment
     override fun onBackPressed() {
         return
+    }
+
+    override fun onDestroy() {
+        // stop channel subscriptions
+        val factory = InjectorUtils.provideChatViewModelFactory()
+        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
+        chatViewModel.stopChannel()
+        super.onDestroy()
     }
 
 }
