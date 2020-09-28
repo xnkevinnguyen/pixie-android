@@ -3,15 +3,16 @@ package com.pixie.android.ui.user.register
 import androidx.lifecycle.ViewModel
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
+import com.pixie.android.model.user.AuthResult
 import com.pixie.android.model.user.LoginFormState
 
 class RegisterViewModel (private val userRepository: UserRepository) : ViewModel() {
 
     fun getLoginResultState() = userRepository.getLoginResult()
 
-    fun register(username: String, email:String, password: String) {
+    fun register(username: String, email:String, password: String, onRegisterResult :(authResult: AuthResult)->Unit) {
 
-        userRepository.register(username, email, password)
+        userRepository.register(username, email, password,onRegisterResult)
 
     }
 

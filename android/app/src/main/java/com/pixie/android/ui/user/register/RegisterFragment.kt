@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import com.pixie.android.utilities.Constants
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import com.pixie.android.R
@@ -54,7 +54,7 @@ class RegisterFragment : Fragment() {
         val password = view.findViewById<EditText>(R.id.et_password)
         var retypePassword = view.findViewById<EditText>(R.id.et_repassword)
         val register = view.findViewById<Button>(R.id.btn_register)
-        preferences = requireContext().getSharedPreferences("Login", Context.MODE_PRIVATE)
+        preferences = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
         editor = preferences.edit()
 
         val intent = Intent(view.context, MainActivity::class.java)
@@ -62,25 +62,11 @@ class RegisterFragment : Fragment() {
         val factory = InjectorUtils.provideRegisterViewModelFactory()
         registerViewModel = ViewModelProvider(this, factory).get(RegisterViewModel::class.java)
 
-        if (preferences.getBoolean("isLoggedIn", false)) {
+        if (preferences.getBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, false)) {
             startActivity(intent)
             requireActivity().finish()
         }
 
-        registerViewModel.getLoginResultState().observe(viewLifecycleOwner, Observer {
-            val registerResult = it
-
-            if (registerResult.error != null) {
-                showLoginFailed(registerResult.error)
-            }
-            if (registerResult.success != null) {
-                editor.putBoolean("isLoggedIn", true)
-                editor.apply()
-                startActivity(intent)
-                requireActivity().finish()
-                updateUiWithUser(registerResult.success)
-            }
-        })
 
         username.afterTextChanged {
             registerViewModel.registerDataChanged(
@@ -121,7 +107,20 @@ class RegisterFragment : Fragment() {
 
 
             register.setOnClickListener {
-                registerViewModel.register(username.text.toString(), email.text.toString(), password.text.toString())
+                registerViewModel.register(username.text.toString(), email.text.toString(), password.text.toString()) {
+                    val registerResult = it
+
+                    if (registerResult.error != null) {
+                        showLoginFailed(registerResult.error)
+                    }
+                    if (registerResult.success != null) {
+                        editor.putBoolean("isLoggedIn", true)
+                        editor.apply()
+                        startActivity(intent)
+                        requireActivity().finish()
+                        updateUiWithUser(registerResult.success)
+                    }
+                }
 
             }
         }
@@ -139,7 +138,8 @@ class RegisterFragment : Fragment() {
         ).show()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showLoginFailed(errorString: String) {
+
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
     }
 }
