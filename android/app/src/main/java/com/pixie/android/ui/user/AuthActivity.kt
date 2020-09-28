@@ -11,7 +11,7 @@ import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pixie.android.R
 
-class LoginActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

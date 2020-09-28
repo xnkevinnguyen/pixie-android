@@ -1,6 +1,5 @@
 package com.pixie.android.ui.draw.profile
 
-import android.app.ActionBar
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -13,14 +12,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
-import com.pixie.android.ui.draw.MainActivity
-import com.pixie.android.ui.user.LoginActivity
+import com.pixie.android.ui.user.AuthActivity
 import com.pixie.android.utilities.InjectorUtils
 
 class ProfileFragment: Fragment() {
@@ -42,7 +37,7 @@ class ProfileFragment: Fragment() {
         preferences = requireContext().getSharedPreferences("Login", Context.MODE_PRIVATE)
         editor = preferences.edit()
 
-        val intent = Intent(root.context, LoginActivity::class.java)
+        val intent = Intent(root.context, AuthActivity::class.java)
 
         logout.setOnClickListener {
             profileViewModel.logout()

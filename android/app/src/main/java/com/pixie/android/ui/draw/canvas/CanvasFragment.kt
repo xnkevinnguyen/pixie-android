@@ -27,6 +27,15 @@ class CanvasFragment : Fragment() {
         return rootView
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val factory = InjectorUtils.provideCanvasViewModelFactory()
         val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)

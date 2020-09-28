@@ -12,15 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.lifecycleScope
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.coroutines.toDeferred
-import com.apollographql.apollo.exception.ApolloException
-//import com.pixie.android.LaunchListQuery
-import kotlinx.coroutines.CoroutineScope
 import com.pixie.android.R
 import com.pixie.android.apolloClient
 import com.pixie.android.utilities.InjectorUtils

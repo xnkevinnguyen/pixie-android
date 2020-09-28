@@ -31,18 +31,6 @@
         android:background="@drawable/ic_et_custom"
         android:textSize="15sp" />
 
-    <EditText
-        android:id="@+id/et_email"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="@string/email"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:padding="15dp"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/ic_et_custom"
-        android:textSize="15sp" />
 
     <EditText
         android:id="@+id/et_password"

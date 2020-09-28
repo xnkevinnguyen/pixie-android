@@ -2,7 +2,6 @@ package com.pixie.android.data.user
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.model.user.LoginFormState
@@ -21,8 +20,10 @@ import kotlinx.coroutines.launch
 class UserRepository(val dataSource: UserDataSource) {
 
     private val loginForm = MutableLiveData<LoginFormState>()
-    private val loginResult = MutableLiveData<AuthResult>()
     var user: LoggedInUser? = null
+
+    // Stricly used for operations after logged out
+    var loggedOutUserID :Double?=null
 
     fun getLoginForm(): LiveData<LoginFormState> {
         return loginForm
@@ -32,17 +33,13 @@ class UserRepository(val dataSource: UserDataSource) {
         loginForm.value = loginFormState
     }
 
-    fun getLoginResult(): LiveData<AuthResult> {
-        return loginResult
-    }
 
-    fun setLoginResult(authResultState: AuthResult) {
-        loginResult.postValue(authResultState)
-    }
+
 
     fun logout() {
+        loggedOutUserID = user?.userId
         user = null
-        loginResult.postValue(null)
+
         dataSource.logout()
     }
 
@@ -53,13 +50,12 @@ class UserRepository(val dataSource: UserDataSource) {
             lateinit var authResult: AuthResult
             if (response?.login?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
-                    response.login.user.id.toString(),
-                    response.login.user.username,
-                    response.login.user.email
+                    response.login.user.id,
+                    response.login.user.username
                 )
 
                 setLoggedInUser(userData)
-                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username))
+                authResult = AuthResult(success = LoggedInUserView(username = userData.username, userID = userData.userId))
 
             } else if (!response?.login?.errors.isNullOrEmpty()) {
                 authResult = AuthResult(error = response?.login?.errors?.last()?.message)
@@ -81,22 +77,20 @@ class UserRepository(val dataSource: UserDataSource) {
 
     fun register(
         username: String,
-        email: String,
         password: String,
         onLoginResult: (authResult: AuthResult) -> Unit
     ) {
         CoroutineScope(IO).launch {
-            val response = dataSource.register(username, email, password)
+            val response = dataSource.register(username, password)
             lateinit var authResult: AuthResult
 
             if (response?.register?.user?.id != null) {// user needs to exist
                 val userData = LoggedInUser(
-                    response.register.user.id.toString(),
-                    response.register.user.username,
-                    response.register.user.email
+                    response.register.user.id,
+                    response.register.user.username
                 )
                 setLoggedInUser(userData)
-                authResult = AuthResult(success = LoggedInUserView(displayName = userData.username))
+                authResult = AuthResult(success = LoggedInUserView(username = userData.username, userID = userData.userId))
             } else if (!response?.register?.errors.isNullOrEmpty()) {
                 authResult = AuthResult(error = response?.register?.errors?.last()?.message)
 
@@ -114,7 +108,7 @@ class UserRepository(val dataSource: UserDataSource) {
     }
 
 
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
+    fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser
     }
 

@@ -1,0 +1,11 @@
+mutation SendMessage($addMessageInput: AddMessageInput!){
+    addMessage(input: $addMessageInput){
+        id
+        content
+        sender{
+            id
+            username
+        }
+    }
+
+}
