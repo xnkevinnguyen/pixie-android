@@ -23,6 +23,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.user.AuthActivity"/>
+
+        <service android:name=".utilities.OnApplicationStopService" android:stopWithTask="false" />
+
     </application>
 
 </manifest>

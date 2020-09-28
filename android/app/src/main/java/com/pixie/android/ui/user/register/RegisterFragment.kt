@@ -31,7 +31,7 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val root =  inflater.inflate(R.layout.register_fragment, container, false)
+        val root = inflater.inflate(R.layout.register_fragment, container, false)
         val navController = findNavController(requireActivity(), R.id.nav_login_fragment)
 
         val toLogin = root.findViewById<ImageView>(R.id.return_login)
@@ -46,29 +46,23 @@ class RegisterFragment : Fragment() {
 
         return root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val username = view.findViewById<EditText>(R.id.et_name)
         val password = view.findViewById<EditText>(R.id.et_password)
         var retypePassword = view.findViewById<EditText>(R.id.et_repassword)
         val register = view.findViewById<Button>(R.id.btn_register)
-        preferences = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        preferences = requireContext().getSharedPreferences(
+            Constants.SHARED_PREFERENCES_LOGIN,
+            Context.MODE_PRIVATE
+        )
         editor = preferences.edit()
 
-        val intent = Intent(view.context, MainActivity::class.java)
 
         val factory = InjectorUtils.provideRegisterViewModelFactory()
         registerViewModel = ViewModelProvider(this, factory).get(RegisterViewModel::class.java)
 
-        if (preferences.getBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, false)) {
-            startActivity(intent)
 
-            val userID = preferences.getString(Constants.USER_ID,null)
-            if(userID!=null){
-                registerViewModel.userPreviousLogin(userID.toDouble(),"username")
-
-            }
-            requireActivity().finish()
-        }
 
 
         username.afterTextChanged {
@@ -100,17 +94,20 @@ class RegisterFragment : Fragment() {
 
             register.setOnClickListener {
                 registerViewModel.register(username.text.toString(), password.text.toString()) {
-                    val registerResult = it
 
-                    if (registerResult.error != null) {
-                        showLoginFailed(registerResult.error)
-                    }
-                    if (registerResult.success != null) {
-                        editor.putBoolean("isLoggedIn", true)
+
+                    if (it.success != null) {
+                        val intent = Intent(view?.context, MainActivity::class.java)
+                        // Store for next time user opens application
+                        editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
+                        editor.putString(Constants.USER_ID, it.success.userID.toString())
+                        editor.putString(Constants.USERNAME, it.success.username)
                         editor.apply()
                         startActivity(intent)
                         requireActivity().finish()
-                        updateUiWithUser(registerResult.success)
+                        updateUiWithUser(it.success)
+                    } else if (it.error != null) {
+                        showRegisterFail(it.error)
                     }
                 }
 
@@ -130,7 +127,7 @@ class RegisterFragment : Fragment() {
         ).show()
     }
 
-    private fun showLoginFailed(errorString: String) {
+    private fun showRegisterFail(errorString: String) {
 
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
     }
