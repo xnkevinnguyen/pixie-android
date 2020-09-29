@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.pixie.android.utilities.Constants
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
@@ -62,7 +63,16 @@ class RegisterFragment : Fragment() {
         val factory = InjectorUtils.provideRegisterViewModelFactory()
         registerViewModel = ViewModelProvider(this, factory).get(RegisterViewModel::class.java)
 
+        registerViewModel.getRegisterFormState().observe(viewLifecycleOwner, Observer {
+            val loginState = it
 
+            // disable register button unless both username / password and retype password is valid
+            register.isEnabled = loginState.isDataValid
+
+            if (loginState.passwordError != null) {
+                password.error = getString(loginState.passwordError)
+            }
+        })
 
 
         username.afterTextChanged {

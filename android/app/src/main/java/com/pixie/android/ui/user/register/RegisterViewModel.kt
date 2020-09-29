@@ -9,6 +9,8 @@ import com.pixie.android.model.user.LoginFormState
 
 class RegisterViewModel (private val userRepository: UserRepository) : ViewModel() {
 
+    fun getRegisterFormState() = userRepository.getLoginForm()
+
     fun userPreviousLogin(userID:Double, username: String){
         userRepository.setLoggedInUser(LoggedInUser(userID,username))
     }
@@ -27,7 +29,7 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
             userRepository.setLoginForm(LoginFormState(passwordError = R.string.invalid_password))
         }
         else if (reTypePassword != password ) {
-            userRepository.setLoginForm(LoginFormState(passwordError = R.string.invalid_password))
+            userRepository.setLoginForm(LoginFormState(passwordError = R.string.invalid_re_password))
         } else {
             userRepository.setLoginForm(LoginFormState(isDataValid = true))
         }
@@ -35,6 +37,6 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
 
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
-        return password.length > 8
+        return password.length >= 8
     }
 }
