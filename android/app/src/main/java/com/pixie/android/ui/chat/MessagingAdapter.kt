@@ -1,6 +1,9 @@
 package com.pixie.android.ui.chat
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +11,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.pixie.android.R
 import com.pixie.android.model.chat.MessageData
+
 
 class MessagingAdapter(context: Context) : BaseAdapter() {
 
@@ -33,6 +37,7 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
         return position.toLong()
     }
 
+    @SuppressLint("DefaultLocale")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val message: MessageData = listOfMessage[position]
 
@@ -45,9 +50,23 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
             val rowView = inflater.inflate(R.layout.other_chat_message, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.message_body)
             val userName = rowView.findViewById<TextView>(R.id.name)
+            val timePosted = rowView.findViewById<TextView>(R.id.time)
+            val time = message.timePosted.toLong()
+            val timeFormatted = getDate(time, "hh:mm:ss")
+
             txtTitle.text = message.text
             userName.text = message.userName
+            timePosted.text = timeFormatted
             rowView
         }
+    }
+    private fun getDate(milliSeconds: Long, dateFormat: String?): String? {
+        // Create a DateFormatter object for displaying date in specified format.
+        val formatter = SimpleDateFormat(dateFormat)
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = milliSeconds
+        return formatter.format(calendar.time)
     }
 }

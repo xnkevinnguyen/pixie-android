@@ -15,6 +15,7 @@ import com.pixie.android.type.ExitChannelInput
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
+import java.util.*
 
 class ChatDataSource() {
 
@@ -85,10 +86,11 @@ class ChatDataSource() {
 
                 val messageContent = it.data?.onNewMessage?.content
                 val messageSenderUsername = it.data?.onNewMessage?.sender?.username
+                val messageTimePosted = it.data?.onNewMessage?.postedAt
 
 
-                if (messageContent != null && messageSenderUsername != null) {
-                    val messageData = MessageData(messageContent, false, messageSenderUsername)
+                if (messageContent != null && messageSenderUsername != null && messageTimePosted != null) {
+                    val messageData = MessageData(messageContent, false, messageSenderUsername, messageTimePosted)
                     onReceiveMessage(messageData)
                 }
             }
