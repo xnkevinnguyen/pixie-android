@@ -7,11 +7,11 @@ import android.os.IBinder
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
 
 
 class OnApplicationStopService :Service() {
-    private lateinit var chatViewModel:ChatViewModel
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -29,8 +29,10 @@ class OnApplicationStopService :Service() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         Log.e("OnApplicationStopService", "END")
         val chatRepository = ChatRepository.getInstance()
+        val userRepository = UserRepository.getInstance()
         chatRepository.clearChannels()
         chatRepository.cancelMainChannelSubscriptions()
+        userRepository.logout()
 
         stopSelf()
     }

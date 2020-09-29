@@ -37,10 +37,14 @@ class UserRepository(val dataSource: UserDataSource) {
 
 
     fun logout() {
-        loggedOutUserID = user?.userId
-        user = null
-
-        dataSource.logout()
+        // Logout is called when application stops or on manual logout
+        if(user!=null) {
+            loggedOutUserID = user?.userId
+            CoroutineScope(IO).launch {
+                dataSource.logout()
+            }
+            user = null
+        }
     }
 
     fun login(username: String, password: String, onLoginResult: (authResult: AuthResult) -> Unit) {
