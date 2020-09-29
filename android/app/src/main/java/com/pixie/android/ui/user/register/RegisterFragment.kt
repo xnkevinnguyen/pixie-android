@@ -72,6 +72,10 @@ class RegisterFragment : Fragment() {
             if (loginState.passwordError != null) {
                 password.error = getString(loginState.passwordError)
             }
+
+            if (loginState.rePasswordError != null) {
+                retypePassword.error = getString(loginState.rePasswordError)
+            }
         })
 
 

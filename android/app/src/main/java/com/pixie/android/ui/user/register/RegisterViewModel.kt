@@ -29,7 +29,7 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
             userRepository.setLoginForm(LoginFormState(passwordError = R.string.invalid_password))
         }
         else if (reTypePassword != password ) {
-            userRepository.setLoginForm(LoginFormState(passwordError = R.string.invalid_re_password))
+            userRepository.setLoginForm(LoginFormState(rePasswordError = R.string.invalid_re_password))
         } else {
             userRepository.setLoginForm(LoginFormState(isDataValid = true))
         }
