@@ -2,9 +2,6 @@ package com.pixie.android.data.chat
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.apollographql.apollo.ApolloSubscriptionCall
-import com.pixie.android.OnChannelChangeSubscription
-import com.pixie.android.OnNewMessageSubscription
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
@@ -13,6 +10,8 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChatRepository(
     private val dataSource: ChatDataSource,
@@ -107,7 +106,8 @@ class ChatRepository(
 
 
     fun sendMessage(message: String) {
-        val messageData = MessageData(message, true)
+
+        val messageData = MessageData(message, true, timePosted = Calendar.getInstance().timeInMillis.toString())
         mainChannelMessageList.value?.add(messageData)
         CoroutineScope(IO).launch {
             val data = dataSource.sendMessageToChannel(

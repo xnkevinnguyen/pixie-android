@@ -20,6 +20,10 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
         userRepository.register(username, password,onRegisterResult)
 
     }
+    fun login(username: String, password: String,onLoginResult:(authResult:AuthResult)->Unit){
+        userRepository.login(username,password,onLoginResult )
+    }
+
 
     fun registerDataChanged(username: String, password: String, reTypePassword:String) {
         if (!username.isNotBlank()) {

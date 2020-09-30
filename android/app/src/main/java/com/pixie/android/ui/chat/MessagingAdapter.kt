@@ -44,7 +44,14 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
         return if (message.belongsToCurrentUser) {
             val rowView = inflater.inflate(R.layout.align_chat_right, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.text_title)
+            val timePosted = rowView.findViewById<TextView>(R.id.time)
+            val time = message.timePosted.toLong()
+            val timeFormatted = getDate(time, "hh:mm:ss")
+
+
             txtTitle.text = message.text
+            timePosted.text = timeFormatted
+
             rowView
         } else {
             val rowView = inflater.inflate(R.layout.other_chat_message, parent, false)
