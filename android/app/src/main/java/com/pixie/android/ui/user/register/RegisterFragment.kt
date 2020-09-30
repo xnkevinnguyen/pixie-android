@@ -53,6 +53,10 @@ class RegisterFragment : Fragment() {
         val password = view.findViewById<EditText>(R.id.et_password)
         var retypePassword = view.findViewById<EditText>(R.id.et_repassword)
         val register = view.findViewById<Button>(R.id.btn_register)
+        val loading = view.findViewById<ProgressBar>(R.id.loading)
+        val errorMessageField = view.findViewById<TextView>(R.id.error_login)
+
+
         preferences = requireContext().getSharedPreferences(
             Constants.SHARED_PREFERENCES_LOGIN,
             Context.MODE_PRIVATE
@@ -107,7 +111,10 @@ class RegisterFragment : Fragment() {
 
 
             register.setOnClickListener {
+                loading.visibility = View.VISIBLE
+
                 registerViewModel.register(username.text.toString(), password.text.toString()) {
+                    loading.visibility = View.INVISIBLE
 
 
                     if (it.success != null) {
@@ -121,6 +128,8 @@ class RegisterFragment : Fragment() {
                         requireActivity().finish()
                         updateUiWithUser(it.success)
                     } else if (it.error != null) {
+                        errorMessageField.text = it.error
+                        errorMessageField.visibility = View.VISIBLE
                         showRegisterFail(it.error)
                     }
                 }

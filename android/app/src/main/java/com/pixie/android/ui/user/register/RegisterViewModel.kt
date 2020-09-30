@@ -21,6 +21,7 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
 
     }
 
+
     fun registerDataChanged(username: String, password: String, reTypePassword:String) {
         if (!username.isNotBlank()) {
             userRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_username))

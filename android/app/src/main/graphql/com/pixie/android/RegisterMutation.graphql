@@ -6,9 +6,6 @@ mutation register($user:UsernamePasswordInput!){
             createdAt
             updatedAt
         }
-        errors{
-            field
-            message
-        }
+        error
     }
 }
