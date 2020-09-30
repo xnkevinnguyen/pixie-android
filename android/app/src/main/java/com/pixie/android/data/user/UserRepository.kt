@@ -37,10 +37,15 @@ class UserRepository(val dataSource: UserDataSource) {
 
 
     fun logout() {
-        loggedOutUserID = user?.userId
-        user = null
-
-        dataSource.logout()
+        val userToLogout = user
+        // Logout is called when application stops or on manual logout
+        if(userToLogout!=null) {
+            loggedOutUserID = userToLogout.userId
+            CoroutineScope(IO).launch {
+                dataSource.logout(userToLogout.userId)
+            }
+            user = null
+        }
     }
 
     fun login(username: String, password: String, onLoginResult: (authResult: AuthResult) -> Unit) {
@@ -57,8 +62,8 @@ class UserRepository(val dataSource: UserDataSource) {
                 setLoggedInUser(userData)
                 authResult = AuthResult(success = LoggedInUserView(username = userData.username, userID = userData.userId))
 
-            } else if (!response?.login?.errors.isNullOrEmpty()) {
-                authResult = AuthResult(error = response?.login?.errors?.last()?.message)
+            } else if (!response?.login?.error.isNullOrBlank()) {
+                authResult = AuthResult(error = response?.login?.error)
 
             } else {
                 //Abnormal case since server is supposed to give us an error message
@@ -91,8 +96,8 @@ class UserRepository(val dataSource: UserDataSource) {
                 )
                 setLoggedInUser(userData)
                 authResult = AuthResult(success = LoggedInUserView(username = userData.username, userID = userData.userId))
-            } else if (!response?.register?.errors.isNullOrEmpty()) {
-                authResult = AuthResult(error = response?.register?.errors?.last()?.message)
+            } else if (!response?.register?.error.isNullOrEmpty()) {
+                authResult = AuthResult(error = response?.register?.error)
 
             } else {
                 authResult = AuthResult(error = Constants.PLACEHOLDER_REGISTRATION_ERROR)

@@ -1,13 +1,12 @@
-mutation login ($input:LoginInput!){
-    login(input:$input){
-        errors{
-            field
-            message
-        }
+mutation login ($user:LoginInput!){
+    login(input: $user){
+
         user{
             id
             username
             createdAt
+            isOnline
         }
+        error
     }
 }

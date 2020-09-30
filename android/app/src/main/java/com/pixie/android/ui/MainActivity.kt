@@ -19,6 +19,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
+import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.InjectorUtils
 import com.pixie.android.utilities.OnApplicationStopService
@@ -98,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         val factory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
         chatViewModel.stopChannel()
+        UserRepository.getInstance().logout()
         super.onDestroy()
     }
 
