@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -112,26 +113,41 @@ class RegisterFragment : Fragment() {
 
             register.setOnClickListener {
                 loading.visibility = View.VISIBLE
+                val usernameInput = username.text.toString()
+                val passwordInput = password.text.toString()
+                registerViewModel.register(username.text.toString(), password.text.toString()) { registerResult ->
 
-                registerViewModel.register(username.text.toString(), password.text.toString()) {
+                    if (registerResult.success != null) {
+                        // Once register succeeds, we are loggin in the user
+                        registerViewModel.login(
+                            username = usernameInput,
+                            password = passwordInput
+                        ) { loginResult ->
+                            if (loginResult.success != null) {
+                                val intent = Intent(view.context, MainActivity::class.java)
+                                // Store for next time user opens application
+                                editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
+                                editor.putString(
+                                    Constants.USER_ID,
+                                    loginResult.success.userID.toString()
+                                )
+                                editor.putString(Constants.USERNAME, loginResult.success.username)
+                                editor.apply()
+                                startActivity(intent)
+                                requireActivity().finish()
+                                updateUiWithUser(loginResult.success)
+                            }else{
+                                Log.d("ApolloException", "Register succeeds, but login fails.")
+                            }
+                        }
+                    } else if (registerResult.error != null) {
+                        errorMessageField.text = registerResult.error
+                        errorMessageField.visibility = View.VISIBLE
+                        showRegisterFail(registerResult.error)
+                    }
+
                     loading.visibility = View.INVISIBLE
 
-
-                    if (it.success != null) {
-                        val intent = Intent(view?.context, MainActivity::class.java)
-                        // Store for next time user opens application
-                        editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
-                        editor.putString(Constants.USER_ID, it.success.userID.toString())
-                        editor.putString(Constants.USERNAME, it.success.username)
-                        editor.apply()
-                        startActivity(intent)
-                        requireActivity().finish()
-                        updateUiWithUser(it.success)
-                    } else if (it.error != null) {
-                        errorMessageField.text = it.error
-                        errorMessageField.visibility = View.VISIBLE
-                        showRegisterFail(it.error)
-                    }
                 }
 
             }
