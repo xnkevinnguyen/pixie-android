@@ -43,7 +43,8 @@ object InjectorUtils {
     }
 
     fun provideHomeViewModelFactory(): HomeViewModelFactory {
-        return HomeViewModelFactory()
+        val userRepository = UserRepository.getInstance()
+        return HomeViewModelFactory(userRepository)
     }
 
     fun provideProfileViewModelFactory(): ProfileViewModelFactory {
