@@ -1,0 +1,12 @@
+mutation login ($user:LoginInput!){
+    login(input: $user){
+
+        user{
+            id
+            username
+            createdAt
+            isOnline
+        }
+        error
+    }
+}

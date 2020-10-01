@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/draw_tools_fragment"
+        android:name="com.pixie.android.ui.draw.drawTools.DrawToolsFragment"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
+        android:layout_toStartOf="@+id/canvas_fragment"/>
+
+    <fragment
+        android:id="@+id/canvas_fragment"
+        android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
+        android:layout_width="900dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="300dp"
+        android:layout_alignParentEnd="true"/>
+
+    <fragment
+        android:id="@+id/second_chat_fragment"
+        android:name="com.pixie.android.ui.chat.ChatFragment"
+        android:layout_width="275dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"/>
+
+
+
+
+</RelativeLayout>

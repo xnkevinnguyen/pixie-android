@@ -12,7 +12,7 @@ import com.pixie.android.R
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.canvas_fragment.*
 
-class CanvasFragment: Fragment() {
+class CanvasFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,13 +27,30 @@ class CanvasFragment: Fragment() {
         return rootView
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val factory = InjectorUtils.provideCanvasViewModelFactory()
-        val viewModel = ViewModelProvider(this,factory).get(CanvasViewModel::class.java)
+        val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
 
         viewModel.getPrimaryColor().observe(viewLifecycleOwner, Observer {
             my_canvas.drawColor = it.toArgb()
             my_canvas.reinitializeDrawingParameters()
+        })
+
+        viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
+
+            my_canvas.drawFromCommandList(it)
+        })
+        my_canvas.completedCommand.observe(viewLifecycleOwner, Observer {
+            viewModel.addCommandToHistory(it)
         })
 
         viewModel.getStrokeWidth().observe(viewLifecycleOwner, Observer {
@@ -54,16 +71,25 @@ class CanvasFragment: Fragment() {
         })
 
         super.onViewCreated(view, savedInstanceState)
+
     }
 
-    private fun showGrid(gridOn: Boolean){
-        if(gridOn){
+    private fun showGrid(gridOn: Boolean) {
+        if (gridOn) {
             my_grid.visibility = View.VISIBLE
             my_canvas.setBackgroundColor(Color.TRANSPARENT)
-        }
-        else {
+        } else {
             my_grid.visibility = View.GONE
             my_canvas.setBackgroundColor(Color.WHITE)
         }
+    }
+
+    override fun onDestroyView() {
+        // Set DrawCommandHistory whenever you enter the canvas page or else it crashes
+        val factory = InjectorUtils.provideCanvasViewModelFactory()
+        val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
+
+        viewModel.resetDrawCommandHistory()
+        super.onDestroyView()
     }
 }

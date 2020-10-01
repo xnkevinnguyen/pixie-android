@@ -6,12 +6,21 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.MutableLiveData
 import com.pixie.android.R
+import com.pixie.android.model.draw.DrawCommand
+import com.pixie.android.model.draw.PathData
+import com.pixie.android.model.draw.PathPoint
+
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     // Holds the path you are currently drawing.
     private var path = Path()
     var drawStroke: Float = 12f
+    var completedCommand = MutableLiveData<DrawCommand>()
+    var pathData: PathData = PathData(arrayListOf())
+
+
     var drawColor: Int = 0 // Should be replaced at runtime with default BLACK value from repository
     private val backgroundColor = Color.TRANSPARENT
     private var erase = false
@@ -29,7 +38,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun setErase(isErase: Boolean) {
         erase = isErase
-        if(erase) paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+        if (erase) paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         else paint.xfermode = null
     }
 
@@ -47,6 +56,15 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             drawStroke
     }
 
+    fun drawFromCommandList(drawCommandList: List<DrawCommand>) {
+
+        canvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
+        drawCommandList.forEach {
+            canvas.drawPath(it.path, it.paint)
+        }
+        invalidate()
+    }
+
 
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
         super.onSizeChanged(width, height, oldWidth, oldHeight)
@@ -55,6 +73,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
         canvas.drawColor(backgroundColor)
+
 
     }
 
@@ -83,20 +102,32 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun onTouchMove() {
+        pathData.pointList.add(
+            PathPoint(
+                currentX,
+                currentY,
+                (motionTouchEventX + currentX) / 2,
+                (motionTouchEventY + currentY) / 2
+            )
+        )
         path.quadTo(
             currentX,
             currentY,
             (motionTouchEventX + currentX) / 2,
             (motionTouchEventY + currentY) / 2
         )
+
         currentX = motionTouchEventX
         currentY = motionTouchEventY
         canvas.drawPath(path, paint)
+
         // Invalidate triggers onDraw from the view
         invalidate()
+
     }
 
     private fun onTouchStop() {
+        completedCommand.postValue(DrawCommand(Path(path), Paint(paint)))
         path.reset()
     }
 }

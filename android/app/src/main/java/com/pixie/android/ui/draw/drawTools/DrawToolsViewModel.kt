@@ -2,12 +2,14 @@ package com.pixie.android.ui.draw.drawTools
 
 import android.graphics.Color
 import androidx.lifecycle.ViewModel
+import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
 import kotlin.random.Random
 
-class DrawToolsViewModel(private val drawingParametersRepository: DrawingParametersRepository):ViewModel() {
+class DrawToolsViewModel(private val drawingParametersRepository: DrawingParametersRepository, private val drawCommandHistoryRepository: DrawCommandHistoryRepository):ViewModel() {
 
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
+
 
     fun modifyPrimaryColor(color:Color) = drawingParametersRepository.setPrimaryDrawingColor(color)
 
@@ -18,4 +20,11 @@ class DrawToolsViewModel(private val drawingParametersRepository: DrawingParamet
     fun setEraser(erase: Boolean) = drawingParametersRepository.setErase(erase)
 
     fun setGridValue(grid: Boolean) = drawingParametersRepository.setGrid(grid)
+
+    fun undo(){
+        drawCommandHistoryRepository.popLastDrawCommandFromHistory()
+    }
+    fun redo(){
+        drawCommandHistoryRepository.popUndoneCommand()
+    }
 }

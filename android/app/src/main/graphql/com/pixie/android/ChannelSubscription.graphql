@@ -1,0 +1,11 @@
+subscription onChannelChange($channelId:Float!){
+    onChannelChange(channelId:$channelId){
+        id
+        name
+        participants{
+            id
+            username
+            isOnline
+        }
+    }
+}
