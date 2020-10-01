@@ -41,6 +41,6 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
 
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
-        return password.length >= 8
+        return password.length >= 6
     }
 }
