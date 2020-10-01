@@ -109,7 +109,7 @@ class DrawToolsFragment() : Fragment() {
         val window: Window? = dialog.window
         if(window != null){
             val wlp = window.attributes
-            wlp.gravity = Gravity.RIGHT
+            wlp.gravity = Gravity.LEFT
             wlp.y = -200
             wlp.x = 150
         }
