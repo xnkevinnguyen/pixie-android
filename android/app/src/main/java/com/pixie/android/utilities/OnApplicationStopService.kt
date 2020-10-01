@@ -28,12 +28,14 @@ class OnApplicationStopService :Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         Log.e("OnApplicationStopService", "END")
-        val chatRepository = ChatRepository.getInstance()
-        val userRepository = UserRepository.getInstance()
-        chatRepository.clearChannels()
-        chatRepository.cancelMainChannelSubscriptions()
-        userRepository.logout()
+//        val chatRepository = ChatRepository.getInstance()
+//        val userRepository = UserRepository.getInstance()
+//        chatRepository.clearChannels()
+//        chatRepository.cancelMainChannelSubscriptions()
+//        userRepository.logout()
+        val intent = Intent(this, LogoutService::class.java)
+        startService(intent)
 
-        stopSelf()
+//        stopSelf()
     }
 }

@@ -36,14 +36,14 @@ class UserRepository(val dataSource: UserDataSource) {
 
 
 
-    fun logout() {
+    suspend fun logout() {
         val userToLogout = user
         // Logout is called when application stops or on manual logout
         if(userToLogout!=null) {
             loggedOutUserID = userToLogout.userId
-            CoroutineScope(IO).launch {
+//            CoroutineScope(IO).launch {
                 dataSource.logout(userToLogout.userId)
-            }
+//            }
             user = null
         }
     }
