@@ -24,6 +24,7 @@ import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.InjectorUtils
 import com.pixie.android.utilities.OnApplicationStopService
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.coroutines.runBlocking
 
 
 class MainActivity : AppCompatActivity() {
@@ -94,12 +95,15 @@ class MainActivity : AppCompatActivity() {
         return
     }
 
-    override fun onDestroy() {
+    override  fun onDestroy() {
         // stop channel subscriptions
         val factory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
-        chatViewModel.stopChannel()
-        UserRepository.getInstance().logout()
+        runBlocking {
+            chatViewModel.stopChannel()
+
+            UserRepository.getInstance().logout()}
+
         super.onDestroy()
     }
 
