@@ -46,7 +46,7 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
             val txtTitle = rowView.findViewById<TextView>(R.id.text_title)
             val timePosted = rowView.findViewById<TextView>(R.id.time)
             val time = message.timePosted.toLong()
-            val timeFormatted = getDate(time, "hh:mm:ss")
+            val timeFormatted = getDate(time, "HH:mm:ss")
 
 
             txtTitle.text = message.text
@@ -59,7 +59,7 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
             val userName = rowView.findViewById<TextView>(R.id.name)
             val timePosted = rowView.findViewById<TextView>(R.id.time)
             val time = message.timePosted.toLong()
-            val timeFormatted = getDate(time, "hh:mm:ss")
+            val timeFormatted = getDate(time, "HH:mm:ss")
 
             txtTitle.text = message.text
             userName.text = message.userName
