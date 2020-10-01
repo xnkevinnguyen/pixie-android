@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -12,9 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.apolloClient
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.draw_tools_fragment.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import top.defaults.colorpicker.ColorPickerPopup
+import java.lang.Exception
 
 class DrawToolsFragment() : Fragment() {
     override fun onCreateView(
@@ -69,6 +74,10 @@ class DrawToolsFragment() : Fragment() {
             pencil.setBackgroundColor(unselectedColor)
             strokeSizeDialog(true)
             viewModel.setEraser(true)
+
+
+
+
         }
         undo_button.setOnClickListener {
             viewModel.undo()
@@ -83,6 +92,7 @@ class DrawToolsFragment() : Fragment() {
         }
 
         super.onViewCreated(view, savedInstanceState)
+
     }
 
     private fun strokeSizeDialog(eraserOn: Boolean){

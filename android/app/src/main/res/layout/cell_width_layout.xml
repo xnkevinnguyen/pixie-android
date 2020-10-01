@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Input cell width"
+        android:text="@string/cell_width"
         android:textSize="30dp"
         tools:ignore="MissingConstraints" />
 
@@ -21,7 +21,7 @@
         android:id="@+id/cellWidthInput"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="cell width"
+        android:hint="@string/cell_hint"
         android:inputType="number"
         android:autofillHints="10" />
 
@@ -40,7 +40,7 @@
             android:id="@+id/negative_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textSize="20dp"
             android:textColor="#0094DE"
             android:layout_marginEnd="30dp" />
@@ -49,7 +49,7 @@
             android:id="@+id/positive_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Apply"
+            android:text="@string/apply"
             android:textSize="20dp"
             android:textColor="#0094DE" />
 

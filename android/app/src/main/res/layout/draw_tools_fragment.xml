@@ -7,48 +7,48 @@
 
     <ImageButton
         android:id="@+id/color_picker"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="@android:color/holo_purple"
         android:src="@drawable/ic_palette" />
 
     <ImageButton
         android:id="@+id/pencil"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="@android:color/darker_gray"
         android:src="@drawable/ic_pencil" />
 
     <ImageButton
         android:id="@+id/eraser"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="@color/unselectedButtonColor"
         android:src="@drawable/ic_eraser" />
 
     <ImageButton
         android:id="@+id/grid"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="@color/unselectedButtonColor"
         android:src="@drawable/ic_grid" />
 
     <ImageButton
         android:id="@+id/undo_button"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="@color/unselectedButtonColor"
         android:src="@drawable/ic_undo" />
 
     <ImageButton
         android:id="@+id/redo_button"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="@color/unselectedButtonColor"
         android:src="@drawable/ic_redo" />

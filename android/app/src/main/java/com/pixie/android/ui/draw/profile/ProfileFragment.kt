@@ -1,25 +1,28 @@
 package com.pixie.android.ui.draw.profile
 
-import android.app.ActionBar
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.ui.user.AuthActivity
 import com.pixie.android.utilities.InjectorUtils
 
 class ProfileFragment: Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var preferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,10 +33,19 @@ class ProfileFragment: Fragment() {
         val factory = InjectorUtils.provideProfileViewModelFactory()
         profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
         val root = inflater.inflate(R.layout.profile_fragment, container, false)
-        val textView: TextView = root.findViewById(R.id.text_profile)
-        profileViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        val logout: Button = root.findViewById(R.id.btn_logout)
+        preferences = requireContext().getSharedPreferences("Login", Context.MODE_PRIVATE)
+        editor = preferences.edit()
+
+        val intent = Intent(root.context, AuthActivity::class.java)
+
+        logout.setOnClickListener {
+            profileViewModel.logout()
+            editor.remove("isLoggedIn")
+            editor.apply()
+            startActivity(intent)
+            requireActivity().finish()
+        }
 
         var avatar : ImageView = root.findViewById(R.id.imageView)
         val lp = LinearLayout.LayoutParams(200, 200)
