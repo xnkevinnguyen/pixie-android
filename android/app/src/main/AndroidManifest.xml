@@ -25,7 +25,7 @@
             android:name=".ui.user.AuthActivity"/>
 
         <service android:name=".utilities.OnApplicationStopService" android:stopWithTask="false" />
-
+    <service android:name=".utilities.LogoutService" android:stopWithTask="false"/>
     </application>
 
 </manifest>
