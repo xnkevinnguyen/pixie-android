@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,8 @@ import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.InjectorUtils
+import kotlinx.android.synthetic.main.login_fragment.*
+import kotlinx.android.synthetic.main.register_fragment.*
 
 
 class RegisterFragment : Fragment() {
@@ -44,6 +48,15 @@ class RegisterFragment : Fragment() {
         val swipe = root.findViewById<TextView>(R.id.swipeLeft)
         swipe.setOnClickListener {
             navController.navigate(R.id.nav_login)
+        }
+
+        val eye1 = root.findViewById<ImageView>(R.id.view_pass)
+        val eye2 = root.findViewById<ImageView>(R.id.view2_pass)
+        eye1.setOnClickListener {
+            toggleHidePassword(eye1, et_password)
+        }
+        eye2.setOnClickListener {
+            toggleHidePassword(eye2, et_repassword)
         }
 
         return root
@@ -169,6 +182,17 @@ class RegisterFragment : Fragment() {
     private fun showRegisterFail(errorString: String) {
 
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun toggleHidePassword(eyeIcon:ImageView, passwordText:EditText){
+        if(passwordText.transformationMethod == PasswordTransformationMethod.getInstance()){
+            eyeIcon.setImageResource(R.drawable.ic_eye)
+            passwordText.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        }
+        else {
+            eyeIcon.setImageResource(R.drawable.ic_hide_eye);
+            passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
+        }
     }
 }
 

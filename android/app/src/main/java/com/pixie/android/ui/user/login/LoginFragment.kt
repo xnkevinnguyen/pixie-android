@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
+import kotlinx.android.synthetic.main.login_fragment.*
 
 class LoginFragment : Fragment() {
 
@@ -36,6 +39,18 @@ class LoginFragment : Fragment() {
         val toRegister: TextView = root.findViewById(R.id.button_register)
         toRegister.setOnClickListener {
             navController.navigate(R.id.nav_register)
+        }
+
+        val eye = root.findViewById<ImageView>(R.id.eye)
+        eye.setOnClickListener {
+            if(password.transformationMethod == PasswordTransformationMethod.getInstance()){
+                eye.setImageResource(R.drawable.ic_eye)
+                password.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            }
+            else {
+                eye.setImageResource(R.drawable.ic_hide_eye);
+                password.transformationMethod = PasswordTransformationMethod.getInstance()
+            }
         }
         return root
     }
