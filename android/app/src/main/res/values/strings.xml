@@ -20,13 +20,13 @@
     <string name="register"><u>Register</u></string>
     <string name="failed_login">Username or password is incorrect</string>
     <string name="failed_registration">Registration Failed</string>
-    <string name="login_user_hint">username/email</string>
-    <string name="login_pass_hint">password</string>
+    <string name="login_user_hint">UserName</string>
+    <string name="login_pass_hint">Enter password</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="register_title">Register</string>
     <string name="email">email</string>
-    <string name="retype_pass">Re-type password</string>
+    <string name="retype_pass">Re-Enter your password</string>
     <string name="return_login">Return to login page</string>
     <string name="active_users">Players</string>
     <string name="messages">Messages</string>
