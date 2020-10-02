@@ -1,10 +1,15 @@
 package com.pixie.android.ui.chat
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +36,7 @@ class ChatFragment : Fragment() {
         val messageList = root.findViewById<ListView>(R.id.messages_list)
         val participantListElement = root.findViewById<ListView>(R.id.participant_list)
         val chatTab = root.findViewById<TabLayout>(R.id.chat_tab)
+        val editText = root.findViewById<EditText>(R.id.editText)
 
         val messageAdapter = MessagingAdapter(requireContext())
         val participantAdapter = ChannelParticipantAdapter(requireContext())
@@ -51,6 +57,38 @@ class ChatFragment : Fragment() {
 
             }
         }
+
+        // Enter button on real keyboard if attached to android
+        editText.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
+                if (event.action == KeyEvent.ACTION_DOWN &&
+                    keyCode == KeyEvent.KEYCODE_ENTER) {
+                    val message = editText.text.toString()
+                    if (message.isNotBlank()) {
+                        chatViewModel.sendMessageToCurrentChannel(message)
+                        editText.text.clear() //clear text line
+                    }
+                    return true
+                }
+                return false
+            }
+        })
+
+        // Enter button on soft keyboard
+        editText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val message = editText.text.toString()
+
+                if (message.isNotBlank()) {
+                    chatViewModel.sendMessageToCurrentChannel(message)
+                    editText.text.clear()
+                }
+                true
+            } else {
+                false
+            }
+        }
+
         chatTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Do nothing

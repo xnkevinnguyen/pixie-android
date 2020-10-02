@@ -32,7 +32,6 @@
         android:textColor= "@color/errorLogin"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toBottomOf="@id/tv_logo"/>
 
 
@@ -62,18 +61,30 @@
         android:layout_marginBottom="10dp"
         android:padding="15dp"
         android:layout_margin="15dp"
-        android:inputType="textPassword"
+        android:inputType = "textPassword"
         android:background="@drawable/ic_et_custom"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_name"/>
+
+    <ImageView
+        android:id="@+id/view_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_hide_eye"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="10dp"
+        android:padding="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/et_name"
+        app:layout_constraintRight_toRightOf="@id/et_password"/>
+
     <EditText
         android:id="@+id/et_repassword"
         android:layout_width="500dp"
         android:layout_height="50dp"
         android:layout_margin="15dp"
-
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/ic_et_custom"
@@ -84,6 +95,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_password"/>
+
+    <ImageView
+        android:id="@+id/view2_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_hide_eye"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="10dp"
+        android:padding="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/et_password"
+        app:layout_constraintRight_toRightOf="@id/et_repassword"/>
 
     <RelativeLayout
         android:layout_width="300dp"
