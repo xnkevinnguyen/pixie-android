@@ -30,4 +30,6 @@
     <string name="return_login">Return to login page</string>
     <string name="active_users">Players</string>
     <string name="messages">Messages</string>
+    <string name="channel">Available Channels</string>
+    <string name="players">Players</string>
 </resources>
