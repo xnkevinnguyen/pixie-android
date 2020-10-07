@@ -15,7 +15,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.ui.user.AuthActivity
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 class ProfileFragment: Fragment() {
@@ -34,7 +36,7 @@ class ProfileFragment: Fragment() {
         profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
         val root = inflater.inflate(R.layout.profile_fragment, container, false)
         val logout: Button = root.findViewById(R.id.btn_logout)
-        preferences = requireContext().getSharedPreferences("Login", Context.MODE_PRIVATE)
+        preferences = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
         editor = preferences.edit()
 
         val intent = Intent(root.context, AuthActivity::class.java)
@@ -58,6 +60,7 @@ class ProfileFragment: Fragment() {
         var username: TextView = root.findViewById(R.id.username)
         username.gravity = Gravity.CENTER_HORIZONTAL
         username.textSize = 25F
+        username.text = preferences.getString(Constants.USERNAME, null)
 
         return root
     }

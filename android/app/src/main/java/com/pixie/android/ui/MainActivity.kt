@@ -5,13 +5,11 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -28,6 +26,7 @@ import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
 import com.pixie.android.ui.user.AuthActivity
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 import com.pixie.android.utilities.OnApplicationStopService
 import kotlinx.android.synthetic.main.main_activity.*
@@ -42,11 +41,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        val factory = InjectorUtils.provideChatViewModelFactory()
-        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
         startService(Intent(baseContext, OnApplicationStopService::class.java))
-
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -57,11 +52,16 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
-        var avatar: ImageView = header.findViewById(R.id.imageView)
+        val avatar: ImageView = header.findViewById(R.id.imageView)
         avatar.setOnClickListener {
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
         }
+
+        val username = header.findViewById<TextView>(R.id.username)
+        val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        username.text = preferences.getString(Constants.USERNAME, null)
+
 
         settings.setOnClickListener {
             navController.navigate(R.id.nav_settings)
@@ -93,9 +93,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val userRepository = UserRepository.getInstance()
-        var preferences = this.getSharedPreferences("Login", Context.MODE_PRIVATE)
-        var editor = preferences.edit()
+        val profileFactory = InjectorUtils.provideProfileViewModelFactory()
+        val profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
+        val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        val editor = preferences.edit()
         val intent = Intent(this, AuthActivity::class.java)
 
         return when (item.itemId) {
@@ -105,14 +106,14 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_dropdown2 ->{
-                runBlocking {  userRepository.logout()}
+                profileViewModel.logout()
                 editor.remove("isLoggedIn")
                 editor.apply()
                 startActivity(intent)
                 this.finish()
                 return true
             }
-            else -> super.onOptionsItemSelected(item);
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

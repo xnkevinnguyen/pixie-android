@@ -34,8 +34,6 @@ class UserRepository(val dataSource: UserDataSource) {
     }
 
 
-
-
     suspend fun logout() {
         val userToLogout = user
         // Logout is called when application stops or on manual logout
