@@ -1,4 +1,4 @@
-package com.pixie.android.ui.draw.ChannelList
+package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
 import android.os.Bundle

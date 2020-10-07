@@ -60,4 +60,14 @@
     <string name="time_game">Time: </string>
     <string name="players_game">Players: </string>
     <string name="winner">Winner: </string>
+    <string name="edit_user">Edit User Informations</string>
+    <string name="edit">Edit</string>
+
+    <string name="history">History</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="last_7">Last 7 days</string>
+    <string name="last_month">Last month</string>
+    <string name="conn">Connection:</string>
+    <string name="disc">Disconnection: </string>
 </resources>

@@ -6,8 +6,8 @@ import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.draw.canvas.CanvasViewModelFactory
 import com.pixie.android.ui.chat.ChatViewModelFactory
-import com.pixie.android.ui.draw.ChannelList.ChannelViewModelFactory
-import com.pixie.android.ui.draw.ChannelList.PlayersViewModelFactory
+import com.pixie.android.ui.draw.channelList.ChannelViewModelFactory
+import com.pixie.android.ui.draw.channelList.PlayersViewModelFactory
 import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
 import com.pixie.android.ui.user.login.LoginViewModelFactory
 import com.pixie.android.ui.draw.home.HomeViewModelFactory

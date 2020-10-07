@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/channel_fragment"
-        android:name="com.pixie.android.ui.draw.ChannelList.ChannelFragment"
+        android:name="com.pixie.android.ui.draw.channelList.ChannelFragment"
         android:layout_width="225dp"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/player_fragment"
-        android:name="com.pixie.android.ui.draw.ChannelList.PlayersFragment"
+        android:name="com.pixie.android.ui.draw.channelList.PlayersFragment"
         android:layout_width="275dp"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
