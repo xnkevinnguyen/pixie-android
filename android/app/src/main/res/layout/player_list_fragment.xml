@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorFifth">
 
     <TextView
         android:layout_width="match_parent"
@@ -12,6 +13,17 @@
         android:textAlignment="center"
         android:textSize="25dp"
         android:background="@color/colorFourth"/>
+
+    <EditText
+        android:id="@+id/search_player"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin = "20dp"
+        android:background="@drawable/ic_et_custom"
+        android:hint="@string/search_player"
+        android:inputType="textPersonName"
+        android:padding="15dp"
+        android:textSize="15sp" />
 
     <ListView
         android:id="@+id/participants"

@@ -8,24 +8,24 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.pixie.android.ui.draw.home.HomeFragment"
-        android:label="home"
+        android:label="Home"
         tools:layout="@layout/home_fragment" />
 
     <fragment
         android:id="@+id/nav_drawing"
         android:name="com.pixie.android.ui.draw.DrawFragment"
-        android:label="drawing"
+        android:label="Drawing"
         tools:layout="@layout/draw_fragment" />
 
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.pixie.android.ui.draw.profile.ProfileFragment"
-        android:label="profile"
+        android:label="Profile"
         tools:layout="@layout/profile_fragment" />
 
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.pixie.android.ui.draw.settings.SettingsFragment"
-        android:label="settings"
+        android:label="Settings"
         tools:layout="@layout/settings_fragment" />
 </navigation>

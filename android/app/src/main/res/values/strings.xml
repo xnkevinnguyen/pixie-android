@@ -30,6 +30,11 @@
     <string name="return_login">Return to login page</string>
     <string name="active_users">Players</string>
     <string name="messages">Messages</string>
-    <string name="channel">Available Channels</string>
+    <string name="channel">Your Channels</string>
+    <string name="join_channel">Join another channel</string>
+    <string name="create_channel">Create channel</string>
     <string name="players">Players</string>
+    <string name="dropdown_1">Profile</string>
+    <string name="dropdown_2">Logout</string>
+    <string name="search_player">Search player</string>
 </resources>

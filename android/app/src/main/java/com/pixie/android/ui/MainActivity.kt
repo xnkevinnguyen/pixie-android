@@ -2,10 +2,15 @@ package com.pixie.android.ui
 
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -21,6 +26,8 @@ import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
+import com.pixie.android.ui.draw.profile.ProfileViewModel
+import com.pixie.android.ui.user.AuthActivity
 import com.pixie.android.utilities.InjectorUtils
 import com.pixie.android.utilities.OnApplicationStopService
 import kotlinx.android.synthetic.main.main_activity.*
@@ -81,8 +88,32 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.profile_menu, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val userRepository = UserRepository.getInstance()
+        var preferences = this.getSharedPreferences("Login", Context.MODE_PRIVATE)
+        var editor = preferences.edit()
+        val intent = Intent(this, AuthActivity::class.java)
+
+        return when (item.itemId) {
+            R.id.action_dropdown1 ->{
+                val navController = findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_profile)
+                return true
+            }
+            R.id.action_dropdown2 ->{
+                runBlocking {  userRepository.logout()}
+                editor.remove("isLoggedIn")
+                editor.apply()
+                startActivity(intent)
+                this.finish()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item);
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
