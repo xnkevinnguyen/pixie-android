@@ -51,12 +51,12 @@
     <string name="average_game">Average game time: </string>
     <string name="total_game">Total play time: </string>
     <string name="best_score">Best score: </string>
-    <string name="history_con_disc">Connection and Disconnection History</string>
+    <string name="history_con_disc">Connections and Disconnections History</string>
     <string name="last_conn">Last connection: </string>
     <string name="last_disc">Last disconnection: </string>
     <string name="registration_date">Registration date: </string>
     <string name="show_hist">Show History</string>
-    <string name="game_history">Game History</string>
+    <string name="game_history">Games History</string>
     <string name="last_game">Last game played</string>
     <string name="date_game">Date: </string>
     <string name="time_game">Time: </string>
@@ -64,14 +64,6 @@
     <string name="winner">Winner: </string>
     <string name="difficulty">Difficulty:</string>
     <string name="game_mode">Game mode: </string>
-    <string name="edit_user">Edit User Informations</string>
-    <string name="edit">Edit</string>
-
-    <string name="history">History</string>
-    <string name="today">Today</string>
-    <string name="yesterday">Yesterday</string>
-    <string name="last_7">Last 7 days</string>
-    <string name="last_month">Last month</string>
     <string name="conn">Connection:</string>
     <string name="disc">Disconnection: </string>
 </resources>

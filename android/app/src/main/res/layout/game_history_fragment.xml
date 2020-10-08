@@ -6,88 +6,107 @@
     android:background="@color/colorFifth"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/game_history"
+        android:textStyle="bold"
+        android:textSize="@dimen/profile_titles"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="7">
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/date_game"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            android:orientation="horizontal"
+            android:weightSum="7">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/time_game"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/date_game"
+                android:textSize="@dimen/profile_text"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/history_table_border"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/your_points"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/time_game"
+                android:textSize="@dimen/profile_text"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/history_table_border"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/winner"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/your_points"
+                android:textSize="@dimen/profile_text"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/history_table_border"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/best_score"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/winner"
+                android:textSize="@dimen/profile_text"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/history_table_border"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/difficulty"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/best_score"
+                android:textSize="@dimen/profile_text"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/history_table_border"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/game_mode"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/difficulty"
+                android:textSize="@dimen/profile_text"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/history_table_border"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/game_mode"
+                android:textSize="@dimen/profile_text"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/history_table_border"/>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/history_game_list"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:background="@android:color/white"
+            android:scrollbarAlwaysDrawVerticalTrack="true"/>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/history_game_list"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:background="@color/colorFifth"
-        android:scrollbarAlwaysDrawVerticalTrack="true"/>
 
 </LinearLayout>
