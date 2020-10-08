@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
@@ -49,45 +50,12 @@ class ProfileFragment: Fragment() {
             requireActivity().finish()
         }
 
-        val avatar : ImageView = root.findViewById(R.id.imageView)
+        val avatar : ImageView = root.findViewById(R.id.avatar)
         val lp = LinearLayout.LayoutParams(200, 200)
-        lp.gravity = (Gravity.CENTER_HORIZONTAL)
         avatar.layoutParams =lp
 
-        val header : LinearLayout = root.findViewById(R.id.header_profile)
-        header.setPadding(16, 0, 16, 0)
-
-        val username: TextView = root.findViewById(R.id.username)
-        username.gravity = Gravity.CENTER_HORIZONTAL
-        username.textSize = 25F
+        val username: TextView = root.findViewById(R.id.user_username)
         username.text = preferences.getString(Constants.USERNAME, null)
-
-        val name = root.findViewById<TextView>(R.id.name)
-        val surname = root.findViewById<TextView>(R.id.surname)
-        val id = root.findViewById<TextView>(R.id.user_id)
-        val editBtn = root.findViewById<Button>(R.id.edit_user_info)
-
-        val stringId = resources.getString(R.string.id) + " " + preferences.getString(Constants.USER_ID, null)
-        id.text = stringId
-
-        editBtn.setOnClickListener {
-            val dialog = Dialog(requireContext())
-            dialog.setContentView(R.layout.edit_user_info)
-            dialog.findViewById<Button>(R.id.btn_cancel).setOnClickListener {
-                dialog.dismiss()
-            }
-            val applyBtn = dialog.findViewById<Button>(R.id.btn_apply)
-            applyBtn.setOnClickListener {
-                Log.d("here", "apply")
-                val stringName = resources.getString(R.string.name) + " " + dialog.findViewById<EditText>(R.id.name_edit).text.toString()
-                name.text = stringName
-                val stringSurname = resources.getString(R.string.surname) + " " + dialog.findViewById<EditText>(R.id.surname_edit).text.toString()
-                surname.text = stringSurname
-
-                dialog.dismiss()
-            }
-            dialog.show()
-        }
 
         val showHistory = root.findViewById<Button>(R.id.btn_show_hist)
         showHistory.setOnClickListener {

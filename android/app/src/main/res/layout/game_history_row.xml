@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/colorFifth"
     android:orientation="vertical">
 
@@ -13,74 +13,74 @@
         android:weightSum="7">
 
         <TextView
+            android:id="@+id/history_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/date_game"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            android:background="@drawable/history_table_input_border"/>
 
         <TextView
+            android:id="@+id/history_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/time_game"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            android:background="@drawable/history_table_input_border"/>
 
         <TextView
+            android:id="@+id/history_points"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/your_points"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            android:background="@drawable/history_table_input_border"/>
 
         <TextView
+            android:id="@+id/history_winner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/winner"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            android:background="@drawable/history_table_input_border"/>
 
         <TextView
+            android:id="@+id/history_score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/best_score"
             android:textSize="@dimen/profile_text"
             android:textStyle="bold"
             android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            android:background="@drawable/history_table_input_border"/>
 
         <TextView
+            android:id="@+id/history_difficulty"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/difficulty"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            android:background="@drawable/history_table_input_border"/>
 
         <TextView
+            android:id="@+id/history_mode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/game_mode"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
-            android:background="@drawable/history_table_border"/>
+            android:background="@drawable/history_table_input_border"/>
     </LinearLayout>
 
     <ListView

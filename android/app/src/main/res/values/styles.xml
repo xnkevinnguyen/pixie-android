@@ -1,5 +1,5 @@
 <resources>
-    <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorTertiary</item>
@@ -9,9 +9,8 @@
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuHeaderStyle</item>
-
     </style>
-
+    
     <!--Needed for navigation to work -->
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

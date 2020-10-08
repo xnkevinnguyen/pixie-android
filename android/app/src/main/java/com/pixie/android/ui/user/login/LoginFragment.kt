@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -41,6 +42,8 @@ class LoginFragment : Fragment() {
             navController.navigate(R.id.nav_register)
         }
 
+        var color = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+        color = ContextCompat.getColor(requireContext(), R.color.colorFourth)
         val eye = root.findViewById<ImageView>(R.id.eye)
         eye.setOnClickListener {
             if(password.transformationMethod == PasswordTransformationMethod.getInstance()){

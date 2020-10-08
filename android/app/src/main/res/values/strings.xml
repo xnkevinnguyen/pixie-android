@@ -42,24 +42,28 @@
     <string name="invite">Invite</string>
 
     <string name="user_info">User Informations</string>
-    <string name="name">Name: </string>
-    <string name="surname">Surname: </string>
-    <string name="id">User id: </string>
+    <string name="name">Last name: </string>
+    <string name="surname">First name: </string>
+    <string name="user_username">Username: </string>
     <string name="game_play_info">User Game Play Informations</string>
     <string name="number_games">Number of games played: </string>
     <string name="percentage_victory">Percentage of victory: </string>
     <string name="average_game">Average game time: </string>
     <string name="total_game">Total play time: </string>
+    <string name="best_score">Best score: </string>
     <string name="history_con_disc">Connection and Disconnection History</string>
     <string name="last_conn">Last connection: </string>
     <string name="last_disc">Last disconnection: </string>
+    <string name="registration_date">Registration date: </string>
     <string name="show_hist">Show History</string>
     <string name="game_history">Game History</string>
     <string name="last_game">Last game played</string>
     <string name="date_game">Date: </string>
     <string name="time_game">Time: </string>
-    <string name="players_game">Players: </string>
+    <string name="your_points">Your points: </string>
     <string name="winner">Winner: </string>
+    <string name="difficulty">Difficulty:</string>
+    <string name="game_mode">Game mode: </string>
     <string name="edit_user">Edit User Informations</string>
     <string name="edit">Edit</string>
 
