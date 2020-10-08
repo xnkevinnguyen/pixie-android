@@ -20,11 +20,11 @@ import java.util.*
 class ChatDataSource() {
 
     suspend fun sendMessageToChannel(
-        messageData: MessageData,
+        message: String,
         channelID: Double,
         userId: Double
     ): SendMessageMutation.Data? {
-        val addMessageInput = AddMessageInput(messageData.text, channelID, userId)
+        val addMessageInput = AddMessageInput(message, channelID, userId)
         try {
             return apolloClient.mutate(SendMessageMutation(addMessageInput)).toDeferred()
                 .await().data
@@ -90,7 +90,7 @@ class ChatDataSource() {
 
 
                 if (messageContent != null && messageSenderUsername != null && messageTimePosted != null) {
-                    val messageData = MessageData(messageContent, false, messageSenderUsername, messageTimePosted)
+                    val messageData = MessageData(messageContent, null, messageSenderUsername, messageTimePosted)
                     onReceiveMessage(messageData)
                 }
             }
