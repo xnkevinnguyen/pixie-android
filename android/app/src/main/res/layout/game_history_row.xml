@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorFifth"
     android:orientation="vertical">
 
     <LinearLayout
@@ -82,12 +81,5 @@
             android:gravity="center"
             android:background="@drawable/history_table_input_border"/>
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/history_game_list"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:background="@color/colorFifth"
-        android:scrollbarAlwaysDrawVerticalTrack="true"/>
 
 </LinearLayout>

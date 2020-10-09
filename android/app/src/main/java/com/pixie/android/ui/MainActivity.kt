@@ -4,12 +4,14 @@ package com.pixie.android.ui
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -35,6 +37,8 @@ import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var preferencesSettings: SharedPreferences
+    private lateinit var editorSettings: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,9 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
+
+        preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        editorSettings = preferencesSettings.edit()
 
         appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_drawing), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -62,10 +69,43 @@ class MainActivity : AppCompatActivity() {
         val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
         username.text = preferences.getString(Constants.USERNAME, null)
 
+        val itemsLang = arrayOf(resources.getString(R.string.eng), resources.getString(R.string.fr))
+        val adapterLang: ArrayAdapter<String> = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            itemsLang
+        )
 
+        val itemsTheme = arrayOf(resources.getString(R.string.dark), resources.getString(R.string.light))
+        val adapterTheme: ArrayAdapter<String> = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            itemsTheme
+        )
         settings.setOnClickListener {
-            navController.navigate(R.id.nav_settings)
             drawerLayout.closeDrawer(GravityCompat.START, false)
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.settings_fragment)
+            val dropdownLang = dialog.findViewById<Spinner>(R.id.spinner_language)
+            dropdownLang.adapter = adapterLang
+            val langInMemory = preferencesSettings.getString(Constants.LANGUAGE, "English")
+            dropdownLang.setSelection(adapterLang.getPosition(langInMemory))
+
+            val dropdownTheme = dialog.findViewById<Spinner>(R.id.spinner_theme)
+            dropdownTheme.adapter = adapterTheme
+            val themeInMemory = preferencesSettings.getString(Constants.THEME, "Dark")
+            dropdownTheme.setSelection(adapterTheme.getPosition(themeInMemory))
+
+            val apply = dialog.findViewById<Button>(R.id.apply_settings)
+
+            apply.setOnClickListener {
+                val themeValue = dropdownTheme.selectedItem.toString()
+                val langValue = dropdownLang.selectedItem.toString()
+                applyThemeSettings(themeValue)
+                applyLanguageSettings(langValue)
+                dialog.dismiss()
+            }
+            dialog.show()
         }
 
         tutorial.setOnClickListener {
@@ -75,6 +115,36 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun applyThemeSettings(themeValue:String){
+        val themeSaved = preferencesSettings.getString(Constants.THEME, "Dark")
+        if (themeSaved != themeValue){
+            editorSettings.putString(Constants.THEME, themeValue)
+            editorSettings.apply()
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.warning_change_theme_language)
+            val closeBtn = dialog.findViewById<ImageView>(R.id.close)
+            closeBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+    }
+
+    private fun applyLanguageSettings(langValue:String){
+        val langSaved = preferencesSettings.getString(Constants.LANGUAGE, "English")
+        if (langSaved != langValue){
+            editorSettings.putString(Constants.LANGUAGE, langValue)
+            editorSettings.apply()
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.warning_change_theme_language)
+            val closeBtn = dialog.findViewById<ImageView>(R.id.close)
+            closeBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

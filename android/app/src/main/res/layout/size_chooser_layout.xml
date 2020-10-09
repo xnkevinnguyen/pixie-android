@@ -4,7 +4,8 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:background="?color">
 
         <ImageButton
             android:id="@+id/small_stroke_size"

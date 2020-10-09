@@ -4,6 +4,7 @@
     <string name="cell_hint">50</string>
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
+    <string name="ok">Ok</string>
     <string name="tutorial">Tutorial</string>
     <string name="setting_desc">nav_setting_desc</string>
     <string name="username">Username</string>
@@ -66,4 +67,14 @@
     <string name="game_mode">Game mode: </string>
     <string name="conn">Connection:</string>
     <string name="disc">Disconnection: </string>
+
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+    <string name="eng">English</string>
+    <string name="fr">French</string>
+    <string name="setting">Settings</string>
+
+    <string name="changing_theme">To apply these changes please restart the application.</string>
 </resources>

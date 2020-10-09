@@ -13,7 +13,7 @@ import com.pixie.android.model.draw.PathData
 import com.pixie.android.model.draw.PathPoint
 
 
-class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     // Holds the path you are currently drawing.
     private var path = Path()
     var drawStroke: Float = 12f

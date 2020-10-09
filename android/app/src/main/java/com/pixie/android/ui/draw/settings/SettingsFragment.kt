@@ -25,10 +25,6 @@ class SettingsFragment : Fragment() {
         val factory = InjectorUtils.provideSettingsViewModelFactory()
         settingsViewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
         val root = inflater.inflate(R.layout.settings_fragment, container, false)
-        val textView: TextView = root.findViewById(R.id.text_settings)
-        settingsViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
 
         return root
     }
