@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_baseline_cancel"
-        app:tint="@color/unselectedButtonColor" />
+        app:tint="@color/selectedButtonColor" />
 
 </RelativeLayout>

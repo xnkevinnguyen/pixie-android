@@ -56,8 +56,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="@dimen/profile_text"
-            android:textStyle="bold"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
             android:background="@drawable/history_table_input_border"/>
 
