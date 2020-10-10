@@ -2,19 +2,24 @@ package com.pixie.android.ui.draw.settings
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.model.user.LoggedInUser
+import com.pixie.android.ui.MainActivity
 import com.pixie.android.ui.draw.history.connectionHistory.ConnectionAdapter
 import com.pixie.android.ui.draw.home.HomeViewModel
+import com.pixie.android.ui.user.login.LoginViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
@@ -76,16 +81,22 @@ class SettingsFragment : DialogFragment() {
 
     private fun applyThemeSettings(themeValue:String){
         val themeSaved = preferencesSettings.getString(Constants.THEME, "Dark")
+
         if (themeSaved != themeValue){
             editorSettings.putString(Constants.THEME, themeValue)
             editorSettings.apply()
-            val dialog = Dialog(requireContext())
-            dialog.setContentView(R.layout.warning_change_theme_language)
-            val closeBtn = dialog.findViewById<ImageView>(R.id.close)
-            closeBtn.setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog.show()
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+            //requireActivity().recreate()
+
+//            val dialog = Dialog(requireContext())
+//            dialog.setContentView(R.layout.warning_change_theme_language)
+//            val closeBtn = dialog.findViewById<ImageView>(R.id.close)
+//            closeBtn.setOnClickListener {
+//                dialog.dismiss()
+//            }
+//            dialog.show()
         }
     }
 

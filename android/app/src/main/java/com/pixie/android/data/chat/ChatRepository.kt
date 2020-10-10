@@ -1,5 +1,6 @@
 package com.pixie.android.data.chat
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.user.UserRepository
@@ -109,6 +110,7 @@ class ChatRepository(
 
         val messageData = MessageData(message, true, timePosted = Calendar.getInstance().timeInMillis.toString())
         mainChannelMessageList.value?.add(messageData)
+        Log.d("here", "${userRepository.user}")
         CoroutineScope(IO).launch {
             val data = dataSource.sendMessageToChannel(
                 messageData,

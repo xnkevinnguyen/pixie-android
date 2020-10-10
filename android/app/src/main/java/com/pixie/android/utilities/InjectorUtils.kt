@@ -55,7 +55,8 @@ object InjectorUtils {
     }
 
     fun provideSettingsViewModelFactory(): SettingsViewModelFactory {
-        return SettingsViewModelFactory()
+        val userRepository = UserRepository.getInstance()
+        return SettingsViewModelFactory(userRepository)
 
     }
     fun provideChatViewModelFactory():ChatViewModelFactory{

@@ -25,11 +25,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
+import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.history.connectionHistory.ConnectionHistoryFragment
 import com.pixie.android.ui.draw.profile.ProfileViewModel
 import com.pixie.android.ui.draw.settings.SettingsFragment
+import com.pixie.android.ui.draw.settings.SettingsViewModel
 import com.pixie.android.ui.user.AuthActivity
+import com.pixie.android.ui.user.login.LoginViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 import com.pixie.android.utilities.OnApplicationStopService
@@ -68,9 +71,10 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START, false)
         }
 
-        val username = header.findViewById<TextView>(R.id.username)
         val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
-        username.text = preferences.getString(Constants.USERNAME, null)
+        val usernamePreference = preferences.getString(Constants.USERNAME, null)
+        val username = header.findViewById<TextView>(R.id.username)
+        username.text = usernamePreference
 
 
         settings.setOnClickListener {
@@ -148,6 +152,10 @@ class MainActivity : AppCompatActivity() {
             UserRepository.getInstance().logout()}
 
         super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
 }
