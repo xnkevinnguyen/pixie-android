@@ -20,10 +20,20 @@ import kotlinx.coroutines.launch
 class UserRepository(val dataSource: UserDataSource) {
 
     private val loginForm = MutableLiveData<LoginFormState>()
-    var user: LoggedInUser? = null
+    private var user: LoggedInUser? = null
 
     // Stricly used for operations after logged out
     var loggedOutUserID :Double?=null
+
+    fun getUser():LoggedInUser{
+        val userCopy = user
+        if(userCopy !=null) {
+            return userCopy
+        }
+        else{
+            throw error("User in UserRepository is null")
+        }
+    }
 
     fun getLoginForm(): LiveData<LoginFormState> {
         return loginForm
@@ -35,15 +45,12 @@ class UserRepository(val dataSource: UserDataSource) {
 
 
     suspend fun logout() {
-        val userToLogout = user
+        // Logout should ALWAYS be called after exit operations
         // Logout is called when application stops or on manual logout
-        if(userToLogout!=null) {
-            loggedOutUserID = userToLogout.userId
-//            CoroutineScope(IO).launch {
-                dataSource.logout(userToLogout.userId)
-//            }
-            user = null
-        }
+        loggedOutUserID = getUser().userId
+        dataSource.logout(getUser().userId)
+        user = null
+
     }
 
     fun login(username: String, password: String, onLoginResult: (authResult: AuthResult) -> Unit) {

@@ -144,8 +144,8 @@ class MainActivity : AppCompatActivity() {
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
         runBlocking {
             chatViewModel.stopChannel()
-
-            UserRepository.getInstance().logout()}
+            UserRepository.getInstance().logout()
+        }
 
         super.onDestroy()
     }

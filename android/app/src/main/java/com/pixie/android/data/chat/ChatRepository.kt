@@ -3,6 +3,7 @@ package com.pixie.android.data.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.user.UserRepository
+import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 import kotlinx.coroutines.CoroutineScope
@@ -29,9 +30,15 @@ class ChatRepository(
             val loadingID = 0.0
             this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
+    private var userChannels = MutableLiveData<MutableList<ChannelData>>()
 
-    private lateinit var mainChannelMessageJob : Job
-    private lateinit var mainChannelParticipantJob:Job
+    private lateinit var mainChannelMessageJob: Job
+    private lateinit var mainChannelParticipantJob: Job
+
+
+    fun getUserChannels(): LiveData<MutableList<ChannelData>> {
+        return userChannels
+    }
 
     fun getMainChannelMessageList(): LiveData<MutableList<MessageData>> {
         return mainChannelMessageList
@@ -41,33 +48,33 @@ class ChatRepository(
         return mainChannelParticipantList
     }
 
-    fun enterMainChannel() {
+    fun setUserChannels() {
         CoroutineScope(IO).launch {
-            val userId = userRepository.user?.userId
-            if (userId != null) {
-                val channelData = dataSource.enterChannel(MAIN_CHANNEL_ID, userId)
-                if (channelData != null)
-                    mainChannelParticipantList.postValue(channelData.participantList.toMutableList())
-
-            }
 
         }
     }
-    fun clearChannels(){
+
+    fun enterMainChannel() {
+        CoroutineScope(IO).launch {
+
+            val channelData =
+                dataSource.enterChannel(MAIN_CHANNEL_ID, userRepository.getUser().userId)
+            if (channelData != null)
+                mainChannelParticipantList.postValue(channelData.participantList.toMutableList())
+
+
+        }
+    }
+
+    fun clearChannels() {
         mainChannelMessageList.postValue(arrayListOf())
         mainChannelParticipantList.postValue(arrayListOf())
     }
 
     fun exitMainChannel() {
         CoroutineScope(IO).launch {
-            val userID = userRepository.user?.userId
-            val loggedOutUserID = userRepository.loggedOutUserID
-            if (userID != null) {
-                dataSource.exitChannel(MAIN_CHANNEL_ID, userID)
-
-            } else if (loggedOutUserID != null) {
-                dataSource.exitChannel(MAIN_CHANNEL_ID, loggedOutUserID)
-            }
+            val userID = userRepository.getUser().userId
+            dataSource.exitChannel(MAIN_CHANNEL_ID, userID)
 
         }
     }
@@ -79,10 +86,10 @@ class ChatRepository(
 
     fun subscribeChannelMessages() {
         mainChannelMessageJob = CoroutineScope(IO).launch {
-            val sub = dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID,onReceiveMessage =  {
+            val sub = dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID, onReceiveMessage = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
-                    if (it.userName != userRepository.user!!.username) {
+                    if (it.userName != userRepository.getUser().username) {
                         mainChannelMessageList.value?.add(it)
                         mainChannelMessageList.notifyObserver()
                     }
@@ -93,8 +100,8 @@ class ChatRepository(
     }
 
     fun suscribeChannelUsers() {
-        mainChannelParticipantJob=CoroutineScope(IO).launch {
-             dataSource.suscribeToChannelChange(MAIN_CHANNEL_ID, onChannelChange = {
+        mainChannelParticipantJob = CoroutineScope(IO).launch {
+            dataSource.suscribeToChannelChange(MAIN_CHANNEL_ID, onChannelChange = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
                     mainChannelParticipantList.postValue(it.participantList.toMutableList())
@@ -107,13 +114,14 @@ class ChatRepository(
 
     fun sendMessage(message: String) {
 
-        val messageData = MessageData(message, true, timePosted = Calendar.getInstance().timeInMillis.toString())
+        val messageData =
+            MessageData(message, true, timePosted = Calendar.getInstance().timeInMillis.toString())
         mainChannelMessageList.value?.add(messageData)
         CoroutineScope(IO).launch {
             val data = dataSource.sendMessageToChannel(
                 messageData,
                 MAIN_CHANNEL_ID,
-                userRepository.user!!.userId
+                userRepository.getUser().userId
             )
             if (data?.addMessage == null) {
                 // handle possible error
