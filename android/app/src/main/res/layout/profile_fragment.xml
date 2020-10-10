@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="?colorAccent"
     android:weightSum="7"
     android:orientation="vertical"
     tools:context=".ui.draw.profile.ProfileFragment">
@@ -26,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@color/colorFourth"
+            android:background="?colorSecondary"
             android:layout_weight="1">
 
             <TextView
@@ -104,7 +104,7 @@
                             android:layout_marginTop="10dp"
                             android:paddingLeft="30dp"
                             android:paddingRight="30dp"
-                            android:background="@color/colorFifth"/>
+                            android:background="?color"/>
 
                         <TextView
                             android:id="@+id/surname"
@@ -115,7 +115,7 @@
                             android:layout_marginTop="10dp"
                             android:paddingLeft="30dp"
                             android:paddingRight="30dp"
-                            android:background="@color/colorFifth"/>
+                            android:background="?color"/>
 
                         <TextView
                             android:id="@+id/user_username"
@@ -125,7 +125,7 @@
                             android:layout_marginTop="10dp"
                             android:paddingLeft="30dp"
                             android:paddingRight="30dp"
-                            android:background="@color/colorFifth"/>
+                            android:background="?color"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -135,7 +135,7 @@
                 android:id="@+id/btn_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="?colorAccent"
                 android:textColor="@android:color/white"
                 android:layout_gravity="center"
                 android:text="@string/logout" />
@@ -146,7 +146,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@color/colorFourth"
+            android:background="?colorSecondary"
             android:layout_marginStart="30dp"
             android:layout_weight="1">
 
@@ -211,7 +211,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorFifth" />
+                        android:background="?color" />
 
 
                     <TextView
@@ -222,7 +222,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorFifth" />
+                        android:background="?color" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -232,7 +232,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorFifth" />
+                        android:background="?color" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -240,7 +240,7 @@
                 android:id="@+id/btn_show_hist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="?colorAccent"
                 android:textColor="@android:color/white"
                 android:layout_gravity="center"
                 android:paddingLeft="5dp"
@@ -268,7 +268,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
-            android:background="@color/colorFourth">
+            android:background="?colorSecondary">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -345,7 +345,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorFifth"/>
+                        android:background="?color"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -355,7 +355,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorFifth"/>
+                        android:background="?color"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -365,7 +365,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorFifth"/>
+                        android:background="?color"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -375,7 +375,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorFifth"/>
+                        android:background="?color"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -385,7 +385,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorFifth"/>
+                        android:background="?color"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -397,7 +397,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:layout_marginStart="30dp"
-            android:background="@color/colorFourth">
+            android:background="?colorSecondary">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -488,7 +488,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
-                        android:background="@color/colorFifth"
+                        android:background="?color"
                         android:layout_marginTop="10dp"/>
 
                     <TextView
@@ -498,7 +498,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
-                        android:background="@color/colorFifth"
+                        android:background="?color"
                         android:layout_marginTop="10dp"/>
 
                     <TextView
@@ -508,7 +508,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
-                        android:background="@color/colorFifth"
+                        android:background="?color"
                         android:layout_marginTop="10dp"/>
 
                     <TextView
@@ -518,7 +518,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
-                        android:background="@color/colorFifth"
+                        android:background="?color"
                         android:layout_marginTop="10dp"/>
 
                     <LinearLayout
@@ -534,7 +534,7 @@
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:textSize="@dimen/profile_text"
-                            android:background="@color/colorFifth"/>
+                            android:background="?color"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -544,7 +544,7 @@
                             android:paddingRight="10dp"
                             android:layout_marginStart="10dp"
                             android:textSize="@dimen/profile_text"
-                            android:background="@color/colorFifth"/>
+                            android:background="?color"/>
 
                     </LinearLayout>
 
@@ -555,7 +555,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
-                        android:background="@color/colorFifth"
+                        android:background="?color"
                         android:layout_marginTop="10dp"/>
 
                 </LinearLayout>
@@ -566,7 +566,7 @@
                 android:id="@+id/btn_game_hist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="?colorAccent"
                 android:textColor="@android:color/white"
                 android:layout_gravity="bottom|center_horizontal"
                 android:paddingLeft="5dp"

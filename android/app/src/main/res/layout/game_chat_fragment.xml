@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorFifth"
+    android:background="?color"
     android:clipToPadding="false"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
@@ -31,7 +31,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <ListView
             android:id="@+id/participant_list"
             android:layout_width="match_parent"
@@ -43,6 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/message_layout"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:orientation="vertical">
 
             <ListView
@@ -50,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="580dp"
                 android:layout_weight="2"
-                android:divider="#fff" />
+                android:divider="@android:color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"

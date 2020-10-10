@@ -10,7 +10,7 @@
         android:visibility="gone"
         android:background="@android:color/white" />
 
-    <com.pixie.android.ui.draw.canvas.DrawView
+    <com.pixie.android.ui.draw.canvas.CanvasView
         android:id="@+id/my_canvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,35 +1,106 @@
 package com.pixie.android.ui.draw.settings
 
+import android.app.Dialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.*
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.ui.draw.history.connectionHistory.ConnectionAdapter
 import com.pixie.android.ui.draw.home.HomeViewModel
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : DialogFragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var preferencesSettings: SharedPreferences
+    private lateinit var editorSettings: SharedPreferences.Editor
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val factory = InjectorUtils.provideSettingsViewModelFactory()
         settingsViewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
-        val root = inflater.inflate(R.layout.settings_fragment, container, false)
-        val textView: TextView = root.findViewById(R.id.text_settings)
-        settingsViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
 
-        return root
+        val builder = Dialog(requireContext())
+        val inflater = requireActivity().layoutInflater
+        val layout: View = inflater.inflate(R.layout.settings_fragment, null)
+        builder.setContentView(layout)
+
+        preferencesSettings = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        editorSettings = preferencesSettings.edit()
+
+        val itemsLang = arrayOf(resources.getString(R.string.eng), resources.getString(R.string.fr))
+        val adapterLang: ArrayAdapter<String> = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            itemsLang
+        )
+
+        val itemsTheme = arrayOf(resources.getString(R.string.dark), resources.getString(R.string.light))
+        val adapterTheme: ArrayAdapter<String> = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            itemsTheme
+        )
+
+        val dropdownLang = builder.findViewById<Spinner>(R.id.spinner_language)
+        dropdownLang.adapter = adapterLang
+        val langInMemory = preferencesSettings.getString(Constants.LANGUAGE, "English")
+        dropdownLang.setSelection(adapterLang.getPosition(langInMemory))
+
+        val dropdownTheme = builder.findViewById<Spinner>(R.id.spinner_theme)
+        dropdownTheme.adapter = adapterTheme
+        val themeInMemory = preferencesSettings.getString(Constants.THEME, "Dark")
+        dropdownTheme.setSelection(adapterTheme.getPosition(themeInMemory))
+
+        val apply = builder.findViewById<Button>(R.id.apply_settings)
+
+        apply.setOnClickListener {
+            val themeValue = dropdownTheme.selectedItem.toString()
+            val langValue = dropdownLang.selectedItem.toString()
+            applyThemeSettings(themeValue)
+            applyLanguageSettings(langValue)
+            builder.dismiss()
+        }
+
+        return builder
+    }
+
+    private fun applyThemeSettings(themeValue:String){
+        val themeSaved = preferencesSettings.getString(Constants.THEME, "Dark")
+        if (themeSaved != themeValue){
+            editorSettings.putString(Constants.THEME, themeValue)
+            editorSettings.apply()
+            val dialog = Dialog(requireContext())
+            dialog.setContentView(R.layout.warning_change_theme_language)
+            val closeBtn = dialog.findViewById<ImageView>(R.id.close)
+            closeBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+    }
+
+    private fun applyLanguageSettings(langValue:String){
+        val langSaved = preferencesSettings.getString(Constants.LANGUAGE, "English")
+        if (langSaved != langValue){
+            editorSettings.putString(Constants.LANGUAGE, langValue)
+            editorSettings.apply()
+            val dialog = Dialog(requireContext())
+            dialog.setContentView(R.layout.warning_change_theme_language)
+            val closeBtn = dialog.findViewById<ImageView>(R.id.close)
+            closeBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
     }
 }

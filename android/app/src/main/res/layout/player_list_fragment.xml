@@ -4,7 +4,7 @@
     android:layout_width="300dp"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorFifth">
+    android:background="?color">
 
     <TextView
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:text="@string/players"
         android:textAlignment="center"
         android:textSize="25dp"
-        android:background="@color/colorFourth"/>
+        android:background="?colorSecondary"/>
 
     <EditText
         android:id="@+id/search_player"
@@ -32,7 +32,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:scrollHorizontally="false"
-        android:background="@color/colorFifth"
+        android:background="?color"
         android:layout_weight="2"
         android:divider="#eee"/>
 </LinearLayout>
