@@ -79,7 +79,6 @@ class ChatFragment : Fragment() {
                 false
             }
         }
-        //Fetch data to populate UI
 
         val mainChannelMessageList = chatViewModel.getMainChannelMessage()
         mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->

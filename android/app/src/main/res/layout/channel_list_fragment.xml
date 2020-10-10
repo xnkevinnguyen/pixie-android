@@ -47,7 +47,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/channels"
+        android:id="@+id/channels_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:paddingLeft="10dp"

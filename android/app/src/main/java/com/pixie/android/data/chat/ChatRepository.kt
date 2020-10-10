@@ -13,6 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatRepository(
     private val dataSource: ChatDataSource,
@@ -30,13 +31,13 @@ class ChatRepository(
             val loadingID = 0.0
             this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
-    private var userChannels = MutableLiveData<MutableList<ChannelData>>()
+    private var userChannels = MutableLiveData<ArrayList<ChannelData>>()
 
     private lateinit var mainChannelMessageJob: Job
     private lateinit var mainChannelParticipantJob: Job
 
 
-    fun getUserChannels(): LiveData<MutableList<ChannelData>> {
+    fun getUserChannels(): LiveData<ArrayList<ChannelData>> {
         return userChannels
     }
 
