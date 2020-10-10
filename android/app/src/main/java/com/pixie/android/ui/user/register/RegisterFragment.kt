@@ -136,7 +136,9 @@ class RegisterFragment : Fragment() {
                 loading.visibility = View.VISIBLE
                 val usernameInput = username.text.toString()
                 val passwordInput = password.text.toString()
-                registerViewModel.register(username.text.toString(), password.text.toString()) { registerResult ->
+                val firstName = name.text.toString()
+                val lastName = surname.text.toString()
+                registerViewModel.register(username.text.toString(), password.text.toString(), name.text.toString(), surname.text.toString()) { registerResult ->
 
                     if (registerResult.success != null) {
                         // Once register succeeds, we are loggin in the user
