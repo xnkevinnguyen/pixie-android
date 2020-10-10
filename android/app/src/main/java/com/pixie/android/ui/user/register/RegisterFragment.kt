@@ -63,6 +63,8 @@ class RegisterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val surname = view.findViewById<EditText>(R.id.first_name)
+        val name = view.findViewById<EditText>(R.id.last_name)
         val username = view.findViewById<EditText>(R.id.et_name)
         val password = view.findViewById<EditText>(R.id.et_password)
         var retypePassword = view.findViewById<EditText>(R.id.et_repassword)
@@ -99,6 +101,8 @@ class RegisterFragment : Fragment() {
 
         username.afterTextChanged {
             registerViewModel.registerDataChanged(
+                name.text.toString(),
+                surname.text.toString(),
                 username.text.toString(),
                 password.text.toString(),
                 retypePassword.text.toString()
@@ -108,6 +112,8 @@ class RegisterFragment : Fragment() {
 
         password.afterTextChanged {
             registerViewModel.registerDataChanged(
+                name.text.toString(),
+                surname.text.toString(),
                 username.text.toString(),
                 password.text.toString(),
                 retypePassword.text.toString()
@@ -117,6 +123,8 @@ class RegisterFragment : Fragment() {
         retypePassword.apply {
             afterTextChanged {
                 registerViewModel.registerDataChanged(
+                    name.text.toString(),
+                    surname.text.toString(),
                     username.text.toString(),
                     password.text.toString(),
                     retypePassword.text.toString()
@@ -128,7 +136,9 @@ class RegisterFragment : Fragment() {
                 loading.visibility = View.VISIBLE
                 val usernameInput = username.text.toString()
                 val passwordInput = password.text.toString()
-                registerViewModel.register(username.text.toString(), password.text.toString()) { registerResult ->
+                val firstName = name.text.toString()
+                val lastName = surname.text.toString()
+                registerViewModel.register(username.text.toString(), password.text.toString(), name.text.toString(), surname.text.toString()) { registerResult ->
 
                     if (registerResult.success != null) {
                         // Once register succeeds, we are loggin in the user

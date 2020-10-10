@@ -15,9 +15,9 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
         userRepository.setLoggedInUser(LoggedInUser(userID,username))
     }
 
-    fun register(username: String, password: String, onRegisterResult :(authResult: AuthResult)->Unit) {
+    fun register(username: String, password: String, firstName: String, lastName: String, onRegisterResult :(authResult: AuthResult)->Unit) {
 
-        userRepository.register(username, password,onRegisterResult)
+        userRepository.register(username, password, firstName, lastName, onRegisterResult)
 
     }
     fun login(username: String, password: String,onLoginResult:(authResult:AuthResult)->Unit){
@@ -25,8 +25,11 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
     }
 
 
-    fun registerDataChanged(username: String, password: String, reTypePassword:String) {
-        if (!username.isNotBlank()) {
+    fun registerDataChanged(name:String, surname: String, username: String, password: String, reTypePassword:String) {
+        if (!name.isNotBlank() || !surname.isNotBlank()){
+            userRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_name))
+        }
+        else if (!username.isNotBlank()) {
             userRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_username))
         }
         else if (!isPasswordValid(password)) {
