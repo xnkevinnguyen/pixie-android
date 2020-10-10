@@ -10,7 +10,11 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
 
     fun getMainChannelParticipants()= chatRepository.getMainChannelParticipantList()
 
-    fun startChannel(){
+    fun getUserChannels()=chatRepository.getUserChannels()
+
+    fun startChannels(){
+        // Fetch all channels users has joined
+        chatRepository.fetchUserChannels()
         chatRepository.enterMainChannel()
         chatRepository.subscribeChannelMessages()
         chatRepository.suscribeChannelUsers()

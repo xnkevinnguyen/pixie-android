@@ -16,10 +16,10 @@
     <fragment
         android:id="@+id/canvas_fragment"
         android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
-        android:layout_width="900dp"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="300dp"
-        android:layout_alignParentEnd="true"/>
+        android:layout_width="1000px"
+        android:layout_height="1000px"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="300dp" />
 
     <fragment
         android:id="@+id/second_chat_fragment"
