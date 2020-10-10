@@ -1,0 +1,25 @@
+query getUserChannels($input:UserChannelInput!){
+    userChannels(input:$input){
+        id
+        username
+
+        channels{
+            id
+            name
+            participants{
+                id
+                username
+                isOnline
+            }
+            messages{
+                id
+                content
+                sender{
+                    username
+                }
+                postedAt
+            }
+        }
+        isOnline
+    }
+}

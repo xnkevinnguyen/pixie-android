@@ -12,12 +12,34 @@ import com.pixie.android.model.chat.MessageData
 import com.pixie.android.type.AddMessageInput
 import com.pixie.android.type.EnterChannelInput
 import com.pixie.android.type.ExitChannelInput
+import com.pixie.android.type.UserChannelInput
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
 import java.util.*
 
 class ChatDataSource() {
+    suspend fun getUserChannels(
+        userId:Double
+    ): List<ChannelData>?{
+        val userChannelInput = UserChannelInput(userId)
+        try{
+            val response = apolloClient.query(GetUserChannelsQuery(userChannelInput)).toDeferred().await().data
+            val channelQueryData = response?.userChannels?.channels
+            if (channelQueryData != null){
+                val channelData =channelQueryData.map {
+                    val participantList = it.participants.map{ ChannelParticipant(it.id,it.username,it.isOnline) }
+                    ChannelData(it.id,it.name,participantList)
+                }
+                return channelData
+            }
+        }catch(e:ApolloException){
+            Log.d("ApolloException", e.message.toString())
+
+        }
+        Log.d("ApolloException","Error fetching user channels")
+        return null
+    }
 
     suspend fun sendMessageToChannel(
         messageData: MessageData,
@@ -30,7 +52,7 @@ class ChatDataSource() {
                 .await().data
 
         } catch (e: ApolloException) {
-            Log.d("apolloException", e.message.toString())
+            Log.d("ApolloException", e.message.toString())
         }
         return null
     }

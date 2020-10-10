@@ -48,9 +48,10 @@ class ChatRepository(
         return mainChannelParticipantList
     }
 
-    fun setUserChannels() {
+    fun fetchUserChannels() {
         CoroutineScope(IO).launch {
-
+            val channelDataList = dataSource.getUserChannels(userRepository.getUser().userId)
+            userChannels.postValue(channelDataList?.toMutableList())
         }
     }
 
@@ -86,7 +87,7 @@ class ChatRepository(
 
     fun subscribeChannelMessages() {
         mainChannelMessageJob = CoroutineScope(IO).launch {
-            val sub = dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID, onReceiveMessage = {
+            dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID, onReceiveMessage = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
                     if (it.userName != userRepository.getUser().username) {
