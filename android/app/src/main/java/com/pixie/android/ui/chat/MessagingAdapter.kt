@@ -40,8 +40,8 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
     @SuppressLint("DefaultLocale")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val message: MessageData = listOfMessage[position]
-
-        return if (message.belongsToCurrentUser) {
+        val messageBelongsToCurrentUser = message.belongsToCurrentUser
+        return if (messageBelongsToCurrentUser==true) {
             val rowView = inflater.inflate(R.layout.align_chat_right, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.text_title)
             val timePosted = rowView.findViewById<TextView>(R.id.time)

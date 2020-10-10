@@ -106,15 +106,15 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             PathPoint(
                 currentX,
                 currentY,
-                (motionTouchEventX + currentX) / 2,
-                (motionTouchEventY + currentY) / 2
+                motionTouchEventX,
+                motionTouchEventY
             )
         )
         path.quadTo(
             currentX,
             currentY,
-            (motionTouchEventX + currentX) / 2,
-            (motionTouchEventY + currentY) / 2
+            motionTouchEventX,
+            motionTouchEventY
         )
 
         currentX = motionTouchEventX

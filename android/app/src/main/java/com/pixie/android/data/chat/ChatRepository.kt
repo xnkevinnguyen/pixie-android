@@ -30,8 +30,8 @@ class ChatRepository(
             this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
 
-    private lateinit var mainChannelMessageJob : Job
-    private lateinit var mainChannelParticipantJob:Job
+    private lateinit var mainChannelMessageJob: Job
+    private lateinit var mainChannelParticipantJob: Job
 
     fun getMainChannelMessageList(): LiveData<MutableList<MessageData>> {
         return mainChannelMessageList
@@ -53,7 +53,8 @@ class ChatRepository(
 
         }
     }
-    fun clearChannels(){
+
+    fun clearChannels() {
         mainChannelMessageList.postValue(arrayListOf())
         mainChannelParticipantList.postValue(arrayListOf())
     }
@@ -79,13 +80,15 @@ class ChatRepository(
 
     fun subscribeChannelMessages() {
         mainChannelMessageJob = CoroutineScope(IO).launch {
-            val sub = dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID,onReceiveMessage =  {
+            val sub = dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID, onReceiveMessage = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
-                    if (it.userName != userRepository.user!!.username) {
-                        mainChannelMessageList.value?.add(it)
-                        mainChannelMessageList.notifyObserver()
-                    }
+
+                    it.belongsToCurrentUser = it.userName == userRepository.user?.username
+
+
+                    mainChannelMessageList.value?.add(it)
+                    mainChannelMessageList.notifyObserver()
                 }
 
             })
@@ -93,8 +96,8 @@ class ChatRepository(
     }
 
     fun suscribeChannelUsers() {
-        mainChannelParticipantJob=CoroutineScope(IO).launch {
-             dataSource.suscribeToChannelChange(MAIN_CHANNEL_ID, onChannelChange = {
+        mainChannelParticipantJob = CoroutineScope(IO).launch {
+            dataSource.suscribeToChannelChange(MAIN_CHANNEL_ID, onChannelChange = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
                     mainChannelParticipantList.postValue(it.participantList.toMutableList())
@@ -106,12 +109,9 @@ class ChatRepository(
 
 
     fun sendMessage(message: String) {
-
-        val messageData = MessageData(message, true, timePosted = Calendar.getInstance().timeInMillis.toString())
-        mainChannelMessageList.value?.add(messageData)
         CoroutineScope(IO).launch {
             val data = dataSource.sendMessageToChannel(
-                messageData,
+                message,
                 MAIN_CHANNEL_ID,
                 userRepository.user!!.userId
             )
@@ -119,8 +119,6 @@ class ChatRepository(
                 // handle possible error
             }
         }
-        mainChannelMessageList.notifyObserver()
-
     }
 
     // Singleton
