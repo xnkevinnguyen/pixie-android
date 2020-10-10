@@ -34,13 +34,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_logo"/>
 
+    <LinearLayout
+        android:id="@+id/user_info_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/error_login">
+
+        <EditText
+            android:id="@+id/first_name"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_et_custom"
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:padding="15dp"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/last_name"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginRight="80dp"
+            android:background="@drawable/ic_et_custom"
+            android:hint="@string/surname"
+            android:inputType="textPersonName"
+            android:padding="15dp"
+            android:textSize="15sp" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_name"
         android:layout_width="500dp"
         android:layout_height="50dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="80dp"
         android:background="@drawable/ic_et_custom"
         android:hint="@string/username"
@@ -49,7 +83,7 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/error_login" />
+        app:layout_constraintTop_toBottomOf="@id/user_info_name" />
 
     <EditText
         android:id="@+id/et_password"

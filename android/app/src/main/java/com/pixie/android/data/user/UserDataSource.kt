@@ -39,8 +39,8 @@ class UserDataSource {
     }
 
 
-    suspend fun register(username:String, password: String ):RegisterMutation.Data?{
-        val usernamePasswordInput = UsernamePasswordInput(username,password)
+    suspend fun register(username:String, password: String, firstName: String, lastName: String):RegisterMutation.Data?{
+        val usernamePasswordInput = UsernamePasswordInput(username,password, firstName, lastName)
         var response :RegisterMutation.Data? =null
         try{
             response =  apolloClient.mutate(RegisterMutation(usernamePasswordInput)).toDeferred().await().data

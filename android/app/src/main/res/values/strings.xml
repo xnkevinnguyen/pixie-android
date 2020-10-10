@@ -15,6 +15,7 @@
     <string name="chat_hint">Type here...</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_name">Not a valid name</string>
     <string name="invalid_password">Password must be minimum 6 characters</string>
     <string name="invalid_re_password">Passwords must be the same</string>
     <string name="login_failed">"Login failed"</string>

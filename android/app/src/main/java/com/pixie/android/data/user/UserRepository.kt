@@ -81,10 +81,12 @@ class UserRepository(val dataSource: UserDataSource) {
     fun register(
         username: String,
         password: String,
+        firstName: String,
+        lastName: String,
         onLoginResult: (authResult: AuthResult) -> Unit
     ) {
         CoroutineScope(IO).launch {
-            val response = dataSource.register(username, password)
+            val response = dataSource.register(username, password, firstName, lastName)
             lateinit var authResult: AuthResult
 
             if (response?.register?.user?.id != null) {// user needs to exist
