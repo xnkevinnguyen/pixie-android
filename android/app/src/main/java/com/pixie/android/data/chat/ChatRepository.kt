@@ -51,7 +51,7 @@ class ChatRepository(
     fun fetchUserChannels() {
         CoroutineScope(IO).launch {
             val channelDataList = dataSource.getUserChannels(userRepository.getUser().userId)
-            userChannels.postValue(channelDataList?.toMutableList())
+            userChannels.postValue(channelDataList?.toMutableList() as ArrayList<ChannelData>?)
         }
     }
 

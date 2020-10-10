@@ -33,7 +33,8 @@ class ChannelFragment: Fragment() {
         val userChannelAdapter = UserChannelAdapter(requireContext())
         channelListElement.adapter = userChannelAdapter
 
-        val chatViewModel = ViewModelProvider(this,factory).get(ChatViewModel::class.java)
+        val factoryChat = InjectorUtils.provideChatViewModelFactory()
+        val chatViewModel = ViewModelProvider(this,factoryChat).get(ChatViewModel::class.java)
         val userChannels = chatViewModel.getUserChannels()
         userChannels.observe(viewLifecycleOwner, Observer { userChannelList->
             userChannelAdapter.set(userChannelList)

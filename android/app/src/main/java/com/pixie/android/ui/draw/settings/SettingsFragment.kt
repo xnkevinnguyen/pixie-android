@@ -88,7 +88,6 @@ class SettingsFragment : DialogFragment() {
             val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)
             requireActivity().finish()
-            //requireActivity().recreate()
 
 //            val dialog = Dialog(requireContext())
 //            dialog.setContentView(R.layout.warning_change_theme_language)

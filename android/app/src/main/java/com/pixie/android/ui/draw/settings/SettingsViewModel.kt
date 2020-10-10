@@ -7,6 +7,4 @@ import com.pixie.android.model.user.LoggedInUser
 
 class SettingsViewModel(private val userRepository: UserRepository): ViewModel() {
     fun resetUser(loggedInUser: LoggedInUser) = userRepository.setLoggedInUser(loggedInUser)
-    fun getUser() = userRepository.user
-
 }
