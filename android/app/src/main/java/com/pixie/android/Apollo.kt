@@ -2,6 +2,7 @@ package com.pixie.android
 
 
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.subscription.SubscriptionConnectionParams
 import com.apollographql.apollo.subscription.WebSocketSubscriptionTransport
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -10,6 +11,11 @@ import okhttp3.Response
 
 
 private var instance: ApolloClient? = null
+object HeadersProvider {
+    val HEADERS = mapOf(
+        "authToken" to "1"
+    )
+}
 
 fun apolloClient(authToken:Double?): ApolloClient {
 
@@ -20,9 +26,15 @@ fun apolloClient(authToken:Double?): ApolloClient {
     val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(AuthorizationInterceptor(authToken))
         .build()
+    val subParams = SubscriptionConnectionParams()
+    if (authToken!=null){
+        subParams.put("authToken",authToken.toInt())
+
+    }
 
     instance = ApolloClient.builder()
         .serverUrl("https://pixie-server.herokuapp.com/graphql")
+        .subscriptionConnectionParams(subParams)
         .subscriptionTransportFactory(WebSocketSubscriptionTransport.Factory("wss://pixie-server.herokuapp.com/graphql", okHttpClient))
         .okHttpClient(okHttpClient)
         .build()
@@ -38,7 +50,7 @@ private class AuthorizationInterceptor(val authToken: Double?) : Interceptor {
                 .build()
         }else {
              request = chain.request().newBuilder()
-                .addHeader("authToken", authToken.toString())
+                .addHeader("authToken", "1")
                 .build()
         }
         return chain.proceed(request)

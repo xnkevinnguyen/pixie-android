@@ -21,14 +21,14 @@ class ChatRepository(
     private val userRepository: UserRepository
 ) {
 
-    val MAIN_CHANNEL_ID = 3.0
+    val MAIN_CHANNEL_ID = 1.0
     private var mainChannelMessageList = MutableLiveData<MutableList<MessageData>>().apply {
         this.postValue(arrayListOf())
     }
     private var mainChannelParticipantList =
         MutableLiveData<MutableList<ChannelParticipant>>().apply {
             val loadingUsername = "Loading ..."
-            val loadingID = 0.0
+            val loadingID = 1.0
             this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
     private var userChannels = MutableLiveData<ArrayList<ChannelData>>()
@@ -51,7 +51,7 @@ class ChatRepository(
     fun fetchUserChannels() {
         CoroutineScope(IO).launch {
             val channelDataList = dataSource.getUserChannels(userRepository.getUser().userId)
-            userChannels.postValue(channelDataList?.toMutableList() as ArrayList<ChannelData>?)
+            userChannels.postValue(ArrayList(channelDataList))
         }
     }
 
