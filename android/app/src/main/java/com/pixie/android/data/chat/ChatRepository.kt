@@ -90,11 +90,11 @@ class ChatRepository(
             dataSource.suscribeToChannelMessages(userRepository.getUser().userId,MAIN_CHANNEL_ID, onReceiveMessage = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
-                    if (it.userName != userRepository.getUser().username) {
-                        mainChannelMessageList.value?.add(it)
+                    it.belongsToCurrentUser = it.userName == userRepository.getUser().username
+                    mainChannelMessageList.value?.add(it)
                         mainChannelMessageList.notifyObserver()
                     }
-                }
+
 
             })
         }
@@ -115,8 +115,6 @@ class ChatRepository(
 
 
     fun sendMessage(message: String) {
-        val messageData = MessageData(message, true, timePosted = Calendar.getInstance().timeInMillis.toString())
-        mainChannelMessageList.value?.add(messageData)
         CoroutineScope(IO).launch {
             val data = dataSource.sendMessageToChannel(
                 message,
