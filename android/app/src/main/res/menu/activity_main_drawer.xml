@@ -12,6 +12,10 @@
         android:id="@+id/nav_drawing"
             android:icon="@drawable/ic_palette"
             android:title="@string/drawing" />
+        <item
+            android:id="@+id/nav_game_selection"
+            android:icon="@drawable/ic_baseline_games"
+            android:title="@string/game_select" />
 
     </group>
 </menu>

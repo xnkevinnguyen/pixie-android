@@ -23,13 +23,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
-import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
 import com.pixie.android.ui.draw.settings.SettingsFragment
-import com.pixie.android.ui.draw.settings.SettingsViewModel
 import com.pixie.android.ui.user.AuthActivity
-import com.pixie.android.ui.user.login.LoginViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 import com.pixie.android.utilities.OnApplicationStopService
@@ -57,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_drawing), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_drawing, R.id.nav_game_selection), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 

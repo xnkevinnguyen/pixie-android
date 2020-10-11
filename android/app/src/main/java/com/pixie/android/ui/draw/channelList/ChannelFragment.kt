@@ -36,10 +36,10 @@ class ChannelFragment: Fragment() {
         val factoryChat = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this,factoryChat).get(ChatViewModel::class.java)
         val userChannels = chatViewModel.getUserChannels()
-        userChannels.observe(viewLifecycleOwner, Observer { userChannelList->
-            userChannelAdapter.set(userChannelList)
-
-        })
+//        userChannels.observe(viewLifecycleOwner, Observer { userChannelList->
+//            userChannelAdapter.set(userChannelList)
+//
+//        })
         return root
     }
 
