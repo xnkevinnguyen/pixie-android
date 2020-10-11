@@ -87,7 +87,7 @@ class ChatRepository(
 
     fun subscribeChannelMessages() {
         mainChannelMessageJob = CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID, onReceiveMessage = {
+            dataSource.suscribeToChannelMessages(userRepository.getUser().userId,MAIN_CHANNEL_ID, onReceiveMessage = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
                     if (it.userName != userRepository.getUser().username) {
@@ -103,7 +103,7 @@ class ChatRepository(
 
     fun suscribeChannelUsers() {
         mainChannelParticipantJob = CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelChange(MAIN_CHANNEL_ID, onChannelChange = {
+            dataSource.suscribeToChannelChange(userRepository.getUser().userId,MAIN_CHANNEL_ID, onChannelChange = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
                     mainChannelParticipantList.postValue(it.participantList.toMutableList())

@@ -21,8 +21,10 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
         this.channelList.add(channel)
 
     }
-    fun set(newChannelList:ArrayList<ChannelData>){
-        channelList = newChannelList
+    fun set(newChannelList:ArrayList<ChannelData>?){
+        if(newChannelList!=null) {
+            channelList = newChannelList
+        }
     }
     fun clear(){
         channelList.clear()
