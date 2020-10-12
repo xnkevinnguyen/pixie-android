@@ -50,7 +50,7 @@ private class AuthorizationInterceptor(val authToken: Double?) : Interceptor {
                 .build()
         }else {
              request = chain.request().newBuilder()
-                .addHeader("authToken", "1")
+                .addHeader("authToken", authToken.toInt().toString())
                 .build()
         }
         return chain.proceed(request)

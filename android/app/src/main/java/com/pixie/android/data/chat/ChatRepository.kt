@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ChatRepository(
     private val dataSource: ChatDataSource,
@@ -25,6 +26,19 @@ class ChatRepository(
     private var mainChannelMessageList = MutableLiveData<MutableList<MessageData>>().apply {
         this.postValue(arrayListOf())
     }
+    // Map with <ChannelID,Messages>
+    private var channelMessages = MutableLiveData<MutableMap<Double,ArrayList<MessageData>>>().apply{
+        val initialMap = HashMap<Double,ArrayList<MessageData>>()
+        val messageList = arrayListOf<MessageData>(MessageData("message1",false,"user","100000"),MessageData("message1",false,"user","100000"))
+
+        val messageList2 = arrayListOf<MessageData>(MessageData("message2",false,"user","100000"))
+
+        initialMap.put(1.0, messageList)
+        initialMap.put(2.0,messageList2)
+        this.postValue(initialMap)
+    }
+    private var channelSubscriptions:ArrayList<Job> = arrayListOf()
+
     private var mainChannelParticipantList =
         MutableLiveData<MutableList<ChannelParticipant>>().apply {
             val loadingUsername = "Loading ..."
@@ -32,10 +46,19 @@ class ChatRepository(
             this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
     private var userChannels = MutableLiveData<ArrayList<ChannelData>>()
+    private var currentChannelID = MutableLiveData<Double>()
+
 
     private lateinit var mainChannelMessageJob: Job
     private lateinit var mainChannelParticipantJob: Job
 
+    fun getCurrentChannelID():LiveData<Double>{
+        return currentChannelID
+    }
+
+    fun getChannelMessages():LiveData<MutableMap<Double,ArrayList<MessageData>>>{
+        return channelMessages
+    }
     fun getUserChannels(): LiveData<ArrayList<ChannelData>> {
         return userChannels
     }
@@ -66,7 +89,9 @@ class ChatRepository(
 
         }
     }
-
+    fun setCurrentChannelID(id:Double){
+        currentChannelID.postValue(id)
+    }
     fun clearChannels() {
         mainChannelMessageList.postValue(arrayListOf())
         mainChannelParticipantList.postValue(arrayListOf())

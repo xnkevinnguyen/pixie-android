@@ -24,7 +24,7 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
     }
     fun set(newChannelList:ArrayList<ChannelData>?){
         if(newChannelList!=null) {
-            channelList = newChannelList
+            channelList= ArrayList(newChannelList)
         }
         notifyDataSetChanged()
     }
