@@ -8,7 +8,6 @@ import com.pixie.android.LogoutMutation
 import com.pixie.android.RegisterMutation
 import com.pixie.android.apolloClient
 import com.pixie.android.type.LoginInput
-import com.pixie.android.type.LogoutInput
 import com.pixie.android.type.UsernamePasswordInput
 
 class UserDataSource {
@@ -27,10 +26,9 @@ class UserDataSource {
     }
 
     suspend fun logout(userID:Double){
-        val input : LogoutInput = LogoutInput(userID)
         try{
 
-            val result = apolloClient(userID).mutate(LogoutMutation(input)).toDeferred().await().data
+            val result = apolloClient(userID).mutate(LogoutMutation()).toDeferred().await().data
 
         }catch(e:ApolloException){
             Log.d("apolloException", e.message.toString())

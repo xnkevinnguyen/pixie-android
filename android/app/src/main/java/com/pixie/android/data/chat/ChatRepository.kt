@@ -29,7 +29,7 @@ class ChatRepository(
     // Map with <ChannelID,Messages>
     private var channelMessages = MutableLiveData<MutableMap<Double,ArrayList<MessageData>>>().apply{
         val initialMap = HashMap<Double,ArrayList<MessageData>>()
-        val messageList = arrayListOf<MessageData>(MessageData("message1",false,"user","100000"),MessageData("message1",false,"user","100000"))
+        val messageList = arrayListOf<MessageData>(MessageData("message1",false,"user","100000"))
 
         val messageList2 = arrayListOf<MessageData>(MessageData("message2",false,"user","100000"))
 
@@ -74,8 +74,37 @@ class ChatRepository(
     fun fetchUserChannels() {
         CoroutineScope(IO).launch {
             val channelDataList = dataSource.getUserChannels(userRepository.getUser().userId)
-            userChannels.postValue(ArrayList(channelDataList))
+            if(channelDataList!=null){
+                userChannels.postValue(ArrayList(channelDataList))
+
+            }
         }
+
+    }
+    fun suscribeToUserChannels(){
+        //clear current channels subscriptions
+        channelSubscriptions.clear()
+        //fetch subscriptions for each channels
+        userChannels.value?.forEach {channelData->
+            val subscriptionJob = CoroutineScope(IO).launch {
+                dataSource.suscribeToChannelMessages(userRepository.getUser().userId,channelData.channelID, onReceiveMessage = {
+                    // Main thread only used to modify values
+                    CoroutineScope(Main).launch {
+                        it.belongsToCurrentUser = it.userName == userRepository.getUser().username
+                        channelMessages.value?.get(channelData.channelID)?.add(it)
+
+                        //Only update UI if the change is on selected channel
+                         if(currentChannelID.value ==channelData.channelID){
+                             mainChannelMessageList.notifyObserver()
+                         }
+                    }
+
+
+                })
+            }
+            channelSubscriptions.add(subscriptionJob)
+        }
+
     }
 
     fun enterMainChannel() {
