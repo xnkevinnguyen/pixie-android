@@ -1,18 +1,18 @@
 package com.pixie.android.ui.chat
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ListView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.utilities.InjectorUtils
 
 
@@ -80,21 +80,37 @@ class ChatFragment : Fragment() {
             }
         }
 
-        val mainChannelMessageList = chatViewModel.getMainChannelMessage()
-        mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->
-            if (!messageList.isNullOrEmpty()){
-                if(messageAdapter.isEmpty){
-                    // Repopulating the adapter
-                    messageList.forEach {
-                        messageAdapter.add(it)
-                    }
+        val currentChannelID = chatViewModel.getCurrentChannelID()
+        currentChannelID.observe(viewLifecycleOwner, Observer {id->
+            // on channel change
+            //clear adapter messages
+            messageAdapter.clear()
+            // load new channel messages
+            val messageList = chatViewModel.getCurrentChannelMessageList(id)
+            messageAdapter.set(messageList)
 
-                }else{
-                    messageAdapter.add(messageList.last())
+        }
+
+        )
+
+        val channelMessages = chatViewModel.getChannelMessageList()
+        channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
+            if (!channelMessagesMap.isNullOrEmpty()){
+                val messages = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
+                if(messageAdapter.isEmpty && messages!=null){
+                    // Repopulating the adapter
+                   messageAdapter.set(messages)
+
+                }else if (messages!=null){
+                    messageAdapter.add(messages.last())
                 }
             }
 
         })
+
+
+
+
 
 
         return root

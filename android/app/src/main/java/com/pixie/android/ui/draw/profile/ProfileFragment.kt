@@ -43,9 +43,9 @@ class ProfileFragment: Fragment() {
         val intent = Intent(root.context, AuthActivity::class.java)
 
         logout.setOnClickListener {
-            profileViewModel.logout()
             editor.remove("isLoggedIn")
             editor.apply()
+            // this will trigger a logout and exit channels
             startActivity(intent)
             requireActivity().finish()
         }

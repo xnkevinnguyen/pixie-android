@@ -22,8 +22,6 @@ class UserRepository(val dataSource: UserDataSource) {
     private val loginForm = MutableLiveData<LoginFormState>()
     private var user: LoggedInUser? = null
 
-    // Stricly used for operations after logged out
-    var loggedOutUserID :Double?=null
 
     fun getUser():LoggedInUser{
         val userCopy = user
@@ -47,8 +45,10 @@ class UserRepository(val dataSource: UserDataSource) {
     suspend fun logout() {
         // Logout should ALWAYS be called after exit operations
         // Logout is called when application stops or on manual logout
-        loggedOutUserID = getUser().userId
-        dataSource.logout(getUser().userId)
+        if(user!=null){
+            dataSource.logout(getUser().userId)
+
+        }
         user = null
 
     }
