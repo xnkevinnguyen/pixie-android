@@ -8,7 +8,6 @@ import com.pixie.android.LogoutMutation
 import com.pixie.android.RegisterMutation
 import com.pixie.android.apolloClient
 import com.pixie.android.type.LoginInput
-import com.pixie.android.type.LogoutInput
 import com.pixie.android.type.UsernamePasswordInput
 
 class UserDataSource {
@@ -17,7 +16,7 @@ class UserDataSource {
         var response :LoginMutation.Data? =null
          try{
              val loginInput = LoginInput(username,password)
-            response =  apolloClient.mutate(LoginMutation(loginInput)).toDeferred().await().data
+            response =  apolloClient(null).mutate(LoginMutation(loginInput)).toDeferred().await().data
 
         }catch(e:ApolloException){
              Log.d("apolloException", e.message.toString())
@@ -27,10 +26,9 @@ class UserDataSource {
     }
 
     suspend fun logout(userID:Double){
-        val input : LogoutInput = LogoutInput(userID)
         try{
 
-            val result = apolloClient.mutate(LogoutMutation(input)).toDeferred().await().data
+            val result = apolloClient(userID).mutate(LogoutMutation()).toDeferred().await().data
 
         }catch(e:ApolloException){
             Log.d("apolloException", e.message.toString())
@@ -43,7 +41,7 @@ class UserDataSource {
         val usernamePasswordInput = UsernamePasswordInput(username,password, firstName, lastName)
         var response :RegisterMutation.Data? =null
         try{
-            response =  apolloClient.mutate(RegisterMutation(usernamePasswordInput)).toDeferred().await().data
+            response =  apolloClient(null).mutate(RegisterMutation(usernamePasswordInput)).toDeferred().await().data
 
         }catch(e:ApolloException){
             Log.d("apolloException", e.message.toString())

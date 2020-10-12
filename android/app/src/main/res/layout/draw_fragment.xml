@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?colorAccent">
 
     <fragment
         android:id="@+id/draw_tools_fragment"
@@ -16,14 +16,14 @@
     <fragment
         android:id="@+id/canvas_fragment"
         android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
-        android:layout_width="900dp"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="300dp"
-        android:layout_alignParentEnd="true"/>
+        android:layout_width="1000px"
+        android:layout_height="1000px"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="300dp" />
 
     <fragment
         android:id="@+id/second_chat_fragment"
-        android:name="com.pixie.android.ui.chat.ChatFragment"
+        android:name="com.pixie.android.ui.chat.GameChatFragment"
         android:layout_width="275dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"/>

@@ -1,0 +1,21 @@
+query getUserChannels{
+    userChannels{
+
+        id
+        name
+        participants{
+            id
+            username
+            isOnline
+        }
+        messages{
+            id
+            content
+            sender{
+                username
+            }
+            postedAt
+        }
+
+    }
+}

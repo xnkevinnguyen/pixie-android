@@ -2,11 +2,14 @@ package com.pixie.android.ui
 
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -20,7 +23,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
+import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.ui.chat.ChatViewModel
+import com.pixie.android.ui.draw.profile.ProfileViewModel
+import com.pixie.android.ui.draw.settings.SettingsFragment
+import com.pixie.android.ui.draw.settings.SettingsViewModel
+import com.pixie.android.ui.user.AuthActivity
+import com.pixie.android.ui.user.login.LoginViewModel
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 import com.pixie.android.utilities.OnApplicationStopService
 import kotlinx.android.synthetic.main.main_activity.*
@@ -29,17 +39,19 @@ import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var preferencesSettings: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val theme = preferencesSettings.getString(Constants.THEME, "Dark")
+        if (theme == "Dark") setTheme(R.style.AppTheme_NoActionBar)
+        else setTheme(R.style.AppLightTheme_NoActionBar)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        val factory = InjectorUtils.provideChatViewModelFactory()
-        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
         startService(Intent(baseContext, OnApplicationStopService::class.java))
-
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -50,15 +62,22 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
-        var avatar: ImageView = header.findViewById(R.id.imageView)
+        val avatar: ImageView = header.findViewById(R.id.imageView)
         avatar.setOnClickListener {
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
         }
 
+        val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        val usernamePreference = preferences.getString(Constants.USERNAME, null)
+        val username = header.findViewById<TextView>(R.id.username)
+        username.text = usernamePreference
+
+
         settings.setOnClickListener {
-            navController.navigate(R.id.nav_settings)
             drawerLayout.closeDrawer(GravityCompat.START, false)
+            val dialog = SettingsFragment()
+            dialog.show(supportFragmentManager, "SettingsDialogFragment")
         }
 
         tutorial.setOnClickListener {
@@ -75,14 +94,39 @@ class MainActivity : AppCompatActivity() {
         //Start channel subscriptions
         val factory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
-        chatViewModel.startChannel()
+        chatViewModel.startChannels()
         super.onPostCreate(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.profile_menu, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val profileFactory = InjectorUtils.provideProfileViewModelFactory()
+        val profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
+        val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        val editor = preferences.edit()
+        val intent = Intent(this, AuthActivity::class.java)
+
+        return when (item.itemId) {
+            R.id.action_dropdown1 ->{
+                val navController = findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_profile)
+                return true
+            }
+            R.id.action_dropdown2 ->{
+                profileViewModel.logout()
+                editor.remove("isLoggedIn")
+                editor.apply()
+                startActivity(intent)
+                this.finish()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -101,10 +145,14 @@ class MainActivity : AppCompatActivity() {
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
         runBlocking {
             chatViewModel.stopChannel()
-
-            UserRepository.getInstance().logout()}
+            UserRepository.getInstance().logout()
+        }
 
         super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
 }

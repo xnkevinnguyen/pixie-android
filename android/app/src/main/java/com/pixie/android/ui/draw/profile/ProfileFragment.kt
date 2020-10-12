@@ -1,21 +1,24 @@
 package com.pixie.android.ui.draw.profile
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.ui.draw.history.connectionHistory.ConnectionHistoryFragment
+import com.pixie.android.ui.draw.history.gameHistory.GameHistoryFragment
 import com.pixie.android.ui.user.AuthActivity
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 class ProfileFragment: Fragment() {
@@ -34,30 +37,38 @@ class ProfileFragment: Fragment() {
         profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
         val root = inflater.inflate(R.layout.profile_fragment, container, false)
         val logout: Button = root.findViewById(R.id.btn_logout)
-        preferences = requireContext().getSharedPreferences("Login", Context.MODE_PRIVATE)
+        preferences = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
         editor = preferences.edit()
 
         val intent = Intent(root.context, AuthActivity::class.java)
 
         logout.setOnClickListener {
-            profileViewModel.logout()
             editor.remove("isLoggedIn")
             editor.apply()
+            // this will trigger a logout and exit channels
             startActivity(intent)
             requireActivity().finish()
         }
 
-        var avatar : ImageView = root.findViewById(R.id.imageView)
+        val avatar : ImageView = root.findViewById(R.id.avatar)
         val lp = LinearLayout.LayoutParams(200, 200)
-        lp.gravity = (Gravity.CENTER_HORIZONTAL)
         avatar.layoutParams =lp
 
-        var header : LinearLayout = root.findViewById(R.id.header_profile)
-        header.setPadding(16, 0, 16, 0)
+        val username: TextView = root.findViewById(R.id.user_username)
+        username.text = preferences.getString(Constants.USERNAME, null)
 
-        var username: TextView = root.findViewById(R.id.username)
-        username.gravity = Gravity.CENTER_HORIZONTAL
-        username.textSize = 25F
+        val showHistory = root.findViewById<Button>(R.id.btn_show_hist)
+        showHistory.setOnClickListener {
+            val dialog = ConnectionHistoryFragment()
+            dialog.show(childFragmentManager, "ConnectionDialogFragment")
+        }
+
+        val showGameHistory = root.findViewById<Button>(R.id.btn_game_hist)
+        showGameHistory.setOnClickListener {
+            val dialog = GameHistoryFragment()
+            dialog.show(childFragmentManager, "GameDialogFragment")
+        }
+
 
         return root
     }

@@ -4,6 +4,7 @@
     <string name="cell_hint">50</string>
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
+    <string name="ok">Ok</string>
     <string name="tutorial">Tutorial</string>
     <string name="setting_desc">nav_setting_desc</string>
     <string name="username">Username</string>
@@ -31,6 +32,50 @@
     <string name="return_login">Return to login page</string>
     <string name="active_users">Players</string>
     <string name="messages">Messages</string>
-    <string name="name">First name</string>
-    <string name="surname">Last name</string>
+    <string name="channel">Your Channels</string>
+    <string name="join_channel">Join another channel</string>
+    <string name="create_channel">Create channel</string>
+    <string name="players">Players</string>
+    <string name="dropdown_1">Profile</string>
+    <string name="dropdown_2">Logout</string>
+    <string name="search_player">Search player</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="invite">Invite</string>
+
+    <string name="user_info">User Informations</string>
+    <string name="name">Last name: </string>
+    <string name="surname">First name: </string>
+    <string name="user_username">Username: </string>
+    <string name="game_play_info">User Game Play Informations</string>
+    <string name="number_games">Number of games played: </string>
+    <string name="percentage_victory">Percentage of victory: </string>
+    <string name="average_game">Average game time: </string>
+    <string name="total_game">Total play time: </string>
+    <string name="best_score">Best score: </string>
+    <string name="history_con_disc">Connections and Disconnections History</string>
+    <string name="last_conn">Last connection: </string>
+    <string name="last_disc">Last disconnection: </string>
+    <string name="registration_date">Registration date: </string>
+    <string name="show_hist">Show History</string>
+    <string name="game_history">Games History</string>
+    <string name="last_game">Last game played</string>
+    <string name="date_game">Date: </string>
+    <string name="time_game">Time: </string>
+    <string name="your_points">Your points: </string>
+    <string name="winner">Winner: </string>
+    <string name="difficulty">Difficulty:</string>
+    <string name="game_mode">Game mode: </string>
+    <string name="conn">Connection:</string>
+    <string name="disc">Disconnection: </string>
+
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+    <string name="eng">English</string>
+    <string name="fr">French</string>
+    <string name="setting">Settings</string>
+
+    <string name="changing_theme">To apply these changes please logout of Pixie.</string>
 </resources>

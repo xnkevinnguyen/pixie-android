@@ -18,10 +18,14 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-    private val listOfMessage = ArrayList<MessageData>()
+    private var listOfMessage = ArrayList<MessageData>()
 
     fun add(message: MessageData) {
         this.listOfMessage.add(message)
+        notifyDataSetChanged()
+    }
+    fun set(newMessages:ArrayList<MessageData>){
+        listOfMessage = ArrayList(newMessages)
         notifyDataSetChanged()
     }
 
@@ -31,6 +35,9 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
 
     override fun getItem(position: Int): Any {
         return listOfMessage[position]
+    }
+    fun clear(){
+        listOfMessage.clear()
     }
 
     override fun getItemId(position: Int): Long {
