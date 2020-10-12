@@ -13,7 +13,6 @@ import com.pixie.android.model.chat.MessageData
 import com.pixie.android.type.AddMessageInput
 import com.pixie.android.type.EnterChannelInput
 import com.pixie.android.type.ExitChannelInput
-import com.pixie.android.type.UserChannelInput
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
@@ -22,30 +21,33 @@ import kotlin.collections.ArrayList
 
 class ChatDataSource() {
     suspend fun getUserChannels(
-        userId:Double
-    ): List<ChannelData>?{
-        val userChannelInput = UserChannelInput(userId)
-        try{
-            val response = apolloClient(userId).query(GetUserChannelsQuery(userChannelInput)).requestHeaders(
+        userId: Double,
+        onReceiveMessage: (ArrayList<ChannelData>?) -> Unit
+    ) {
+        try {
+            val response = apolloClient(userId).query(GetUserChannelsQuery()).requestHeaders(
                 RequestHeaders.builder()
                     .addHeader("authToken", "1")
                     .build()
             )
                 .toDeferred().await().data
-            val channelQueryData = response?.userChannels?.channels
-            if (channelQueryData != null){
-                val channelData =channelQueryData.map {
-                    val participantList = it.participants.map{ ChannelParticipant(it.id,it.username,it.isOnline) }
-                    ChannelData(it.id,it.name,participantList)
-                }
-                return channelData
+            val channelQueryData = response?.userChannels
+            if (channelQueryData != null) {
+                val channelData = ArrayList(channelQueryData.map {
+                    var participantList =
+                        it.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
+                    if (participantList == null) {
+                        participantList = arrayListOf()
+                    }
+                    ChannelData(it.id, it.name, participantList)
+                })
+                onReceiveMessage( channelData)
             }
-        }catch(e:ApolloException){
+        } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
 
         }
-        Log.d("ApolloException","Error fetching user channels")
-        return null
+        Log.d("ApolloException", "Error fetching user channels")
     }
 
     suspend fun sendMessageToChannel(
@@ -68,12 +70,16 @@ class ChatDataSource() {
         val enterChannelInput = EnterChannelInput(channelID, userId)
         try {
             val response =
-                apolloClient(userId).mutate(EnterChannelMutation(enterChannelInput)).toDeferred().await()
+                apolloClient(userId).mutate(EnterChannelMutation(enterChannelInput)).toDeferred()
+                    .await()
             val data = response.data?.enterChannel
             if (data != null) {
 
-                val channelParticipant = data.participants.map {
+                var channelParticipant = data.participants?.map {
                     ChannelParticipant(it.id, it.username, it.isOnline)
+                }
+                if(channelParticipant==null){
+                    channelParticipant = arrayListOf()
                 }
                 return ChannelData(
                     data.id,
@@ -104,10 +110,11 @@ class ChatDataSource() {
     }
 
     suspend fun suscribeToChannelMessages(
-        userID:Double,
+        userID: Double,
         channelID: Double,
-        onReceiveMessage: (messageData: MessageData) -> Unit){
-         apolloClient(userID).subscribe(OnNewMessageSubscription(channelID)).toFlow()
+        onReceiveMessage: (messageData: MessageData) -> Unit
+    ) {
+        apolloClient(userID).subscribe(OnNewMessageSubscription(channelID)).toFlow()
             .retryWhen { _, attempt ->
                 delay(attempt * 1000)
                 true
@@ -120,7 +127,8 @@ class ChatDataSource() {
 
 
                 if (messageContent != null && messageSenderUsername != null && messageTimePosted != null) {
-                    val messageData = MessageData(messageContent, null, messageSenderUsername, messageTimePosted)
+                    val messageData =
+                        MessageData(messageContent, null, messageSenderUsername, messageTimePosted)
                     onReceiveMessage(messageData)
                 }
             }
@@ -132,7 +140,7 @@ class ChatDataSource() {
         channelID: Double,
         onChannelChange: (channelData: ChannelData) -> Unit
     ) {
-         apolloClient(userID).subscribe(OnChannelChangeSubscription(channelID)).toFlow()
+        apolloClient(userID).subscribe(OnChannelChangeSubscription(channelID)).toFlow()
             .retryWhen { _, attempt ->
                 delay(attempt * 1000)
                 true
@@ -142,8 +150,11 @@ class ChatDataSource() {
                 val data = it.data?.onChannelChange
                 if (data != null) {
 
-                    val channelParticipant = data.participants.map {
+                    var channelParticipant = data.participants?.map {
                         ChannelParticipant(it.id, it.username, it.isOnline)
+                    }
+                    if (channelParticipant==null){
+                        channelParticipant = arrayListOf()
                     }
                     val channelData = ChannelData(
                         data.id,
