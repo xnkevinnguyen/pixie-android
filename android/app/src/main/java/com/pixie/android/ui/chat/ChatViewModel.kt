@@ -1,5 +1,6 @@
 package com.pixie.android.ui.chat
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
@@ -7,10 +8,12 @@ import com.pixie.android.model.chat.MessageData
 
 class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
 
-    fun getCurrentChannelID() = chatRepository.getCurrentChannelID()
+    fun getCurrentChannelID():LiveData<Double> = chatRepository.getCurrentChannelID()
+
     fun setCurrentChannelID(id:Double){
         chatRepository.setCurrentChannelID(id)
     }
+    fun getChannelMessageList() = chatRepository.getChannelMessages()
     fun getCurrentChannelMessageList(channelID:Double):ArrayList<MessageData>{
         val messageList=chatRepository.getChannelMessages().value?.get(channelID)
         if(messageList.isNullOrEmpty()){
@@ -32,7 +35,6 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
         chatRepository.enterMainChannel()
         chatRepository.subscribeChannelMessages()
         chatRepository.suscribeChannelUsers()
-        chatRepository.suscribeToUserChannels()
 
     }
     fun stopChannel(){
@@ -43,7 +45,10 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
     }
 
     fun sendMessageToCurrentChannel(message:String){
-        chatRepository.sendMessage(message)
+        val channelID =chatRepository.getCurrentChannelID().value
+        if(channelID!=null) {
+            chatRepository.sendMessage(channelID,message)
+        }
     }
 
 }

@@ -21,8 +21,9 @@ import kotlin.collections.ArrayList
 
 class ChatDataSource() {
     suspend fun getUserChannels(
-        userId: Double
-    ): List<ChannelData>? {
+        userId: Double,
+        onReceiveMessage: (ArrayList<ChannelData>?) -> Unit
+    ) {
         try {
             val response = apolloClient(userId).query(GetUserChannelsQuery()).requestHeaders(
                 RequestHeaders.builder()
@@ -32,22 +33,21 @@ class ChatDataSource() {
                 .toDeferred().await().data
             val channelQueryData = response?.userChannels
             if (channelQueryData != null) {
-                val channelData = channelQueryData.map {
+                val channelData = ArrayList(channelQueryData.map {
                     var participantList =
                         it.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
                     if (participantList == null) {
                         participantList = arrayListOf()
                     }
                     ChannelData(it.id, it.name, participantList)
-                }
-                return channelData
+                })
+                onReceiveMessage( channelData)
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
 
         }
         Log.d("ApolloException", "Error fetching user channels")
-        return null
     }
 
     suspend fun sendMessageToChannel(

@@ -93,17 +93,16 @@ class ChatFragment : Fragment() {
 
         )
 
-        val mainChannelMessageList = chatViewModel.getMainChannelMessage()
-        mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->
-            if (!messageList.isNullOrEmpty()){
-                if(messageAdapter.isEmpty){
+        val channelMessages = chatViewModel.getChannelMessageList()
+        channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
+            if (!channelMessagesMap.isNullOrEmpty()){
+                val messages = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
+                if(messageAdapter.isEmpty && messages!=null){
                     // Repopulating the adapter
-                    messageList.forEach {
-                        messageAdapter.add(it)
-                    }
+                   messageAdapter.set(messages)
 
-                }else{
-                    messageAdapter.add(messageList.last())
+                }else if (messages!=null){
+                    messageAdapter.add(messages.last())
                 }
             }
 
