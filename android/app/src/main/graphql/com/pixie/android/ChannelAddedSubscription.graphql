@@ -1,0 +1,11 @@
+subscription onChannelAdded{
+    onChannelAdded{
+        id
+        name
+        participants{
+            id
+            username
+            isOnline
+        }
+    }
+}

@@ -55,7 +55,7 @@ class ChannelFragment: Fragment() {
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
                 val channel:ChannelData = channelListElement.getItemAtPosition(position) as ChannelData
                chatViewModel.setCurrentChannelID(channel.channelID)
-
+                //TODO Make UI changes to show channel is selected
 
             }
         return root

@@ -35,8 +35,9 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
         chatRepository.enterMainChannel()
         chatRepository.subscribeChannelMessages()
         chatRepository.suscribeChannelUsers()
-
+        chatRepository.suscribeToUserChannelListChanges()
     }
+
     fun stopChannel(){
        chatRepository.cancelMainChannelSubscriptions()
         chatRepository.exitMainChannel()
