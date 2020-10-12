@@ -19,10 +19,14 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
 
     fun add(channel: ChannelData) {
         this.channelList.add(channel)
+        notifyDataSetChanged()
 
     }
-    fun set(newChannelList:ArrayList<ChannelData>){
-        channelList = newChannelList
+    fun set(newChannelList:ArrayList<ChannelData>?){
+        if(newChannelList!=null) {
+            channelList= ArrayList(newChannelList)
+        }
+        notifyDataSetChanged()
     }
     fun clear(){
         channelList.clear()
@@ -42,7 +46,7 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val channel: ChannelData = channelList[position]
-        val rowView = inflater.inflate(R.layout.participant_row, parent, false)
+        val rowView = inflater.inflate(R.layout.user_channel_row_, parent, false)
         val channelName = rowView.findViewById<TextView>(R.id.participant_username)
         channelName.text = channel.channelName
         return rowView

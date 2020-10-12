@@ -15,27 +15,50 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ChatRepository(
     private val dataSource: ChatDataSource,
     private val userRepository: UserRepository
 ) {
 
-    val MAIN_CHANNEL_ID = 3.0
+    val MAIN_CHANNEL_ID = 1.0
     private var mainChannelMessageList = MutableLiveData<MutableList<MessageData>>().apply {
         this.postValue(arrayListOf())
     }
+    // Map with <ChannelID,Messages>
+    private var channelMessages = MutableLiveData<MutableMap<Double,ArrayList<MessageData>>>().apply{
+        val initialMap = HashMap<Double,ArrayList<MessageData>>()
+        val messageList = arrayListOf<MessageData>(MessageData("message1",false,"user","100000"),MessageData("message1",false,"user","100000"))
+
+        val messageList2 = arrayListOf<MessageData>(MessageData("message2",false,"user","100000"))
+
+        initialMap.put(1.0, messageList)
+        initialMap.put(2.0,messageList2)
+        this.postValue(initialMap)
+    }
+    private var channelSubscriptions:ArrayList<Job> = arrayListOf()
+
     private var mainChannelParticipantList =
         MutableLiveData<MutableList<ChannelParticipant>>().apply {
             val loadingUsername = "Loading ..."
-            val loadingID = 0.0
+            val loadingID = 1.0
             this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
     private var userChannels = MutableLiveData<ArrayList<ChannelData>>()
+    private var currentChannelID = MutableLiveData<Double>()
+
 
     private lateinit var mainChannelMessageJob: Job
     private lateinit var mainChannelParticipantJob: Job
 
+    fun getCurrentChannelID():LiveData<Double>{
+        return currentChannelID
+    }
+
+    fun getChannelMessages():LiveData<MutableMap<Double,ArrayList<MessageData>>>{
+        return channelMessages
+    }
     fun getUserChannels(): LiveData<ArrayList<ChannelData>> {
         return userChannels
     }
@@ -51,7 +74,7 @@ class ChatRepository(
     fun fetchUserChannels() {
         CoroutineScope(IO).launch {
             val channelDataList = dataSource.getUserChannels(userRepository.getUser().userId)
-            userChannels.postValue(channelDataList?.toMutableList() as ArrayList<ChannelData>?)
+            userChannels.postValue(ArrayList(channelDataList))
         }
     }
 
@@ -66,7 +89,9 @@ class ChatRepository(
 
         }
     }
-
+    fun setCurrentChannelID(id:Double){
+        currentChannelID.postValue(id)
+    }
     fun clearChannels() {
         mainChannelMessageList.postValue(arrayListOf())
         mainChannelParticipantList.postValue(arrayListOf())
@@ -87,14 +112,14 @@ class ChatRepository(
 
     fun subscribeChannelMessages() {
         mainChannelMessageJob = CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelMessages(MAIN_CHANNEL_ID, onReceiveMessage = {
+            dataSource.suscribeToChannelMessages(userRepository.getUser().userId,MAIN_CHANNEL_ID, onReceiveMessage = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
-                    if (it.userName != userRepository.getUser().username) {
-                        mainChannelMessageList.value?.add(it)
+                    it.belongsToCurrentUser = it.userName == userRepository.getUser().username
+                    mainChannelMessageList.value?.add(it)
                         mainChannelMessageList.notifyObserver()
                     }
-                }
+
 
             })
         }
@@ -103,7 +128,7 @@ class ChatRepository(
 
     fun suscribeChannelUsers() {
         mainChannelParticipantJob = CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelChange(MAIN_CHANNEL_ID, onChannelChange = {
+            dataSource.suscribeToChannelChange(userRepository.getUser().userId,MAIN_CHANNEL_ID, onChannelChange = {
                 // Main thread only used to modify values
                 CoroutineScope(Main).launch {
                     mainChannelParticipantList.postValue(it.participantList.toMutableList())
@@ -115,8 +140,6 @@ class ChatRepository(
 
 
     fun sendMessage(message: String) {
-        val messageData = MessageData(message, true, timePosted = Calendar.getInstance().timeInMillis.toString())
-        mainChannelMessageList.value?.add(messageData)
         CoroutineScope(IO).launch {
             val data = dataSource.sendMessageToChannel(
                 message,

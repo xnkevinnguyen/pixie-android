@@ -18,7 +18,6 @@ class LogoutService : IntentService("LogoutService") {
             userRepository.logout()
         }
 
-        Thread.sleep(1000)
 
     }
 }

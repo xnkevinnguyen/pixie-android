@@ -5,6 +5,7 @@ import com.apollographql.apollo.ApolloSubscriptionCall
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
 import com.apollographql.apollo.exception.ApolloException
+import com.apollographql.apollo.request.RequestHeaders
 import com.pixie.android.*
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
@@ -17,6 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatDataSource() {
     suspend fun getUserChannels(
@@ -24,7 +26,12 @@ class ChatDataSource() {
     ): List<ChannelData>?{
         val userChannelInput = UserChannelInput(userId)
         try{
-            val response = apolloClient.query(GetUserChannelsQuery(userChannelInput)).toDeferred().await().data
+            val response = apolloClient(userId).query(GetUserChannelsQuery(userChannelInput)).requestHeaders(
+                RequestHeaders.builder()
+                    .addHeader("authToken", "1")
+                    .build()
+            )
+                .toDeferred().await().data
             val channelQueryData = response?.userChannels?.channels
             if (channelQueryData != null){
                 val channelData =channelQueryData.map {
@@ -48,7 +55,7 @@ class ChatDataSource() {
     ): SendMessageMutation.Data? {
         val addMessageInput = AddMessageInput(message, channelID, userId)
         try {
-            return apolloClient.mutate(SendMessageMutation(addMessageInput)).toDeferred()
+            return apolloClient(userId).mutate(SendMessageMutation(addMessageInput)).toDeferred()
                 .await().data
 
         } catch (e: ApolloException) {
@@ -61,7 +68,7 @@ class ChatDataSource() {
         val enterChannelInput = EnterChannelInput(channelID, userId)
         try {
             val response =
-                apolloClient.mutate(EnterChannelMutation(enterChannelInput)).toDeferred().await()
+                apolloClient(userId).mutate(EnterChannelMutation(enterChannelInput)).toDeferred().await()
             val data = response.data?.enterChannel
             if (data != null) {
 
@@ -87,7 +94,7 @@ class ChatDataSource() {
     suspend fun exitChannel(channelID: Double, userId: Double) {
         val exitChannelInput = ExitChannelInput(channelID, userId)
         try {
-            apolloClient.mutate(ExitChannelMutation(exitChannelInput)).toDeferred().await()
+            apolloClient(userId).mutate(ExitChannelMutation(exitChannelInput)).toDeferred().await()
 
 
         } catch (e: ApolloException) {
@@ -97,9 +104,10 @@ class ChatDataSource() {
     }
 
     suspend fun suscribeToChannelMessages(
+        userID:Double,
         channelID: Double,
         onReceiveMessage: (messageData: MessageData) -> Unit){
-         apolloClient.subscribe(OnNewMessageSubscription(channelID)).toFlow()
+         apolloClient(userID).subscribe(OnNewMessageSubscription(channelID)).toFlow()
             .retryWhen { _, attempt ->
                 delay(attempt * 1000)
                 true
@@ -120,10 +128,11 @@ class ChatDataSource() {
     }
 
     suspend fun suscribeToChannelChange(
+        userID: Double,
         channelID: Double,
         onChannelChange: (channelData: ChannelData) -> Unit
     ) {
-         apolloClient.subscribe(OnChannelChangeSubscription(channelID)).toFlow()
+         apolloClient(userID).subscribe(OnChannelChangeSubscription(channelID)).toFlow()
             .retryWhen { _, attempt ->
                 delay(attempt * 1000)
                 true

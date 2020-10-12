@@ -1,18 +1,18 @@
 package com.pixie.android.ui.chat
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ListView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.utilities.InjectorUtils
 
 
@@ -80,6 +80,19 @@ class ChatFragment : Fragment() {
             }
         }
 
+        val currentChannelID = chatViewModel.getCurrentChannelID()
+        currentChannelID.observe(viewLifecycleOwner, Observer {id->
+            // on channel change
+            //clear adapter messages
+            messageAdapter.clear()
+            // load new channel messages
+            val messageList = chatViewModel.getCurrentChannelMessageList(id)
+            messageAdapter.set(messageList)
+
+        }
+
+        )
+
         val mainChannelMessageList = chatViewModel.getMainChannelMessage()
         mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->
             if (!messageList.isNullOrEmpty()){
@@ -95,6 +108,10 @@ class ChatFragment : Fragment() {
             }
 
         })
+
+
+
+
 
 
         return root
