@@ -56,6 +56,9 @@ class ChatRepository(
     fun getCurrentChannelID(): LiveData<Double> {
         return currentChannelID
     }
+    fun getJoinableChannels():LiveData<ArrayList<ChannelData>>{
+        return joinableChannels
+    }
 
     fun getChannelMessages(): LiveData<MutableMap<Double, ArrayList<MessageData>>> {
         return channelMessages
