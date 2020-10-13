@@ -2,6 +2,7 @@ package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,6 +69,13 @@ class ChannelFragment: Fragment() {
             dialog.setContentView(R.layout.create_join_channel)
             val listJoinChannel = dialog.findViewById<ListView>(R.id.list_join_channel)
             listJoinChannel.adapter = joinChannelAdapter
+//            val list = List<ChannelParticipant>(1){
+//                ChannelParticipant(id = 3.0, username = "jo", isOnline = false)
+//            }
+//            val channel = ChannelData(channelID = 21.0, channelName= "Channel 21", participantList = list)
+//            val channel2 = ChannelData(channelID = 19.0, channelName= "Channel 19", participantList = list)
+//            joinChannelAdapter.add(channel)
+//            joinChannelAdapter.add(channel2)
             dialog.show()
         }
 

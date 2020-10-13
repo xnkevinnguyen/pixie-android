@@ -1,5 +1,6 @@
 package com.pixie.android.ui.chat
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,6 +34,10 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
 
     fun joinChannel(channelID: Double){
         chatRepository.joinChannel(channelID)
+    }
+
+    fun exitChannel(channelID: Double){
+        chatRepository.exitChannel(channelID)
     }
 
     fun getUserChannels()=chatRepository.getUserChannels()

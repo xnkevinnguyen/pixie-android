@@ -211,10 +211,8 @@ class ChatRepository(
     fun enterChannel(): ChannelData? {
         var channelData: ChannelData?
         runBlocking {
-
             channelData =
                 dataSource.enterChannel(MAIN_CHANNEL_ID, userRepository.getUser().userId)
-
         }
         return channelData
     }
