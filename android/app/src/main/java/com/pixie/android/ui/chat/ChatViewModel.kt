@@ -1,9 +1,11 @@
 package com.pixie.android.ui.chat
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 
 class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
@@ -23,16 +25,26 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
         }
     }
 
+
     fun getMainChannelMessage() = chatRepository.getMainChannelMessageList()
 
     fun getMainChannelParticipants()= chatRepository.getMainChannelParticipantList()
+
+    fun getJoinableChannels() = chatRepository.getJoinableChannels()
+
+    fun joinChannel(channelID: Double){
+        chatRepository.joinChannel(channelID)
+    }
+
+    fun exitChannel(channelID: Double){
+        chatRepository.exitChannel(channelID)
+    }
 
     fun getUserChannels()=chatRepository.getUserChannels()
 
     fun startChannels(){
         // Fetch all channels users has joined
         chatRepository.fetchUserChannels()
-        chatRepository.enterMainChannel()
         chatRepository.subscribeChannelMessages()
         chatRepository.suscribeChannelUsers()
         chatRepository.suscribeToUserChannelListChanges()

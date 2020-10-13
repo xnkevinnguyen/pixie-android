@@ -11,8 +11,10 @@
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Home</string>
     <string name="drawing">Drawing</string>
+    <string name="game_select">Game Selection</string>
     <string name="action_settings">action settings</string>
-    <string name="chat_hint">Type here...</string>
+    <string name="chat_message_hint">Type message here...</string>
+    <string name="chat_guess_hint">Type guess here...</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_name">Not a valid name</string>
@@ -33,8 +35,9 @@
     <string name="active_users">Players</string>
     <string name="messages">Messages</string>
     <string name="channel">Your Channels</string>
-    <string name="join_channel">Join another channel</string>
-    <string name="create_channel">Create channel</string>
+    <string name="join_channel">Join</string>
+    <string name="create_channel">Create</string>
+    <string name="add_channel">Add Channel</string>
     <string name="players">Players</string>
     <string name="dropdown_1">Profile</string>
     <string name="dropdown_2">Logout</string>
@@ -78,4 +81,36 @@
     <string name="setting">Settings</string>
 
     <string name="changing_theme">To apply these changes please logout of Pixie.</string>
+    <string name="new_channel">Create new channel</string>
+    <string name="channel_name">Enter channel name...</string>
+    <string name="join_existing_channel">Join existing channels</string>
+
+    <string name="select_game">Select Game Mode</string>
+    <string name="mode1">Free for all</string>
+    <string name="mode1_explanation">\"Compete against others\"</string>
+    <string name="mode2">Solo</string>
+    <string name="mode2_explanation">\"Compete by yourself\"</string>
+    <string name="mode3">Coop</string>
+    <string name="mode3_explanation">\"Compete together\"</string>
+    <string name="difficulty_select">Difficulty</string>
+    <string name="diff1">Easy</string>
+    <string name="diff2">Medium</string>
+    <string name="diff3">Hard</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="game1">Game 1</string>
+    <string name="game2">Game 2</string>
+    <string name="game3">Game 3</string>
+    <string name="game4">Game 4</string>
+    <string name="join">Join</string>
+    <string name="create">Create</string>
+    <string name="new_game">New Game</string>
+    <string name="guess">Guess</string>
+    <string name="message">Message</string>
+    <string name="hints">Hints</string>
+    <string name="guess_left">Guess left</string>
+    <string name="kick">Kick player</string>
+    <string name="leave">Leave game</string>
+>>>>>>> origin/dev
 </resources>

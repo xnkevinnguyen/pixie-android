@@ -2,6 +2,7 @@ package com.pixie.android.ui.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.pixie.android.R
 import com.pixie.android.model.chat.MessageData
+import com.pixie.android.utilities.Constants
 
 
 class MessagingAdapter(context: Context) : BaseAdapter() {
@@ -49,17 +51,17 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
         val message: MessageData = listOfMessage[position]
         val messageBelongsToCurrentUser = message.belongsToCurrentUser
         return if (messageBelongsToCurrentUser==true) {
+
             val rowView = inflater.inflate(R.layout.align_chat_right, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.text_title)
             val timePosted = rowView.findViewById<TextView>(R.id.time)
             val time = message.timePosted.toLong()
             val timeFormatted = getDate(time, "HH:mm:ss")
-
-
             txtTitle.text = message.text
             timePosted.text = timeFormatted
 
             rowView
+
         } else {
             val rowView = inflater.inflate(R.layout.other_chat_message, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.message_body)
