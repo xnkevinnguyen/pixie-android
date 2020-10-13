@@ -9,7 +9,7 @@
         android:id="@+id/color_picker"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:tint="@android:color/white"
         android:src="@drawable/ic_palette" />
 

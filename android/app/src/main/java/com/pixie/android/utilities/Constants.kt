@@ -15,6 +15,7 @@ class Constants {
         const val GAME_DIFF = "Game difficulty"
         const val GAME_MODE = "Game mode"
         const val GAME_LANGUAGE = "Game language"
+        const val GAME_CHAT_VALUE = "Game chat value"
 
     }
 }

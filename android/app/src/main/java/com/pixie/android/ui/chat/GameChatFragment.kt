@@ -1,6 +1,10 @@
 package com.pixie.android.ui.chat
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +12,22 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.tabs.TabLayout
 import com.pixie.android.R
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
-import kotlinx.android.synthetic.main.game_chat_fragment.*
+
 
 class GameChatFragment : Fragment() {
+    private lateinit var preferencesGame: SharedPreferences
+    private lateinit var editorGame: SharedPreferences.Editor
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,30 +39,54 @@ class GameChatFragment : Fragment() {
             container, false
         )
 
+        preferencesGame = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_GAME, Context.MODE_PRIVATE)
+        editorGame = preferencesGame.edit()
+
+        editorGame.putString(Constants.GAME_CHAT_VALUE, "message")
+        editorGame.apply()
+
         val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
-        val messageLayout = root.findViewById<LinearLayout>(R.id.message_layout)
         val messageList = root.findViewById<ListView>(R.id.messages_list)
-        val participantListElement = root.findViewById<ListView>(R.id.participant_list)
-        val chatTab = root.findViewById<TabLayout>(R.id.chat_tab)
         val editText = root.findViewById<EditText>(R.id.editText)
+        val guessBtn = root.findViewById<TextView>(R.id.guess)
+        val messageBtn = root.findViewById<TextView>(R.id.message_btn)
 
         val messageAdapter = MessagingAdapter(requireContext())
-        val participantAdapter = ChannelParticipantAdapter(requireContext())
+        //val participantAdapter = ChannelParticipantAdapter(requireContext())
         val factory = InjectorUtils.provideChatViewModelFactory()
 
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
 
         messageList.adapter = messageAdapter
-        participantListElement.adapter = participantAdapter
+        //participantListElement.adapter = participantAdapter
 
+        val typedValue = TypedValue()
+        val theme = requireContext().theme
+        theme.resolveAttribute(R.attr.colorSecondary, typedValue, true)
+        @ColorInt val color = typedValue.data
+        messageBtn.setOnClickListener {
+            editText.setHintTextColor(color)
+            editText.hint = resources.getString(R.string.chat_message_hint)
+            editorGame.putString(Constants.GAME_CHAT_VALUE, "message")
+            editorGame.apply()
+        }
+        guessBtn.setOnClickListener {
+            editText.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+            editText.hint = resources.getString(R.string.chat_guess_hint)
+            editorGame.putString(Constants.GAME_CHAT_VALUE, "guess")
+            editorGame.apply()
+        }
 
         sendMessage.setOnClickListener {
             val message = editText.text.toString()
 
-            if (message.isNotBlank()) {
-                chatViewModel.sendMessageToCurrentChannel(message)
-                editText.text.clear() //clear text line
+            val valueChat = preferencesGame.getString(Constants.GAME_CHAT_VALUE,"message")
+            if(valueChat == "message") {
+                if (message.isNotBlank()) {
+                    chatViewModel.sendMessageToCurrentChannel(message)
+                    editText.text.clear() //clear text line
 
+                }
             }
         }
 
@@ -88,29 +121,8 @@ class GameChatFragment : Fragment() {
             }
         }
 
-        chatTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // Do nothing
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                //Do nothing
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-
-                if (tab?.position ==1){ // Active Users
-                    messageLayout.visibility= View.INVISIBLE
-                    participant_list.visibility = View.VISIBLE
-                }else if (tab?.position ==0){ // Messages
-                    messageLayout.visibility= View.VISIBLE
-                    participant_list.visibility = View.INVISIBLE
-                }
-            }
-
-        })
         val mainChannelMessageList = chatViewModel.getMainChannelMessage()
-        val mainChannelParticipantList = chatViewModel.getMainChannelParticipants()
+        //val mainChannelParticipantList = chatViewModel.getMainChannelParticipants()
         mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->
             if (!messageList.isNullOrEmpty()){
                 if(messageAdapter.isEmpty){
@@ -125,28 +137,19 @@ class GameChatFragment : Fragment() {
             }
 
         })
-        mainChannelParticipantList.observe(viewLifecycleOwner, Observer { participantList->
-            if(!participantList.isNullOrEmpty()){
-                participantAdapter.clear()
-                participantList.forEach{
-                    participantAdapter.add(it)
-                }
-
-            }
-
-        })
+//        mainChannelParticipantList.observe(viewLifecycleOwner, Observer { participantList->
+//            if(!participantList.isNullOrEmpty()){
+//                participantAdapter.clear()
+//                participantList.forEach{
+//                    participantAdapter.add(it)
+//                }
+//
+//            }
+//
+//        })
 
 
         return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        // Participant list is initially hidden
-
-        participant_list.visibility = View.INVISIBLE
-
-        super.onViewCreated(view, savedInstanceState)
     }
 
 
