@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:weightSum="8">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="7">
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/channel_id"
@@ -32,11 +29,11 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:scrollHorizontally="false"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:background="@drawable/list_item_selector"/>
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
     <Button
+        android:id="@+id/exit_channel"
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:background="@drawable/ic_baseline_close"
@@ -45,6 +42,5 @@
         android:layout_marginEnd="5dp"
         android:layout_marginTop="10dp"
         android:layout_alignParentEnd="true"
-        android:layout_weight="1"
         android:layout_marginBottom="10dp"/>
-</LinearLayout>
+</RelativeLayout>
