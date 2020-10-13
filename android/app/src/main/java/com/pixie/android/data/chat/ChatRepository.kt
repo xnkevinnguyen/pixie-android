@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -81,19 +79,21 @@ class ChatRepository(
             val channelDataList =
                 dataSource.getUserChannels(userRepository.getUser().userId, onReceiveMessage = {
                     if (it != null) {
-                        userChannels.postValue(ArrayList(it))
-                        suscribeToUserChannels(it)
+                        CoroutineScope(Main).launch {
 
-                    }
+                        userChannels.postValue(ArrayList(it))
+                        userChannels.notifyObserver()
+                        //suscribe to messages
+                        suscribeToUserChannelsMessages(it)
+                        //suscribe to participant changes
+//                        suscribeToUserChannelsParticipants(it)
+                    }}
                 })
 
         }
 
     }
 
-    fun fetchJoinableChannels() {
-        //TODO
-    }
 
     fun joinChannel(channelID: Double) {
         //enter channel
@@ -102,6 +102,8 @@ class ChatRepository(
             removeChannelFromJoinableList(channelID)
             // suscribe to messages
             addUserChannelSubscription(channelData)
+            //suscribe to participant changes
+
 
         }else{
             Log.d("ApolloException","Error on joinChannel")
@@ -110,7 +112,7 @@ class ChatRepository(
     }
 
 
-    fun suscribeToUserChannels(newUserChannels: ArrayList<ChannelData>) {
+    fun suscribeToUserChannelsMessages(newUserChannels: ArrayList<ChannelData>) {
         //clear current channels subscriptions
         channelSubscriptions.clear()
         //fetch subscriptions for each channels
