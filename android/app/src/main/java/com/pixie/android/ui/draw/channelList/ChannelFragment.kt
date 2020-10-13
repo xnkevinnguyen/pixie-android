@@ -35,6 +35,7 @@ class ChannelFragment: Fragment() {
         val root = inflater.inflate(R.layout.channel_list_fragment, container, false)
 
         val channelListElement = root.findViewById<ListView>(R.id.channels_list)
+        val addBtn = root.findViewById<Button>(R.id.add_channel)
 
         val userChannelAdapter = UserChannelAdapter(requireContext())
         channelListElement.adapter = userChannelAdapter
@@ -50,6 +51,16 @@ class ChannelFragment: Fragment() {
             userChannelAdapter.set(userChannelList)
 
         })
+
+        addBtn.setOnClickListener {
+            val dialog = Dialog(requireContext())
+            dialog.setContentView(R.layout.create_join_channel)
+            val listJoinChannel = dialog.findViewById<ListView>(R.id.list_join_channel)
+            val joinChannelAdapter = ChannelJoinAdapter(requireContext())
+            listJoinChannel.adapter = joinChannelAdapter
+
+            dialog.show()
+        }
 
         channelListElement.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
