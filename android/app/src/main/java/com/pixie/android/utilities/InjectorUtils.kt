@@ -72,4 +72,5 @@ object InjectorUtils {
         val chatRepository = ChatRepository.getInstance()
         return PlayersViewModelFactory(chatRepository)
     }
+
 }

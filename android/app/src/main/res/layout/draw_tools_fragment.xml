@@ -9,7 +9,7 @@
         android:id="@+id/color_picker"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:tint="@android:color/white"
         android:src="@drawable/ic_palette" />
 
@@ -18,7 +18,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:background="@color/selectedButtonColor"
+        android:background="@color/dark_grey"
         android:src="@drawable/ic_pencil" />
 
     <ImageButton
@@ -26,7 +26,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:background="@color/unselectedButtonColor"
+        android:background="@color/grey"
         android:src="@drawable/ic_eraser" />
 
     <ImageButton
@@ -34,7 +34,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:background="@color/unselectedButtonColor"
+        android:background="@color/grey"
         android:src="@drawable/ic_grid" />
 
     <ImageButton
@@ -42,7 +42,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:background="@color/unselectedButtonColor"
+        android:background="@color/grey"
         android:src="@drawable/ic_undo" />
 
     <ImageButton
@@ -50,7 +50,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:background="@color/unselectedButtonColor"
+        android:background="@color/grey"
         android:src="@drawable/ic_redo" />
 
 </LinearLayout>

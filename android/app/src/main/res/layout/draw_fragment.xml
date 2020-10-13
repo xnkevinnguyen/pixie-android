@@ -6,25 +6,40 @@
     android:background="?colorAccent">
 
     <fragment
-        android:id="@+id/draw_tools_fragment"
-        android:name="com.pixie.android.ui.draw.drawTools.DrawToolsFragment"
-        android:layout_width="50dp"
+        android:id="@+id/game_info_fragment"
+        android:name="com.pixie.android.ui.draw.gameInformation.GameInformationFragment"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:layout_marginRight="10dp"
-        android:layout_toStartOf="@+id/canvas_fragment"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignStart="@id/drawing_surface"/>
 
-    <fragment
-        android:id="@+id/canvas_fragment"
-        android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
-        android:layout_width="1000px"
-        android:layout_height="1000px"
+    <FrameLayout
+        android:id="@+id/drawing_surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="300dp" />
+        android:layout_marginEnd="300dp">
+
+
+        <fragment
+            android:id="@+id/canvas_fragment"
+            android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
+            android:layout_width="1000px"
+            android:layout_height="1000px" />
+
+        <fragment
+            android:id="@+id/draw_tools_fragment"
+            android:name="com.pixie.android.ui.draw.drawTools.DrawToolsFragment"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"/>
+
+    </FrameLayout>
 
     <fragment
         android:id="@+id/second_chat_fragment"
         android:name="com.pixie.android.ui.chat.GameChatFragment"
-        android:layout_width="275dp"
+        android:layout_width="290dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"/>
 
