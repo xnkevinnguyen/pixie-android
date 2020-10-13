@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 
 class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
@@ -22,6 +23,7 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
             return messageList
         }
     }
+
 
     fun getMainChannelMessage() = chatRepository.getMainChannelMessageList()
 
