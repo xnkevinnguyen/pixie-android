@@ -42,7 +42,9 @@ class ChatRepository(
             this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
     private var userChannels = MutableLiveData<ArrayList<ChannelData>>()
-    private var joinableChannels = MutableLiveData<ArrayList<ChannelData>>()
+    private var joinableChannels = MutableLiveData<ArrayList<ChannelData>>().apply{
+        this.postValue(userChannels.value)
+    }
     private var currentChannelID = MutableLiveData<Double>().apply {
         this.postValue(MAIN_CHANNEL_ID)
     }
@@ -53,6 +55,9 @@ class ChatRepository(
 
     fun getCurrentChannelID(): LiveData<Double> {
         return currentChannelID
+    }
+    fun getJoinableChannels():LiveData<ArrayList<ChannelData>>{
+        return joinableChannels
     }
 
     fun getChannelMessages(): LiveData<MutableMap<Double, ArrayList<MessageData>>> {
@@ -85,8 +90,23 @@ class ChatRepository(
         }
 
     }
-    fun fetchJoinableChannels(){
+
+    fun fetchJoinableChannels() {
         //TODO
+    }
+
+    fun joinChannel(channelID: Double) {
+        //enter channel
+        val channelData = enterChannel()
+        if(channelData!=null){
+            removeChannelFromJoinableList(channelID)
+            // suscribe to messages
+            addUserChannelSubscription(channelData)
+
+        }else{
+            Log.d("ApolloException","Error on joinChannel")
+        }
+
     }
 
 
@@ -162,7 +182,7 @@ class ChatRepository(
                             addUserChannelSubscription(channelData = it)
                             userChannels.notifyObserver()
                         }
-                    }else{
+                    } else {
                         //handle case where user is not in the channel
                         CoroutineScope(Main).launch {
                             joinableChannels.value?.add(it)
@@ -177,14 +197,8 @@ class ChatRepository(
                     CoroutineScope(Main).launch {
                         channelMessages.value?.remove(channelRemovedData.channelID)
                         channelSubscriptions.remove(channelRemovedData.channelID)
-                        userChannels.value?.removeIf { userChannelData ->
-                            userChannelData.channelID == channelRemovedData.channelID
-                        }
-                        userChannels.notifyObserver()
-                        joinableChannels.value?.removeIf{joinableChannelData->
-                            joinableChannelData.channelID==channelRemovedData.channelID
-                        }
-                        joinableChannels.notifyObserver()
+                        removeChannelFromUserList(channelRemovedData.channelID)
+                        removeChannelFromJoinableList(channelRemovedData.channelID)
                     }
 
 
@@ -192,16 +206,15 @@ class ChatRepository(
         }
     }
 
-    fun enterMainChannel() {
-        CoroutineScope(IO).launch {
+    fun enterChannel(): ChannelData? {
+        var channelData: ChannelData?
+        runBlocking {
 
-            val channelData =
+            channelData =
                 dataSource.enterChannel(MAIN_CHANNEL_ID, userRepository.getUser().userId)
-            if (channelData != null)
-                mainChannelParticipantList.postValue(channelData.participantList.toMutableList())
-
 
         }
+        return channelData
     }
 
     fun setCurrentChannelID(id: Double) {
@@ -273,6 +286,20 @@ class ChatRepository(
                 // handle possible error
             }
         }
+    }
+
+    fun removeChannelFromJoinableList(channelID: Double) {
+        joinableChannels.value?.removeIf { joinableChannelData ->
+            joinableChannelData.channelID == channelID
+        }
+        joinableChannels.notifyObserver()
+    }
+
+    fun removeChannelFromUserList(channelID: Double) {
+        userChannels.value?.removeIf { userChannelData ->
+            userChannelData.channelID == channelID
+        }
+        userChannels.notifyObserver()
     }
 
     // Singleton
