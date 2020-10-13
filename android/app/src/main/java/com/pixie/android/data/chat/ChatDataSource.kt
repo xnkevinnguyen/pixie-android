@@ -23,13 +23,9 @@ class ChatDataSource() {
         onReceiveMessage: (ArrayList<ChannelData>?) -> Unit
     ) {
         try {
-            val response = apolloClient(userId).query(GetUserChannelsQuery()).requestHeaders(
-                RequestHeaders.builder()
-                    .addHeader("authToken", "1")
-                    .build()
-            )
+            val response = apolloClient(userId).query(GetUserChannelsQuery())
                 .toDeferred().await().data
-            val channelQueryData = response?.userChannels
+            val channelQueryData = response?.userChannels?.channels
             if (channelQueryData != null) {
                 val channelData = ArrayList(channelQueryData.map {
                     var participantList =
