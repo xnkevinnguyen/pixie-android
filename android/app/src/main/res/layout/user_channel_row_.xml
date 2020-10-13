@@ -1,18 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingVertical="7dp">
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="8">
 
-
-    <TextView
-        android:id="@+id/participant_username"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:scrollHorizontally="false"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:orientation="horizontal"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="7">
 
-        />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/channel_id"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/channel_id"
+            android:textSize="15dp"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/participant_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="@drawable/list_item_selector"/>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/ic_baseline_close"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_weight="1"
+        android:layout_marginBottom="10dp"/>
+</LinearLayout>

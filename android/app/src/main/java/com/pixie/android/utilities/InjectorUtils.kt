@@ -65,7 +65,8 @@ object InjectorUtils {
     }
 
     fun provideChannelViewModelFactory(): ChannelViewModelFactory {
-        return ChannelViewModelFactory()
+        val chatRepository = ChatRepository.getInstance()
+        return ChannelViewModelFactory(chatRepository)
     }
 
     fun providePlayersViewModelFactory(): PlayersViewModelFactory {

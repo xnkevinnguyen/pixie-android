@@ -24,6 +24,14 @@ class ChannelJoinAdapter(context: Context) : BaseAdapter() {
         this.listChannelJoin.add(channel)
         notifyDataSetChanged()
     }
+
+    fun set(newChannelList:ArrayList<ChannelData>?){
+        if(newChannelList!=null) {
+            listChannelJoin= ArrayList(newChannelList)
+        }
+        notifyDataSetChanged()
+    }
+
     fun clear(){
         listChannelJoin.clear()
     }

@@ -12,12 +12,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.pixie.android.EnterChannelMutation
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
 import com.pixie.android.utilities.InjectorUtils
+import kotlinx.coroutines.channels.Channel
 
 class ChannelFragment: Fragment() {
 
@@ -43,6 +45,8 @@ class ChannelFragment: Fragment() {
         val factoryChat = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this,factoryChat).get(ChatViewModel::class.java)
         val userChannels = chatViewModel.getUserChannels()
+        val joinableChannel = chatViewModel.getJoinableChannels()
+        val joinChannelAdapter = ChannelJoinAdapter(requireContext())
 
         if(userChannels.value !=null){
             userChannelAdapter.set(userChannels.value)
@@ -52,20 +56,26 @@ class ChannelFragment: Fragment() {
 
         })
 
+        if(joinableChannel.value !=null){
+            joinChannelAdapter.set(joinableChannel.value)
+        }
+        joinableChannel.observe(viewLifecycleOwner, Observer { channelList->
+            joinChannelAdapter.set(channelList)
+        })
+
         addBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
             dialog.setContentView(R.layout.create_join_channel)
             val listJoinChannel = dialog.findViewById<ListView>(R.id.list_join_channel)
-            val joinChannelAdapter = ChannelJoinAdapter(requireContext())
             listJoinChannel.adapter = joinChannelAdapter
-
             dialog.show()
         }
 
         channelListElement.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
                 val channel:ChannelData = channelListElement.getItemAtPosition(position) as ChannelData
-               chatViewModel.setCurrentChannelID(channel.channelID)
+                chatViewModel.setCurrentChannelID(channel.channelID)
+
                 //TODO Make UI changes to show channel is selected
 
             }
