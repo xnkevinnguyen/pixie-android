@@ -83,7 +83,7 @@ class ProfileFragment: Fragment() {
                 val lastLog = findLastLog(it)
                 if(lastLog.connection != "null") {
                     val dateConnection = getDate(
-                        format.parse(it[it.size - 1].connection).time,
+                        format.parse(lastLog.connection).time,
                         "yyyy-MM-dd HH:mm:ss"
                     )
                     lastConnection.text = dateConnection
@@ -92,7 +92,7 @@ class ProfileFragment: Fragment() {
 
                 if(lastLog.disconnection != "null") {
                     val dateDisconnection = getDate(
-                        format.parse(it[it.size - 2].disconnection).time,
+                        format.parse(lastLog.disconnection).time,
                         "yyyy-MM-dd HH:mm:ss"
                     )
                     lastDisconnection.text = dateDisconnection
