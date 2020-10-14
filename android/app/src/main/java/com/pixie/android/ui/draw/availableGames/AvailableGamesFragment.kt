@@ -8,13 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.pixie.android.R
-import com.pixie.android.ui.chat.ChannelParticipantAdapter
+import com.pixie.android.model.chat.ChannelData
+import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.availableGames.adapters.PlayersInGame2Adapter
 import com.pixie.android.ui.draw.availableGames.adapters.PlayersInGame3Adapter
 import com.pixie.android.ui.draw.availableGames.adapters.PlayersInGame4Adapter
 import com.pixie.android.ui.draw.availableGames.adapters.PlayersInGameAdapter
+import com.pixie.android.ui.draw.home.HomeFragment
 import com.pixie.android.utilities.Constants
+import com.pixie.android.utilities.InjectorUtils
 
 class AvailableGamesFragment : Fragment() {
 
@@ -81,6 +87,10 @@ class AvailableGamesFragment : Fragment() {
         createBtn.setOnClickListener {
             editorGame.putString(Constants.GAME_LANGUAGE, spinnerLanguage.selectedItem.toString())
             editorGame.apply()
+
+            val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+            navController.navigate(R.id.nav_home)
+
         }
         return root
     }

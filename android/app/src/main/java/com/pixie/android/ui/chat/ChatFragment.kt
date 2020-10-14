@@ -2,6 +2,7 @@ package com.pixie.android.ui.chat
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -98,10 +99,12 @@ class ChatFragment : Fragment() {
             if (!channelMessagesMap.isNullOrEmpty()){
                 val messages = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
                 if(messageAdapter.isEmpty && messages!=null){
+                    Log.d("here", "if ${chatViewModel.getCurrentChannelID().value}")
                     // Repopulating the adapter
                    messageAdapter.set(messages)
 
                 }else if (messages!=null){
+                    Log.d("here", "else if ${chatViewModel.getCurrentChannelID().value}")
                     messageAdapter.add(messages.last())
                 }
             }

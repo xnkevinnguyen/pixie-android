@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.lifecycle.ViewModelProvider
@@ -66,7 +67,9 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
             exit.visibility = View.GONE
         }
 
+        val notifBadge = rowView.findViewById<ImageView>(R.id.chat_notification_badge)
         if(channelIdSelected == channel.channelID){
+            notifBadge.visibility = View.GONE
             val typedValue = TypedValue()
             val theme: Theme = context.getTheme()
             theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
