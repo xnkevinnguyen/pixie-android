@@ -2,6 +2,7 @@ package com.pixie.android.ui.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.pixie.android.R
 import com.pixie.android.model.chat.MessageData
+import com.pixie.android.utilities.Constants
 
 
 class MessagingAdapter(context: Context) : BaseAdapter() {
@@ -18,10 +20,14 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-    private val listOfMessage = ArrayList<MessageData>()
+    private var listOfMessage = ArrayList<MessageData>()
 
     fun add(message: MessageData) {
         this.listOfMessage.add(message)
+        notifyDataSetChanged()
+    }
+    fun set(newMessages:ArrayList<MessageData>){
+        listOfMessage = ArrayList(newMessages)
         notifyDataSetChanged()
     }
 
@@ -32,6 +38,9 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
     override fun getItem(position: Int): Any {
         return listOfMessage[position]
     }
+    fun clear(){
+        listOfMessage.clear()
+    }
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
@@ -40,26 +49,26 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
     @SuppressLint("DefaultLocale")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val message: MessageData = listOfMessage[position]
+        val messageBelongsToCurrentUser = message.belongsToCurrentUser
+        return if (messageBelongsToCurrentUser==true) {
 
-        return if (message.belongsToCurrentUser) {
             val rowView = inflater.inflate(R.layout.align_chat_right, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.text_title)
             val timePosted = rowView.findViewById<TextView>(R.id.time)
             val time = message.timePosted.toLong()
-            val timeFormatted = getDate(time, "hh:mm:ss")
-
-
+            val timeFormatted = getDate(time, "HH:mm:ss")
             txtTitle.text = message.text
             timePosted.text = timeFormatted
 
             rowView
+
         } else {
             val rowView = inflater.inflate(R.layout.other_chat_message, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.message_body)
             val userName = rowView.findViewById<TextView>(R.id.name)
             val timePosted = rowView.findViewById<TextView>(R.id.time)
             val time = message.timePosted.toLong()
-            val timeFormatted = getDate(time, "hh:mm:ss")
+            val timeFormatted = getDate(time, "HH:mm:ss")
 
             txtTitle.text = message.text
             userName.text = message.userName

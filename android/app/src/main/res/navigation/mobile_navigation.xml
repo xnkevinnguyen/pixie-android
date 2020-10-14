@@ -8,24 +8,30 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.pixie.android.ui.draw.home.HomeFragment"
-        android:label="home"
+        android:label="Home"
         tools:layout="@layout/home_fragment" />
 
     <fragment
         android:id="@+id/nav_drawing"
         android:name="com.pixie.android.ui.draw.DrawFragment"
-        android:label="drawing"
+        android:label="Drawing"
         tools:layout="@layout/draw_fragment" />
 
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.pixie.android.ui.draw.profile.ProfileFragment"
-        android:label="profile"
+        android:label="Profile"
         tools:layout="@layout/profile_fragment" />
 
     <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.pixie.android.ui.draw.settings.SettingsFragment"
-        android:label="settings"
-        tools:layout="@layout/settings_fragment" />
+        android:id="@+id/nav_available_games"
+        android:name="com.pixie.android.ui.draw.availableGames.AvailableGamesFragment"
+        android:label="Available Games"
+        tools:layout="@layout/available_game_fragment" />
+
+    <fragment
+        android:id="@+id/nav_game_selection"
+        android:name="com.pixie.android.ui.draw.gameSelection.GameSelectionFragment"
+        android:label="Game Selection"
+        tools:layout="@layout/game_selection_fragment" />
 </navigation>

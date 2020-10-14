@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,8 @@ import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.InjectorUtils
+import kotlinx.android.synthetic.main.login_fragment.*
+import kotlinx.android.synthetic.main.register_fragment.*
 
 
 class RegisterFragment : Fragment() {
@@ -46,10 +50,21 @@ class RegisterFragment : Fragment() {
             navController.navigate(R.id.nav_login)
         }
 
+        val eye1 = root.findViewById<ImageView>(R.id.view_pass)
+        val eye2 = root.findViewById<ImageView>(R.id.view2_pass)
+        eye1.setOnClickListener {
+            toggleHidePassword(eye1, et_password)
+        }
+        eye2.setOnClickListener {
+            toggleHidePassword(eye2, et_repassword)
+        }
+
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val surname = view.findViewById<EditText>(R.id.first_name)
+        val name = view.findViewById<EditText>(R.id.last_name)
         val username = view.findViewById<EditText>(R.id.et_name)
         val password = view.findViewById<EditText>(R.id.et_password)
         var retypePassword = view.findViewById<EditText>(R.id.et_repassword)
@@ -86,6 +101,8 @@ class RegisterFragment : Fragment() {
 
         username.afterTextChanged {
             registerViewModel.registerDataChanged(
+                name.text.toString(),
+                surname.text.toString(),
                 username.text.toString(),
                 password.text.toString(),
                 retypePassword.text.toString()
@@ -95,6 +112,8 @@ class RegisterFragment : Fragment() {
 
         password.afterTextChanged {
             registerViewModel.registerDataChanged(
+                name.text.toString(),
+                surname.text.toString(),
                 username.text.toString(),
                 password.text.toString(),
                 retypePassword.text.toString()
@@ -104,6 +123,8 @@ class RegisterFragment : Fragment() {
         retypePassword.apply {
             afterTextChanged {
                 registerViewModel.registerDataChanged(
+                    name.text.toString(),
+                    surname.text.toString(),
                     username.text.toString(),
                     password.text.toString(),
                     retypePassword.text.toString()
@@ -115,31 +136,32 @@ class RegisterFragment : Fragment() {
                 loading.visibility = View.VISIBLE
                 val usernameInput = username.text.toString()
                 val passwordInput = password.text.toString()
-                registerViewModel.register(username.text.toString(), password.text.toString()) { registerResult ->
+                val firstName = name.text.toString()
+                val lastName = surname.text.toString()
+                registerViewModel.register(
+                    username.text.toString(),
+                    password.text.toString(),
+                    name.text.toString(),
+                    surname.text.toString()
+                ) { registerResult ->
 
                     if (registerResult.success != null) {
                         // Once register succeeds, we are loggin in the user
-                        registerViewModel.login(
-                            username = usernameInput,
-                            password = passwordInput
-                        ) { loginResult ->
-                            if (loginResult.success != null) {
-                                val intent = Intent(view.context, MainActivity::class.java)
-                                // Store for next time user opens application
-                                editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
-                                editor.putString(
-                                    Constants.USER_ID,
-                                    loginResult.success.userID.toString()
-                                )
-                                editor.putString(Constants.USERNAME, loginResult.success.username)
-                                editor.apply()
-                                startActivity(intent)
-                                requireActivity().finish()
-                                updateUiWithUser(loginResult.success)
-                            }else{
-                                Log.d("ApolloException", "Register succeeds, but login fails.")
-                            }
-                        }
+
+                        val intent = Intent(view.context, MainActivity::class.java)
+                        // Store for next time user opens application
+                        editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
+                        editor.putString(
+                            Constants.USER_ID,
+                            registerResult.success.userID.toString()
+                        )
+                        editor.putString(Constants.USERNAME, registerResult.success.username)
+                        editor.apply()
+                        startActivity(intent)
+                        requireActivity().finish()
+                        updateUiWithUser(registerResult.success)
+
+
                     } else if (registerResult.error != null) {
                         errorMessageField.text = registerResult.error
                         errorMessageField.visibility = View.VISIBLE
@@ -169,6 +191,16 @@ class RegisterFragment : Fragment() {
     private fun showRegisterFail(errorString: String) {
 
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun toggleHidePassword(eyeIcon: ImageView, passwordText: EditText) {
+        if (passwordText.transformationMethod == PasswordTransformationMethod.getInstance()) {
+            eyeIcon.setImageResource(R.drawable.ic_eye)
+            passwordText.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        } else {
+            eyeIcon.setImageResource(R.drawable.ic_hide_eye);
+            passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
+        }
     }
 }
 

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?color"
+    android:clipToPadding="false"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/messages_list"
+            android:layout_width="match_parent"
+            android:layout_height="580dp"
+            android:layout_weight="2"
+            android:divider="@android:color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/guess"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/guess"
+                    android:background="@color/yellow"
+                    android:textSize="15dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="5dp"/>
+                <TextView
+                    android:id="@+id/message_btn"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message"
+                    android:background="?colorSecondary"
+                    android:textSize="15dp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="10"
+                android:hint="@string/chat_message_hint"
+                android:textColorHint="?colorSecondary"
+                android:inputType="text"
+                android:paddingHorizontal="10dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/send_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/ic_send_black"
+                android:scaleType="fitCenter" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -2,6 +2,7 @@ package com.pixie.android.data.user
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.model.user.LoginFormState
@@ -20,10 +21,21 @@ import kotlinx.coroutines.launch
 class UserRepository(val dataSource: UserDataSource) {
 
     private val loginForm = MutableLiveData<LoginFormState>()
-    var user: LoggedInUser? = null
+    private var user: LoggedInUser? = null
 
-    // Stricly used for operations after logged out
-    var loggedOutUserID :Double?=null
+
+    fun getUser():LoggedInUser{
+        val userCopy = user
+        if(userCopy !=null) {
+            return userCopy
+        }
+        else{
+            throw error("User in UserRepository is null")
+        }
+    }
+    fun getUserAsChannelParticipant():ChannelParticipant{
+        return ChannelParticipant(getUser().userId,getUser().username,true)
+    }
 
     fun getLoginForm(): LiveData<LoginFormState> {
         return loginForm
@@ -34,18 +46,15 @@ class UserRepository(val dataSource: UserDataSource) {
     }
 
 
-
-
-    fun logout() {
-        val userToLogout = user
+    suspend fun logout() {
+        // Logout should ALWAYS be called after exit operations
         // Logout is called when application stops or on manual logout
-        if(userToLogout!=null) {
-            loggedOutUserID = userToLogout.userId
-            CoroutineScope(IO).launch {
-                dataSource.logout(userToLogout.userId)
-            }
-            user = null
+        if(user!=null){
+            dataSource.logout(getUser().userId)
+
         }
+        user = null
+
     }
 
     fun login(username: String, password: String, onLoginResult: (authResult: AuthResult) -> Unit) {
@@ -83,10 +92,12 @@ class UserRepository(val dataSource: UserDataSource) {
     fun register(
         username: String,
         password: String,
+        firstName: String,
+        lastName: String,
         onLoginResult: (authResult: AuthResult) -> Unit
     ) {
         CoroutineScope(IO).launch {
-            val response = dataSource.register(username, password)
+            val response = dataSource.register(username, password, firstName, lastName)
             lateinit var authResult: AuthResult
 
             if (response?.register?.user?.id != null) {// user needs to exist

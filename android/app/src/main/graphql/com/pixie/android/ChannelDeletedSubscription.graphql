@@ -1,0 +1,11 @@
+subscription onChannelDeleted{
+    onChannelDeleted{
+        id
+        name
+        participants{
+            id
+            username
+            isOnline
+        }
+    }
+}

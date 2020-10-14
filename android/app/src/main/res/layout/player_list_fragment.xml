@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?color">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/players"
+        android:textAlignment="center"
+        android:textSize="25dp"
+        android:background="?colorSecondary"/>
+
+    <EditText
+        android:id="@+id/search_player"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin = "20dp"
+        android:background="@drawable/ic_et_custom"
+        android:hint="@string/search_player"
+        android:inputType="textPersonName"
+        android:padding="15dp"
+        android:textSize="15sp" />
+
+    <ListView
+        android:id="@+id/participants"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:scrollHorizontally="false"
+        android:background="?color"
+        android:layout_weight="2"
+        android:divider="#eee"/>
+</LinearLayout>
