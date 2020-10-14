@@ -1,0 +1,21 @@
+query getGames{
+    me{
+        playedGames{
+            winner{
+                username
+            }
+            createdAt,
+            bestScore,
+            mode,
+            difficulty,
+            scores{
+                user{
+                    username
+                }
+                tries,
+                wordGuessed,
+                value
+            }
+        }
+    }
+}

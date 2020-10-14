@@ -3,6 +3,7 @@ package com.pixie.android.utilities
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
+import com.pixie.android.data.profile.ProfileRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.draw.canvas.CanvasViewModelFactory
 import com.pixie.android.ui.chat.ChatViewModelFactory
@@ -51,7 +52,8 @@ object InjectorUtils {
 
     fun provideProfileViewModelFactory(): ProfileViewModelFactory {
         val userRepository = UserRepository.getInstance()
-        return ProfileViewModelFactory(userRepository)
+        val profileRepository = ProfileRepository.getInstance()
+        return ProfileViewModelFactory(userRepository, profileRepository)
     }
 
     fun provideSettingsViewModelFactory(): SettingsViewModelFactory {

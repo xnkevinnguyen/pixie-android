@@ -99,7 +99,7 @@
                             android:id="@+id/name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/name"
+                            android:text="@string/not_available"
                             android:textSize="@dimen/profile_text"
                             android:layout_marginTop="10dp"
                             android:paddingLeft="30dp"
@@ -110,7 +110,7 @@
                             android:id="@+id/surname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/surname"
+                            android:text="@string/not_available"
                             android:textSize="@dimen/profile_text"
                             android:layout_marginTop="10dp"
                             android:paddingLeft="30dp"
@@ -122,6 +122,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/profile_text"
+                            android:text="@string/not_available"
                             android:layout_marginTop="10dp"
                             android:paddingLeft="30dp"
                             android:paddingRight="30dp"
@@ -204,9 +205,10 @@
                     android:layout_marginStart="30dp">
 
                     <TextView
+                        android:id="@+id/user_last_connection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/last_conn"
+                        android:text="@string/not_available"
                         android:textSize="@dimen/profile_text"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
@@ -215,9 +217,10 @@
 
 
                     <TextView
+                        android:id="@+id/user_last_disconnection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/last_disc"
+                        android:text="@string/not_available"
                         android:textSize="@dimen/profile_text"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
@@ -225,9 +228,10 @@
                         android:background="?color" />
 
                     <TextView
+                        android:id="@+id/user_registration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/registration_date"
+                        android:text="@string/not_available"
                         android:textSize="@dimen/profile_text"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
@@ -338,9 +342,10 @@
                     android:layout_weight="1">
 
                     <TextView
+                        android:id="@+id/nb_games"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/number_games"
+                        android:text="@string/not_available"
                         android:textSize="@dimen/profile_text"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
@@ -348,9 +353,10 @@
                         android:background="?color"/>
 
                     <TextView
+                        android:id="@+id/percent_win"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/percentage_victory"
+                        android:text="@string/not_available"
                         android:textSize="@dimen/profile_text"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
@@ -358,9 +364,10 @@
                         android:background="?color"/>
 
                     <TextView
+                        android:id="@+id/average_game"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/average_game"
+                        android:text="@string/not_available"
                         android:textSize="@dimen/profile_text"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
@@ -368,9 +375,10 @@
                         android:background="?color"/>
 
                     <TextView
+                        android:id="@+id/total_game"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/total_game"
+                        android:text="@string/not_available"
                         android:textSize="@dimen/profile_text"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
@@ -378,9 +386,10 @@
                         android:background="?color"/>
 
                     <TextView
+                        android:id="@+id/best_score"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/best_score"
+                        android:text="@string/not_available"
                         android:textSize="@dimen/profile_text"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
@@ -440,13 +449,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/time_game"
-                        android:textSize="@dimen/profile_text"
-                        android:layout_marginTop="10dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/your_points"
                         android:textSize="@dimen/profile_text"
                         android:layout_marginTop="10dp"/>
@@ -482,9 +484,10 @@
                     android:layout_weight="1">
 
                     <TextView
+                        android:id="@+id/game_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/date_game"
+                        android:text="@string/not_available"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
@@ -492,9 +495,10 @@
                         android:layout_marginTop="10dp"/>
 
                     <TextView
+                        android:id="@+id/game_my_points"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/time_game"
+                        android:text="@string/not_available"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
@@ -502,19 +506,10 @@
                         android:layout_marginTop="10dp"/>
 
                     <TextView
+                        android:id="@+id/game_difficulty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/your_points"
-                        android:paddingLeft="30dp"
-                        android:paddingRight="30dp"
-                        android:textSize="@dimen/profile_text"
-                        android:background="?color"
-                        android:layout_marginTop="10dp"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/difficulty"
+                        android:text="@string/not_available"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
@@ -528,18 +523,20 @@
                         android:layout_marginTop="10dp">
 
                         <TextView
+                            android:id="@+id/game_winner"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/winner"
+                            android:text="@string/not_available"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:textSize="@dimen/profile_text"
                             android:background="?color"/>
 
                         <TextView
+                            android:id="@+id/game_winner_points"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/winner"
+                            android:text="@string/not_available"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:layout_marginStart="10dp"
@@ -549,9 +546,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/game_mode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/game_mode"
+                        android:text="@string/not_available"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
@@ -571,7 +569,7 @@
                 android:layout_gravity="bottom|center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:text="@string/show_hist" />
 
