@@ -52,7 +52,12 @@ class ChannelFragment: Fragment() {
             userChannelAdapter.set(userChannelList)
 
         })
+        val currentChannelID = chatViewModel.getCurrentChannelID()
+        currentChannelID.observe(viewLifecycleOwner, Observer { id->
+            userChannelAdapter.setChannelIdSelected(id)
 
+        })
+        //Add channel
         addBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
             val joinableChannel = chatViewModel.getJoinableChannels()
@@ -72,7 +77,6 @@ class ChannelFragment: Fragment() {
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
                 val channel:ChannelData = channelListElement.getItemAtPosition(position) as ChannelData
                 chatViewModel.setCurrentChannelID(channel.channelID)
-                userChannelAdapter.setChannelIdSelected(channel.channelID)
             }
         return root
     }
