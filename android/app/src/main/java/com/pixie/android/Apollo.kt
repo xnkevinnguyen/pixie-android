@@ -11,6 +11,7 @@ import okhttp3.Response
 
 
 private var instance: ApolloClient? = null
+private var savedAuthToken:Double? = null
 object HeadersProvider {
     val HEADERS = mapOf(
         "authToken" to "1"
@@ -19,9 +20,10 @@ object HeadersProvider {
 
 fun apolloClient(authToken:Double?): ApolloClient {
 
-    if (instance != null) {
+    if (instance != null && authToken== savedAuthToken) {
         return instance!!
     }
+    savedAuthToken=authToken
 
     val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(AuthorizationInterceptor(authToken))
