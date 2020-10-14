@@ -1,5 +1,5 @@
-query getUserChannels{
-    userChannels{
+subscription onChannelDeleted{
+    onChannelDeleted{
         id
         name
         participants{

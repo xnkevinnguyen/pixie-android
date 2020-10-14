@@ -35,8 +35,9 @@
     <string name="active_users">Players</string>
     <string name="messages">Messages</string>
     <string name="channel">Your Channels</string>
-    <string name="join_channel">Join another channel</string>
-    <string name="create_channel">Create channel</string>
+    <string name="join_channel">Join</string>
+    <string name="create_channel">Create</string>
+    <string name="add_channel">Add Channel</string>
     <string name="players">Players</string>
     <string name="dropdown_1">Profile</string>
     <string name="dropdown_2">Logout</string>
@@ -80,6 +81,9 @@
     <string name="setting">Settings</string>
 
     <string name="changing_theme">To apply these changes please logout of Pixie.</string>
+    <string name="new_channel">Create new channel</string>
+    <string name="channel_name">Enter channel name...</string>
+    <string name="join_existing_channel">Join existing channels</string>
 
     <string name="select_game">Select Game Mode</string>
     <string name="mode1">Free for all</string>
@@ -108,4 +112,5 @@
     <string name="guess_left">Guess left</string>
     <string name="kick">Kick player</string>
     <string name="leave">Leave game</string>
+    <string name="not_available">Not Available</string>
 </resources>

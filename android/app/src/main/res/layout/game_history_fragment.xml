@@ -115,7 +115,7 @@
             android:id="@+id/history_game_list"
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:background="@android:color/white"
+            android:background="?color"
             android:scrollbarAlwaysDrawVerticalTrack="true"/>
     </LinearLayout>
 

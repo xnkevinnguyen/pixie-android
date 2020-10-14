@@ -1,7 +1,6 @@
 package com.pixie.android.data.chat
 
 import android.util.Log
-import com.apollographql.apollo.ApolloSubscriptionCall
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
 import com.apollographql.apollo.exception.ApolloException
@@ -16,7 +15,6 @@ import com.pixie.android.type.ExitChannelInput
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ChatDataSource() {
@@ -25,11 +23,7 @@ class ChatDataSource() {
         onReceiveMessage: (ArrayList<ChannelData>?) -> Unit
     ) {
         try {
-            val response = apolloClient(userId).query(GetUserChannelsQuery()).requestHeaders(
-                RequestHeaders.builder()
-                    .addHeader("authToken", "1")
-                    .build()
-            )
+            val response = apolloClient(userId).query(GetUserChannelsQuery())
                 .toDeferred().await().data
             val channelQueryData = response?.userChannels
             if (channelQueryData != null) {
@@ -41,13 +35,34 @@ class ChatDataSource() {
                     }
                     ChannelData(it.id, it.name, participantList)
                 })
-                onReceiveMessage( channelData)
+                onReceiveMessage(channelData)
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
 
         }
-        Log.d("ApolloException", "Error fetching user channels")
+    }
+
+    suspend fun getJoinableChannels(
+        userId: Double
+    ):ArrayList<ChannelData>{
+        try {
+            val response = apolloClient(userId).query(GetJoinableChannelsQuery())
+                .toDeferred().await().data
+            val channelQueryData = response?.channelsUserHasNotJoined
+            if (channelQueryData != null) {
+                val channelData = ArrayList(channelQueryData.map {
+
+                    ChannelData(it.id, it.name, null)
+                })
+               return channelData
+            }
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.message.toString())
+
+        }
+        Log.d("ApolloException", "Error fetching joinable channels")
+        return arrayListOf()
     }
 
     suspend fun sendMessageToChannel(
@@ -67,7 +82,7 @@ class ChatDataSource() {
     }
 
     suspend fun enterChannel(channelID: Double, userId: Double): ChannelData? {
-        val enterChannelInput = EnterChannelInput(channelID, userId)
+        val enterChannelInput = EnterChannelInput(channelID)
         try {
             val response =
                 apolloClient(userId).mutate(EnterChannelMutation(enterChannelInput)).toDeferred()
@@ -78,7 +93,7 @@ class ChatDataSource() {
                 var channelParticipant = data.participants?.map {
                     ChannelParticipant(it.id, it.username, it.isOnline)
                 }
-                if(channelParticipant==null){
+                if (channelParticipant == null) {
                     channelParticipant = arrayListOf()
                 }
                 return ChannelData(
@@ -98,7 +113,7 @@ class ChatDataSource() {
     }
 
     suspend fun exitChannel(channelID: Double, userId: Double) {
-        val exitChannelInput = ExitChannelInput(channelID, userId)
+        val exitChannelInput = ExitChannelInput(channelID)
         try {
             apolloClient(userId).mutate(ExitChannelMutation(exitChannelInput)).toDeferred().await()
 
@@ -135,6 +150,45 @@ class ChatDataSource() {
 
     }
 
+    suspend fun suscribeToChannelListChange(
+        userID: Double,
+        onChannelAdded: (channelData: ChannelData) -> Unit,
+        onChannelRemoved: (channelData: ChannelData) -> Unit
+    ) {
+        apolloClient(userID).subscribe(OnChannelAddedSubscription()).toFlow()
+            .retryWhen { _, attempt ->
+                delay(attempt * 1000)
+                true
+            }.collect {
+                val subscriptionData =it.data?.onChannelAdded
+                if(subscriptionData!=null && subscriptionData.participants !=null){
+                    val channelData = ChannelData(subscriptionData.id,subscriptionData.name,subscriptionData.participants.map{
+                        ChannelParticipant(it.id,it.username,it.isOnline)
+                    })
+                    onChannelAdded(channelData)
+
+                }else{
+                    Log.d("ApolloException","Error onCollect for ChannelAddedSubscription")
+                }
+            }
+        apolloClient(userID).subscribe(OnChannelDeletedSubscription()).toFlow()
+            .retryWhen { _, attempt ->
+                delay(attempt * 1000)
+                true
+            }.collect {
+                val subscriptionData =it.data?.onChannelDeleted
+                if(subscriptionData!=null && subscriptionData.participants !=null){
+                    val channelData = ChannelData(subscriptionData.id,subscriptionData.name,subscriptionData.participants.map{
+                        ChannelParticipant(it.id,it.username,it.isOnline)
+                    })
+                    onChannelRemoved(channelData)
+
+                }else{
+                    Log.d("ApolloException","Error onCollect for ChannelAddedSubscription")
+                }
+            }
+    }
+
     suspend fun suscribeToChannelChange(
         userID: Double,
         channelID: Double,
@@ -153,7 +207,7 @@ class ChatDataSource() {
                     var channelParticipant = data.participants?.map {
                         ChannelParticipant(it.id, it.username, it.isOnline)
                     }
-                    if (channelParticipant==null){
+                    if (channelParticipant == null) {
                         channelParticipant = arrayListOf()
                     }
                     val channelData = ChannelData(

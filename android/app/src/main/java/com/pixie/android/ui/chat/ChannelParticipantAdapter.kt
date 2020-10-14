@@ -30,7 +30,18 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     fun clear(){
         filteredListOfParticipants.clear()
     }
+    fun reset(){
+        clear()
+        listOfParticipants.clear()
+    }
 
+    fun set(participantList:ArrayList<ChannelParticipant>){
+        reset()
+        listOfParticipants = ArrayList(participantList)
+        filteredListOfParticipants=ArrayList(participantList)
+        notifyDataSetChanged()
+
+    }
     override fun getCount(): Int {
         return filteredListOfParticipants.size
     }

@@ -2,6 +2,7 @@ package com.pixie.android.data.user
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoggedInUserView
 import com.pixie.android.model.user.LoginFormState
@@ -31,6 +32,9 @@ class UserRepository(val dataSource: UserDataSource) {
         else{
             throw error("User in UserRepository is null")
         }
+    }
+    fun getUserAsChannelParticipant():ChannelParticipant{
+        return ChannelParticipant(getUser().userId,getUser().username,true)
     }
 
     fun getLoginForm(): LiveData<LoginFormState> {
