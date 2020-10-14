@@ -64,6 +64,7 @@ class ChannelJoinAdapter(context: Context) : BaseAdapter() {
             val factoryChat = InjectorUtils.provideChatViewModelFactory()
             val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)
             chatViewModel.joinChannel(channel.channelID)
+            set(chatViewModel.getJoinableChannels())
         }
         return rowView
 

@@ -103,9 +103,12 @@ class ChatFragment : Fragment() {
                     // Repopulating the adapter
                    messageAdapter.set(messages)
 
+<<<<<<< HEAD
                 }else if (messages!=null){
                     Log.d("here", "else if ${chatViewModel.getCurrentChannelID().value}")
                     messageAdapter.add(messages.last())
+=======
+>>>>>>> d45e265b47336c16b222a7fc8691d3cf6b2dafc4
                 }
             }
 
