@@ -2,6 +2,7 @@ package com.pixie.android.ui.chat
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -101,8 +102,6 @@ class ChatFragment : Fragment() {
                     // Repopulating the adapter
                    messageAdapter.set(messages)
 
-                }else if (messages!=null){
-                    messageAdapter.add(messages.last())
                 }
             }
 

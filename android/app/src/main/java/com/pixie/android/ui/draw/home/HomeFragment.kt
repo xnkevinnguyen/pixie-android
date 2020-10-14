@@ -1,9 +1,7 @@
 package com.pixie.android.ui.draw.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
@@ -22,6 +20,8 @@ class HomeFragment: Fragment() {
         val factory = InjectorUtils.provideHomeViewModelFactory()
         homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
+
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
+
 }

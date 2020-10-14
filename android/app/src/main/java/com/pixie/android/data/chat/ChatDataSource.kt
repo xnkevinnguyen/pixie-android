@@ -4,12 +4,12 @@ import android.util.Log
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
 import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.request.RequestHeaders
 import com.pixie.android.*
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 import com.pixie.android.type.AddMessageInput
+import com.pixie.android.type.CreateChannelInput
 import com.pixie.android.type.EnterChannelInput
 import com.pixie.android.type.ExitChannelInput
 import kotlinx.coroutines.delay
@@ -111,6 +111,36 @@ class ChatDataSource() {
         }
         return null
     }
+    suspend fun createChannel(channelName: String, userId: Double): ChannelData? {
+        val createChannelInput = CreateChannelInput(channelName)
+        try {
+            val response =
+                apolloClient(userId).mutate(CreateChannelMutation(createChannelInput)).toDeferred()
+                    .await()
+            val data = response.data?.createChannel
+            if (data != null) {
+
+                var channelParticipant = data.participants?.map {
+                    ChannelParticipant(it.id, it.username, it.isOnline)
+                }
+                if (channelParticipant == null) {
+                    channelParticipant = arrayListOf()
+                }
+                return ChannelData(
+                    data.id,
+                    data.name,
+                    channelParticipant
+                )
+
+
+            } else {
+                Log.d("ApolloException", "CreateChannel Error")
+            }
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.message.toString())
+        }
+        return null
+    }
 
     suspend fun exitChannel(channelID: Double, userId: Double) {
         val exitChannelInput = ExitChannelInput(channelID)
@@ -188,6 +218,7 @@ class ChatDataSource() {
                 }
             }
     }
+
 
     suspend fun suscribeToChannelChange(
         userID: Double,

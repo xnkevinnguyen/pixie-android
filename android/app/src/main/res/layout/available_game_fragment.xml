@@ -8,6 +8,7 @@
     android:weightSum="5">
     
     <LinearLayout
+        android:id="@+id/game_available_1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -104,6 +105,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/game_available_2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -198,6 +200,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/game_available_3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -292,6 +295,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/game_available_4"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

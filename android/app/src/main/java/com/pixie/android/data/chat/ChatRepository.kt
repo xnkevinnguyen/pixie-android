@@ -113,6 +113,21 @@ class ChatRepository(
         }
 
     }
+    fun createChannel(channelName:String){
+            val channelData = createGetChannel(channelName)
+
+            if (channelData != null) {
+                // suscribe to messages
+                addUserChannelMessageSubscription(channelData)
+                //suscribe to participant changes
+                addUserChannelParticipantSubscription(channelData)
+                userChannels.value?.add(channelData)
+                userChannels.notifyObserver()
+            } else {
+                Log.d("ApolloException", "Error on createChannel")
+            }
+
+    }
 
 
     fun suscribeToUserChannelsMessages(newUserChannels: ArrayList<ChannelData>) {
@@ -274,6 +289,14 @@ class ChatRepository(
         }
         return channelData
     }
+    fun createGetChannel(channelName: String):ChannelData?{
+        var channelData: ChannelData?
+        runBlocking {
+            channelData =
+                dataSource.createChannel(channelName, userRepository.getUser().userId)
+        }
+        return channelData
+    }
 
     fun setCurrentChannelID(id: Double) {
         currentChannelID.postValue(id)
@@ -285,7 +308,9 @@ class ChatRepository(
     }
 
     fun exitChannel(channelID: Double) {
+        if(currentChannelID.value == channelID){
         currentChannelID.postValue(MAIN_CHANNEL_ID)
+        }
         userChannels.value?.removeIf {
             it.channelID == channelID
         }
@@ -307,40 +332,10 @@ class ChatRepository(
         mainChannelParticipantJob.cancel()
     }
 
-    fun subscribeChannelMessages() {
-        mainChannelMessageJob = CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelMessages(
-                userRepository.getUser().userId,
-                MAIN_CHANNEL_ID,
-                onReceiveMessage = {
-                    // Main thread only used to modify values
-                    CoroutineScope(Main).launch {
-                        it.belongsToCurrentUser =
-                            it.userName == userRepository.getUser().username
-                        mainChannelMessageList.value?.add(it)
-                        mainChannelMessageList.notifyObserver()
-                    }
 
 
-                })
-        }
-    }
 
 
-    fun suscribeChannelUsers() {
-        mainChannelParticipantJob = CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelChange(
-                userRepository.getUser().userId,
-                MAIN_CHANNEL_ID,
-                onChannelChange = {
-                    // Main thread only used to modify values
-                    CoroutineScope(Main).launch {
-                        mainChannelParticipantList.postValue(it.participantList?.toMutableList())
-                    }
-
-                })
-        }
-    }
 
 
     fun sendMessage(channelID: Double, message: String) {

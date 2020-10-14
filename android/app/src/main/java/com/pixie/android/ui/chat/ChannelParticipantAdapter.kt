@@ -23,9 +23,11 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     var filteredListOfParticipants = ArrayList<ChannelParticipant>()
 
     fun add(channelParticipant: ChannelParticipant) {
-        this.listOfParticipants.add(channelParticipant)
-        this.filteredListOfParticipants.add(channelParticipant)
-        notifyDataSetChanged()
+        if(channelParticipant.isOnline==true) {
+            this.listOfParticipants.add(channelParticipant)
+            this.filteredListOfParticipants.add(channelParticipant)
+            notifyDataSetChanged()
+        }
     }
     fun clear(){
         filteredListOfParticipants.clear()
@@ -37,8 +39,9 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
 
     fun set(participantList:ArrayList<ChannelParticipant>){
         reset()
-        listOfParticipants = ArrayList(participantList)
-        filteredListOfParticipants=ArrayList(participantList)
+
+        listOfParticipants = ArrayList(participantList.filter { it.isOnline==true })
+        filteredListOfParticipants=ArrayList(participantList.filter { it.isOnline==true })
         notifyDataSetChanged()
 
     }
