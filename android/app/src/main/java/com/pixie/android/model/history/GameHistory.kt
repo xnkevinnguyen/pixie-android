@@ -1,4 +1,6 @@
 package com.pixie.android.model.history
 
-data class GameHistory (val date: String, val time: String, val points: String, val winner: String,
-                        val score: String, val difficulty: String, val gameMode: String)
+import com.pixie.android.model.profile.ScoreData
+
+data class GameHistory (val date: String, val points: List<ScoreData>, val winner: String?,
+                        val score: Double?, val difficulty: String, val gameMode: String)
