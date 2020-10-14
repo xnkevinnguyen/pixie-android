@@ -19,10 +19,10 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
     fun getChannelMessageList() = chatRepository.getChannelMessages()
     fun getCurrentChannelMessageList(channelID:Double):ArrayList<MessageData>{
         val messageList=chatRepository.getChannelMessages().value?.get(channelID)
-        if(messageList.isNullOrEmpty()){
-            return arrayListOf()
+        return if(messageList.isNullOrEmpty()){
+            arrayListOf()
         }else{
-            return messageList
+            messageList
         }
     }
 

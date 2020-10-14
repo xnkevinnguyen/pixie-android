@@ -1,6 +1,8 @@
 package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +18,7 @@ import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.coroutines.channels.Channel
 

@@ -22,7 +22,6 @@ class ChatRepository(
     private var mainChannelMessageList = MutableLiveData<MutableList<MessageData>>().apply {
         this.postValue(arrayListOf())
     }
-
     // Map with <ChannelID,Messages>
     private var channelMessages =
         MutableLiveData<MutableMap<Double, ArrayList<MessageData>>>().apply {

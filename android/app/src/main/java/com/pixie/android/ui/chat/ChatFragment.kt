@@ -1,6 +1,8 @@
 package com.pixie.android.ui.chat
 
 import android.app.Dialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -14,10 +16,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.ui.draw.channelList.ChannelViewModel
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 
 class ChatFragment : Fragment() {
+    private lateinit var preferencesChannel: SharedPreferences
+    private lateinit var chatViewModel: ChatViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,6 +35,8 @@ class ChatFragment : Fragment() {
             container, false
         )
 
+        preferencesChannel = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_CHANNEL, Context.MODE_PRIVATE)
+
         val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
         val messageList = root.findViewById<ListView>(R.id.messages_list)
         val editText = root.findViewById<EditText>(R.id.editText)
@@ -36,7 +44,7 @@ class ChatFragment : Fragment() {
         val messageAdapter = MessagingAdapter(requireContext())
         val factory = InjectorUtils.provideChatViewModelFactory()
 
-        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
+        chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
 
         messageList.adapter = messageAdapter
 
@@ -90,35 +98,25 @@ class ChatFragment : Fragment() {
             val messageList = chatViewModel.getCurrentChannelMessageList(id)
             messageAdapter.set(messageList)
 
-        }
+        })
 
-        )
 
         val channelMessages = chatViewModel.getChannelMessageList()
         channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
             if (!channelMessagesMap.isNullOrEmpty()){
                 val messages = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
                 if(messageAdapter.isEmpty && messages!=null){
-                    Log.d("here", "if ${chatViewModel.getCurrentChannelID().value}")
                     // Repopulating the adapter
                    messageAdapter.set(messages)
 
                 }else if (messages!=null){
-                    Log.d("here", "else if ${chatViewModel.getCurrentChannelID().value}")
                     messageAdapter.add(messages.last())
                 }
             }
 
         })
-
-
-
-
-
-
         return root
     }
-
 }
 
 
