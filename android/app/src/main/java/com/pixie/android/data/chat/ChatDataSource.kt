@@ -25,7 +25,7 @@ class ChatDataSource() {
         try {
             val response = apolloClient(userId).query(GetUserChannelsQuery())
                 .toDeferred().await().data
-            val channelQueryData = response?.userChannels?.channels
+            val channelQueryData = response?.userChannels
             if (channelQueryData != null) {
                 val channelData = ArrayList(channelQueryData.map {
                     var participantList =
@@ -41,7 +41,28 @@ class ChatDataSource() {
             Log.d("ApolloException", e.message.toString())
 
         }
-        Log.d("ApolloException", "Error fetching user channels")
+    }
+
+    suspend fun getJoinableChannels(
+        userId: Double
+    ):ArrayList<ChannelData>{
+        try {
+            val response = apolloClient(userId).query(GetJoinableChannelsQuery())
+                .toDeferred().await().data
+            val channelQueryData = response?.channelsUserHasNotJoined
+            if (channelQueryData != null) {
+                val channelData = ArrayList(channelQueryData.map {
+
+                    ChannelData(it.id, it.name, null)
+                })
+               return channelData
+            }
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.message.toString())
+
+        }
+        Log.d("ApolloException", "Error fetching joinable channels")
+        return arrayListOf()
     }
 
     suspend fun sendMessageToChannel(
@@ -61,7 +82,7 @@ class ChatDataSource() {
     }
 
     suspend fun enterChannel(channelID: Double, userId: Double): ChannelData? {
-        val enterChannelInput = EnterChannelInput(channelID, userId)
+        val enterChannelInput = EnterChannelInput(channelID)
         try {
             val response =
                 apolloClient(userId).mutate(EnterChannelMutation(enterChannelInput)).toDeferred()
@@ -92,7 +113,7 @@ class ChatDataSource() {
     }
 
     suspend fun exitChannel(channelID: Double, userId: Double) {
-        val exitChannelInput = ExitChannelInput(channelID, userId)
+        val exitChannelInput = ExitChannelInput(channelID)
         try {
             apolloClient(userId).mutate(ExitChannelMutation(exitChannelInput)).toDeferred().await()
 

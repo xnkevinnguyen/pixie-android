@@ -46,7 +46,6 @@ class ChannelFragment: Fragment() {
         val factoryChat = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this,factoryChat).get(ChatViewModel::class.java)
         val userChannels = chatViewModel.getUserChannels()
-        val joinableChannel = chatViewModel.getJoinableChannels()
         val joinChannelAdapter = ChannelJoinAdapter(requireContext())
 
         if(userChannels.value !=null){
@@ -57,25 +56,13 @@ class ChannelFragment: Fragment() {
 
         })
 
-        if(joinableChannel.value !=null){
-            joinChannelAdapter.set(joinableChannel.value)
-        }
-        joinableChannel.observe(viewLifecycleOwner, Observer { channelList->
-            joinChannelAdapter.set(channelList)
-        })
-
         addBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
+            val joinableChannel = chatViewModel.getJoinableChannels()
+            joinChannelAdapter.set(joinableChannel as ArrayList<ChannelData>)
             dialog.setContentView(R.layout.create_join_channel)
             val listJoinChannel = dialog.findViewById<ListView>(R.id.list_join_channel)
             listJoinChannel.adapter = joinChannelAdapter
-//            val list = List<ChannelParticipant>(1){
-//                ChannelParticipant(id = 3.0, username = "jo", isOnline = false)
-//            }
-//            val channel = ChannelData(channelID = 21.0, channelName= "Channel 21", participantList = list)
-//            val channel2 = ChannelData(channelID = 19.0, channelName= "Channel 19", participantList = list)
-//            joinChannelAdapter.add(channel)
-//            joinChannelAdapter.add(channel2)
             dialog.show()
         }
 

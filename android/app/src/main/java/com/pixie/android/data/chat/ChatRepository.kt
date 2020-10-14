@@ -7,12 +7,9 @@ import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -41,9 +38,7 @@ class ChatRepository(
             this.postValue(arrayListOf(ChannelParticipant(loadingID, loadingUsername, false)))
         }
     private var userChannels = MutableLiveData<ArrayList<ChannelData>>()
-    private var joinableChannels = MutableLiveData<ArrayList<ChannelData>>().apply {
-        this.postValue(userChannels.value)
-    }
+
     private var currentChannelID = MutableLiveData<Double>().apply {
         this.postValue(MAIN_CHANNEL_ID)
     }
@@ -56,9 +51,6 @@ class ChatRepository(
         return currentChannelID
     }
 
-    fun getJoinableChannels(): LiveData<ArrayList<ChannelData>> {
-        return joinableChannels
-    }
 
     fun getChannelMessages(): LiveData<MutableMap<Double, ArrayList<MessageData>>> {
         return channelMessages
@@ -74,6 +66,14 @@ class ChatRepository(
 
     fun getMainChannelParticipantList(): LiveData<MutableList<ChannelParticipant>> {
         return mainChannelParticipantList
+    }
+
+    fun getJoinableChannels(): ArrayList<ChannelData> {
+        var joinableChannels: ArrayList<ChannelData>
+        runBlocking {
+            joinableChannels = dataSource.getJoinableChannels(userRepository.getUser().userId)
+        }
+        return joinableChannels
     }
 
     fun fetchUserChannels() {
@@ -100,9 +100,8 @@ class ChatRepository(
 
     fun joinChannel(channelID: Double) {
         //enter channel
-        val channelData = enterChannel()
+        val channelData = enterChannel(channelID)
         if (channelData != null) {
-            removeChannelFromJoinableList(channelID)
             // suscribe to messages
             addUserChannelMessageSubscription(channelData)
             //suscribe to participant changes
@@ -148,6 +147,7 @@ class ChatRepository(
         }
 
     }
+
     // suscribe to all joined channels participants
     fun suscribeToUserChannelsParticipants(newUserChannels: ArrayList<ChannelData>) {
         //clear current channels subscriptions
@@ -160,12 +160,23 @@ class ChatRepository(
                     channelData.channelID,
                     onChannelChange = { channelData ->
                         // Main thread only used to modify values
+
                         //TODO replace userChannels with a hashmap
-                        val channelToUpdate = userChannels.value?.filter {
-                            it.channelID == channelData.channelID
-                        }?.last()
-                        channelToUpdate?.participantList = channelData.participantList
-                        userChannels.notifyObserver()
+                        CoroutineScope(Main).launch {
+                            val channelToUpdate = userChannels.value?.filter {
+                                it.channelID == channelData.channelID
+                            }
+                            if (channelToUpdate.isNullOrEmpty()) {
+                                Log.d(
+                                    "suscribeToUserChannelParticipants",
+                                    "No channel matching subscriptions"
+                                )
+                            } else {
+                                channelToUpdate.last().participantList = channelData.participantList
+                                userChannels.notifyObserver()
+                            }
+
+                        }
                     })
             }
             channelParticipantSubscriptions.put(channelData.channelID, subscriptionJob)
@@ -173,7 +184,8 @@ class ChatRepository(
         }
 
     }
-    fun addUserChannelParticipantSubscription(channelData: ChannelData){
+
+    fun addUserChannelParticipantSubscription(channelData: ChannelData) {
         val subscriptionJob = CoroutineScope(IO).launch {
             dataSource.suscribeToChannelChange(
                 userRepository.getUser().userId,
@@ -181,11 +193,18 @@ class ChatRepository(
                 onChannelChange = { channelData ->
                     // Main thread only used to modify values
                     //TODO replace userChannels with a hashmap
-                    val channelToUpdate = userChannels.value?.filter {
-                        it.channelID == channelData.channelID
-                    }?.last()
-                    channelToUpdate?.participantList = channelData.participantList
-                    userChannels.notifyObserver()
+                    CoroutineScope(Main).launch {
+                        val channelToUpdate = userChannels.value?.filter {
+                            it.channelID == channelData.channelID
+                        }
+                        if (channelToUpdate.isNullOrEmpty()) {
+                            Log.d("addUserChannelParticipantSubscription", "Channel is inexistent")
+                        } else {
+                            channelToUpdate.last().participantList = channelData.participantList
+                            userChannels.notifyObserver()
+                        }
+
+                    }
                 })
         }
         channelParticipantSubscriptions.put(channelData.channelID, subscriptionJob)
@@ -223,18 +242,12 @@ class ChatRepository(
                 userRepository.getUser().userId,
                 onChannelAdded = {
 
-                    if (it.participantList.contains(userRepository.getUserAsChannelParticipant())) {
+                    if (it.participantList?.contains(userRepository.getUserAsChannelParticipant()) == true) {
                         //handle case where user is in the channel
                         CoroutineScope(Main).launch {
                             userChannels.value?.add(it)
                             addUserChannelMessageSubscription(channelData = it)
                             userChannels.notifyObserver()
-                        }
-                    } else {
-                        //handle case where user is not in the channel
-                        CoroutineScope(Main).launch {
-                            joinableChannels.value?.add(it)
-                            joinableChannels.notifyObserver()
                         }
                     }
 
@@ -246,7 +259,6 @@ class ChatRepository(
                         channelMessages.value?.remove(channelRemovedData.channelID)
                         channelMessageSubscriptions.remove(channelRemovedData.channelID)
                         removeChannelFromUserList(channelRemovedData.channelID)
-                        removeChannelFromJoinableList(channelRemovedData.channelID)
                     }
 
 
@@ -254,11 +266,11 @@ class ChatRepository(
         }
     }
 
-    fun enterChannel(): ChannelData? {
+    fun enterChannel(channelID: Double): ChannelData? {
         var channelData: ChannelData?
         runBlocking {
             channelData =
-                dataSource.enterChannel(MAIN_CHANNEL_ID, userRepository.getUser().userId)
+                dataSource.enterChannel(channelID, userRepository.getUser().userId)
         }
         return channelData
     }
@@ -273,10 +285,20 @@ class ChatRepository(
     }
 
     fun exitChannel(channelID: Double) {
+        currentChannelID.postValue(MAIN_CHANNEL_ID)
+        userChannels.value?.removeIf {
+            it.channelID == channelID
+        }
+        userChannels.notifyObserver()
+
+        channelMessages.value?.remove(channelID)
+
+        //unsuscription
+        channelParticipantSubscriptions.remove(channelID)
+        channelMessageSubscriptions.remove(channelID)
         CoroutineScope(IO).launch {
             val userID = userRepository.getUser().userId
             dataSource.exitChannel(channelID, userID)
-
         }
     }
 
@@ -313,7 +335,7 @@ class ChatRepository(
                 onChannelChange = {
                     // Main thread only used to modify values
                     CoroutineScope(Main).launch {
-                        mainChannelParticipantList.postValue(it.participantList.toMutableList())
+                        mainChannelParticipantList.postValue(it.participantList?.toMutableList())
                     }
 
                 })
@@ -334,12 +356,6 @@ class ChatRepository(
         }
     }
 
-    fun removeChannelFromJoinableList(channelID: Double) {
-        joinableChannels.value?.removeIf { joinableChannelData ->
-            joinableChannelData.channelID == channelID
-        }
-        joinableChannels.notifyObserver()
-    }
 
     fun removeChannelFromUserList(channelID: Double) {
         userChannels.value?.removeIf { userChannelData ->
