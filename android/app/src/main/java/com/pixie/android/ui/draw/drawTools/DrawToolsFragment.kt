@@ -105,8 +105,8 @@ class DrawToolsFragment() : Fragment() {
         if(window != null){
             val wlp = window.attributes
             wlp.gravity = Gravity.LEFT
-            wlp.y = -200
-            wlp.x = 150
+            wlp.y = -250
+            wlp.x = 530
         }
 
         dialog.setContentView(R.layout.size_chooser_layout)

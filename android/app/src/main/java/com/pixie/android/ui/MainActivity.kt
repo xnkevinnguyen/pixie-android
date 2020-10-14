@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity() {
         val header: View = navView.getHeaderView(0)
         val avatar: ImageView = header.findViewById(R.id.imageView)
         avatar.setOnClickListener {
+//            val factory = InjectorUtils.provideProfileViewModelFactory()
+//            val profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
+//            profileViewModel.fetchUserInfo()
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
         }

@@ -120,12 +120,10 @@ class ChatFragment : Fragment() {
                     }
                 }
                 val messages = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
-                if(messageAdapter.isEmpty && messages!=null){
+                if(messages!=null){
                     // Repopulating the adapter
                    messageAdapter.set(messages)
 
-                }else if (messages!=null){
-                    messageAdapter.add(messages.last())
                 }
             }
 

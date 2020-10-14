@@ -49,8 +49,6 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
     fun startChannels(){
         // Fetch all channels users has joined
         chatRepository.fetchUserChannels()
-        chatRepository.subscribeChannelMessages()
-        chatRepository.suscribeChannelUsers()
         chatRepository.suscribeToUserChannelListChanges()
     }
 

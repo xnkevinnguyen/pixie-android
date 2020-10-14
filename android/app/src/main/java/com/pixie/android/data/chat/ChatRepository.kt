@@ -307,7 +307,9 @@ class ChatRepository(
     }
 
     fun exitChannel(channelID: Double) {
+        if(currentChannelID.value == channelID){
         currentChannelID.postValue(MAIN_CHANNEL_ID)
+        }
         userChannels.value?.removeIf {
             it.channelID == channelID
         }
@@ -329,40 +331,10 @@ class ChatRepository(
         mainChannelParticipantJob.cancel()
     }
 
-    fun subscribeChannelMessages() {
-        mainChannelMessageJob = CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelMessages(
-                userRepository.getUser().userId,
-                MAIN_CHANNEL_ID,
-                onReceiveMessage = {
-                    // Main thread only used to modify values
-                    CoroutineScope(Main).launch {
-                        it.belongsToCurrentUser =
-                            it.userName == userRepository.getUser().username
-                        mainChannelMessageList.value?.add(it)
-                        mainChannelMessageList.notifyObserver()
-                    }
 
 
-                })
-        }
-    }
 
 
-    fun suscribeChannelUsers() {
-        mainChannelParticipantJob = CoroutineScope(IO).launch {
-            dataSource.suscribeToChannelChange(
-                userRepository.getUser().userId,
-                MAIN_CHANNEL_ID,
-                onChannelChange = {
-                    // Main thread only used to modify values
-                    CoroutineScope(Main).launch {
-                        mainChannelParticipantList.postValue(it.participantList?.toMutableList())
-                    }
-
-                })
-        }
-    }
 
 
     fun sendMessage(channelID: Double, message: String) {

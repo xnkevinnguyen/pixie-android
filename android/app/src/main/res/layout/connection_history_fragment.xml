@@ -61,7 +61,7 @@
             android:id="@+id/history_conn_disc_list"
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:background="@android:color/white"
+            android:background="?color"
             android:scrollbarAlwaysDrawVerticalTrack="true"/>
     </LinearLayout>
 
