@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.model.chat.MessageData
 import com.pixie.android.ui.draw.channelList.ChannelViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
@@ -102,8 +103,22 @@ class ChatFragment : Fragment() {
 
 
         val channelMessages = chatViewModel.getChannelMessageList()
+        var oldMessage = ArrayList<MessageData>()
+        val notifBadge = root.findViewById<ImageView>(R.id.chat_notification_badge)
         channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
             if (!channelMessagesMap.isNullOrEmpty()){
+                val channels = chatViewModel.getUserChannels().value
+                if (channels != null) {
+                    for(channel in channels){
+                        if(channel.channelID != chatViewModel.getCurrentChannelID().value){
+                            val messageChannel = channelMessagesMap[channel.channelID]
+                            if(messageChannel != null && messageChannel.size != oldMessage.size){
+                                oldMessage = messageChannel
+                                notifBadge.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
                 val messages = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
                 if(messageAdapter.isEmpty && messages!=null){
                     // Repopulating the adapter
