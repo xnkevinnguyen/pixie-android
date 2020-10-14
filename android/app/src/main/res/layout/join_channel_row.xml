@@ -24,9 +24,9 @@
 
         <TextView
             android:id="@+id/channel_name"
-            android:layout_width="150dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:textStyle="bold"
             android:textSize="@dimen/profile_text" />
     </LinearLayout>
