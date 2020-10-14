@@ -303,8 +303,12 @@ class ChatRepository(
     }
 
     fun clearChannels() {
-        mainChannelMessageList.postValue(arrayListOf())
-        mainChannelParticipantList.postValue(arrayListOf())
+        userChannels.value?.clear()
+        channelMessages.value?.clear()
+        channelParticipantSubscriptions.values.clear()
+        channelMessageSubscriptions.values.clear()
+        currentChannelID.postValue(MAIN_CHANNEL_ID)
+
     }
 
     fun exitChannel(channelID: Double) {
