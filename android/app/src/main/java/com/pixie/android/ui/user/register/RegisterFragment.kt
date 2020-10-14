@@ -138,31 +138,30 @@ class RegisterFragment : Fragment() {
                 val passwordInput = password.text.toString()
                 val firstName = name.text.toString()
                 val lastName = surname.text.toString()
-                registerViewModel.register(username.text.toString(), password.text.toString(), name.text.toString(), surname.text.toString()) { registerResult ->
+                registerViewModel.register(
+                    username.text.toString(),
+                    password.text.toString(),
+                    name.text.toString(),
+                    surname.text.toString()
+                ) { registerResult ->
 
                     if (registerResult.success != null) {
                         // Once register succeeds, we are loggin in the user
-                        registerViewModel.login(
-                            username = usernameInput,
-                            password = passwordInput
-                        ) { loginResult ->
-                            if (loginResult.success != null) {
-                                val intent = Intent(view.context, MainActivity::class.java)
-                                // Store for next time user opens application
-                                editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
-                                editor.putString(
-                                    Constants.USER_ID,
-                                    loginResult.success.userID.toString()
-                                )
-                                editor.putString(Constants.USERNAME, loginResult.success.username)
-                                editor.apply()
-                                startActivity(intent)
-                                requireActivity().finish()
-                                updateUiWithUser(loginResult.success)
-                            }else{
-                                Log.d("ApolloException", "Register succeeds, but login fails.")
-                            }
-                        }
+
+                        val intent = Intent(view.context, MainActivity::class.java)
+                        // Store for next time user opens application
+                        editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
+                        editor.putString(
+                            Constants.USER_ID,
+                            registerResult.success.userID.toString()
+                        )
+                        editor.putString(Constants.USERNAME, registerResult.success.username)
+                        editor.apply()
+                        startActivity(intent)
+                        requireActivity().finish()
+                        updateUiWithUser(registerResult.success)
+
+
                     } else if (registerResult.error != null) {
                         errorMessageField.text = registerResult.error
                         errorMessageField.visibility = View.VISIBLE
@@ -194,12 +193,11 @@ class RegisterFragment : Fragment() {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
     }
 
-    private fun toggleHidePassword(eyeIcon:ImageView, passwordText:EditText){
-        if(passwordText.transformationMethod == PasswordTransformationMethod.getInstance()){
+    private fun toggleHidePassword(eyeIcon: ImageView, passwordText: EditText) {
+        if (passwordText.transformationMethod == PasswordTransformationMethod.getInstance()) {
             eyeIcon.setImageResource(R.drawable.ic_eye)
             passwordText.transformationMethod = HideReturnsTransformationMethod.getInstance()
-        }
-        else {
+        } else {
             eyeIcon.setImageResource(R.drawable.ic_hide_eye);
             passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
         }

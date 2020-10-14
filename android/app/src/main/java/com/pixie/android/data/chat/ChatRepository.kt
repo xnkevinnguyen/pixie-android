@@ -113,6 +113,21 @@ class ChatRepository(
         }
 
     }
+    fun createChannel(channelName:String){
+        CoroutineScope(IO).launch {
+            val channelData = dataSource.createChannel(channelName, userRepository.getUser().userId)
+            if (channelData != null) {
+                // suscribe to messages
+                addUserChannelMessageSubscription(channelData)
+                //suscribe to participant changes
+                addUserChannelParticipantSubscription(channelData)
+                userChannels.value?.add(channelData)
+                userChannels.notifyObserver()
+            } else {
+                Log.d("ApolloException", "Error on createChannel")
+            }
+        }
+    }
 
 
     fun suscribeToUserChannelsMessages(newUserChannels: ArrayList<ChannelData>) {
@@ -271,6 +286,14 @@ class ChatRepository(
         runBlocking {
             channelData =
                 dataSource.enterChannel(channelID, userRepository.getUser().userId)
+        }
+        return channelData
+    }
+    fun createGetChannel(channelName: String):ChannelData?{
+        var channelData: ChannelData?
+        runBlocking {
+            channelData =
+                dataSource.createChannel(channelName, userRepository.getUser().userId)
         }
         return channelData
     }

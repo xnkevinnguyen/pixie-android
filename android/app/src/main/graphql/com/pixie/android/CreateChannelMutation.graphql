@@ -1,0 +1,11 @@
+mutation CreateChannel($input: CreateChannelInput!){
+    createChannel(input:$input){
+        id
+        name
+        participants{
+            id
+            username
+            isOnline
+        }
+    }
+}
