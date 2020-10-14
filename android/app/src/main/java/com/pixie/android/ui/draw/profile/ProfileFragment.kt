@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.model.history.ConnectionHistory
 import com.pixie.android.model.profile.ScoreData
 import com.pixie.android.ui.draw.history.connectionHistory.ConnectionHistoryFragment
 import com.pixie.android.ui.draw.history.gameHistory.GameHistoryFragment
@@ -77,12 +78,26 @@ class ProfileFragment: Fragment() {
         val lastConnection = root.findViewById<TextView>(R.id.user_last_connection)
         val lastDisconnection = root.findViewById<TextView>(R.id.user_last_disconnection)
         profileViewModel.getLogList().observe(viewLifecycleOwner, Observer {
-            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-            val dateConnection = getDate(format.parse(it[it.size-1].connection).time, "yyyy-MM-dd HH:mm:ss")
-            lastConnection.text = dateConnection
+            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+            if(it.isNotEmpty()){
+                val lastLog = findLastLog(it)
+                if(lastLog.connection != "null") {
+                    val dateConnection = getDate(
+                        format.parse(it[it.size - 1].connection).time,
+                        "yyyy-MM-dd HH:mm:ss"
+                    )
+                    lastConnection.text = dateConnection
+                }
 
-            val dateDisconnection = getDate(format.parse(it[it.size-2].disconnection).time, "yyyy-MM-dd HH:mm:ss")
-            lastDisconnection.text = dateDisconnection
+
+                if(lastLog.disconnection != "null") {
+                    val dateDisconnection = getDate(
+                        format.parse(it[it.size - 2].disconnection).time,
+                        "yyyy-MM-dd HH:mm:ss"
+                    )
+                    lastDisconnection.text = dateDisconnection
+                }
+            }
         })
         return root
     }
@@ -152,6 +167,20 @@ class ProfileFragment: Fragment() {
             }
         }
         return "0"
+    }
+
+    private fun findLastLog(listOfLogs: List<ConnectionHistory>): ConnectionHistory{
+        var lastConnection: String = "null"
+        var lastDisconnection:String = "null"
+        for (log in listOfLogs){
+            if(log.connection != "null"){
+                lastConnection = log.connection
+            }
+            if(log.disconnection != "null"){
+                lastDisconnection = log.disconnection
+            }
+        }
+        return ConnectionHistory(connection = lastConnection, disconnection = lastDisconnection)
     }
 
     private fun getDate(milliSeconds: Long, dateFormat: String?): String? {
