@@ -112,5 +112,5 @@
     <string name="guess_left">Guess left</string>
     <string name="kick">Kick player</string>
     <string name="leave">Leave game</string>
->>>>>>> origin/dev
+    <string name="not_available">Not Available</string>
 </resources>
