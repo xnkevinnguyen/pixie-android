@@ -131,7 +131,7 @@ class ProfileFragment: Fragment() {
         profileViewModel.getGameList().observe(viewLifecycleOwner, Observer {
             val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
             var dateGame: String? = resources.getString(R.string.not_available)
-            if(it.size != 0) {
+            if(it.isNotEmpty()) {
                 if (it[it.size - 1].date != "null") {
                     dateGame = getDate(format.parse(it[it.size - 1].date).time, "yyyy-MM-dd HH:mm:ss")
                 }

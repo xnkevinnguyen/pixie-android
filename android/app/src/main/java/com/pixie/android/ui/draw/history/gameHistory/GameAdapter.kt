@@ -54,7 +54,7 @@ class GameAdapter (context: Context) : BaseAdapter() {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val history: GameHistory = listOfGames[position]
+        val history: GameHistory = listOfGames[listOfGames.size - position - 1]
         val rowView = inflater.inflate(R.layout.game_history_row, parent, false)
         val date = rowView.findViewById<TextView>(R.id.history_date)
         val time = rowView.findViewById<TextView>(R.id.history_time)
