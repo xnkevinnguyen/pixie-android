@@ -98,11 +98,11 @@ class ChatFragment : Fragment() {
         channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
             if (!channelMessagesMap.isNullOrEmpty()){
                 val messages = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
-                if(messageAdapter.isEmpty && messages!=null){
                     // Repopulating the adapter
-                   messageAdapter.set(messages)
-
+                if(messages !=null) {
+                    messageAdapter.set(messages)
                 }
+
             }
 
         })
