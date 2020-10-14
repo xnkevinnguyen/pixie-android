@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 
@@ -34,6 +35,9 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
 
     fun joinChannel(channelID: Double){
         chatRepository.joinChannel(channelID)
+    }
+    fun createChannel(channelName:String){
+        return chatRepository.createChannel(channelName)
     }
 
     fun exitChannel(channelID: Double){

@@ -6,10 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -62,6 +59,11 @@ class ChannelFragment: Fragment() {
             joinChannelAdapter.set(joinableChannel as ArrayList<ChannelData>)
             dialog.setContentView(R.layout.create_join_channel)
             val listJoinChannel = dialog.findViewById<ListView>(R.id.list_join_channel)
+            val createChannelButtonElement = dialog.findViewById<Button>(R.id.create_channel)
+            createChannelButtonElement.setOnClickListener{
+                val channelNameElement = dialog.findViewById<EditText>(R.id.create_channel_name)
+                chatViewModel.createChannel(channelNameElement.text.toString())
+            }
             listJoinChannel.adapter = joinChannelAdapter
             dialog.show()
         }

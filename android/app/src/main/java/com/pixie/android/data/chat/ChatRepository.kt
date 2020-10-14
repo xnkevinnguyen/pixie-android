@@ -114,8 +114,8 @@ class ChatRepository(
 
     }
     fun createChannel(channelName:String){
-        CoroutineScope(IO).launch {
-            val channelData = dataSource.createChannel(channelName, userRepository.getUser().userId)
+            val channelData = createGetChannel(channelName)
+
             if (channelData != null) {
                 // suscribe to messages
                 addUserChannelMessageSubscription(channelData)
@@ -126,7 +126,7 @@ class ChatRepository(
             } else {
                 Log.d("ApolloException", "Error on createChannel")
             }
-        }
+
     }
 
 
