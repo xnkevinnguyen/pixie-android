@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
+import com.pixie.android.model.chat.ChannelMessageObject
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 import kotlinx.coroutines.*
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+typealias ChannelID = Double
 class ChatRepository(
     private val dataSource: ChatDataSource,
     private val userRepository: UserRepository
@@ -22,13 +24,13 @@ class ChatRepository(
 
     // Map with <ChannelID,Messages>
     private var channelMessages =
-        MutableLiveData<MutableMap<Double, ArrayList<MessageData>>>().apply {
+        MutableLiveData<MutableMap<ChannelID, ChannelMessageObject>>().apply {
             this.postValue(HashMap())
         }
-    private var channelMessageSubscriptions = HashMap<Double, Job>()
-    private var channelParticipantSubscriptions = HashMap<Double, Job>()
+    private var channelMessageSubscriptions = HashMap<ChannelID, Job>()
+    private var channelParticipantSubscriptions = HashMap<ChannelID, Job>()
 
-    private var userChannels = MutableLiveData<LinkedHashMap<Double, ChannelData>>()
+    private var userChannels = MutableLiveData<LinkedHashMap<ChannelID, ChannelData>>()
 
     private var currentChannelID = MutableLiveData<Double>().apply {
         this.postValue(MAIN_CHANNEL_ID)
@@ -40,7 +42,7 @@ class ChatRepository(
     }
 
 
-    fun getChannelMessages(): LiveData<MutableMap<Double, ArrayList<MessageData>>> {
+    fun getChannelMessages(): LiveData<MutableMap<Double, ChannelMessageObject>> {
         return channelMessages
     }
 
@@ -76,7 +78,14 @@ class ChatRepository(
         }
 
     }
-
+    fun getChatHistory(channelID: Double){
+        CoroutineScope(IO).launch {
+            dataSource.getChatHistory(userRepository.getUser().userId,channelID) {
+                channelMessages.value?.put(channelID, ChannelMessageObject(it,true))
+                channelMessages.notifyObserver()
+            }
+        }
+    }
 
     fun joinChannel(channelID: Double) {
         //enter channel
@@ -132,9 +141,12 @@ class ChatRepository(
                         it.belongsToCurrentUser =
                             it.userName == userRepository.getUser().username
                         if (channelMessages.value?.get(channelData.channelID) == null) {
-                            channelMessages.value?.put(channelData.channelID, arrayListOf(it))
+                            //new channel
+                            channelMessages.value?.put(channelData.channelID, ChannelMessageObject(
+                                arrayListOf(it)
+                            ))
                         } else {
-                            channelMessages.value?.get(channelData.channelID)?.add(it)
+                            channelMessages.value?.get(channelData.channelID)?.messageList?.add(it)
                         }
                         //Only update UI if the change is on selected channel
                         if (currentChannelID.value == channelData.channelID) {

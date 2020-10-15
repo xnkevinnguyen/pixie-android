@@ -50,6 +50,11 @@ class ChatFragment : Fragment() {
             }
         }
 
+        val loadHistoryButton = root.findViewById<Button>(R.id.load_chat_history)
+        loadHistoryButton.setOnClickListener{
+            chatViewModel.getChatHistoryCurrentChannel()
+        }
+
         // Enter button on real keyboard if attached to android
         editText.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
@@ -97,11 +102,15 @@ class ChatFragment : Fragment() {
         val channelMessages = chatViewModel.getChannelMessageList()
         channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
             if (!channelMessagesMap.isNullOrEmpty()){
-                val messages = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
+                val messageObject = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
                     // Repopulating the adapter
-                if(messages !=null) {
-                    messageAdapter.set(messages)
+                if(messageObject !=null) {
+                    messageAdapter.set(messageObject.messageList)
+                    if(messageObject.isHistoryLoaded){
+                        loadHistoryButton.visibility = View.INVISIBLE
+                    }
                 }
+
 
             }
 
