@@ -50,10 +50,12 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
 
     fun getUserChannels() = chatRepository.getUserChannels()
 
-    fun startChannels() {
-        // Fetch all channels users has joined
-        chatRepository.fetchUserChannels()
-        chatRepository.suscribeToUserChannelListChanges()
+    fun startChannelsIfNecessary() {
+        if(chatRepository.getUserChannels().value.isNullOrEmpty()) {
+            // Fetch all channels users has joined
+            chatRepository.fetchUserChannels()
+            chatRepository.suscribeToUserChannelListChanges()
+        }
     }
 
 
