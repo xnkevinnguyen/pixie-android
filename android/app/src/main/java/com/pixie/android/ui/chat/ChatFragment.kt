@@ -1,8 +1,6 @@
 package com.pixie.android.ui.chat
 
-import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
-import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.chat.MessageData
 import com.pixie.android.utilities.InjectorUtils
 
 
@@ -94,9 +90,13 @@ class ChatFragment : Fragment() {
             //clear adapter messages
             messageAdapter.clear()
             // load new channel messages
-            val messageList = chatViewModel.getCurrentChannelMessageList(id)
-            messageAdapter.set(messageList)
-
+            val messageObject = chatViewModel.getCurrentChannelMessageObject(id)
+            messageAdapter.set(messageObject.messageList)
+            if(messageObject.isHistoryLoaded){
+                loadHistoryButton.visibility = View.INVISIBLE
+            }else{
+                loadHistoryButton.visibility = View.VISIBLE
+            }
         })
 
         val channelMessages = chatViewModel.getChannelMessageList()
@@ -109,6 +109,8 @@ class ChatFragment : Fragment() {
                     messageAdapter.set(messageObject.messageList)
                     if(messageObject.isHistoryLoaded){
                         loadHistoryButton.visibility = View.INVISIBLE
+                    }else{
+                        loadHistoryButton.visibility = View.VISIBLE
                     }
                 }
 
