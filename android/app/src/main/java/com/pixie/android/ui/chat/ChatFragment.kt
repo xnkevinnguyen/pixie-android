@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.model.chat.MessageData
 import com.pixie.android.utilities.InjectorUtils
 
 
@@ -35,6 +36,7 @@ class ChatFragment : Fragment() {
 
         val messageAdapter = MessagingAdapter(requireContext())
         val factory = InjectorUtils.provideChatViewModelFactory()
+        val userChannelAdapter = UserChannelAdapter(requireContext())
 
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
 
@@ -95,14 +97,13 @@ class ChatFragment : Fragment() {
             val messageList = chatViewModel.getCurrentChannelMessageList(id)
             messageAdapter.set(messageList)
 
-        }
-
-        )
+        })
 
         val channelMessages = chatViewModel.getChannelMessageList()
         channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
             if (!channelMessagesMap.isNullOrEmpty()){
                 val messageObject = channelMessagesMap[chatViewModel.getCurrentChannelID().value]
+
                     // Repopulating the adapter
                 if(messageObject !=null) {
                     messageAdapter.set(messageObject.messageList)

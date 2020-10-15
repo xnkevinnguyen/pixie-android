@@ -26,11 +26,13 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
     val context = context
     private var channelList = ArrayList<ChannelData>()
     private var channelIdSelected:Double = 1.0
+    private var channelUnread = ArrayList<Double>()
 
     fun setChannelIdSelected(id:Double){
         channelIdSelected = id
         notifyDataSetChanged()
     }
+
 
     fun add(channel: ChannelData) {
         this.channelList.add(channel)
@@ -69,14 +71,15 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
             exit.visibility = View.GONE
         }
 
+        val badge = rowView.findViewById<ImageView>(R.id.chat_notification_badge)
         if(channelIdSelected == channel.channelID){
+            badge.visibility = View.GONE
             val typedValue = TypedValue()
             val theme: Theme = context.getTheme()
             theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
             @ColorInt val color = typedValue.data
             rowView.setBackgroundColor(color)
         }
-
 
         exit.setOnClickListener {
             val factoryChat = InjectorUtils.provideChatViewModelFactory()
@@ -89,6 +92,9 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
         //set nb of unread messages
         val unreadMessages = rowView.findViewById<TextView>(R.id.unread_messages)
         unreadMessages.text = channel.unreadMessages.toString()
+        if(channel.unreadMessages>0){
+            badge.visibility = View.VISIBLE
+        }
         return rowView
 
     }
