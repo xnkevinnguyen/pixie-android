@@ -13,11 +13,9 @@ class LogoutService : IntentService("LogoutService") {
         val chatRepository = ChatRepository.getInstance()
         val userRepository = UserRepository.getInstance()
         chatRepository.clearChannels()
-        chatRepository.cancelMainChannelSubscriptions()
         runBlocking {
             userRepository.logout()
         }
-
 
     }
 }

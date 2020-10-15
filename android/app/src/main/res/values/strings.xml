@@ -33,6 +33,7 @@
     <string name="retype_pass">Re-Enter your password</string>
     <string name="return_login">Return to login page</string>
     <string name="active_users">Players</string>
+    <string name="load_chat_history">Load Chat History</string>
     <string name="messages">Messages</string>
     <string name="channel">Your Channels</string>
     <string name="join_channel">Join</string>

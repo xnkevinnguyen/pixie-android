@@ -26,20 +26,24 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
     val context = context
     private var channelList = ArrayList<ChannelData>()
     private var channelIdSelected:Double = 1.0
+    private var channelUnread = ArrayList<Double>()
 
     fun setChannelIdSelected(id:Double){
         channelIdSelected = id
         notifyDataSetChanged()
     }
 
+
     fun add(channel: ChannelData) {
         this.channelList.add(channel)
         notifyDataSetChanged()
 
     }
-    fun set(newChannelList:ArrayList<ChannelData>?){
+    fun set(newChannelList:LinkedHashMap<Double,ChannelData>?){
         if(newChannelList!=null) {
-            channelList= ArrayList(newChannelList)
+            channelList= ArrayList(newChannelList.map{
+                it.value
+            })
         }
         notifyDataSetChanged()
     }
@@ -67,7 +71,9 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
             exit.visibility = View.GONE
         }
 
+        val badge = rowView.findViewById<ImageView>(R.id.chat_notification_badge)
         if(channelIdSelected == channel.channelID){
+            badge.visibility = View.GONE
             val typedValue = TypedValue()
             val theme: Theme = context.getTheme()
             theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
@@ -80,8 +86,15 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
             val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)
             chatViewModel.exitChannel(channel.channelID)
         }
-        val channelName = rowView.findViewById<TextView>(R.id.participant_username)
+        val channelName = rowView.findViewById<TextView>(R.id.channel_name)
         channelName.text = channel.channelName
+
+        //set nb of unread messages
+        val unreadMessages = rowView.findViewById<TextView>(R.id.unread_messages)
+        unreadMessages.text = channel.unreadMessages.toString()
+        if(channel.unreadMessages>0){
+            badge.visibility = View.VISIBLE
+        }
         return rowView
 
     }

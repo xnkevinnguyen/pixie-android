@@ -33,7 +33,7 @@ class ChatDataSource() {
                     if (participantList == null) {
                         participantList = arrayListOf()
                     }
-                    ChannelData(it.id, it.name, participantList)
+                    ChannelData(it.id, it.name, participantList, 0)
                 })
                 onReceiveMessage(channelData)
             }
@@ -43,9 +43,30 @@ class ChatDataSource() {
         }
     }
 
+    suspend fun getChatHistory(
+        userId: Double,
+        channelID: Double,
+        onReceiveChannel: (ArrayList<MessageData>) -> Unit
+    ) {
+        try {
+            val response = apolloClient(userId).query(GetChannelQuery(channelID))
+                .toDeferred().await().data
+            val channelQueryData = response?.channel
+            if (channelQueryData?.messages != null) {
+                onReceiveChannel( ArrayList(channelQueryData.messages.map {
+                    MessageData(it.content, userId == it.sender.id, it.sender.username, it.postedAt)
+                }))
+            }
+        }
+        catch(e:ApolloException){
+            Log.d("ApolloException",e.toString())
+
+        }
+    }
+
     suspend fun getJoinableChannels(
         userId: Double
-    ):ArrayList<ChannelData>{
+    ): ArrayList<ChannelData> {
         try {
             val response = apolloClient(userId).query(GetJoinableChannelsQuery())
                 .toDeferred().await().data
@@ -55,7 +76,7 @@ class ChatDataSource() {
 
                     ChannelData(it.id, it.name, null)
                 })
-               return channelData
+                return channelData
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
@@ -111,6 +132,7 @@ class ChatDataSource() {
         }
         return null
     }
+
     suspend fun createChannel(channelName: String, userId: Double): ChannelData? {
         val createChannelInput = CreateChannelInput(channelName)
         try {
@@ -190,15 +212,18 @@ class ChatDataSource() {
                 delay(attempt * 1000)
                 true
             }.collect {
-                val subscriptionData =it.data?.onChannelAdded
-                if(subscriptionData!=null && subscriptionData.participants !=null){
-                    val channelData = ChannelData(subscriptionData.id,subscriptionData.name,subscriptionData.participants.map{
-                        ChannelParticipant(it.id,it.username,it.isOnline)
-                    })
+                val subscriptionData = it.data?.onChannelAdded
+                if (subscriptionData != null && subscriptionData.participants != null) {
+                    val channelData = ChannelData(
+                        subscriptionData.id,
+                        subscriptionData.name,
+                        subscriptionData.participants.map {
+                            ChannelParticipant(it.id, it.username, it.isOnline)
+                        })
                     onChannelAdded(channelData)
 
-                }else{
-                    Log.d("ApolloException","Error onCollect for ChannelAddedSubscription")
+                } else {
+                    Log.d("ApolloException", "Error onCollect for ChannelAddedSubscription")
                 }
             }
         apolloClient(userID).subscribe(OnChannelDeletedSubscription()).toFlow()
@@ -206,15 +231,18 @@ class ChatDataSource() {
                 delay(attempt * 1000)
                 true
             }.collect {
-                val subscriptionData =it.data?.onChannelDeleted
-                if(subscriptionData!=null && subscriptionData.participants !=null){
-                    val channelData = ChannelData(subscriptionData.id,subscriptionData.name,subscriptionData.participants.map{
-                        ChannelParticipant(it.id,it.username,it.isOnline)
-                    })
+                val subscriptionData = it.data?.onChannelDeleted
+                if (subscriptionData != null && subscriptionData.participants != null) {
+                    val channelData = ChannelData(
+                        subscriptionData.id,
+                        subscriptionData.name,
+                        subscriptionData.participants.map {
+                            ChannelParticipant(it.id, it.username, it.isOnline)
+                        })
                     onChannelRemoved(channelData)
 
-                }else{
-                    Log.d("ApolloException","Error onCollect for ChannelAddedSubscription")
+                } else {
+                    Log.d("ApolloException", "Error onCollect for ChannelAddedSubscription")
                 }
             }
     }

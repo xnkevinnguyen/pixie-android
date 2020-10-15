@@ -45,9 +45,8 @@ class ChannelFragment: Fragment() {
         val userChannels = chatViewModel.getUserChannels()
         val joinChannelAdapter = ChannelJoinAdapter(requireContext())
 
-        if(userChannels.value !=null){
-            userChannelAdapter.set(userChannels.value)
-        }
+        userChannelAdapter.set(userChannels.value)
+
         userChannels.observe(viewLifecycleOwner, Observer { userChannelList->
             userChannelAdapter.set(userChannelList)
 

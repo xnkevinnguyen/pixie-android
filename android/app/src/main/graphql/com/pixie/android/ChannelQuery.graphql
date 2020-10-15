@@ -1,0 +1,22 @@
+query getChannel($channelId:Float!){
+    channel(channelId:$channelId){
+        id
+        name
+        participants{
+            id
+            username
+            isOnline
+        }
+        messages{
+            id
+            content
+            sender{
+                id
+                username
+                isOnline
+            }
+            postedAt
+        }
+
+    }
+}
