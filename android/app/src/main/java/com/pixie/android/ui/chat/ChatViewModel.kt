@@ -26,11 +26,6 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
         }
     }
 
-
-    fun getMainChannelMessage() = chatRepository.getMainChannelMessageList()
-
-    fun getMainChannelParticipants()= chatRepository.getMainChannelParticipantList()
-
     fun getJoinableChannels() = chatRepository.getJoinableChannels()
 
     fun joinChannel(channelID: Double){
@@ -52,9 +47,8 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
         chatRepository.suscribeToUserChannelListChanges()
     }
 
+
     fun stopChannel(){
-//       chatRepository.cancelMainChannelSubscriptions()
-//        chatRepository.exitMainChannel()
         chatRepository.clearChannels()
 
     }

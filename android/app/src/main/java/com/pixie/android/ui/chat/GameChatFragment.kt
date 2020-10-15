@@ -121,22 +121,22 @@ class GameChatFragment : Fragment() {
             }
         }
 
-        val mainChannelMessageList = chatViewModel.getMainChannelMessage()
-        //val mainChannelParticipantList = chatViewModel.getMainChannelParticipants()
-        mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->
-            if (!messageList.isNullOrEmpty()){
-                if(messageAdapter.isEmpty){
-                    // Repopulating the adapter
-                    messageList.forEach {
-                        messageAdapter.add(it)
-                    }
-
-                }else{
-                    messageAdapter.add(messageList.last())
-                }
-            }
-
-        })
+//        val mainChannelMessageList = chatViewModel.getMainChannelMessage()
+//        //val mainChannelParticipantList = chatViewModel.getMainChannelParticipants()
+//        mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->
+//            if (!messageList.isNullOrEmpty()){
+//                if(messageAdapter.isEmpty){
+//                    // Repopulating the adapter
+//                    messageList.forEach {
+//                        messageAdapter.add(it)
+//                    }
+//
+//                }else{
+//                    messageAdapter.add(messageList.last())
+//                }
+//            }
+//
+//        })
 //        mainChannelParticipantList.observe(viewLifecycleOwner, Observer { participantList->
 //            if(!participantList.isNullOrEmpty()){
 //                participantAdapter.clear()

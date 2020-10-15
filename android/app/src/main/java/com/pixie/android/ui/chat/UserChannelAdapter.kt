@@ -37,9 +37,11 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
         notifyDataSetChanged()
 
     }
-    fun set(newChannelList:ArrayList<ChannelData>?){
+    fun set(newChannelList:LinkedHashMap<Double,ChannelData>?){
         if(newChannelList!=null) {
-            channelList= ArrayList(newChannelList)
+            channelList= ArrayList(newChannelList.map{
+                it.value
+            })
         }
         notifyDataSetChanged()
     }
