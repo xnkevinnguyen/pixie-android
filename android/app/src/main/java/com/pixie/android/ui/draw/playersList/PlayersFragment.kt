@@ -37,18 +37,6 @@ class PlayersFragment : Fragment() {
         val participantAdapter = ChannelParticipantAdapter(requireContext())
         participantListElement.adapter = participantAdapter
 
-        //TODO should be removed and replaced with players from current channel
-        val mainChannelParticipantList = playersViewModel.getMainChannelParticipants()
-        mainChannelParticipantList.observe(viewLifecycleOwner, Observer { participantList ->
-            if (!participantList.isNullOrEmpty()) {
-                participantAdapter.clear()
-                participantList.forEach {
-                    participantAdapter.add(it)
-                }
-
-            }
-
-        })
         val currentChannelID = playersViewModel.getCurrentChannelID()
 
         currentChannelID.observe(viewLifecycleOwner, Observer {id->

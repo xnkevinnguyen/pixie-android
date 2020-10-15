@@ -10,9 +10,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentStart="true">
-
         <TextView
-            android:id="@+id/participant_username"
+            android:id="@+id/unread_messages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/channel_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"

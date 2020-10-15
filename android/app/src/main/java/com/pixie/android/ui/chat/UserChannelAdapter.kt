@@ -77,13 +77,18 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
             rowView.setBackgroundColor(color)
         }
 
+
         exit.setOnClickListener {
             val factoryChat = InjectorUtils.provideChatViewModelFactory()
             val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)
             chatViewModel.exitChannel(channel.channelID)
         }
-        val channelName = rowView.findViewById<TextView>(R.id.participant_username)
+        val channelName = rowView.findViewById<TextView>(R.id.channel_name)
         channelName.text = channel.channelName
+
+        //set nb of unread messages
+        val unreadMessages = rowView.findViewById<TextView>(R.id.unread_messages)
+        unreadMessages.text = channel.unreadMessages.toString()
         return rowView
 
     }

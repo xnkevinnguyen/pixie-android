@@ -33,7 +33,7 @@ class ChatDataSource() {
                     if (participantList == null) {
                         participantList = arrayListOf()
                     }
-                    ChannelData(it.id, it.name, participantList)
+                    ChannelData(it.id, it.name, participantList,0)
                 })
                 onReceiveMessage(channelData)
             }

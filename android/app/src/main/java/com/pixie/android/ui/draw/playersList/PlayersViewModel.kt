@@ -10,7 +10,6 @@ import java.lang.IndexOutOfBoundsException
 class PlayersViewModel(private val chatRepository: ChatRepository) : ViewModel() {
     fun getCurrentChannelID(): LiveData<Double> = chatRepository.getCurrentChannelID()
 
-    fun getMainChannelParticipants() = chatRepository.getMainChannelParticipantList()
     fun getCurrentChannelParticipants(channelID: Double?): ArrayList<ChannelParticipant> {
 
         val participantList = getUserChannels().value?.get(channelID)?.participantList

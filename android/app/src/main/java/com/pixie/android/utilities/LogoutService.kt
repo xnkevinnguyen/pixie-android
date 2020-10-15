@@ -17,6 +17,5 @@ class LogoutService : IntentService("LogoutService") {
             userRepository.logout()
         }
 
-
     }
 }
