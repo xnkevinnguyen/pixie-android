@@ -321,6 +321,22 @@
               "deprecationReason": null
             },
             {
+              "name": "nParticipants",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "createdAt",
               "description": null,
               "args": [],
@@ -1228,22 +1244,6 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "User",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "currentChannel",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Channel",
                   "ofType": null
                 }
               },
@@ -3428,9 +3428,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2020-10-14T12:15:15.916Z",
-      "endTime": "2020-10-14T12:15:15.947Z",
-      "duration": 30066540,
+      "startTime": "2020-10-15T22:57:12.298Z",
+      "endTime": "2020-10-15T22:57:12.345Z",
+      "duration": 47174341,
       "execution": {
         "resolvers": []
       }

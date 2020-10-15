@@ -33,7 +33,7 @@ class ChatDataSource() {
                     if (participantList == null) {
                         participantList = arrayListOf()
                     }
-                    ChannelData(it.id, it.name, participantList, 0)
+                    ChannelData(it.id, it.name, participantList, nParticipant = null)
                 })
                 onReceiveMessage(channelData)
             }
@@ -53,13 +53,12 @@ class ChatDataSource() {
                 .toDeferred().await().data
             val channelQueryData = response?.channel
             if (channelQueryData?.messages != null) {
-                onReceiveChannel( ArrayList(channelQueryData.messages.map {
+                onReceiveChannel(ArrayList(channelQueryData.messages.map {
                     MessageData(it.content, userId == it.sender.id, it.sender.username, it.postedAt)
                 }))
             }
-        }
-        catch(e:ApolloException){
-            Log.d("ApolloException",e.toString())
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.toString())
 
         }
     }
@@ -74,7 +73,7 @@ class ChatDataSource() {
             if (channelQueryData != null) {
                 val channelData = ArrayList(channelQueryData.map {
 
-                    ChannelData(it.id, it.name, null)
+                    ChannelData(it.id, it.name, null, nParticipant = it.nParticipants.toInt())
                 })
                 return channelData
             }
@@ -120,7 +119,8 @@ class ChatDataSource() {
                 return ChannelData(
                     data.id,
                     data.name,
-                    channelParticipant
+                    channelParticipant,
+                    nParticipant = null
                 )
 
 
@@ -151,7 +151,7 @@ class ChatDataSource() {
                 return ChannelData(
                     data.id,
                     data.name,
-                    channelParticipant
+                    channelParticipant, nParticipant = null
                 )
 
 
@@ -219,7 +219,8 @@ class ChatDataSource() {
                         subscriptionData.name,
                         subscriptionData.participants.map {
                             ChannelParticipant(it.id, it.username, it.isOnline)
-                        })
+                        }, nParticipant = null
+                    )
                     onChannelAdded(channelData)
 
                 } else {
@@ -238,7 +239,8 @@ class ChatDataSource() {
                         subscriptionData.name,
                         subscriptionData.participants.map {
                             ChannelParticipant(it.id, it.username, it.isOnline)
-                        })
+                        }, nParticipant = null
+                    )
                     onChannelRemoved(channelData)
 
                 } else {
@@ -272,7 +274,7 @@ class ChatDataSource() {
                     val channelData = ChannelData(
                         data.id,
                         data.name,
-                        channelParticipant
+                        channelParticipant, nParticipant = null
                     )
                     onChannelChange(channelData)
 
