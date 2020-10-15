@@ -149,20 +149,5 @@ class MainActivity : AppCompatActivity() {
 
         super.onDestroy()
     }
-      fun onDestroy(shouldLogout: Boolean) {
-        // stop channel subscriptions
-        val factory = InjectorUtils.provideChatViewModelFactory()
-        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
-//        runBlocking {
-//            chatViewModel.stopChannel()
-//            UserRepository.getInstance().logout()
-//        }
-
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
 
 }
