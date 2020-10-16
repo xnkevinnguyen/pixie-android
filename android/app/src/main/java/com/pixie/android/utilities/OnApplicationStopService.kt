@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
+import kotlinx.coroutines.runBlocking
 
 
 class OnApplicationStopService :Service() {
@@ -27,10 +28,18 @@ class OnApplicationStopService :Service() {
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        Log.e("OnApplicationStopService", "END")
+        Log.e("OnApplicationStopService", "onTaskRemoved")
 
         val intent = Intent(this, LogoutService::class.java)
-        startService(intent)
+
+        runBlocking {
+            val chatRepository = ChatRepository.getInstance()
+            val userRepository = UserRepository.getInstance()
+            userRepository.logout()
+            chatRepository.clearChannels()
+
+        }
+        Log.e("OnApplicationStopService", "END")
 
     }
 }

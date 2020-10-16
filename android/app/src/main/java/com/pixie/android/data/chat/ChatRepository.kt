@@ -15,6 +15,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 typealias ChannelID = Double
+
 class ChatRepository(
     private val dataSource: ChatDataSource,
     private val userRepository: UserRepository
@@ -78,11 +79,14 @@ class ChatRepository(
         }
 
     }
-    fun getChatHistory(channelID: Double){
+
+    fun getChatHistory(channelID: Double) {
         CoroutineScope(IO).launch {
-            dataSource.getChatHistory(userRepository.getUser().userId,channelID) {
-                channelMessages.value?.put(channelID, ChannelMessageObject(it,true))
-                channelMessages.notifyObserver()
+            dataSource.getChatHistory(userRepository.getUser().userId, channelID) {
+                CoroutineScope(Main).launch {
+                    channelMessages.value?.put(channelID, ChannelMessageObject(it, true))
+                    channelMessages.notifyObserver()
+                }
             }
         }
     }
@@ -142,9 +146,11 @@ class ChatRepository(
                             it.userName == userRepository.getUser().username
                         if (channelMessages.value?.get(channelData.channelID) == null) {
                             //new channel
-                            channelMessages.value?.put(channelData.channelID, ChannelMessageObject(
-                                arrayListOf(it)
-                            ))
+                            channelMessages.value?.put(
+                                channelData.channelID, ChannelMessageObject(
+                                    arrayListOf(it)
+                                )
+                            )
                         } else {
                             channelMessages.value?.get(channelData.channelID)?.messageList?.add(it)
                         }

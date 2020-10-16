@@ -101,9 +101,11 @@ class SettingsFragment : DialogFragment() {
         if (themeSaved != themeValue){
             editorSettings.putString(Constants.THEME, themeValue)
             editorSettings.apply()
+
             val intent = Intent(requireContext(), MainActivity::class.java)
+
             startActivity(intent)
-            requireActivity().finish()
+            requireActivity()
 
 //            val dialog = Dialog(requireContext())
 //            dialog.setContentView(R.layout.warning_change_theme_language)
