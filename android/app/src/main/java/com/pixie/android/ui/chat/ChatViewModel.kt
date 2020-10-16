@@ -1,17 +1,28 @@
 package com.pixie.android.ui.chat
 
+import android.content.Context
+import android.media.MediaPlayer
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 
-class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
+class ChatViewModel(private val chatRepository: ChatRepository, private val soundRepository: SoundRepository) : ViewModel() {
 
     fun getCurrentChannelID(): LiveData<Double> = chatRepository.getCurrentChannelID()
+
+    fun createMediaPlayer(id: Int, context: Context): MediaPlayer{
+        return soundRepository.createMediaPlayer(id, context)
+    }
+
+    fun startMediaPlayer(mediaPlayer: MediaPlayer) = soundRepository.startMediaPlayer(mediaPlayer)
+
+    fun releaseMediaPlayer(mediaPlayer: MediaPlayer) = soundRepository.releaseMediaPlayer(mediaPlayer)
 
     fun setCurrentChannelID(id: Double) {
         chatRepository.setCurrentChannelID(id)

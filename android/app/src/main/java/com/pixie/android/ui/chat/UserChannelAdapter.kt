@@ -2,13 +2,13 @@ package com.pixie.android.ui.chat
 
 import android.content.Context
 import android.content.res.Resources.Theme
+import android.media.MediaPlayer
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 
@@ -80,19 +81,24 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
             @ColorInt val color = typedValue.data
             rowView.setBackgroundColor(color)
         }
+        val factoryChat = InjectorUtils.provideChatViewModelFactory()
+        val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)
 
         exit.setOnClickListener {
-            val factoryChat = InjectorUtils.provideChatViewModelFactory()
-            val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)
             chatViewModel.exitChannel(channel.channelID)
         }
         val channelName = rowView.findViewById<TextView>(R.id.channel_name)
         channelName.text = channel.channelName
 
         //set nb of unread messages
+        val preferencesSettings = context.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val soundOn:Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
+        val mediaPlayer = chatViewModel.createMediaPlayer(R.raw.notification, context)
         val unreadMessages = rowView.findViewById<TextView>(R.id.unread_messages)
         unreadMessages.text = channel.unreadMessages.toString()
         if(channel.unreadMessages>0){
+            if(soundOn)chatViewModel.startMediaPlayer(mediaPlayer)
+            else chatViewModel.releaseMediaPlayer(mediaPlayer)
             badge.visibility = View.VISIBLE
         }
         return rowView

@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -68,13 +70,27 @@ class SettingsFragment : DialogFragment() {
 
         val apply = builder.findViewById<Button>(R.id.apply_settings)
 
+        val notificationSound = builder.findViewById<SwitchCompat>(R.id.notification_switch)
+        val soundOn:Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
+        notificationSound.isChecked = soundOn
+
         apply.setOnClickListener {
             val themeValue = dropdownTheme.selectedItem.toString()
             val langValue = dropdownLang.selectedItem.toString()
             applyThemeSettings(themeValue)
             applyLanguageSettings(langValue)
+            if(notificationSound.isChecked) {
+                editorSettings.putBoolean(Constants.NOTIFICATION, true)
+                editorSettings.apply()
+            }
+            else {
+                editorSettings.putBoolean(Constants.NOTIFICATION, false)
+                editorSettings.apply()
+            }
             builder.dismiss()
         }
+
+
 
         return builder
     }
