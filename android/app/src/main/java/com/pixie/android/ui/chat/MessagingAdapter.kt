@@ -25,6 +25,7 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
     fun add(message: MessageData) {
         this.listOfMessage.add(message)
         notifyDataSetChanged()
+
     }
     fun set(newMessages:ArrayList<MessageData>){
         listOfMessage = ArrayList(newMessages)

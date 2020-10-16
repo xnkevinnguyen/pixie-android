@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.model.RequestResult
+import com.pixie.android.model.chat.ChannelMessageObject
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
+import java.lang.NullPointerException
 
 class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
 
@@ -18,13 +20,9 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
     }
 
     fun getChannelMessageList() = chatRepository.getChannelMessages()
-    fun getCurrentChannelMessageList(channelID: Double): ArrayList<MessageData> {
-        val messageList = chatRepository.getChannelMessages().value?.get(channelID)?.messageList
-        if (messageList.isNullOrEmpty()) {
-            return arrayListOf()
-        } else {
-            return messageList
-        }
+    fun getCurrentChannelMessageObject(channelID: Double): ChannelMessageObject {
+        val messageObject = chatRepository.getChannelMessages().value?.get(channelID)
+        return messageObject ?: ChannelMessageObject(arrayListOf())
     }
 
     fun getChatHistoryCurrentChannel() {
@@ -50,10 +48,12 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
 
     fun getUserChannels() = chatRepository.getUserChannels()
 
-    fun startChannels() {
-        // Fetch all channels users has joined
-        chatRepository.fetchUserChannels()
-        chatRepository.suscribeToUserChannelListChanges()
+    fun startChannelsIfNecessary() {
+        if (chatRepository.getUserChannels().value.isNullOrEmpty()) {
+            // Fetch all channels users has joined
+            chatRepository.fetchUserChannels()
+            chatRepository.suscribeToUserChannelListChanges()
+        }
     }
 
 

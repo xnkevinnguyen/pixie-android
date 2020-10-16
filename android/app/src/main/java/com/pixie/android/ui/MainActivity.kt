@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         //Start channel subscriptions
         val factory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
-        chatViewModel.startChannels()
+        chatViewModel.startChannelsIfNecessary()
         super.onPostCreate(savedInstanceState)
     }
 
@@ -138,8 +138,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         return
     }
-
-    override  fun onDestroy() {
+    override fun onDestroy() {
         // stop channel subscriptions
         val factory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
@@ -149,10 +148,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         super.onDestroy()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
 }

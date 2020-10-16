@@ -6,11 +6,12 @@
     android:background="?color"
     android:clipToPadding="false"
     android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
     <Button
         android:id="@+id/load_chat_history"
         android:text="@string/load_chat_history"
-        android:background="@color/colorTertiary"
+        android:background="?colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         />
@@ -27,7 +28,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="580dp"
                 android:layout_weight="2"
-                android:divider="#fff" />
+                android:divider="#fff"
+                android:transcriptMode="normal"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

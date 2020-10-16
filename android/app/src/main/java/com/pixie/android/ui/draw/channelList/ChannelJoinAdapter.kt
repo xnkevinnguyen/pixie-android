@@ -54,9 +54,9 @@ class ChannelJoinAdapter(context: Context) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val channel: ChannelData = listChannelJoin[position]
         val rowView = inflater.inflate(R.layout.join_channel_row, parent, false)
-        val channelId = rowView.findViewById<TextView>(R.id.channel_id)
+        val channelId = rowView.findViewById<TextView>(R.id.channel_size)
         val channelName = rowView.findViewById<TextView>(R.id.channel_name)
-        channelId.text = channel.channelID.toString()
+        channelId.text = channel.nParticipant?.toString()
         channelName.text = channel.channelName
 
         val joinBtn = rowView.findViewById<Button>(R.id.join_btn)
