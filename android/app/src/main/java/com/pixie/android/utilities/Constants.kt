@@ -11,6 +11,7 @@ class Constants {
         const val SHARED_PREFERENCES_SETTING="Setting"
         const val THEME="Theme"
         const val LANGUAGE="Language"
+        const val NOTIFICATION = "Notification"
         const val SHARED_PREFERENCES_GAME="Game"
         const val GAME_DIFF = "Game difficulty"
         const val GAME_MODE = "Game mode"
