@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.canvas_fragment.*
+import kotlinx.android.synthetic.main.draw_fragment.*
 
 class CanvasFragment : Fragment() {
     override fun onCreateView(
@@ -40,6 +41,7 @@ class CanvasFragment : Fragment() {
         val factory = InjectorUtils.provideCanvasViewModelFactory()
         val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
 
+        my_canvas.setViewModel(viewModel)
         viewModel.getPrimaryColor().observe(viewLifecycleOwner, Observer {
             my_canvas.drawColor = it.toArgb()
             my_canvas.reinitializeDrawingParameters()
@@ -48,9 +50,6 @@ class CanvasFragment : Fragment() {
         viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
 
             my_canvas.drawFromCommandList(it)
-        })
-        my_canvas.completedCommand.observe(viewLifecycleOwner, Observer {
-            viewModel.addCommandToHistory(it)
         })
 
         viewModel.getStrokeWidth().observe(viewLifecycleOwner, Observer {
