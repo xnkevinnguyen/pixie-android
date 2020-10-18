@@ -2,30 +2,34 @@ package com.pixie.android.data.draw
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pixie.android.model.draw.DrawCommand
+import com.pixie.android.model.draw.CanvasCommand
+import com.pixie.android.model.draw.CommandType
 import java.util.*
 
-class DrawCommandHistoryRepository {
-    private var drawCommandHistory = MutableLiveData<MutableList<DrawCommand>>()
-    private var undoneCommandList: Stack<DrawCommand> = Stack()
+class CanvasCommandHistoryRepostiroy {
+    private var drawCommandHistory = MutableLiveData<MutableList<CanvasCommand>>()
+    private var undoneCommandList: Stack<CanvasCommand> = Stack()
 
 
-    fun getDrawCommandHistory(): LiveData<MutableList<DrawCommand>> {
+    fun getDrawCommandHistory(): LiveData<MutableList<CanvasCommand>> {
         return drawCommandHistory
     }
 
     fun resetDrawCommandHistory() {
         val count = drawCommandHistory.value?.count()
         if(count != null && count > 0) {
-            drawCommandHistory = MutableLiveData<MutableList<DrawCommand>>()
+            drawCommandHistory = MutableLiveData<MutableList<CanvasCommand>>()
         }
         restoreUndoneCommandList()
     }
-
+    //undo
     fun popLastDrawCommandFromHistory() {
         val count = drawCommandHistory.value?.count()
         if (count != null && count > 0) {
             val commandToRemove = drawCommandHistory.value!!.removeAt(count - 1)
+            if(commandToRemove.type == CommandType.ERASE){
+                commandToRemove.reference?.isErased=false
+            }
             addUndoneCommand(commandToRemove)
             drawCommandHistory.notifyObserver()
         }
@@ -34,25 +38,30 @@ class DrawCommandHistoryRepository {
     fun popUndoneCommand() {
         if (!undoneCommandList.empty()) {
             val commandToRedo = undoneCommandList.pop()
-            addDrawCommand(commandToRedo)
+            addCanvasCommand(commandToRedo)
+            if(commandToRedo.type==CommandType.ERASE){
+                commandToRedo.reference?.isErased = true
+            }
             drawCommandHistory.notifyObserver()
         }
     }
 
 
     // Add Draw command should not notify the observer
-    fun addDrawCommand(drawCommand: DrawCommand) {
+    fun addCanvasCommand(drawCommand:CanvasCommand) {
         if (drawCommandHistory.value == null) {
             drawCommandHistory.postValue(arrayListOf(drawCommand))
-
         } else {
             drawCommandHistory.value?.add(drawCommand)
+            //erase needs a reload
+            if(drawCommand.type == CommandType.ERASE)
+                drawCommandHistory.notifyObserver()
         }
 
     }
 
     // Should not notify the observer
-    fun addUndoneCommand(command: DrawCommand) {
+    fun addUndoneCommand(command: CanvasCommand) {
         undoneCommandList.add(command)
     }
 
@@ -66,9 +75,9 @@ class DrawCommandHistoryRepository {
     // Singleton
     companion object {
         @Volatile
-        private var instance: DrawCommandHistoryRepository? = null
+        private var instance: CanvasCommandHistoryRepostiroy? = null
         fun getInstance() = instance ?: synchronized(this) {
-            instance ?: DrawCommandHistoryRepository().also {
+            instance ?: CanvasCommandHistoryRepostiroy().also {
                 instance = it
             }
         }

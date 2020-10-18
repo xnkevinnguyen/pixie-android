@@ -5,9 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import androidx.lifecycle.MutableLiveData
-import com.pixie.android.model.draw.DrawCommand
-import com.pixie.android.model.draw.PathData
+import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
 
 
@@ -15,8 +13,8 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     // Holds the path you are currently drawing.
     private var path = Path()
     var drawStroke: Float = 12f
-    var pathData= ArrayList<PathPoint>()
-    private lateinit var canvasViewModel :CanvasViewModel
+    var pathData = ArrayList<PathPoint>()
+    private lateinit var canvasViewModel: CanvasViewModel
 
 
     var drawColor: Int = 0 // Should be replaced at runtime with default BLACK value from repository
@@ -40,8 +38,9 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         if (erase) paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         else paint.xfermode = null
     }
-    fun setViewModel(viewModel: CanvasViewModel){
-        canvasViewModel=viewModel
+
+    fun setViewModel(viewModel: CanvasViewModel) {
+        canvasViewModel = viewModel
     }
 
     fun reinitializeDrawingParameters() {
@@ -58,17 +57,19 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             drawStroke
     }
 
-    fun drawFromCommandList(drawCommandList: List<DrawCommand>) {
+    fun drawFromCommandList(canvasCommandList: List<CanvasCommand>) {
 
         canvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
-        drawCommandList.forEach {
-            val pathToDraw = Path()
-            pathToDraw.moveTo(it.path.first().x1,it.path.first().y1)
-            it.path.forEach{
-                pathToDraw.quadTo(it.x1,it.y1,it.x2,it.y2)
+        canvasCommandList.forEach {
+            if (it.paint != null && it.path != null) {
+                val pathToDraw = Path()
+                pathToDraw.moveTo(it.path.first().x1, it.path.first().y1)
+                it.path.forEach {
+                    pathToDraw.quadTo(it.x1, it.y1, it.x2, it.y2)
 
+                }
+                canvas.drawPath(pathToDraw, it.paint)
             }
-            canvas.drawPath(pathToDraw, it.paint)
         }
         invalidate()
     }
@@ -93,11 +94,14 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         motionTouchEventX = event.x
         motionTouchEventY = event.y
-
+        if(!erase){//draw actions
         when (event.action) {
             MotionEvent.ACTION_DOWN -> onTouchStart()
             MotionEvent.ACTION_MOVE -> onTouchMove()
             MotionEvent.ACTION_UP -> onTouchStop()
+        }
+        }else if(erase){
+            canvasViewModel.captureEraseAction(motionTouchEventX,motionTouchEventY)
         }
         return true
     }
@@ -136,8 +140,9 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun onTouchStop() {
-
-        canvasViewModel.addCommandToHistory(DrawCommand(ArrayList(pathData), Paint(paint)))
+        if (!erase) {
+            canvasViewModel.addCommandToHistory(Paint(paint), ArrayList(pathData))
+        }
         pathData.clear()
         path.reset()
     }

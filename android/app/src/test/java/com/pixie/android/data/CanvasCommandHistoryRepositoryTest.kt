@@ -3,34 +3,34 @@ package com.pixie.android.data
 import android.graphics.Paint
 import android.graphics.Path
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.pixie.android.data.draw.DrawCommandHistoryRepository
-import com.pixie.android.model.draw.DrawCommand
+import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
+import com.pixie.android.model.draw.CanvasCommand
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
 
-class DrawCommandHistoryRepositoryTest {
+class CanvasCommandHistoryRepositoryTest {
     // Rule used to test MutableLiveData https://medium.com/pxhouse/unit-testing-with-mutablelivedata-22b3283a7819
     @Rule @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
     @Test
     fun testAddDrawCommandOnceShouldReturnListofOne(){
         //PREPARE
-        val repository:DrawCommandHistoryRepository = getRepository()
+        val repostiroy:CanvasCommandHistoryRepostiroy = getRepository()
 
         //PERFORM
-        val drawCommand = DrawCommand( Path(), Paint())
-        repository.addDrawCommand(drawCommand)
-        val result = repository.getDrawCommandHistory()
+        val drawCommand = CanvasCommand( Path(), Paint())
+        repostiroy.addCanvasCommand(drawCommand)
+        val result = repostiroy.getDrawCommandHistory()
 
 
         //CHECK
         Assert.assertEquals(result.value!!.size,1)
     }
 
-    private fun getRepository():DrawCommandHistoryRepository{
-        return DrawCommandHistoryRepository()
+    private fun getRepository():CanvasCommandHistoryRepostiroy{
+        return CanvasCommandHistoryRepostiroy()
     }
 }
