@@ -3,8 +3,6 @@ package com.pixie.android.data.draw
 import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pixie.android.model.draw.DrawCommand
-import java.util.*
 
 class DrawingParametersRepository {
 

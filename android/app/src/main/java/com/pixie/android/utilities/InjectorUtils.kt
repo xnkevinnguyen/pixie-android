@@ -1,7 +1,7 @@
 package com.pixie.android.utilities
 
 import com.pixie.android.data.chat.ChatRepository
-import com.pixie.android.data.draw.DrawCommandHistoryRepository
+import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
 import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.profile.ProfileRepository
@@ -21,7 +21,7 @@ import com.pixie.android.ui.user.register.RegisterViewModelFactory
 object InjectorUtils {
     fun provideDrawViewModelFactory(): DrawToolsViewModelFactory {
         val drawingParametersRepository = DrawingParametersRepository.getInstance()
-        val drawCommandHistoryRepository = DrawCommandHistoryRepository.getInstance()
+        val drawCommandHistoryRepository = CanvasCommandHistoryRepostiroy.getInstance()
         return DrawToolsViewModelFactory(
             drawingParametersRepository,drawCommandHistoryRepository
         )
@@ -29,7 +29,7 @@ object InjectorUtils {
 
     fun provideCanvasViewModelFactory(): CanvasViewModelFactory {
         val drawingParametersRepository = DrawingParametersRepository.getInstance()
-        val drawCommandHistoryRepository = DrawCommandHistoryRepository.getInstance()
+        val drawCommandHistoryRepository = CanvasCommandHistoryRepostiroy.getInstance()
         return CanvasViewModelFactory(
             drawingParametersRepository,drawCommandHistoryRepository
         )

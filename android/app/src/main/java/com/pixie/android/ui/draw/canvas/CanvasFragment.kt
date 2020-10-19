@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.model.draw.CommandType
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.canvas_fragment.*
 
@@ -40,17 +41,16 @@ class CanvasFragment : Fragment() {
         val factory = InjectorUtils.provideCanvasViewModelFactory()
         val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
 
+        my_canvas.setViewModel(viewModel)
         viewModel.getPrimaryColor().observe(viewLifecycleOwner, Observer {
             my_canvas.drawColor = it.toArgb()
             my_canvas.reinitializeDrawingParameters()
         })
 
         viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
-
-            my_canvas.drawFromCommandList(it)
-        })
-        my_canvas.completedCommand.observe(viewLifecycleOwner, Observer {
-            viewModel.addCommandToHistory(it)
+            // should only draw DRAW commands and remove ERASE commands
+            val filteredCommand = it.filter { !it.isErased&& it.type == CommandType.DRAW }
+            my_canvas.drawFromCommandList(filteredCommand)
         })
 
         viewModel.getStrokeWidth().observe(viewLifecycleOwner, Observer {
