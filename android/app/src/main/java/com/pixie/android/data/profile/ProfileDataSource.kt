@@ -72,7 +72,7 @@ class ProfileDataSource {
             if (gameQueryData != null) {
                 val gameData = ArrayList(gameQueryData.map {
                     var scoreList =
-                        it.scores?.map { ScoreData(it.user.username, it.tries, it.wordGuessed, it.value) }
+                        it.scores?.map { ScoreData(it.user.username, it.tries, null, it.value) }
                     if (scoreList == null) {
                         scoreList = arrayListOf()
                     }
