@@ -23,6 +23,13 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
         this.listOfParticipants.add(channelParticipant)
         notifyDataSetChanged()
     }
+
+    fun set(participantList:ArrayList<ChannelParticipant>){
+        listOfParticipants = participantList
+        notifyDataSetChanged()
+    }
+
+
     fun clear(){
         listOfParticipants.clear()
     }
@@ -42,8 +49,8 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val participant: ChannelParticipant = listOfParticipants[position]
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
-        val participantUserName = rowView.findViewById<TextView>(R.id.game_player)
-        participantUserName.text = participant.username
+        val usernameParticipant = rowView.findViewById<TextView>(R.id.participant_username)
+        usernameParticipant.text = participant.username
         return rowView
     }
 }
