@@ -5,6 +5,7 @@ import android.graphics.Path
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
 import com.pixie.android.model.draw.CanvasCommand
+import com.pixie.android.model.draw.CommandType
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -21,7 +22,7 @@ class CanvasCommandHistoryRepositoryTest {
         val repostiroy:CanvasCommandHistoryRepostiroy = getRepository()
 
         //PERFORM
-        val drawCommand = CanvasCommand( Path(), Paint())
+        val drawCommand = CanvasCommand( CommandType.DRAW, Paint())
         repostiroy.addCanvasCommand(drawCommand)
         val result = repostiroy.getDrawCommandHistory()
 
