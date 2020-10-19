@@ -115,4 +115,6 @@
     <string name="kick">Kick player</string>
     <string name="leave">Leave game</string>
     <string name="not_available">Not Available</string>
+
+    <string name="start_game">Start</string>
 </resources>

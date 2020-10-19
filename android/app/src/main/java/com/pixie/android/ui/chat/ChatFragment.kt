@@ -32,7 +32,6 @@ class ChatFragment : Fragment() {
 
         val messageAdapter = MessagingAdapter(requireContext())
         val factory = InjectorUtils.provideChatViewModelFactory()
-        val userChannelAdapter = UserChannelAdapter(requireContext())
 
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
 

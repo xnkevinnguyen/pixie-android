@@ -1,0 +1,14 @@
+mutation CreateGame($input: CreateGameInput!){
+    createGame(input:$input){
+        id
+        gameHall{
+            id,
+            name,
+            participants{
+                id
+                username
+                isOnline
+            }
+        }
+    }
+}

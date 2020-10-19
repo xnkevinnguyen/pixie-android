@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelMessageObject
-import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.chat.MessageData
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -36,7 +34,6 @@ class ChatRepository(
     private var currentChannelID = MutableLiveData<Double>().apply {
         this.postValue(MAIN_CHANNEL_ID)
     }
-
 
     fun getCurrentChannelID(): LiveData<Double> {
         return currentChannelID
@@ -122,6 +119,38 @@ class ChatRepository(
         }
 
     }
+
+    fun addUserChannels(channelData: ChannelData){
+        userChannels.value?.put(channelData.channelID, channelData)
+        userChannels.notifyObserver()
+    }
+
+//    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language):GameData? {
+//        val gameData = createGetGame(mode, difficulty, language)
+//
+//        if (gameData != null) {
+//            // suscribe to messages
+//            addUserChannelMessageSubscription(gameData.channelData)
+//            //suscribe to participant changes
+//            addUserChannelParticipantSubscription(gameData.channelData)
+//            userChannels.value?.put(gameData.channelData.channelID, gameData.channelData)
+//            userChannels.notifyObserver()
+//        } else {
+//            Log.d("ApolloException", "Error on createChannel")
+//        }
+//
+//        return gameData
+//
+//    }
+//
+//    private fun createGetGame(mode: GameMode, difficulty: GameDifficulty, language: Language): GameData? {
+//        var gameData: GameData?
+//        runBlocking {
+//            gameData =
+//                gameDataSource.createGame(mode, difficulty, language, userRepository.getUser().userId)
+//        }
+//        return gameData
+//    }
 
 
     fun suscribeToUserChannelsMessages(newUserChannels: ArrayList<ChannelData>) {

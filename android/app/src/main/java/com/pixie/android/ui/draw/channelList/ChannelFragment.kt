@@ -2,7 +2,6 @@ package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,11 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.pixie.android.EnterChannelMutation
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
-import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
 import com.pixie.android.utilities.InjectorUtils
-import kotlinx.coroutines.channels.Channel
 
 class ChannelFragment: Fragment() {
 
@@ -37,7 +33,7 @@ class ChannelFragment: Fragment() {
         val channelListElement = root.findViewById<ListView>(R.id.channels_list)
         val addBtn = root.findViewById<Button>(R.id.add_channel)
 
-        val userChannelAdapter = UserChannelAdapter(requireContext())
+        val userChannelAdapter = UserChannelAdapter(requireContext(), requireActivity())
         channelListElement.adapter = userChannelAdapter
 
         val factoryChat = InjectorUtils.provideChatViewModelFactory()

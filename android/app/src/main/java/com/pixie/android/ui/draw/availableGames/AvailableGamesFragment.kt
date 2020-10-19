@@ -11,14 +11,20 @@ import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.AvailableGame
+import com.pixie.android.type.GameDifficulty
+import com.pixie.android.type.GameMode
+import com.pixie.android.type.Language
+import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.availableGames.adapters.AvailableGamesAdapter
 import com.pixie.android.utilities.Constants
+import com.pixie.android.utilities.InjectorUtils
 
 
 class AvailableGamesFragment : Fragment() {
@@ -83,11 +89,36 @@ class AvailableGamesFragment : Fragment() {
             editorGame.putString(Constants.GAME_LANGUAGE, spinnerLanguage.selectedItem.toString())
             editorGame.apply()
 
+            val factory = InjectorUtils.provideChatViewModelFactory()
+            val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
+            val gameData = chatViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
+
+            if (gameData != null) {
+                chatViewModel.setCurrentChannelID(gameData.channelData.channelID)
+            }
+
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)
             navController.navigate(R.id.nav_home)
 
         }
         return root
     }
+
+    private fun getGameMode(): GameMode{
+        return if (preferencesGame.getString(Constants.GAME_MODE, "Free for all")== "Free for all") GameMode.FREEFORALL
+        else if(preferencesGame.getString(Constants.GAME_MODE, "Free for all")== "Solo") GameMode.SOLO
+        else GameMode.COOP
+    }
+    private fun getGameDifficulty(): GameDifficulty{
+        return if (preferencesGame.getString(Constants.GAME_DIFF, "Medium")== "Easy") GameDifficulty.EASY
+        else if(preferencesGame.getString(Constants.GAME_DIFF, "Medium")== "Medium") GameDifficulty.MEDIUM
+        else GameDifficulty.HARD
+    }
+
+    private fun getGameLanguage(): Language{
+        return if (preferencesGame.getString(Constants.GAME_LANGUAGE, "English")== "English") Language.ENGLISH
+        else Language.FRENCH
+    }
+
 
 }
