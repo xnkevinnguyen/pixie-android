@@ -26,7 +26,7 @@ class CanvasViewModel(
         var eraserTarget:ArrayList<CanvasCommand> = arrayListOf()
         commandHistory.forEach {
             if(it.type == CommandType.DRAW && it.border !=null && !it.path.isNullOrEmpty() && !it.isErased){
-                if (it.border.xMin <= x1 && x1 <=it.border.xMax && it.border.yMin<=y1 && y1<=it.border.yMax){
+//                if (it.border.xMin <= x1 && x1 <=it.border.xMax && it.border.yMin<=y1 && y1<=it.border.yMax){
                     var isContact = false
                     it.path.forEach {
 //                        if((it.x2-5) < x1 && x1<(it.x2+5) && (it.y2-5)<y1 && y1<(it.y2+5) ){
@@ -55,7 +55,7 @@ class CanvasViewModel(
                     }
 
                     if(isContact)eraserTarget.add(it)
-                }
+//                }
             }
         }
         eraserTarget.forEach{

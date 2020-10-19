@@ -110,7 +110,8 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
     private fun onEraseStart(){
 //        canvasViewModel.captureEraseAction(motionTouchEventX,motionTouchEventY,)
-
+        currentX = motionTouchEventX
+        currentY = motionTouchEventY
     }
     private fun onEraseMove(){
         canvasViewModel.captureEraseAction(currentX,currentY,motionTouchEventX,motionTouchEventY)
