@@ -13,7 +13,6 @@ query getGames{
                     username
                 }
                 tries,
-                wordGuessed,
                 value
             }
         }
