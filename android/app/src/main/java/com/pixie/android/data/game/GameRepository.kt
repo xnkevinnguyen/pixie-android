@@ -56,9 +56,9 @@ class GameRepository(private val dataSource: GameDataSource,
         }
     }
 
-    fun fetchAvailableGames(mode: GameMode, difficulty: GameDifficulty, language: Language) {
+    fun fetchAvailableGames(mode: GameMode, difficulty: GameDifficulty) {
         CoroutineScope(Dispatchers.IO).launch {
-            dataSource.getAvailableGames(mode, difficulty, language, userRepository.getUser().userId,
+            dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId,
                 onReceiveMessage = {
                 if (it != null) {
                     CoroutineScope(Dispatchers.Main).launch {
