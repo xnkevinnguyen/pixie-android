@@ -7,8 +7,20 @@ mutation CreateGame($input: CreateGameInput!){
             participants{
                 id
                 username
-                isOnline
+                isOnline,
+                avatar
             }
+        }
+        gameInfo{
+            id,
+            players{
+                id,
+                username,
+                isOnline,
+                avatar
+            }
+            mode,
+            language
         }
     }
 }

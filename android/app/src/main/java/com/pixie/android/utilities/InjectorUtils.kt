@@ -9,6 +9,7 @@ import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.draw.canvas.CanvasViewModelFactory
 import com.pixie.android.ui.chat.ChatViewModelFactory
+import com.pixie.android.ui.draw.availableGames.AvailableGamesViewModelFactory
 import com.pixie.android.ui.draw.channelList.ChannelViewModelFactory
 import com.pixie.android.ui.draw.channelList.PlayersViewModelFactory
 import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
@@ -78,6 +79,11 @@ object InjectorUtils {
     fun providePlayersViewModelFactory(): PlayersViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
         return PlayersViewModelFactory(chatRepository)
+    }
+
+    fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{
+        val gameRepository = GameRepository.getInstance()
+        return AvailableGamesViewModelFactory(gameRepository)
     }
 
 }

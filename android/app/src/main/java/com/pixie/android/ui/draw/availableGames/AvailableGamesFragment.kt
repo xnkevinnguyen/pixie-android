@@ -3,6 +3,7 @@ package com.pixie.android.ui.draw.availableGames
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +12,18 @@ import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pixie.android.R
-import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.game.AvailableGame
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.availableGames.adapters.AvailableGamesAdapter
+import com.pixie.android.ui.draw.channelList.PlayersViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
@@ -31,6 +32,7 @@ class AvailableGamesFragment : Fragment() {
 
     private lateinit var preferencesGame: SharedPreferences
     private lateinit var editorGame: SharedPreferences.Editor
+    private lateinit var availableGamesViewModel: AvailableGamesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +45,9 @@ class AvailableGamesFragment : Fragment() {
         preferencesGame = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_GAME, Context.MODE_PRIVATE)
         editorGame = preferencesGame.edit()
 
+        val factory = InjectorUtils.provideAvailableGamesViewModelFactory()
+        availableGamesViewModel = ViewModelProvider(this, factory).get(AvailableGamesViewModel::class.java)
+
         val mode = root.findViewById<TextView>(R.id.mode)
         val difficulty = root.findViewById<TextView>(R.id.level)
         val spinnerLanguage =  root.findViewById<Spinner>(R.id.spinner_language_game)
@@ -54,28 +59,25 @@ class AvailableGamesFragment : Fragment() {
         val availableGamesAdapter = AvailableGamesAdapter(requireContext())
         availableGames.adapter = availableGamesAdapter
 
-//        val list = ArrayList<ChannelParticipant>()
-//        val parti = ChannelParticipant(id= 35.0, username = "joe", isOnline = false)
-//        val parti2 = ChannelParticipant(id= 30.0, username = "Kevin", isOnline = true)
-//        list.add(parti)
-//        list.add(parti2)
-//
-//        val game = AvailableGame(mode = "Free for all", language = "ENGLISH", listPlayers = list)
-//        val game2 = AvailableGame(mode = "Free for all", language = "FRENCH", listPlayers = list)
-//        val game3 = AvailableGame(mode = "Free for all", language = "ENGLISH", listPlayers = list)
-//        val game4 = AvailableGame(mode = "Free for all", language = "FRENCH", listPlayers = list)
-//        availableGamesAdapter.add(game)
-//        availableGamesAdapter.add(game2)
-//        availableGamesAdapter.add(game3)
-//        availableGamesAdapter.add(game4)
-
         val modeType = preferencesGame.getString(Constants.GAME_MODE, "Free for all")
-
         val gameMode = "Mode: $modeType"
         mode.text = gameMode
 
-        val level = "Difficulty: " + preferencesGame.getString(Constants.GAME_DIFF, "Medium")
+        val difficultyType = preferencesGame.getString(Constants.GAME_DIFF, "Medium")
+        val level = "Difficulty: $difficultyType"
         difficulty.text = level
+
+        availableGamesViewModel.fetchAvailableGames(getGameMode(), getGameDifficulty())
+
+        val availableGamesList = availableGamesViewModel.getAvailableGames()
+
+        availableGamesAdapter.set(availableGamesList.value)
+
+        availableGamesList.observe(viewLifecycleOwner, Observer { availableGamesArray->
+            Log.d("here", "$availableGamesArray")
+            availableGamesAdapter.set(availableGamesArray)
+
+        })
 
         val itemsLang = arrayOf(resources.getString(R.string.eng), resources.getString(R.string.fr))
         val adapterLang: ArrayAdapter<String> = ArrayAdapter(
@@ -91,10 +93,10 @@ class AvailableGamesFragment : Fragment() {
 
             val factory = InjectorUtils.provideChatViewModelFactory()
             val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
-            val gameData = chatViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
+            val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
 
             if (gameData != null) {
-                chatViewModel.setCurrentChannelID(gameData.channelData.channelID)
+                chatViewModel.setCurrentChannelID(gameData.gameChannelData.channelID)
             }
 
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)

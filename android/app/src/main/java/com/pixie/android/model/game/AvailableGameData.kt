@@ -1,3 +1,5 @@
 package com.pixie.android.model.game
 
-data class AvailableGameData(val gameId:Double, val availableGame: AvailableGame)
+import com.pixie.android.model.chat.ChannelData
+
+data class AvailableGameData(val gameId:Double, val gameData: GameData, var gameChannelData: ChannelData)

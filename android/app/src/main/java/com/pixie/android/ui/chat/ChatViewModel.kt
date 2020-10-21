@@ -2,22 +2,16 @@ package com.pixie.android.ui.chat
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.sound.SoundRepository
-import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelMessageObject
-import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.chat.MessageData
-import com.pixie.android.model.game.GameData
+import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
-import java.lang.NullPointerException
 
 class ChatViewModel(private val chatRepository: ChatRepository, private val soundRepository: SoundRepository,
                     private val gameRepository: GameRepository) : ViewModel() {
@@ -57,10 +51,6 @@ class ChatViewModel(private val chatRepository: ChatRepository, private val soun
 
     fun createChannel(channelName: String) {
         return chatRepository.createChannel(channelName)
-    }
-
-    fun createGame(mode:GameMode, difficulty: GameDifficulty, language: Language): GameData?{
-        return gameRepository.createGame(mode, difficulty, language)
     }
 
     fun exitGame(gameID: Double){

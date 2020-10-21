@@ -9,22 +9,28 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.pixie.android.R
+import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.game.AvailableGame
+import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.GameData
 
 class AvailableGamesAdapter(context:Context): RecyclerView.Adapter<AvailableGamesAdapter.ViewHolder>() {
 
     val context = context
 
-    private var listOfGames = ArrayList<AvailableGame>()
+    private var listOfGames = ArrayList<AvailableGameData>()
 
-    fun add(game: AvailableGame) {
+    fun add(game: AvailableGameData) {
         this.listOfGames.add(game)
         notifyDataSetChanged()
 
     }
-    fun set(games:ArrayList<AvailableGame>){
-        listOfGames = ArrayList(games)
+    fun set(gamesList:LinkedHashMap<Double, AvailableGameData>?){
+        if(gamesList!=null) {
+            listOfGames= ArrayList(gamesList.map{
+                it.value
+            })
+        }
         notifyDataSetChanged()
     }
 
@@ -34,20 +40,20 @@ class AvailableGamesAdapter(context:Context): RecyclerView.Adapter<AvailableGame
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val game: AvailableGame = listOfGames[position]
+        val game: AvailableGameData = listOfGames[position]
         val listPlayerAdapter = PlayersInGameAdapter(context)
 
         viewHolder.gameNumber.text = "Game " + (position+1).toString()
-        viewHolder.mode.text = game.mode.rawValue
-        if(game.language.rawValue == "ENGLISH") {
+        viewHolder.mode.text = game.gameData.mode.rawValue
+        if(game.gameData.language.rawValue == "ENGLISH") {
             viewHolder.language.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_uk_flag))
         } else{
             viewHolder.language.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_flag_of_france))
         }
-        viewHolder.numPlayer.text = game.listPlayers?.size.toString()
+        viewHolder.numPlayer.text = game.gameData.listPlayers?.size.toString()
 
         viewHolder.listPlayer.adapter = listPlayerAdapter
-        listPlayerAdapter.set(ArrayList(game.listPlayers))
+        listPlayerAdapter.set(ArrayList(game.gameData.listPlayers))
 
         viewHolder.listPlayer.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->

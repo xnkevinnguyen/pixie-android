@@ -1,11 +1,12 @@
 package com.pixie.android.data.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
-import com.pixie.android.model.game.AvailableGame
+import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.GameData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
@@ -19,28 +20,35 @@ class GameRepository(private val dataSource: GameDataSource,
                      private val chatRepository: ChatRepository
 ) {
 
-    private var availableGames = MutableLiveData<LinkedHashMap<GameID, AvailableGame>>()
+    //private var availableGames = MutableLiveData<ArrayList<AvailableGameData>>()
+    private var availableGames = MutableLiveData<LinkedHashMap<GameID, AvailableGameData>>()
 
-    private var gamePlayerSubscriptions = HashMap<GameID, Job>()
+    fun getAvailableGames():LiveData<LinkedHashMap<GameID, AvailableGameData>>{
+        return availableGames
+    }
 
-    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): GameData? {
+    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): AvailableGameData? {
         val gameData = createGetGame(mode, difficulty, language)
 
         if (gameData != null) {
             // suscribe to messages
-            chatRepository.addUserChannelMessageSubscription(gameData.channelData)
+            chatRepository.addUserChannelMessageSubscription(gameData.gameChannelData)
             //suscribe to participant changes
-            chatRepository.addUserChannelParticipantSubscription(gameData.channelData)
+            chatRepository.addUserChannelParticipantSubscription(gameData.gameChannelData)
 
-            chatRepository.addUserChannels(gameData.channelData)
+            chatRepository.addUserChannels(gameData.gameChannelData)
+
+            availableGames.value?.put(gameData.gameId, gameData)
+            Log.d("here", "repos ${availableGames.value}")
+            availableGames.notifyObserver()
         } else {
             Log.d("ApolloException", "Error on createChannel")
         }
         return gameData
     }
 
-    private fun createGetGame(mode: GameMode, difficulty: GameDifficulty, language: Language): GameData? {
-        var gameData: GameData?
+    private fun createGetGame(mode: GameMode, difficulty: GameDifficulty, language: Language): AvailableGameData? {
+        var gameData: AvailableGameData?
         runBlocking {
             gameData =
                 dataSource.createGame(mode, difficulty, language, userRepository.getUser().userId)
@@ -62,11 +70,11 @@ class GameRepository(private val dataSource: GameDataSource,
                 onReceiveMessage = {
                 if (it != null) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        val availableGameMap: LinkedHashMap<Double, AvailableGame> = LinkedHashMap()
-                        it.associateByTo(availableGameMap, { it.gameId }, { it.availableGame })
-                        availableGames.postValue(availableGameMap)
-                        //suscribe to participant changes
-                        //suscribeToUserChannelsParticipants(it)
+                        val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
+                        it.associateByTo(gameMap, { it.gameId }, { it })
+                        availableGames.postValue(gameMap)
+                        //subscribe to participant changes
+                        //addAvailableGamePlayerSubscription(mode, difficulty)
                     }
                 }
             })
@@ -75,28 +83,34 @@ class GameRepository(private val dataSource: GameDataSource,
 
     }
 
-    fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
-        val subscriptionJob = CoroutineScope(Dispatchers.IO).launch {
-            dataSource.subscribeToAvailableGameChange(
-                userRepository.getUser().userId,
-                mode,
-                difficulty,
-                onChannelChange = {
-                    if (it != null) {
-                        // Main thread only used to modify values
-                        CoroutineScope(Dispatchers.Main).launch {
-                            availableGames.value?.get(it)?.participantList =
-                                it.participantList
-                            userChannels.notifyObserver()
+//    // suscribe to all joined channels participants
+//    fun suscribeToAvailableGames(mode: GameMode, difficulty: GameDifficulty) {
+//        //clear current channels subscriptions
+//        gamePlayerSubscriptions.clear()
+//        //fetch subscriptions for each channels
+//        addAvailableGamePlayerSubscription(mode, difficulty)
+//
+//    }
 
-                            val availableGameMap: LinkedHashMap<Double, Job> = LinkedHashMap()
-                            it.associateByTo(availableGameMap, { it.gameId }, { subscriptionJob })
-                        }
-                    }
-                })
-        }
-        gamePlayerSubscriptions.put(channelData.channelID, subscriptionJob)
-    }
+//    fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
+//        val subscriptionJob = CoroutineScope(Dispatchers.IO).launch {
+//            dataSource.subscribeToAvailableGameChange(
+//                userRepository.getUser().userId,
+//                mode,
+//                difficulty,
+//                onAvailableGameSessionsChange = {
+//                    if (it != null) {
+//                        // Main thread only used to modify values
+//                        CoroutineScope(Dispatchers.Main).launch {
+//                            val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
+//                            it.associateByTo(gameMap, { it.gameId }, { it })
+//                            availableGames = MutableLiveData(gameMap)
+//                            availableGames.notifyObserver()
+//                        }
+//                    }
+//                })
+//        }
+//    }
 
 
     // Singleton
@@ -110,5 +124,11 @@ class GameRepository(private val dataSource: GameDataSource,
                 instance = it
             }
         }
+    }
+
+    // Function to make sure observer is notified when a data structure is modified
+    // https://stackoverflow.com/questions/47941537/notify-observer-when-item-is-added-to-list-of-livedata
+    fun <T> MutableLiveData<T>.notifyObserver() {
+        this.value = this.value
     }
 }
