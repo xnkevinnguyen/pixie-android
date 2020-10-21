@@ -125,34 +125,6 @@ class ChatRepository(
         userChannels.notifyObserver()
     }
 
-//    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language):GameData? {
-//        val gameData = createGetGame(mode, difficulty, language)
-//
-//        if (gameData != null) {
-//            // suscribe to messages
-//            addUserChannelMessageSubscription(gameData.channelData)
-//            //suscribe to participant changes
-//            addUserChannelParticipantSubscription(gameData.channelData)
-//            userChannels.value?.put(gameData.channelData.channelID, gameData.channelData)
-//            userChannels.notifyObserver()
-//        } else {
-//            Log.d("ApolloException", "Error on createChannel")
-//        }
-//
-//        return gameData
-//
-//    }
-//
-//    private fun createGetGame(mode: GameMode, difficulty: GameDifficulty, language: Language): GameData? {
-//        var gameData: GameData?
-//        runBlocking {
-//            gameData =
-//                gameDataSource.createGame(mode, difficulty, language, userRepository.getUser().userId)
-//        }
-//        return gameData
-//    }
-
-
     fun suscribeToUserChannelsMessages(newUserChannels: ArrayList<ChannelData>) {
         //clear current channels subscriptions
         channelMessageSubscriptions.clear()

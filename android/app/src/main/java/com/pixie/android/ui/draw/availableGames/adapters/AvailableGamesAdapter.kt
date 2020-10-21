@@ -38,16 +38,16 @@ class AvailableGamesAdapter(context:Context): RecyclerView.Adapter<AvailableGame
         val listPlayerAdapter = PlayersInGameAdapter(context)
 
         viewHolder.gameNumber.text = "Game " + (position+1).toString()
-        viewHolder.mode.text = game.mode
-        if(game.language == "ENGLISH") {
+        viewHolder.mode.text = game.mode.rawValue
+        if(game.language.rawValue == "ENGLISH") {
             viewHolder.language.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_uk_flag))
         } else{
             viewHolder.language.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_flag_of_france))
         }
-        viewHolder.numPlayer.text = game.listPlayers.size.toString()
+        viewHolder.numPlayer.text = game.listPlayers?.size.toString()
 
         viewHolder.listPlayer.adapter = listPlayerAdapter
-        listPlayerAdapter.set(game.listPlayers)
+        listPlayerAdapter.set(ArrayList(game.listPlayers))
 
         viewHolder.listPlayer.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
