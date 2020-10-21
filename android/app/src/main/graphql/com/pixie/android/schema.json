@@ -319,6 +319,30 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "availableGamesWithoutCriteria",
+              "description": "Get specific available games infos",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "GameSession",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -1562,20 +1586,6 @@
                 }
               },
               "defaultValue": null
-            },
-            {
-              "name": "language",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "Language",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -2753,6 +2763,30 @@
               "deprecationReason": null
             },
             {
+              "name": "onGameSessionsChange",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "GameSession",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "onAvailableGameSessionsChange",
               "description": null,
               "args": [
@@ -3869,9 +3903,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2020-10-19T22:49:32.966Z",
-      "endTime": "2020-10-19T22:49:33.018Z",
-      "duration": 52234833,
+      "startTime": "2020-10-20T23:15:11.328Z",
+      "endTime": "2020-10-20T23:15:11.357Z",
+      "duration": 28178288,
       "execution": {
         "resolvers": []
       }
