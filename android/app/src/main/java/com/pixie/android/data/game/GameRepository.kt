@@ -73,8 +73,6 @@ class GameRepository(private val dataSource: GameDataSource,
                         val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
                         it.associateByTo(gameMap, { it.gameId }, { it })
                         availableGames.postValue(gameMap)
-                        //subscribe to participant changes
-                        //addAvailableGamePlayerSubscription(mode, difficulty)
                     }
                 }
             })
@@ -82,15 +80,6 @@ class GameRepository(private val dataSource: GameDataSource,
         }
 
     }
-
-//    // suscribe to all joined channels participants
-//    fun suscribeToAvailableGames(mode: GameMode, difficulty: GameDifficulty) {
-//        //clear current channels subscriptions
-//        gamePlayerSubscriptions.clear()
-//        //fetch subscriptions for each channels
-//        addAvailableGamePlayerSubscription(mode, difficulty)
-//
-//    }
 
 //    fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
 //        val subscriptionJob = CoroutineScope(Dispatchers.IO).launch {
