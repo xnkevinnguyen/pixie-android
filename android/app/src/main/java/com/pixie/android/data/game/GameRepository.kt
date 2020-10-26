@@ -39,6 +39,7 @@ class GameRepository(private val dataSource: GameDataSource,
             chatRepository.addUserChannels(gameData.gameChannelData)
 
             availableGames.value?.put(gameData.gameId, gameData)
+            Log.d("here", "${gameData}")
             Log.d("here", "repos ${availableGames.value}")
             availableGames.notifyObserver()
         } else {
@@ -68,14 +69,15 @@ class GameRepository(private val dataSource: GameDataSource,
         CoroutineScope(Dispatchers.IO).launch {
             dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId,
                 onReceiveMessage = {
-                if (it != null) {
                     CoroutineScope(Dispatchers.Main).launch {
                         val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
-                        it.associateByTo(gameMap, { it.gameId }, { it })
+                        if (it != null) {
+                            it.associateByTo(gameMap, { it.gameId }, { it })
+                        }
                         availableGames.postValue(gameMap)
+                        Log.d("here", "fetch ${availableGames.value}")
                     }
-                }
-            })
+                })
 
         }
 
