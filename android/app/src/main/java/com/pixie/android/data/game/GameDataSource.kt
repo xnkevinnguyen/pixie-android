@@ -71,7 +71,7 @@ class GameDataSource() {
         userId: Double,
         onReceiveMessage: (ArrayList<AvailableGameData>?) -> Unit
     ) {
-        val createAvailableGamesInput = AvailableGamesInput(mode, difficulty)
+        val createAvailableGamesInput = AvailableGamesInput(mode, difficulty, Language.ENGLISH)
         try {
             val response = apolloClient(userId).query(GetAvailableGamesQuery(createAvailableGamesInput))
                 .toDeferred().await().data

@@ -71,9 +71,7 @@ class GameRepository(private val dataSource: GameDataSource,
                 onReceiveMessage = {
                     CoroutineScope(Dispatchers.Main).launch {
                         val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
-                        if (it != null) {
-                            it.associateByTo(gameMap, { it.gameId }, { it })
-                        }
+                        it?.associateByTo(gameMap, { it.gameId }, { it })
                         availableGames.postValue(gameMap)
                         Log.d("here", "fetch ${availableGames.value}")
                     }
