@@ -7,6 +7,7 @@ import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.CreatedGameData
 import com.pixie.android.model.game.GameData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
@@ -27,7 +28,7 @@ class GameRepository(private val dataSource: GameDataSource,
         return availableGames
     }
 
-    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): AvailableGameData? {
+    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): CreatedGameData? {
         val gameData = createGetGame(mode, difficulty, language)
         Log.d("here", "game data ${gameData}")
         if (gameData != null) {
@@ -43,8 +44,8 @@ class GameRepository(private val dataSource: GameDataSource,
         return gameData
     }
 
-    private fun createGetGame(mode: GameMode, difficulty: GameDifficulty, language: Language): AvailableGameData? {
-        var gameData: AvailableGameData?
+    private fun createGetGame(mode: GameMode, difficulty: GameDifficulty, language: Language): CreatedGameData? {
+        var gameData: CreatedGameData?
         runBlocking {
             gameData =
                 dataSource.createGame(mode, difficulty, language, userRepository.getUser().userId)
@@ -62,14 +63,15 @@ class GameRepository(private val dataSource: GameDataSource,
 
     fun fetchAvailableGames(mode: GameMode, difficulty: GameDifficulty) {
         var availableGames2: ArrayList<AvailableGameData>
-//        runBlocking {
-//            availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
-//        }
         runBlocking {
-            availableGames2 = dataSource.getAvailableGamesWithoutCriteria(userRepository.getUser().userId)
+            availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
         }
+//        runBlocking {
+//            availableGames2 = dataSource.getAvailableGamesWithoutCriteria(userRepository.getUser().userId)
+//        }
         availableGames.postValue(availableGames2)
-        Log.d("here", "fetch ${availableGames.value}")
+        addAvailableGamePlayerSubscription(mode, difficulty)
+    }
 
 //        val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -84,10 +86,9 @@ class GameRepository(private val dataSource: GameDataSource,
 //        }
 //        availableGames.postValue(gameMap)
 //        Log.d("here", "fetch2 ${availableGames.value}")
-    }
 
     fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
-        val subscriptionJob = CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToAvailableGameChange(
                 userRepository.getUser().userId,
                 mode,

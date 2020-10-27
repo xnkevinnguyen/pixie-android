@@ -9,13 +9,14 @@ import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.GameData
 import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.CreatedGameData
 import com.pixie.android.type.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
 
 class GameDataSource() {
-    suspend fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language, userId: Double): AvailableGameData? {
+    suspend fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language, userId: Double): CreatedGameData? {
 
         val createGameInput = CreateGameInput(mode, difficulty , language)
         try {
@@ -38,7 +39,7 @@ class GameDataSource() {
                     playersList = arrayListOf()
                 }
                 val gameData = GameData(data.gameInfo.mode, data.gameInfo.language, playersList)
-                return AvailableGameData(
+                return CreatedGameData(
                     data.id,
                     gameData,
                     gameChannelData
@@ -75,23 +76,21 @@ class GameDataSource() {
             val response = apolloClient(userId).query(GetAvailableGamesQuery(createAvailableGamesInput))
                 .toDeferred().await().data
             val availableGamesQueryData = response?.availableGames
-            Log.d("here", "response ${response}")
             if (availableGamesQueryData != null) {
                 val availableGamesData = ArrayList(availableGamesQueryData.map {
-                    var participantList = it.gameHall.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
-                    if (participantList == null) {
-                        participantList = arrayListOf()
-                    }
-                    val gameChannelData = ChannelData(it.gameHall.id, it.gameHall.name, participantList, nParticipant = null)
+//                    var participantList = it.gameHall.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
+//                    if (participantList == null) {
+//                        participantList = arrayListOf()
+//                    }
+//                    val gameChannelData = ChannelData(it.gameHall.id, it.gameHall.name, participantList, nParticipant = null)
 
                     var playersList = it.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
                     if (playersList == null) {
                         playersList = arrayListOf()
                     }
                     val availableGame = GameData(it.gameInfo.mode, it.gameInfo.language, playersList)
-                    AvailableGameData(it.id, availableGame, gameChannelData)
+                    AvailableGameData(it.id, availableGame)
                 })
-                Log.d("here", "data source ${availableGamesData}")
                 return availableGamesData
             }
         } catch (e: ApolloException) {
@@ -112,18 +111,18 @@ class GameDataSource() {
             Log.d("here", "response $response")
             if (availableGamesQueryData != null) {
                 val availableGamesData = ArrayList(availableGamesQueryData.map {
-                    var participantList = it.gameHall.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
-                    if (participantList == null) {
-                        participantList = arrayListOf()
-                    }
-                    val gameChannelData = ChannelData(it.gameHall.id, it.gameHall.name, participantList, nParticipant = null)
+//                    var participantList = it.gameHall.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
+//                    if (participantList == null) {
+//                        participantList = arrayListOf()
+//                    }
+//                    val gameChannelData = ChannelData(it.gameHall.id, it.gameHall.name, participantList, nParticipant = null)
 
                     var playersList = it.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
                     if (playersList == null) {
                         playersList = arrayListOf()
                     }
                     val availableGame = GameData(it.gameInfo.mode, it.gameInfo.language, playersList)
-                    AvailableGameData(it.id, availableGame, gameChannelData)
+                    AvailableGameData(it.id, availableGame)
                 })
                 Log.d("here", "data source ${availableGamesData}")
                 return availableGamesData
@@ -154,12 +153,12 @@ class GameDataSource() {
 
                     val availableGamesData = ArrayList(data.map {
 
-                        var gameChannelParticipant = it.gameHall.participants?.map {
-                            ChannelParticipant(it.id, it.username, it.isOnline)
-                        }
-                        if (gameChannelParticipant == null) {
-                            gameChannelParticipant = arrayListOf()
-                        }
+//                        var gameChannelParticipant = it.gameHall.participants?.map {
+//                            ChannelParticipant(it.id, it.username, it.isOnline)
+//                        }
+//                        if (gameChannelParticipant == null) {
+//                            gameChannelParticipant = arrayListOf()
+//                        }
 
                         var gamePlayers = it.gameInfo.players?.map {
                             ChannelParticipant(it.id, it.username, it.isOnline)
@@ -167,14 +166,14 @@ class GameDataSource() {
                         if (gamePlayers == null) {
                             gamePlayers = arrayListOf()
                         }
-                        val gameChannelData = ChannelData(
-                            it.gameHall.id,
-                            it.gameHall.name,
-                            gameChannelParticipant, nParticipant = null
-                        )
+//                        val gameChannelData = ChannelData(
+//                            it.gameHall.id,
+//                            it.gameHall.name,
+//                            gameChannelParticipant, nParticipant = null
+//                        )
 
                         val gameInfo = GameData(it.gameInfo.mode, it.gameInfo.language, gamePlayers)
-                        AvailableGameData(it.id, gameInfo, gameChannelData)
+                        AvailableGameData(it.id, gameInfo)//, gameChannelData)
                     })
                     onAvailableGameSessionsChange(availableGamesData)
                 } else {

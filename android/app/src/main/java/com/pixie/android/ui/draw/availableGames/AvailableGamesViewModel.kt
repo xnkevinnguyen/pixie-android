@@ -6,13 +6,14 @@ import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.CreatedGameData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
 
 class AvailableGamesViewModel(private val gameRepository: GameRepository) : ViewModel() {
 
-    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): AvailableGameData?{
+    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): CreatedGameData?{
         return gameRepository.createGame(mode, difficulty, language)
     }
 
