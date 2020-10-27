@@ -56,8 +56,14 @@ class ChannelFragment: Fragment() {
                 }
             }
 
-            if(lobbyGamePresent) startGameBtn.visibility = View.VISIBLE
-            else startGameBtn.visibility = View.GONE
+            if(lobbyGamePresent){
+                startGameBtn.visibility = View.VISIBLE
+                addPlayerBtn.visibility = View.VISIBLE
+            }
+            else {
+                startGameBtn.visibility = View.GONE
+                addPlayerBtn.visibility = View.GONE
+            }
         })
 
         val currentChannelID = chatViewModel.getCurrentChannelID()
