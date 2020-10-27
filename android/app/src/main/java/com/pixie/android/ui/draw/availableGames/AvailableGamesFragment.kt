@@ -74,7 +74,7 @@ class AvailableGamesFragment : Fragment() {
         availableGamesAdapter.set(availableGamesList.value)
 
         availableGamesList.observe(viewLifecycleOwner, Observer { availableGamesArray->
-            Log.d("here", "$availableGamesArray")
+            Log.d("here", "fragment $availableGamesArray")
             availableGamesAdapter.set(availableGamesArray)
 
         })

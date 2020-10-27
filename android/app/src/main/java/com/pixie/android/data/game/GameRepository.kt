@@ -20,10 +20,10 @@ class GameRepository(private val dataSource: GameDataSource,
                      private val chatRepository: ChatRepository
 ) {
 
-    //private var availableGames = MutableLiveData<ArrayList<AvailableGameData>>()
-    private var availableGames = MutableLiveData<LinkedHashMap<GameID, AvailableGameData>>()
+    private var availableGames = MutableLiveData<ArrayList<AvailableGameData>>()
+    //private var availableGames = MutableLiveData<LinkedHashMap<GameID, AvailableGameData>>()
 
-    fun getAvailableGames():LiveData<LinkedHashMap<GameID, AvailableGameData>>{
+    fun getAvailableGames():LiveData<ArrayList<AvailableGameData>>{
         return availableGames
     }
 
@@ -37,11 +37,6 @@ class GameRepository(private val dataSource: GameDataSource,
             chatRepository.addUserChannelParticipantSubscription(gameData.gameChannelData)
 
             chatRepository.addUserChannels(gameData.gameChannelData)
-
-            availableGames.value?.put(gameData.gameId, gameData)
-            Log.d("here", "${gameData}")
-            Log.d("here", "repos ${availableGames.value}")
-            availableGames.notifyObserver()
         } else {
             Log.d("ApolloException", "Error on createChannel")
         }
@@ -66,19 +61,26 @@ class GameRepository(private val dataSource: GameDataSource,
     }
 
     fun fetchAvailableGames(mode: GameMode, difficulty: GameDifficulty) {
-        CoroutineScope(Dispatchers.IO).launch {
-            dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId,
-                onReceiveMessage = {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
-                        it?.associateByTo(gameMap, { it.gameId }, { it })
-                        availableGames.postValue(gameMap)
-                        Log.d("here", "fetch ${availableGames.value}")
-                    }
-                })
-
+        var availableGames2: ArrayList<AvailableGameData>
+        runBlocking {
+            availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
         }
+        availableGames.postValue(availableGames2)
+        Log.d("here", "fetch ${availableGames.value}")
 
+//        val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
+//        CoroutineScope(Dispatchers.IO).launch {
+//            dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId,
+//                onReceiveMessage = {
+//                    CoroutineScope(Dispatchers.Main).launch {
+//                        Log.d("here", "it ${it}")
+//                        it?.associateByTo(gameMap, { it.gameId }, { it })
+//                        Log.d("here", "fetch ${availableGames.value}")
+//                    }
+//                })
+//        }
+//        availableGames.postValue(gameMap)
+//        Log.d("here", "fetch2 ${availableGames.value}")
     }
 
 //    fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {

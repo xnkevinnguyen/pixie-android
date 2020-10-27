@@ -25,11 +25,9 @@ class AvailableGamesAdapter(context:Context): RecyclerView.Adapter<AvailableGame
         notifyDataSetChanged()
 
     }
-    fun set(gamesList:LinkedHashMap<Double, AvailableGameData>?){
+    fun set(gamesList:ArrayList<AvailableGameData>?){
         if(gamesList!=null) {
-            listOfGames= ArrayList(gamesList.map{
-                it.value
-            })
+            listOfGames= gamesList
         }
         notifyDataSetChanged()
     }

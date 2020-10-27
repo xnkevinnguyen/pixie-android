@@ -24,7 +24,6 @@ class GameDataSource() {
                     .await()
             val data = response.data?.createGame
             if (data != null) {
-
                 var gameParticipant = data.gameHall.participants?.map {
                     ChannelParticipant(it.id, it.username, it.isOnline)
                 }
@@ -68,14 +67,15 @@ class GameDataSource() {
     suspend fun getAvailableGames(
         mode: GameMode,
         difficulty: GameDifficulty,
-        userId: Double,
-        onReceiveMessage: (ArrayList<AvailableGameData>?) -> Unit
-    ) {
+        userId: Double
+//        onReceiveMessage: (ArrayList<AvailableGameData>?) -> Unit
+    ): ArrayList<AvailableGameData> {
         val createAvailableGamesInput = AvailableGamesInput(mode, difficulty, Language.ENGLISH)
         try {
             val response = apolloClient(userId).query(GetAvailableGamesQuery(createAvailableGamesInput))
                 .toDeferred().await().data
             val availableGamesQueryData = response?.availableGames
+            Log.d("here", "query data ${availableGamesQueryData}")
             if (availableGamesQueryData != null) {
                 val availableGamesData = ArrayList(availableGamesQueryData.map {
                     var participantList = it.gameHall.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
@@ -91,14 +91,15 @@ class GameDataSource() {
                     val availableGame = GameData(it.gameInfo.mode, it.gameInfo.language, playersList)
                     AvailableGameData(it.id, availableGame, gameChannelData)
                 })
-
-                onReceiveMessage(availableGamesData)
+                Log.d("here", "data source ${availableGamesData}")
+                return availableGamesData
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
 
         }
-        Log.d("ApolloException", "Error fetching user channels")
+        Log.d("ApolloException", "Error fetching available games")
+        return arrayListOf()
     }
 
     suspend fun subscribeToAvailableGameChange(
