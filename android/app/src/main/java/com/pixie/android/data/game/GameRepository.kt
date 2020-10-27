@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.user.UserRepository
+import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.CreatedGameData
@@ -104,6 +105,7 @@ class GameRepository(private val dataSource: GameDataSource,
                 })
         }
     }
+
 
 
     // Singleton

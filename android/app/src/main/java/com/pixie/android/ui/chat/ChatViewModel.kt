@@ -5,8 +5,11 @@ import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.data.game.GameID
 import com.pixie.android.data.game.GameRepository
+import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.data.sound.SoundRepository
+import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelMessageObject
 import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.type.GameDifficulty
@@ -14,7 +17,7 @@ import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
 
 class ChatViewModel(private val chatRepository: ChatRepository, private val soundRepository: SoundRepository,
-                    private val gameRepository: GameRepository) : ViewModel() {
+                    private val gameRepository: GameRepository,private val gameSessionRepository: GameSessionRepository) : ViewModel() {
 
     fun getCurrentChannelID(): LiveData<Double> = chatRepository.getCurrentChannelID()
 
@@ -82,6 +85,10 @@ class ChatViewModel(private val chatRepository: ChatRepository, private val soun
         if (channelID != null) {
             chatRepository.sendMessage(channelID, message)
         }
+    }
+
+    fun startGameSession(gameID: GameID, onResult:(RequestResult)->Unit){
+        gameSessionRepository.startGame(gameID, onResult)
     }
 
 }

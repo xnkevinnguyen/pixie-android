@@ -4,6 +4,7 @@ import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
 import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.game.GameRepository
+import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.data.profile.ProfileRepository
 import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.data.user.UserRepository
@@ -13,6 +14,7 @@ import com.pixie.android.ui.draw.availableGames.AvailableGamesViewModelFactory
 import com.pixie.android.ui.draw.channelList.ChannelViewModelFactory
 import com.pixie.android.ui.draw.channelList.PlayersViewModelFactory
 import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
+import com.pixie.android.ui.draw.gameInformation.GameInformationViewModelFactory
 import com.pixie.android.ui.user.login.LoginViewModelFactory
 import com.pixie.android.ui.draw.home.HomeViewModelFactory
 import com.pixie.android.ui.draw.profile.ProfileViewModelFactory
@@ -68,7 +70,8 @@ object InjectorUtils {
         val chatRepository = ChatRepository.getInstance()
         val soundRepository = SoundRepository.getInstance()
         val gameRepository = GameRepository.getInstance()
-        return ChatViewModelFactory(chatRepository, soundRepository, gameRepository)
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return ChatViewModelFactory(chatRepository, soundRepository, gameRepository, gameSessionRepository)
     }
 
     fun provideChannelViewModelFactory(): ChannelViewModelFactory {
@@ -84,6 +87,11 @@ object InjectorUtils {
     fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{
         val gameRepository = GameRepository.getInstance()
         return AvailableGamesViewModelFactory(gameRepository)
+    }
+
+    fun provideGameInformationViewModelFactory():GameInformationViewModelFactory{
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return GameInformationViewModelFactory(gameSessionRepository)
     }
 
 }

@@ -1,0 +1,32 @@
+subscription OnGameSessionChange($gameSessionId:Float!){
+    onGameSessionChange(gameSessionId:$gameSessionId){
+        id
+        currentDrawerId
+        currentWord
+        currentRound
+        status
+        gameHall{
+            id
+            name
+            isLobby
+            participants{
+                username
+            }
+            messages{
+                sender{
+                    username
+                }
+                content
+            }
+        }
+        gameInfo{
+            id
+
+            players{
+                id
+                username
+                isOnline
+            }
+        }
+    }
+}

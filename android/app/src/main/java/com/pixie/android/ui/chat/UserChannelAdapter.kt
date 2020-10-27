@@ -30,7 +30,7 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
     val context = context
     val activity = activity
     private var channelList = ArrayList<ChannelData>()
-    private var channelIdSelected:Double = 1.0
+    private var channelIdSelected:Double = Constants.MAIN_CHANNEL_ID
     private var channelUnread = ArrayList<Double>()
 
     fun setChannelIdSelected(id:Double){
@@ -73,13 +73,10 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
         val rowView = inflater.inflate(R.layout.user_channel_row_, parent, false)
         val exit = rowView.findViewById<TextView>(R.id.exit_channel)
         val startGame = rowView.findViewById<TextView>(R.id.start_game)
-        if(channel.channelID == 1.0){
+        if(channel.channelID == Constants.MAIN_CHANNEL_ID){
             exit.visibility = View.GONE
         }
 
-        if(channel.gameID != -1.0){
-            startGame.visibility = View.VISIBLE
-        }
 
         val badge = rowView.findViewById<ImageView>(R.id.chat_notification_badge)
         if(channelIdSelected == channel.channelID){
@@ -95,16 +92,26 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
 
         exit.setOnClickListener {
             chatViewModel.exitChannel(channel.channelID)
-            if(channel.gameID != -1.0){
-                chatViewModel.exitGame(channel.gameID)
+            val gameID = channel.gameID
+            if(gameID != null){
+                chatViewModel.exitGame(gameID)
             }
         }
 
-        startGame.setOnClickListener {
-            val navController = findNavController(activity, R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_drawing)
-        }
+        // applicable to channels hosting a game
+        val gameID =channel.gameID
+        if(gameID != null){
+            startGame.visibility = View.VISIBLE
+            startGame.setOnClickListener {
+                chatViewModel.startGameSession(gameID) {
+                    if (it.isSuccess) {
+                        val navController = findNavController(activity, R.id.nav_host_fragment)
+                        navController.navigate(R.id.nav_drawing)
+                    }
+                }
 
+            }
+        }
         val channelName = rowView.findViewById<TextView>(R.id.channel_name)
         channelName.text = channel.channelName
 
