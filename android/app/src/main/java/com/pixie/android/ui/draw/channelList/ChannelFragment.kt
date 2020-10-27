@@ -49,13 +49,23 @@ class ChannelFragment: Fragment() {
 
         userChannels.observe(viewLifecycleOwner, Observer { userChannelList->
             userChannelAdapter.set(userChannelList)
+            var lobbyGamePresent = false
+            for(channel in userChannelList){
+                if(channel.value.gameID != -1.0){
+                    lobbyGamePresent = true
+                }
+            }
 
+            if(lobbyGamePresent) startGameBtn.visibility = View.VISIBLE
+            else startGameBtn.visibility = View.GONE
         })
+
         val currentChannelID = chatViewModel.getCurrentChannelID()
         currentChannelID.observe(viewLifecycleOwner, Observer { id->
             userChannelAdapter.setChannelIdSelected(id)
 
         })
+
         //start game
         startGameBtn.setOnClickListener {
             val navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
