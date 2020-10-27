@@ -96,7 +96,7 @@ class GameRepository(private val dataSource: GameDataSource,
                     if (it != null) {
                         // Main thread only used to modify values
                         CoroutineScope(Dispatchers.Main).launch {
-                            availableGames = MutableLiveData(it)
+                            availableGames.value = it
                             availableGames.notifyObserver()
                         }
                     }
