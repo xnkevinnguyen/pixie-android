@@ -2,10 +2,10 @@ package com.pixie.android.ui.chat
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
-import com.pixie.android.data.game.GameID
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.data.sound.SoundRepository
@@ -87,7 +87,7 @@ class ChatViewModel(private val chatRepository: ChatRepository, private val soun
         }
     }
 
-    fun startGameSession(gameID: GameID, onResult:(RequestResult)->Unit){
+    fun startGameSession(gameID: Double, onResult:(RequestResult)->Unit){
         gameSessionRepository.startGame(gameID, onResult)
     }
 

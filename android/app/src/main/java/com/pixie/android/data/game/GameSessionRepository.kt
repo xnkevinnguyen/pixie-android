@@ -25,7 +25,7 @@ class GameSessionRepository (
     fun getGameSession()=gameSession
 
 
-    fun startGame(gameID:GameID, onResult:(RequestResult)->Unit){
+    fun startGame(gameID:Double, onResult:(RequestResult)->Unit){
         CoroutineScope(Dispatchers.IO).launch{
             val gameSessionStarted = dataSource.startGame(gameID,userRepository.getUser().userId);
             if(gameSessionStarted !=null){
@@ -40,7 +40,7 @@ class GameSessionRepository (
             }
         }
     }
-    fun subscribeToTimer(gameID: GameID){
+    fun subscribeToTimer(gameID: Double){
         val job = CoroutineScope(Dispatchers.IO).launch {
             dataSource.suscribeToTimer(gameID,userRepository.getUser().userId){
                 CoroutineScope(Dispatchers.Main).launch {
@@ -52,7 +52,7 @@ class GameSessionRepository (
         gameSubscriptions.add(job)
     }
 
-    fun subscribeToGameSessionChange(gameID: GameID){
+    fun subscribeToGameSessionChange(gameID: Double){
         val job = CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToGameSessionChange(gameID,userRepository.getUser().userId){
                 CoroutineScope(Dispatchers.Main).launch {

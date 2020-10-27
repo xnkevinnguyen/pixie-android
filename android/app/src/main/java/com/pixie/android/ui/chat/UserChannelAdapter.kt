@@ -72,11 +72,10 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
         val channel: ChannelData = channelList[position]
         val rowView = inflater.inflate(R.layout.user_channel_row_, parent, false)
         val exit = rowView.findViewById<TextView>(R.id.exit_channel)
-        val startGame = rowView.findViewById<TextView>(R.id.start_game)
+
         if(channel.channelID == Constants.MAIN_CHANNEL_ID){
             exit.visibility = View.GONE
         }
-
 
         val badge = rowView.findViewById<ImageView>(R.id.chat_notification_badge)
         if(channelIdSelected == channel.channelID){
@@ -98,20 +97,7 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
             }
         }
 
-        // applicable to channels hosting a game
-        val gameID =channel.gameID
-        if(gameID != null){
-            startGame.visibility = View.VISIBLE
-            startGame.setOnClickListener {
-                chatViewModel.startGameSession(gameID) {
-                    if (it.isSuccess) {
-                        val navController = findNavController(activity, R.id.nav_host_fragment)
-                        navController.navigate(R.id.nav_drawing)
-                    }
-                }
 
-            }
-        }
         val channelName = rowView.findViewById<TextView>(R.id.channel_name)
         channelName.text = channel.channelName
 

@@ -56,7 +56,7 @@ class AvailableGamesFragment : Fragment() {
         val availableGames = root.findViewById<RecyclerView>(R.id.available_games)
         availableGames.layoutManager = layoutManager
 
-        val availableGamesAdapter = AvailableGamesAdapter(requireContext())
+        val availableGamesAdapter = AvailableGamesAdapter(requireContext(), requireActivity())
         availableGames.adapter = availableGamesAdapter
 
         val modeType = preferencesGame.getString(Constants.GAME_MODE, "Free for all")
@@ -74,7 +74,6 @@ class AvailableGamesFragment : Fragment() {
         availableGamesAdapter.set(availableGamesList.value)
 
         availableGamesList.observe(viewLifecycleOwner, Observer { availableGamesArray->
-            Log.d("here", "fragment $availableGamesArray")
             availableGamesAdapter.set(availableGamesArray)
 
         })
@@ -91,8 +90,8 @@ class AvailableGamesFragment : Fragment() {
             editorGame.putString(Constants.GAME_LANGUAGE, spinnerLanguage.selectedItem.toString())
             editorGame.apply()
 
-            val factory = InjectorUtils.provideChatViewModelFactory()
-            val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
+            val chatFactory = InjectorUtils.provideChatViewModelFactory()
+            val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
             val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
 
             if (gameData != null) {
@@ -101,7 +100,6 @@ class AvailableGamesFragment : Fragment() {
 
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)
             navController.navigate(R.id.nav_home)
-
         }
         return root
     }

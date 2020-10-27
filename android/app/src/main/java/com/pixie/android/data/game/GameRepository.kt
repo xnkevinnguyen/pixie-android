@@ -15,15 +15,12 @@ import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
 import kotlinx.coroutines.*
 
-typealias GameID = Double
-
 class GameRepository(private val dataSource: GameDataSource,
                      private val userRepository: UserRepository,
                      private val chatRepository: ChatRepository
 ) {
 
     private var availableGames = MutableLiveData<ArrayList<AvailableGameData>>()
-    //private var availableGames = MutableLiveData<LinkedHashMap<GameID, AvailableGameData>>()
 
     fun getAvailableGames():LiveData<ArrayList<AvailableGameData>>{
         return availableGames
@@ -31,7 +28,7 @@ class GameRepository(private val dataSource: GameDataSource,
 
     fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): CreatedGameData? {
         val gameData = createGetGame(mode, difficulty, language)
-        Log.d("here", "game data ${gameData}")
+        Log.d("here", "created game data $gameData")
         if (gameData != null) {
             // suscribe to messages
             chatRepository.addUserChannelMessageSubscription(gameData.gameChannelData)
@@ -67,28 +64,11 @@ class GameRepository(private val dataSource: GameDataSource,
         runBlocking {
             availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
         }
-//        runBlocking {
-//            availableGames2 = dataSource.getAvailableGamesWithoutCriteria(userRepository.getUser().userId)
-//        }
         availableGames.postValue(availableGames2)
         addAvailableGamePlayerSubscription(mode, difficulty)
     }
 
-//        val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
-//        CoroutineScope(Dispatchers.IO).launch {
-//            dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId,
-//                onReceiveMessage = {
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        Log.d("here", "it ${it}")
-//                        it?.associateByTo(gameMap, { it.gameId }, { it })
-//                        Log.d("here", "fetch ${availableGames.value}")
-//                    }
-//                })
-//        }
-//        availableGames.postValue(gameMap)
-//        Log.d("here", "fetch2 ${availableGames.value}")
-
-    fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
+    private fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
         CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToAvailableGameChange(
                 userRepository.getUser().userId,
@@ -104,6 +84,30 @@ class GameRepository(private val dataSource: GameDataSource,
                     }
                 })
         }
+    }
+
+    fun joinGame(gameID: Double):CreatedGameData? {
+        //enter game
+        val gameData = enterGame(gameID)
+        if (gameData != null) {
+            chatRepository.addUserChannelMessageSubscription(gameData.gameChannelData)
+            //suscribe to participant changes
+            chatRepository.addUserChannelParticipantSubscription(gameData.gameChannelData)
+
+            chatRepository.addUserChannels(gameData.gameChannelData)
+        } else {
+            Log.d("ApolloException", "Error on joinChannel")
+        }
+        return gameData
+    }
+
+    fun enterGame(gameID: Double): CreatedGameData? {
+        var gameData: CreatedGameData?
+        runBlocking {
+            gameData =
+                dataSource.enterGame(gameID, userRepository.getUser().userId)
+        }
+        return gameData
     }
 
 

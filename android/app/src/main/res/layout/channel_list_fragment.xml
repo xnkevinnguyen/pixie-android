@@ -26,7 +26,7 @@
         <ListView
             android:id="@+id/channels_list"
             android:layout_width="match_parent"
-            android:layout_height="515dp"
+            android:layout_height="420dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:scrollHorizontally="false"
@@ -35,17 +35,51 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/add_channel"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="?colorPrimary"
-        android:text="@string/add_channel"
-        android:textAlignment="center"
-        android:textSize="15dp"
-        android:layout_alignParentBottom="true"/>
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/start_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?colorPrimary"
+            android:text="@string/start_game"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/add_players"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?colorPrimary"
+            android:text="@string/add_players"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/add_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?colorPrimary"
+            android:text="@string/add_channel"
+            android:textAlignment="center"
+            android:textSize="15dp" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
 
 class GameSessionDataSource {
-    suspend fun startGame( gameID: GameID,userID: Double):GameSessionData?{
+    suspend fun startGame( gameID: Double,userID: Double):GameSessionData?{
         val startGameInput = StartGameInput(gameID)
         try{
             val response = apolloClient(userID).mutate(StartGameMutation(startGameInput)).toDeferred()
@@ -38,7 +38,7 @@ class GameSessionDataSource {
     }
 
     suspend fun suscribeToTimer(
-        gameSessionID:GameID,
+        gameSessionID:Double,
         userID: Double,
         onTimerChange:(Double)->Unit
     ){
@@ -54,7 +54,7 @@ class GameSessionDataSource {
             }
     }
     suspend fun subscribeToGameSessionChange(
-        gameSessionID:GameID,
+        gameSessionID:Double,
         userID: Double,
         onGameSessionChange:(GameSessionData)->Unit
     ){
