@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.CreatedGameData
 import com.pixie.android.model.game.GameData
@@ -14,12 +15,24 @@ import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
 import kotlinx.coroutines.*
 
+typealias GameID = Double
 class GameRepository(private val dataSource: GameDataSource,
                      private val userRepository: UserRepository,
                      private val chatRepository: ChatRepository
 ) {
 
     private var availableGames = MutableLiveData<ArrayList<AvailableGameData>>()
+    private var userChannels = MutableLiveData<LinkedHashMap<GameID, AvailableGameData>>()
+    private var listPlayer = MutableLiveData<ArrayList<ChannelParticipant>>().apply { this.postValue(
+        arrayListOf()) }
+
+    fun getListPlayers(gameID: Double):LiveData<ArrayList<ChannelParticipant>>{
+        val players = userChannels.value?.get(gameID)?.gameData?.listPlayers
+        if(players != null){
+            listPlayer.postValue(ArrayList(players))
+        }
+        return listPlayer
+    }
 
     fun getAvailableGames():LiveData<ArrayList<AvailableGameData>>{
         return availableGames
@@ -27,7 +40,6 @@ class GameRepository(private val dataSource: GameDataSource,
 
     fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): CreatedGameData? {
         val gameData = createGetGame(mode, difficulty, language)
-        Log.d("here", "created game data $gameData")
         if (gameData != null) {
             // suscribe to messages
             chatRepository.addUserChannelMessageSubscription(gameData.gameChannelData)
@@ -64,10 +76,13 @@ class GameRepository(private val dataSource: GameDataSource,
             availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
         }
         availableGames.postValue(availableGames2)
-        addAvailableGamePlayerSubscription(mode, difficulty)
+//        val channelMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
+//        availableGames2.associateByTo(channelMap, { it.gameId }, { it })
+//        userChannels.postValue(channelMap)
+        availableGamesSubscription(mode, difficulty)
     }
 
-    private fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
+    private fun availableGamesSubscription(mode: GameMode, difficulty: GameDifficulty) {
         CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToAvailableGameChange(
                 userRepository.getUser().userId,

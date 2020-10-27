@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
 import com.pixie.android.utilities.InjectorUtils
@@ -56,6 +57,7 @@ class ChannelFragment: Fragment() {
                     startGameBtn.visibility = View.VISIBLE
                     addPlayerBtn.visibility = View.VISIBLE
                 } else {
+                    Log.d("here", "chan ${currentChannel.participantList}")
                     startGameBtn.visibility = View.GONE
                     addPlayerBtn.visibility = View.GONE
                 }
@@ -75,7 +77,6 @@ class ChannelFragment: Fragment() {
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
             val listFollow = channelViewModel.getFollowList()
-            Log.d("here", "follow ${listFollow.value}")
             listFollow.observe(viewLifecycleOwner, Observer {listUserFollow ->
                 addPlayerAdapter.set(listUserFollow)
             })
@@ -120,6 +121,5 @@ class ChannelFragment: Fragment() {
             }
         return root
     }
-
 
 }

@@ -3,6 +3,7 @@ package com.pixie.android.ui.draw.availableGames.adapters
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +61,10 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
         viewHolder.numPlayer.text = game.gameData.listPlayers?.size.toString()
 
         viewHolder.listPlayer.adapter = listPlayerAdapter
-        listPlayerAdapter.set(ArrayList(game.gameData.listPlayers))
+        val listPlayer = game.gameData.listPlayers
+        if(!listPlayer.isNullOrEmpty()){
+            listPlayerAdapter.set(ArrayList(listPlayer))
+        }
 
         val playerFactory = InjectorUtils.providePlayersViewModelFactory()
         val playersViewModel = ViewModelProvider(ViewModelStore(), playerFactory).get(PlayersViewModel::class.java)
