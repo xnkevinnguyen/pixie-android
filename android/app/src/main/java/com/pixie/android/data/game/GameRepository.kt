@@ -29,7 +29,7 @@ class GameRepository(private val dataSource: GameDataSource,
 
     fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): AvailableGameData? {
         val gameData = createGetGame(mode, difficulty, language)
-
+        Log.d("here", "game data ${gameData}")
         if (gameData != null) {
             // suscribe to messages
             chatRepository.addUserChannelMessageSubscription(gameData.gameChannelData)
@@ -62,8 +62,11 @@ class GameRepository(private val dataSource: GameDataSource,
 
     fun fetchAvailableGames(mode: GameMode, difficulty: GameDifficulty) {
         var availableGames2: ArrayList<AvailableGameData>
+//        runBlocking {
+//            availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
+//        }
         runBlocking {
-            availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
+            availableGames2 = dataSource.getAvailableGamesWithoutCriteria(userRepository.getUser().userId)
         }
         availableGames.postValue(availableGames2)
         Log.d("here", "fetch ${availableGames.value}")

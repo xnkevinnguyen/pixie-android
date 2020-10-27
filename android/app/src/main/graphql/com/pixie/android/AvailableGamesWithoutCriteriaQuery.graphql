@@ -1,0 +1,26 @@
+query getAvailableGamesWithoutCriteria{
+    availableGamesWithoutCriteria{
+        id,
+        gameHall{
+            id,
+            name,
+            participants{
+                id,
+                username,
+                isOnline,
+                avatar
+            }
+        }
+        gameInfo{
+            id,
+            players{
+                id,
+                username,
+                isOnline,
+                avatar
+            }
+            mode,
+            language
+        }
+    }
+}

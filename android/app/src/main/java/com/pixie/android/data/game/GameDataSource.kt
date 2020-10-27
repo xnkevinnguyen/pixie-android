@@ -75,7 +75,41 @@ class GameDataSource() {
             val response = apolloClient(userId).query(GetAvailableGamesQuery(createAvailableGamesInput))
                 .toDeferred().await().data
             val availableGamesQueryData = response?.availableGames
-            Log.d("here", "query data ${availableGamesQueryData}")
+            Log.d("here", "response ${response}")
+            if (availableGamesQueryData != null) {
+                val availableGamesData = ArrayList(availableGamesQueryData.map {
+                    var participantList = it.gameHall.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
+                    if (participantList == null) {
+                        participantList = arrayListOf()
+                    }
+                    val gameChannelData = ChannelData(it.gameHall.id, it.gameHall.name, participantList, nParticipant = null)
+
+                    var playersList = it.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
+                    if (playersList == null) {
+                        playersList = arrayListOf()
+                    }
+                    val availableGame = GameData(it.gameInfo.mode, it.gameInfo.language, playersList)
+                    AvailableGameData(it.id, availableGame, gameChannelData)
+                })
+                Log.d("here", "data source ${availableGamesData}")
+                return availableGamesData
+            }
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.message.toString())
+
+        }
+        Log.d("ApolloException", "Error fetching available games")
+        return arrayListOf()
+    }
+
+    suspend fun getAvailableGamesWithoutCriteria(
+        userId: Double
+    ): ArrayList<AvailableGameData> {
+        try {
+            val response = apolloClient(userId).query(GetAvailableGamesWithoutCriteriaQuery())
+                .toDeferred().await().data
+            val availableGamesQueryData = response?.availableGamesWithoutCriteria
+            Log.d("here", "response $response")
             if (availableGamesQueryData != null) {
                 val availableGamesData = ArrayList(availableGamesQueryData.map {
                     var participantList = it.gameHall.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
