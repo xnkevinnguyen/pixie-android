@@ -3,6 +3,7 @@ package com.pixie.android.utilities
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
 import com.pixie.android.data.draw.DrawingParametersRepository
+import com.pixie.android.data.follow.FollowRepository
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.profile.ProfileRepository
 import com.pixie.android.data.sound.SoundRepository
@@ -73,16 +74,19 @@ object InjectorUtils {
 
     fun provideChannelViewModelFactory(): ChannelViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
-        return ChannelViewModelFactory(chatRepository)
+        val followRepository = FollowRepository.getInstance()
+        return ChannelViewModelFactory(chatRepository, followRepository)
     }
 
     fun providePlayersViewModelFactory(): PlayersViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
-        return PlayersViewModelFactory(chatRepository)
+        val followRepository = FollowRepository.getInstance()
+        return PlayersViewModelFactory(chatRepository, followRepository)
     }
 
     fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{
         val gameRepository = GameRepository.getInstance()
+
         return AvailableGamesViewModelFactory(gameRepository)
     }
 

@@ -17,6 +17,8 @@ import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.availableGames.AvailableGamesViewModel
+import com.pixie.android.ui.draw.channelList.PlayersViewModel
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.Adapter<AvailableGamesAdapter.ViewHolder>() {
@@ -60,6 +62,8 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
         viewHolder.listPlayer.adapter = listPlayerAdapter
         listPlayerAdapter.set(ArrayList(game.gameData.listPlayers))
 
+        val playerFactory = InjectorUtils.providePlayersViewModelFactory()
+        val playersViewModel = ViewModelProvider(ViewModelStore(), playerFactory).get(PlayersViewModel::class.java)
         viewHolder.listPlayer.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, pos, _ ->
                 val user: ChannelParticipant =
@@ -68,10 +72,18 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
                 dialog.setContentView(R.layout.other_user_info)
                 dialog.findViewById<TextView>(R.id.user_name).text = user.username
                 val follow = dialog.findViewById<Button>(R.id.follow)
+
+                if(isUser(user)) follow.visibility = View.GONE
+                if (!playersViewModel.isUserInFollowList(user)) follow.text = viewContext.getString(R.string.follow)
+                else follow.text = viewContext.getString(R.string.unfollow)
                 follow.setOnClickListener {
-                    if (follow.text == "Follow") {
+                    if (!playersViewModel.isUserInFollowList(user)) {
+                        playersViewModel.addUserFollowList(user)
                         follow.text = viewContext.resources.getString(R.string.unfollow)
-                    } else follow.text = viewContext.resources.getString(R.string.follow)
+                    } else {
+                        playersViewModel.removeUserFollowList(user)
+                        follow.text = viewContext.resources.getString(R.string.follow)
+                    }
                 }
 
                 dialog.show()
@@ -103,6 +115,15 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
         val listPlayer: ListView = view.findViewById(R.id.game_player)
         val gameNumber:TextView = view.findViewById(R.id.game_number)
         val joinBtn:Button = view.findViewById(R.id.join_game_btn)
+    }
+
+    fun isUser(user: ChannelParticipant): Boolean{
+        val preferences = viewContext.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        val userIDPreference = preferences.getString(Constants.USER_ID, null)
+        if(userIDPreference.toDouble() == user.id){
+            return true
+        }
+        return false
     }
 }
 

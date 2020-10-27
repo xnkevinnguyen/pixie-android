@@ -44,6 +44,7 @@ class ChannelFragment: Fragment() {
         val chatViewModel = ViewModelProvider(this,factoryChat).get(ChatViewModel::class.java)
         val userChannels = chatViewModel.getUserChannels()
         val joinChannelAdapter = ChannelJoinAdapter(requireContext())
+        val addPlayerAdapter = AddPlayerAdapter(requireContext())
 
         userChannelAdapter.set(userChannels.value)
         val currentChannelID = chatViewModel.getCurrentChannelID()
@@ -73,11 +74,18 @@ class ChannelFragment: Fragment() {
         //add players
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
+            val listFollow = channelViewModel.getFollowList()
+            Log.d("here", "follow ${listFollow.value}")
+            listFollow.observe(viewLifecycleOwner, Observer {listUserFollow ->
+                addPlayerAdapter.set(listUserFollow)
+            })
             dialog.setContentView(R.layout.add_player)
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)
             createVirtualPlayer.setOnClickListener{
                 Log.d("here", "Create virtual player")
             }
+            val listAddPlayer = dialog.findViewById<ListView>(R.id.list_add_player)
+            listAddPlayer.adapter = addPlayerAdapter
             dialog.show()
         }
         //Add channel
