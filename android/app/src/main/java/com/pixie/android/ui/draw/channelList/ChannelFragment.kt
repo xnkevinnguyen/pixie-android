@@ -46,30 +46,23 @@ class ChannelFragment: Fragment() {
         val joinChannelAdapter = ChannelJoinAdapter(requireContext())
 
         userChannelAdapter.set(userChannels.value)
-
-        userChannels.observe(viewLifecycleOwner, Observer { userChannelList->
-            userChannelAdapter.set(userChannelList)
-            var lobbyGamePresent = false
-            for(channel in userChannelList){
-                if(channel.value.gameID != -1.0){
-                    lobbyGamePresent = true
-                }
-            }
-
-            if(lobbyGamePresent){
-                startGameBtn.visibility = View.VISIBLE
-                addPlayerBtn.visibility = View.VISIBLE
-            }
-            else {
-                startGameBtn.visibility = View.GONE
-                addPlayerBtn.visibility = View.GONE
-            }
-        })
-
         val currentChannelID = chatViewModel.getCurrentChannelID()
         currentChannelID.observe(viewLifecycleOwner, Observer { id->
             userChannelAdapter.setChannelIdSelected(id)
+            val currentChannel = channelViewModel.getCurrentChannelInfo(id)
+            if(currentChannel != null) {
+                if (currentChannel.gameID != -1.0) {
+                    startGameBtn.visibility = View.VISIBLE
+                    addPlayerBtn.visibility = View.VISIBLE
+                } else {
+                    startGameBtn.visibility = View.GONE
+                    addPlayerBtn.visibility = View.GONE
+                }
+            }
+        })
 
+        userChannels.observe(viewLifecycleOwner, Observer { userChannelList->
+            userChannelAdapter.set(userChannelList)
         })
 
         //start game
@@ -107,6 +100,15 @@ class ChannelFragment: Fragment() {
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
                 val channel:ChannelData = channelListElement.getItemAtPosition(position) as ChannelData
                 chatViewModel.setCurrentChannelID(channel.channelID)
+
+                if (channel.gameID != -1.0){
+                    startGameBtn.visibility = View.VISIBLE
+                    addPlayerBtn.visibility = View.VISIBLE
+                }
+                else {
+                    startGameBtn.visibility = View.GONE
+                    addPlayerBtn.visibility = View.GONE
+                }
             }
         return root
     }
