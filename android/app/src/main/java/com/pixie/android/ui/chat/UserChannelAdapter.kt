@@ -72,13 +72,8 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
         val channel: ChannelData = channelList[position]
         val rowView = inflater.inflate(R.layout.user_channel_row_, parent, false)
         val exit = rowView.findViewById<TextView>(R.id.exit_channel)
-        val startGame = rowView.findViewById<TextView>(R.id.start_game)
         if(channel.channelID == 1.0){
             exit.visibility = View.GONE
-        }
-
-        if(channel.gameID != -1.0){
-            startGame.visibility = View.VISIBLE
         }
 
         val badge = rowView.findViewById<ImageView>(R.id.chat_notification_badge)
@@ -98,11 +93,6 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
             if(channel.gameID != -1.0){
                 chatViewModel.exitGame(channel.gameID)
             }
-        }
-
-        startGame.setOnClickListener {
-            val navController = findNavController(activity, R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_drawing)
         }
 
         val channelName = rowView.findViewById<TextView>(R.id.channel_name)

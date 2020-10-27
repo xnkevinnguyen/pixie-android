@@ -101,10 +101,6 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="game1">Game 1</string>
-    <string name="game2">Game 2</string>
-    <string name="game3">Game 3</string>
-    <string name="game4">Game 4</string>
     <string name="join">Join</string>
     <string name="create">Create</string>
     <string name="new_game">New Game</string>
@@ -116,5 +112,7 @@
     <string name="leave">Leave game</string>
     <string name="not_available">Not Available</string>
 
-    <string name="start_game">Start</string>
+    <string name="start_game">Start Game</string>
+    <string name="add_players">Add Players</string>
+    <string name="add_virtual">Add Virtual Player</string>
 </resources>
