@@ -86,25 +86,23 @@ class GameRepository(private val dataSource: GameDataSource,
 //        Log.d("here", "fetch2 ${availableGames.value}")
     }
 
-//    fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
-//        val subscriptionJob = CoroutineScope(Dispatchers.IO).launch {
-//            dataSource.subscribeToAvailableGameChange(
-//                userRepository.getUser().userId,
-//                mode,
-//                difficulty,
-//                onAvailableGameSessionsChange = {
-//                    if (it != null) {
-//                        // Main thread only used to modify values
-//                        CoroutineScope(Dispatchers.Main).launch {
-//                            val gameMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
-//                            it.associateByTo(gameMap, { it.gameId }, { it })
-//                            availableGames = MutableLiveData(gameMap)
-//                            availableGames.notifyObserver()
-//                        }
-//                    }
-//                })
-//        }
-//    }
+    fun addAvailableGamePlayerSubscription(mode: GameMode, difficulty: GameDifficulty) {
+        val subscriptionJob = CoroutineScope(Dispatchers.IO).launch {
+            dataSource.subscribeToAvailableGameChange(
+                userRepository.getUser().userId,
+                mode,
+                difficulty,
+                onAvailableGameSessionsChange = {
+                    if (it != null) {
+                        // Main thread only used to modify values
+                        CoroutineScope(Dispatchers.Main).launch {
+                            availableGames = MutableLiveData(it)
+                            availableGames.notifyObserver()
+                        }
+                    }
+                })
+        }
+    }
 
 
     // Singleton
