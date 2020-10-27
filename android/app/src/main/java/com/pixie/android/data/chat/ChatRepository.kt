@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelMessageObject
+import com.pixie.android.model.chat.ChannelParticipant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -26,6 +27,7 @@ class ChatRepository(
         MutableLiveData<MutableMap<ChannelID, ChannelMessageObject>>().apply {
             this.postValue(HashMap())
         }
+
     private var channelMessageSubscriptions = HashMap<ChannelID, Job>()
     private var channelParticipantSubscriptions = HashMap<ChannelID, Job>()
 
@@ -38,7 +40,6 @@ class ChatRepository(
     fun getCurrentChannelID(): LiveData<Double> {
         return currentChannelID
     }
-
 
     fun getChannelMessages(): LiveData<MutableMap<Double, ChannelMessageObject>> {
         return channelMessages
@@ -197,7 +198,6 @@ class ChatRepository(
                         userChannels.value?.get(channelData.channelID)?.participantList =
                             channelData.participantList
                         userChannels.notifyObserver()
-
                     }
                 })
         }

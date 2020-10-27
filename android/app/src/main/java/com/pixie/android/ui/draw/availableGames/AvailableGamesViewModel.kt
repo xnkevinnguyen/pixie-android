@@ -1,11 +1,7 @@
 package com.pixie.android.ui.draw.availableGames
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.game.GameRepository
-import com.pixie.android.data.sound.SoundRepository
-import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.CreatedGameData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
@@ -19,6 +15,10 @@ class AvailableGamesViewModel(private val gameRepository: GameRepository) : View
 
     fun exitGame(gameID: Double){
         gameRepository.exitGame(gameID)
+    }
+
+    fun joinGame(gameID: Double): CreatedGameData?{
+        return gameRepository.joinGame(gameID)
     }
 
     fun getAvailableGames() = gameRepository.getAvailableGames()

@@ -2,6 +2,7 @@ package com.pixie.android.ui.chat
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository

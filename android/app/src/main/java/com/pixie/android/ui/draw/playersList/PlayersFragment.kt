@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,18 +42,14 @@ class PlayersFragment : Fragment() {
 
         currentChannelID.observe(viewLifecycleOwner, Observer {id->
             // on channel change
-
-            // load new channel messages
             val participantList = playersViewModel.getCurrentChannelParticipants(id)
             participantAdapter.set(participantList)
-
         })
 
         val userChannels= playersViewModel.getUserChannels()
         userChannels.observe(viewLifecycleOwner, Observer {
             val participantList = playersViewModel.getCurrentChannelParticipants()
             participantAdapter.set(participantList)
-
         })
         participantListElement.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
