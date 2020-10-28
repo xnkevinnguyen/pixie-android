@@ -23,7 +23,6 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
     }
 
     fun set(participantList:ArrayList<ChannelParticipant>){
-        Log.d("here", "set players adapter")
         listOfPlayers = participantList
         notifyDataSetChanged()
     }

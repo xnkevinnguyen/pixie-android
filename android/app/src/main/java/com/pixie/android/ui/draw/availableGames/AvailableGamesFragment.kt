@@ -73,6 +73,7 @@ class AvailableGamesFragment : Fragment() {
         availableGamesAdapter.set(availableGamesList.value)
 
         availableGamesList.observe(viewLifecycleOwner, Observer { availableGamesArray->
+            Log.d("here", "observe $availableGamesArray")
             availableGamesAdapter.set(availableGamesArray)
         })
 
@@ -93,7 +94,11 @@ class AvailableGamesFragment : Fragment() {
             val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
 
             if (gameData != null) {
-                chatViewModel.setCurrentChannelID(gameData.gameChannelData.channelID)
+                gameData.gameChannelData?.channelID?.let { id ->
+                    chatViewModel.setCurrentChannelID(
+                        id
+                    )
+                }
             }
 
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)

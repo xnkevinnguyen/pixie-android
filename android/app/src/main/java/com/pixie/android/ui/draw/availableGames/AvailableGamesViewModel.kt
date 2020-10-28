@@ -28,8 +28,5 @@ class AvailableGamesViewModel(private val gameRepository: GameRepository) : View
     fun fetchAvailableGames(mode:GameMode, difficulty: GameDifficulty){
         gameRepository.fetchAvailableGames(mode, difficulty)
     }
-
-    fun getListPlayer(gameID:Double):LiveData<ArrayList<ChannelParticipant>>{
-        return gameRepository.getListPlayers(gameID)
-    }
+    
 }

@@ -16,26 +16,15 @@ import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
 import kotlinx.coroutines.*
 
-typealias GameID = Double
 class GameRepository(private val dataSource: GameDataSource,
                      private val userRepository: UserRepository,
                      private val chatRepository: ChatRepository
 ) {
 
-    private var availableGames = MutableLiveData<ArrayList<AvailableGameData>>()
-    private var userChannels = MutableLiveData<LinkedHashMap<GameID, AvailableGameData>>()
-    private var listPlayer = MutableLiveData<ArrayList<ChannelParticipant>>().apply { this.postValue(
-        arrayListOf()) }
+    private var availableGames = MutableLiveData<ArrayList<CreatedGameData>>()
+    private var gameSubscriptions= arrayListOf<Job>()
 
-    fun getListPlayers(gameID: Double):LiveData<ArrayList<ChannelParticipant>>{
-        val players = userChannels.value?.get(gameID)?.gameData?.listPlayers
-        if(players != null){
-            listPlayer.postValue(ArrayList(players))
-        }
-        return listPlayer
-    }
-
-    fun getAvailableGames():LiveData<ArrayList<AvailableGameData>>{
+    fun getAvailableGames():LiveData<ArrayList<CreatedGameData>>{
         return availableGames
     }
 
@@ -43,11 +32,13 @@ class GameRepository(private val dataSource: GameDataSource,
         val gameData = createGetGame(mode, difficulty, language)
         if (gameData != null) {
             // suscribe to messages
-            chatRepository.addUserChannelMessageSubscription(gameData.gameChannelData)
+            gameData.gameChannelData?.let { chatRepository.addUserChannelMessageSubscription(it) }
             //suscribe to participant changes
-            chatRepository.addUserChannelParticipantSubscription(gameData.gameChannelData)
+            gameData.gameChannelData?.let { chatRepository.addUserChannelParticipantSubscription(it) }
 
-            chatRepository.addUserChannels(gameData.gameChannelData)
+            gameData.gameChannelData?.let { chatRepository.addUserChannels(it) }
+            Log.d("here", "notif 1")
+            availableGames.notifyObserver()
         } else {
             Log.d("ApolloException", "Error on createChannel")
         }
@@ -72,19 +63,18 @@ class GameRepository(private val dataSource: GameDataSource,
     }
 
     fun fetchAvailableGames(mode: GameMode, difficulty: GameDifficulty) {
-        var availableGames2: ArrayList<AvailableGameData>
+        var availableGames2: ArrayList<CreatedGameData>
         runBlocking {
             availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
         }
         availableGames.postValue(availableGames2)
-//        val channelMap: LinkedHashMap<Double, AvailableGameData> = LinkedHashMap()
-//        availableGames2.associateByTo(channelMap, { it.gameId }, { it })
-//        userChannels.postValue(channelMap)
+        gameSubscriptions.clear()
+
         availableGamesSubscription(mode, difficulty)
     }
 
     private fun availableGamesSubscription(mode: GameMode, difficulty: GameDifficulty) {
-        CoroutineScope(Dispatchers.IO).launch {
+        val job = CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToAvailableGameChange(
                 userRepository.getUser().userId,
                 mode,
@@ -94,22 +84,25 @@ class GameRepository(private val dataSource: GameDataSource,
                         // Main thread only used to modify values
                         CoroutineScope(Dispatchers.Main).launch {
                             availableGames.value = it
+                            Log.d("here", "notif 2")
                             availableGames.notifyObserver()
                         }
                     }
                 })
         }
+        gameSubscriptions.add(job)
     }
 
     fun joinGame(gameID: Double):CreatedGameData? {
         //enter game
         val gameData = enterGame(gameID)
         if (gameData != null) {
-            chatRepository.addUserChannelMessageSubscription(gameData.gameChannelData)
+            gameData.gameChannelData?.let { chatRepository.addUserChannelMessageSubscription(it) }
             //suscribe to participant changes
-            chatRepository.addUserChannelParticipantSubscription(gameData.gameChannelData)
+            gameData.gameChannelData?.let { chatRepository.addUserChannelParticipantSubscription(it) }
 
-            chatRepository.addUserChannels(gameData.gameChannelData)
+            gameData.gameChannelData?.let { chatRepository.addUserChannels(it) }
+
         } else {
             Log.d("ApolloException", "Error on joinChannel")
         }

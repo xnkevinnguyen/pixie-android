@@ -10,12 +10,10 @@ import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.GameData
 import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.CreatedGameData
-import com.pixie.android.model.game.PlayersData
 import com.pixie.android.type.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
-import kotlinx.coroutines.runBlocking
 
 class GameDataSource() {
     suspend fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language, userId: Double): CreatedGameData? {
@@ -71,7 +69,7 @@ class GameDataSource() {
         mode: GameMode,
         difficulty: GameDifficulty,
         userId: Double
-    ): ArrayList<AvailableGameData> {
+    ): ArrayList<CreatedGameData> {
         val createAvailableGamesInput = AvailableGamesInput(mode, difficulty, Language.ENGLISH)
         try {
             val response = apolloClient(userId).query(GetAvailableGamesQuery(createAvailableGamesInput))
@@ -84,8 +82,10 @@ class GameDataSource() {
                     if (playersList == null) {
                         playersList = arrayListOf()
                     }
+
+                    //val gameChannelData = ChannelData(-1.0, null, arrayListOf(), nParticipant = null, gameID = null)
                     val availableGame = GameData(it.gameInfo.mode, it.gameInfo.language, playersList)
-                    AvailableGameData(it.id, availableGame)
+                    CreatedGameData(it.id, availableGame, null)
                 })
                 return availableGamesData
             }
@@ -128,7 +128,7 @@ class GameDataSource() {
         userID: Double,
         mode:GameMode,
         difficulty: GameDifficulty,
-        onAvailableGameSessionsChange: (ArrayList<AvailableGameData>?) -> Unit
+        onAvailableGameSessionsChange: (ArrayList<CreatedGameData>?) -> Unit
     ) {
         apolloClient(userID).subscribe(OnAvailableGameSessionsChangeSubscription(mode, difficulty)).toFlow()
             .retryWhen { _, attempt ->
@@ -148,9 +148,9 @@ class GameDataSource() {
                         if (gamePlayers == null) {
                             gamePlayers = arrayListOf()
                         }
-
+                        //val gameChannelData = ChannelData(-1.0, null, arrayListOf(), nParticipant = null, gameID = null)
                         val gameInfo = GameData(it.gameInfo.mode, it.gameInfo.language, gamePlayers)
-                        AvailableGameData(it.id, gameInfo)
+                        CreatedGameData(it.id, gameInfo, null)
                     })
                     onAvailableGameSessionsChange(availableGamesData)
                 } else {

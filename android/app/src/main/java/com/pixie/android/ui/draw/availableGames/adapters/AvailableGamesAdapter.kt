@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.CreatedGameData
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.availableGames.AvailableGamesViewModel
 import com.pixie.android.ui.draw.channelList.PlayersViewModel
@@ -27,14 +28,14 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
     private val viewContext = context
     private val viewActivity = activity
 
-    private var listOfGames = ArrayList<AvailableGameData>()
+    private var listOfGames = ArrayList<CreatedGameData>()
 
-    fun add(game: AvailableGameData) {
+    fun add(game: CreatedGameData) {
         this.listOfGames.add(game)
         notifyDataSetChanged()
 
     }
-    fun set(gamesList:ArrayList<AvailableGameData>?){
+    fun set(gamesList:ArrayList<CreatedGameData>?){
         if(gamesList!=null) {
             listOfGames= gamesList
         }
@@ -47,7 +48,7 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val game: AvailableGameData = listOfGames[position]
+        val game: CreatedGameData = listOfGames[position]
         val listPlayerAdapter = PlayersInGameAdapter(viewContext)
 
         val gameNumberString = "Game " + (position+1).toString()
@@ -101,7 +102,11 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
         viewHolder.joinBtn.setOnClickListener {
             val gameData = gameViewModel.joinGame(game.gameId)
             if (gameData != null) {
-                chatViewModel.setCurrentChannelID(gameData.gameChannelData.channelID)
+                gameData.gameChannelData?.channelID?.let { id ->
+                    chatViewModel.setCurrentChannelID(
+                        id
+                    )
+                }
             }
             val navController = viewActivity.findNavController(R.id.nav_host_fragment)
             navController.navigate(R.id.nav_home)
