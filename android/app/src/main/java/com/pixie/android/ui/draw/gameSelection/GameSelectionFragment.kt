@@ -97,8 +97,14 @@ class GameSelectionFragment: Fragment() {
 
         val nextBtn = root.findViewById<Button>(R.id.next_btn)
         nextBtn.setOnClickListener {
-            val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_available_games)
+            val mode = preferencesGame.getString(Constants.GAME_MODE, "Free for all")
+            if(mode != "Solo") {
+                val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_available_games)
+            } else {
+                val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_game_creation)
+            }
         }
         return root
     }

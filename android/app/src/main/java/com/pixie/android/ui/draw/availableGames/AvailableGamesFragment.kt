@@ -48,6 +48,9 @@ class AvailableGamesFragment : Fragment() {
         val factory = InjectorUtils.provideAvailableGamesViewModelFactory()
         availableGamesViewModel = ViewModelProvider(this, factory).get(AvailableGamesViewModel::class.java)
 
+        val chatFactory = InjectorUtils.provideChatViewModelFactory()
+        val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
+
         val mode = root.findViewById<TextView>(R.id.mode)
         val difficulty = root.findViewById<TextView>(R.id.level)
         val spinnerLanguage =  root.findViewById<Spinner>(R.id.spinner_language_game)
@@ -73,7 +76,6 @@ class AvailableGamesFragment : Fragment() {
         availableGamesAdapter.set(availableGamesList.value)
 
         availableGamesList.observe(viewLifecycleOwner, Observer { availableGamesArray->
-           // Log.d("here", "observe $availableGamesArray")
             availableGamesAdapter.set(availableGamesArray)
         })
 
@@ -89,8 +91,6 @@ class AvailableGamesFragment : Fragment() {
             editorGame.putString(Constants.GAME_LANGUAGE, spinnerLanguage.selectedItem.toString())
             editorGame.apply()
 
-            val chatFactory = InjectorUtils.provideChatViewModelFactory()
-            val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
             val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
 
             if (gameData != null) {

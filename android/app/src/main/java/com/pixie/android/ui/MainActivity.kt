@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
+import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
 import com.pixie.android.ui.draw.settings.SettingsFragment
 import com.pixie.android.ui.user.AuthActivity
@@ -54,16 +55,13 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_drawing, R.id.nav_game_selection), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_game_selection), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
         val avatar: ImageView = header.findViewById(R.id.imageView)
         avatar.setOnClickListener {
-//            val factory = InjectorUtils.provideProfileViewModelFactory()
-//            val profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
-//            profileViewModel.fetchUserInfo()
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
         }
@@ -107,6 +105,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val profileFactory = InjectorUtils.provideProfileViewModelFactory()
         val profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
+
+        val factory = InjectorUtils.provideGameInformationViewModelFactory()
+        val gameInfoViewModel = ViewModelProvider(this,factory).get(GameInformationViewModel::class.java)
+
+        val chatFactory = InjectorUtils.provideChatViewModelFactory()
+        val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
+
         val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
         val editor = preferences.edit()
         val intent = Intent(this, AuthActivity::class.java)
@@ -135,9 +140,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Disable back press since drawing undo-redo crashes if back pressed to drawing fragment
-    override fun onBackPressed() {
-        return
-    }
+//    override fun onBackPressed() {
+//        return
+//    }
     override fun onDestroy() {
         // stop channel subscriptions
         val factory = InjectorUtils.provideChatViewModelFactory()

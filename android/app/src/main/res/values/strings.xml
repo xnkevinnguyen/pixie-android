@@ -115,4 +115,5 @@
     <string name="start_game">Start Game</string>
     <string name="add_players">Add Players</string>
     <string name="add_virtual">Add Virtual Player</string>
+    <string name="create_game">Create New Game</string>
 </resources>
