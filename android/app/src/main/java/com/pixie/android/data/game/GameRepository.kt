@@ -5,12 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.user.UserRepository
-import com.pixie.android.model.RequestResult
-import com.pixie.android.model.chat.ChannelData
-import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.CreatedGameData
-import com.pixie.android.model.game.GameData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
@@ -28,6 +23,13 @@ class GameRepository(private val dataSource: GameDataSource,
         return availableGames
     }
 
+    fun removePrevSubscription(){
+        for (job in gameSubscriptions){
+            job.cancel()
+            gameSubscriptions.remove(job)
+        }
+    }
+
     fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): CreatedGameData? {
         val gameData = createGetGame(mode, difficulty, language)
         if (gameData != null) {
@@ -37,8 +39,7 @@ class GameRepository(private val dataSource: GameDataSource,
             gameData.gameChannelData?.let { chatRepository.addUserChannelParticipantSubscription(it) }
 
             gameData.gameChannelData?.let { chatRepository.addUserChannels(it) }
-            Log.d("here", "notif 1")
-            availableGames.notifyObserver()
+
         } else {
             Log.d("ApolloException", "Error on createChannel")
         }
@@ -68,6 +69,8 @@ class GameRepository(private val dataSource: GameDataSource,
             availableGames2 = dataSource.getAvailableGames(mode, difficulty, userRepository.getUser().userId)
         }
         availableGames.postValue(availableGames2)
+
+        removePrevSubscription()
         gameSubscriptions.clear()
 
         availableGamesSubscription(mode, difficulty)
@@ -83,8 +86,9 @@ class GameRepository(private val dataSource: GameDataSource,
                     if (it != null) {
                         // Main thread only used to modify values
                         CoroutineScope(Dispatchers.Main).launch {
-                            availableGames.value = it
                             Log.d("here", "notif 2")
+                            Log.d("here", "it $it")
+                            availableGames.value = it
                             availableGames.notifyObserver()
                         }
                     }
