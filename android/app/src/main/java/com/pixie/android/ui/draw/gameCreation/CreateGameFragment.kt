@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.dev.materialspinner.MaterialSpinner
 import com.pixie.android.R
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
@@ -21,6 +22,7 @@ import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.availableGames.AvailableGamesViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
+
 
 class CreateGameFragment: Fragment() {
     private lateinit var preferencesGame: SharedPreferences
@@ -47,13 +49,15 @@ class CreateGameFragment: Fragment() {
         val difString = "Difficulty: " + preferencesGame.getString(Constants.GAME_DIFF, "Medium")
         difficulty.text = difString
 
+
         val itemsLang = arrayOf(resources.getString(R.string.eng), resources.getString(R.string.fr))
         val adapterLang: ArrayAdapter<String> = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_layout,
             itemsLang
         )
         spinnerLanguage.adapter = adapterLang
+
 
         val createBtn = root.findViewById<TextView>(R.id.create)
         createBtn.setOnClickListener {
@@ -74,6 +78,10 @@ class CreateGameFragment: Fragment() {
             }
         }
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun getGameMode(): GameMode {

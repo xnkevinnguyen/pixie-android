@@ -82,7 +82,7 @@ class AvailableGamesFragment : Fragment() {
         val itemsLang = arrayOf(resources.getString(R.string.eng), resources.getString(R.string.fr))
         val adapterLang: ArrayAdapter<String> = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_layout,
             itemsLang
         )
         spinnerLanguage.adapter = adapterLang

@@ -106,12 +106,6 @@ class MainActivity : AppCompatActivity() {
         val profileFactory = InjectorUtils.provideProfileViewModelFactory()
         val profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
 
-        val factory = InjectorUtils.provideGameInformationViewModelFactory()
-        val gameInfoViewModel = ViewModelProvider(this,factory).get(GameInformationViewModel::class.java)
-
-        val chatFactory = InjectorUtils.provideChatViewModelFactory()
-        val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
-
         val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
         val editor = preferences.edit()
         val intent = Intent(this, AuthActivity::class.java)
