@@ -13,7 +13,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import com.dev.materialspinner.MaterialSpinner
 import com.pixie.android.R
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
