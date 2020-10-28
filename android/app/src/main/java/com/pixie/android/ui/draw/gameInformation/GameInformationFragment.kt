@@ -44,12 +44,15 @@ class GameInformationFragment: Fragment() {
         val gameID = gameInfoViewModel.getGameSession().value?.id
         val channelID = gameInfoViewModel.getGameSession().value?.channelID
         leaveGameBtn.setOnClickListener {
+            gameInfoViewModel.leaveGame()
+
             if (channelID != null) {
                 chatViewModel.exitChannel(channelID)
             }
             if (gameID != null) {
                 chatViewModel.exitGame(gameID)
             }
+
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)
             navController.navigate(R.id.nav_home)
         }
@@ -57,12 +60,15 @@ class GameInformationFragment: Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
+                    gameInfoViewModel.leaveGame()
+
                     if (channelID != null) {
                         chatViewModel.exitChannel(channelID)
                     }
                     if (gameID != null) {
                         chatViewModel.exitGame(gameID)
                     }
+
                     val navController = requireActivity().findNavController(R.id.nav_host_fragment)
                     navController.navigate(R.id.nav_home)                }
             }
@@ -100,6 +106,8 @@ class GameInformationFragment: Fragment() {
         Log.d("here", "item ${item.itemId}")
         return when (item.itemId) {
             android.R.id.home ->{
+                gameInfoViewModel.leaveGame()
+
                 val gameID = gameInfoViewModel.getGameSession().value?.id
                 val channelID = gameInfoViewModel.getGameSession().value?.channelID
                 if (channelID != null) {
@@ -115,5 +123,7 @@ class GameInformationFragment: Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+
 
 }

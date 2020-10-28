@@ -101,12 +101,10 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
         val chatViewModel = ViewModelProvider(ViewModelStore(), chatFactory).get(ChatViewModel::class.java)
         viewHolder.joinBtn.setOnClickListener {
             val gameData = gameViewModel.joinGame(game.gameId)
-            if (gameData != null) {
-                gameData.gameChannelData?.channelID?.let { id ->
-                    chatViewModel.setCurrentChannelID(
-                        id
-                    )
-                }
+            gameData?.channelID?.let { id ->
+                chatViewModel.setCurrentChannelID(
+                    id
+                )
             }
             val navController = viewActivity.findNavController(R.id.nav_host_fragment)
             navController.navigate(R.id.nav_home)

@@ -94,30 +94,22 @@ class GameRepository(private val dataSource: GameDataSource,
         gameSubscriptions.add(job)
     }
 
-    fun joinGame(gameID: Double):CreatedGameData? {
+    fun joinGame(gameID: Double):GameSessionData? {
         //enter game
-        val gameData = enterGame(gameID)
-        if (gameData != null) {
-            gameData.gameChannelData?.let { chatRepository.addUserChannelMessageSubscription(it) }
-            //suscribe to participant changes
-            gameData.gameChannelData?.let { chatRepository.addUserChannelParticipantSubscription(it) }
-
-            gameData.gameChannelData?.let { chatRepository.addUserChannels(it) }
-
-        } else {
-            Log.d("ApolloException", "Error on joinChannel")
-        }
-        return gameData
-    }
-
-    fun enterGame(gameID: Double): CreatedGameData? {
-        var gameData: CreatedGameData?
+        var gameData : GameSessionData?
         runBlocking {
-            gameData =
-                dataSource.enterGame(gameID, userRepository.getUser().userId)
+            gameData=dataSource.enterGame(gameID, userRepository.getUser().userId){
+                chatRepository.addUserChannelMessageSubscription(it)
+                //suscribe to participant changes
+               chatRepository.addUserChannelParticipantSubscription(it)
+
+                chatRepository.addUserChannels(it)
+            }
         }
+
         return gameData
     }
+
 
 
 

@@ -19,7 +19,7 @@ import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
 import com.pixie.android.utilities.InjectorUtils
 
-class ChannelFragment: Fragment() {
+class ChannelFragment : Fragment() {
 
     private lateinit var channelViewModel: ChannelViewModel
 
@@ -43,17 +43,17 @@ class ChannelFragment: Fragment() {
         channelListElement.adapter = userChannelAdapter
 
         val factoryChat = InjectorUtils.provideChatViewModelFactory()
-        val chatViewModel = ViewModelProvider(this,factoryChat).get(ChatViewModel::class.java)
+        val chatViewModel = ViewModelProvider(this, factoryChat).get(ChatViewModel::class.java)
         val userChannels = chatViewModel.getUserChannels()
         val joinChannelAdapter = ChannelJoinAdapter(requireContext())
         val addPlayerAdapter = AddPlayerAdapter(requireContext())
 
         userChannelAdapter.set(userChannels.value)
         val currentChannelID = chatViewModel.getCurrentChannelID()
-        currentChannelID.observe(viewLifecycleOwner, Observer { id->
+        currentChannelID.observe(viewLifecycleOwner, Observer { id ->
             userChannelAdapter.setChannelIdSelected(id)
             val currentChannel = channelViewModel.getCurrentChannelInfo(id)
-            if(currentChannel != null) {
+            if (currentChannel != null) {
                 if (currentChannel.gameID != null) {
                     startGameBtn.visibility = View.VISIBLE
                     addPlayerBtn.visibility = View.VISIBLE
@@ -65,21 +65,21 @@ class ChannelFragment: Fragment() {
             }
         })
 
-        userChannels.observe(viewLifecycleOwner, Observer { userChannelList->
+        userChannels.observe(viewLifecycleOwner, Observer { userChannelList ->
             userChannelAdapter.set(userChannelList)
         })
 
         //start game
         startGameBtn.setOnClickListener {
             val gameID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID
-            if(gameID != null){
-                    chatViewModel.startGameSession(gameID) {
-                        if (it.isSuccess) {
-                            val navController =
-                                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                            navController.navigate(R.id.nav_drawing)
-                        }
+            if (gameID != null) {
+                chatViewModel.startGameSession(gameID) {
+                    if (it.isSuccess) {
+                        val navController =
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController.navigate(R.id.nav_drawing)
                     }
+                }
 
 
             }
@@ -88,14 +88,12 @@ class ChannelFragment: Fragment() {
         //handles if someone else started the game
         val gameSession = chatViewModel.getGameSession()
         gameSession.observe(viewLifecycleOwner, Observer {
-            if (it.status.equals(GameStatus.STARTED)){
-                chatViewModel.startGameSession(it.id) {
-                    if (it.isSuccess) {
-                        val navController =
-                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        navController.navigate(R.id.nav_drawing)
-                    }
-                }
+            if (it.status.equals(GameStatus.STARTED)) {
+
+                val navController =
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_drawing)
+
 
             }
         })
@@ -103,12 +101,12 @@ class ChannelFragment: Fragment() {
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
             val listFollow = channelViewModel.getFollowList()
-            listFollow.observe(viewLifecycleOwner, Observer {listUserFollow ->
+            listFollow.observe(viewLifecycleOwner, Observer { listUserFollow ->
                 addPlayerAdapter.set(listUserFollow)
             })
             dialog.setContentView(R.layout.add_player)
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)
-            createVirtualPlayer.setOnClickListener{
+            createVirtualPlayer.setOnClickListener {
                 Log.d("here", "Create virtual player")
             }
             val listAddPlayer = dialog.findViewById<ListView>(R.id.list_add_player)
@@ -123,7 +121,7 @@ class ChannelFragment: Fragment() {
             dialog.setContentView(R.layout.create_join_channel)
             val listJoinChannel = dialog.findViewById<ListView>(R.id.list_join_channel)
             val createChannelButtonElement = dialog.findViewById<Button>(R.id.create_channel)
-            createChannelButtonElement.setOnClickListener{
+            createChannelButtonElement.setOnClickListener {
                 val channelNameElement = dialog.findViewById<EditText>(R.id.create_channel_name)
                 chatViewModel.createChannel(channelNameElement.text.toString())
             }
@@ -133,14 +131,14 @@ class ChannelFragment: Fragment() {
 
         channelListElement.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
-                val channel:ChannelData = channelListElement.getItemAtPosition(position) as ChannelData
+                val channel: ChannelData =
+                    channelListElement.getItemAtPosition(position) as ChannelData
                 chatViewModel.setCurrentChannelID(channel.channelID)
 
-                if (channel.gameID != -1.0){
+                if (channel.gameID != -1.0) {
                     startGameBtn.visibility = View.VISIBLE
                     addPlayerBtn.visibility = View.VISIBLE
-                }
-                else {
+                } else {
                     startGameBtn.visibility = View.GONE
                     addPlayerBtn.visibility = View.GONE
                 }

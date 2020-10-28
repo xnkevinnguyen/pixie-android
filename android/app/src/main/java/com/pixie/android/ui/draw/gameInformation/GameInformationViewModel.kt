@@ -15,4 +15,8 @@ class GameInformationViewModel( private val gameSessionRepository: GameSessionRe
 
     fun getPlayers():LiveData<ArrayList<GamePlayerData>> = gameSessionRepository.getPlayers()
 
+    fun leaveGame(){
+        gameSessionRepository.leaveGame()
+    }
+
 }

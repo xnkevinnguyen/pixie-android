@@ -1,6 +1,10 @@
 mutation EnterGame ($enterGameInput:GameSessionInput!){
     enterGame(input:$enterGameInput){
         id
+        currentDrawerId
+        currentWord
+        currentRound
+        status
         gameHall{
             id,
             name,

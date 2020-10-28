@@ -15,7 +15,10 @@ class AvailableGamesViewModel(private val gameRepository: GameRepository,private
 
     fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): GameSessionData?{
         val game= gameRepository.createGame(mode, difficulty, language)
-        if(game!=null)  gameSessionRepository.subscribeToGameSessionChange(game.id)
+        if(game!=null) {
+            gameSessionRepository.subscribeToGameSessionChange(game.id)
+            gameSessionRepository.subscribeToTimer(game.id)
+        }
         return game
     }
 
@@ -23,8 +26,13 @@ class AvailableGamesViewModel(private val gameRepository: GameRepository,private
         gameRepository.exitGame(gameID)
     }
 
-    fun joinGame(gameID: Double): CreatedGameData?{
-        return gameRepository.joinGame(gameID)
+    fun joinGame(gameID: Double): GameSessionData?{
+        val game= gameRepository.joinGame(gameID)
+        if(game!=null) {
+            gameSessionRepository.subscribeToGameSessionChange(game.id)
+            gameSessionRepository.subscribeToTimer(game.id)
+        }
+        return game
     }
 
     fun getAvailableGames() = gameRepository.getAvailableGames()

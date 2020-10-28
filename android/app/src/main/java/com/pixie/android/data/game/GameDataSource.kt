@@ -157,14 +157,14 @@ class GameDataSource() {
 
     }
 
-    suspend fun enterGame(gameID: Double, userId: Double): CreatedGameData? {
+    suspend fun enterGame(gameID: Double, userId: Double, onSuccess: (ChannelData) -> Unit): GameSessionData? {
         val enterGameInput = GameSessionInput(gameID)
         try {
             val response =
                 apolloClient(userId).mutate(EnterGameMutation(enterGameInput)).toDeferred()
                     .await()
             val data = response.data?.enterGame
-            if (data != null) {
+            if (data != null && data.gameInfo.players !=null) {
 
                 var gameParticipant = data.gameHall.participants?.map {
                     ChannelParticipant(it.id, it.username, it.isOnline)
@@ -175,16 +175,12 @@ class GameDataSource() {
                 val separated: List<String> = data.gameHall.name.split("-")
 
                 val gameChannelData = ChannelData(channelID = data.gameHall.id, channelName = separated[0], participantList = gameParticipant, nParticipant = null, gameID = data.id)
-                var playersList = data.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
-                if (playersList == null) {
-                    playersList = arrayListOf()
-                }
-                val gameData = GameData(data.gameInfo.mode, data.gameInfo.language, playersList)
-                return CreatedGameData(
-                    data.id,
-                    gameData,
-                    gameChannelData
-                )
+                var playersList = ArrayList(data.gameInfo.players.map { ChannelParticipant(it.id, it.username, it.isOnline) })
+
+                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.status,
+                    data.gameHall.id,playersList,data.gameInfo.mode)
+                onSuccess(gameChannelData)
+                return gameData
 
 
             } else {

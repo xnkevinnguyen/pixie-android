@@ -9,6 +9,7 @@ import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.GameData
 import com.pixie.android.model.game.GamePlayerData
 import com.pixie.android.model.game.GameSessionData
+import com.pixie.android.type.GameStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,6 +39,7 @@ class GameSessionRepository (
 
 
     fun startGame(gameID:Double, onResult:(RequestResult)->Unit){
+
         players.postValue(arrayListOf())
         CoroutineScope(Dispatchers.IO).launch{
             val gameSessionStarted = dataSource.startGame(gameID,userRepository.getUser().userId);
@@ -82,6 +84,16 @@ class GameSessionRepository (
         }
         gameSessionSubscription?.cancel()
         gameSessionSubscription = job
+    }
+
+    fun leaveGame(){
+
+        gameSessionSubscription?.cancel()
+        timerSubscription?.cancel()
+        gameSessionSubscription = null
+        timerSubscription=null
+        gameSession.value?.status = GameStatus.ENDED
+        // send leave request
     }
     // Singleton
     companion object {
