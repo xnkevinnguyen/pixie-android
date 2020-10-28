@@ -44,17 +44,18 @@ class SettingsFragment : DialogFragment() {
         preferencesSettings = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
         editorSettings = preferencesSettings.edit()
 
+
         val itemsLang = arrayOf(resources.getString(R.string.eng), resources.getString(R.string.fr))
         val adapterLang: ArrayAdapter<String> = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_layout,
             itemsLang
         )
 
         val itemsTheme = arrayOf(resources.getString(R.string.dark), resources.getString(R.string.light))
         val adapterTheme: ArrayAdapter<String> = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_layout,
             itemsTheme
         )
 
