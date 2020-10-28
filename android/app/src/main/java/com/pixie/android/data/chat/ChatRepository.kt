@@ -281,6 +281,8 @@ class ChatRepository(
         channelMessages.value?.remove(channelID)
 
         //unsuscription
+        channelMessageSubscriptions.get(channelID)?.cancel()
+        channelParticipantSubscriptions.get(channelID)?.cancel()
         channelParticipantSubscriptions.remove(channelID)
         channelMessageSubscriptions.remove(channelID)
         CoroutineScope(IO).launch {
