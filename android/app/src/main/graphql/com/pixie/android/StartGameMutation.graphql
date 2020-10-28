@@ -20,6 +20,7 @@ mutation startGame($input: StartGameInput!){
                 username
                 isOnline
             }
+            mode
         }
 
     }

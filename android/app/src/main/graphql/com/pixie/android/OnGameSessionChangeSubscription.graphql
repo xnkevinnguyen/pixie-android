@@ -27,6 +27,7 @@ subscription OnGameSessionChange($gameSessionId:Float!){
                 username
                 isOnline
             }
+            mode
         }
     }
 }

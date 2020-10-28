@@ -60,7 +60,10 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
         viewHolder.numPlayer.text = game.gameData.listPlayers?.size.toString()
 
         viewHolder.listPlayer.adapter = listPlayerAdapter
-        listPlayerAdapter.set(ArrayList(game.gameData.listPlayers))
+        val players = game.gameData.listPlayers
+        if(!players.isNullOrEmpty()) {
+            listPlayerAdapter.set(ArrayList(players))
+        }
 
         val playerFactory = InjectorUtils.providePlayersViewModelFactory()
         val playersViewModel = ViewModelProvider(ViewModelStore(), playerFactory).get(PlayersViewModel::class.java)

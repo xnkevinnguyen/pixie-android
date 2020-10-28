@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="255dp"
+        android:layout_height="200dp"
         android:orientation="vertical"
         android:background="?color"
         android:layout_marginBottom="10dp">
@@ -24,106 +24,48 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"/>
 
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:layout_marginStart="20dp">
-                <RelativeLayout
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:background="@drawable/game_timer">
-                    <TextView
-                        android:id="@+id/time_left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="15dp"
-                        android:textColor="@color/colorPaint"
-                        android:textSize="35dp"
-                        android:gravity="center" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:src="@drawable/ic_baseline_access_time" />
-                </RelativeLayout>
-
+            <RelativeLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/game_timer">
                 <TextView
-                    android:id="@+id/round_number"
+                    android:id="@+id/time_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="15dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:layout_marginEnd="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
                     android:textColor="@color/colorPaint"
-                    android:textSize="15dp"
-                    android:layout_gravity="center"
-                    android:text="@string/hints"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="5dp"/>
+                    android:textSize="35dp"
+                    android:gravity="center" />
 
-                <TextView
-                    android:id="@+id/hint_1"
-                    android:layout_width="100dp"
-                    android:layout_height="25dp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"
-                    android:textSize="20dp"
-                    android:layout_marginBottom="10dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_baseline_access_time" />
+            </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/hint_2"
-                    android:layout_width="100dp"
-                    android:layout_height="25dp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"
-                    android:textSize="20dp"/>
-            </LinearLayout>
+            <TextView
+                android:id="@+id/round_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="15dp"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/player_turn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:textSize="@dimen/profile_text"
-            android:gravity="center"
-            android:layout_gravity="center" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/number_guess_left"
@@ -143,12 +85,11 @@
 
         </LinearLayout>
 
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="455dp"
         android:orientation="vertical"
         android:background="?color">
 
@@ -166,7 +107,7 @@
         <ListView
             android:id="@+id/players_in_game"
             android:layout_width="match_parent"
-            android:layout_height="295dp"/>
+            android:layout_height="350dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

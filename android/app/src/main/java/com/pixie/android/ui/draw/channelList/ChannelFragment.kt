@@ -68,7 +68,7 @@ class ChannelFragment: Fragment() {
 
         //start game
         startGameBtn.setOnClickListener {
-            val gameID =channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID
+            val gameID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID
             if(gameID != null){
                     chatViewModel.startGameSession(gameID) {
                         if (it.isSuccess) {

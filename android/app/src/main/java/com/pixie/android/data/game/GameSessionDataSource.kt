@@ -27,7 +27,7 @@ class GameSessionDataSource {
                     ChannelParticipant(it.id,it.username,it.isOnline)
                 })
                 return GameSessionData(data.id, data.currentDrawerId, data.currentWord,
-                data.currentRound,data.status,data.gameHall.id,players)
+                data.currentRound,data.status,data.gameHall.id,players, data.gameInfo.mode)
             }
 
         }catch (e: ApolloException){
@@ -76,7 +76,8 @@ class GameSessionDataSource {
                         data.currentRound,
                         data.status,
                         data.gameHall.id,
-                        players
+                        players,
+                        data.gameInfo.mode
                     )
                     onGameSessionChange(gameSession)
                 }

@@ -2,6 +2,7 @@ package com.pixie.android.ui.draw.availableGames.adapters
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
     }
 
     fun set(participantList:ArrayList<ChannelParticipant>){
+        Log.d("here", "set players adapter")
         listOfParticipants = participantList
         notifyDataSetChanged()
     }
