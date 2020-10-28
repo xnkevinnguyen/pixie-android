@@ -90,8 +90,8 @@ object InjectorUtils {
 
     fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{
         val gameRepository = GameRepository.getInstance()
-
-        return AvailableGamesViewModelFactory(gameRepository)
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return AvailableGamesViewModelFactory(gameRepository,gameSessionRepository)
     }
 
     fun provideGameInformationViewModelFactory():GameInformationViewModelFactory{

@@ -94,7 +94,8 @@ class AvailableGamesFragment : Fragment() {
             val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
 
             if (gameData != null) {
-                gameData.gameChannelData?.channelID?.let { id ->
+
+                gameData?.channelID?.let { id ->
                     chatViewModel.setCurrentChannelID(
                         id
                     )

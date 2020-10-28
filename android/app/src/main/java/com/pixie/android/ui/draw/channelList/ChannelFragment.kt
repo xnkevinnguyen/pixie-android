@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
 import com.pixie.android.utilities.InjectorUtils
@@ -84,6 +85,20 @@ class ChannelFragment: Fragment() {
             }
 
         }
+        //handles if someone else started the game
+        val gameSession = chatViewModel.getGameSession()
+        gameSession.observe(viewLifecycleOwner, Observer {
+            if (it.status.equals(GameStatus.STARTED)){
+                chatViewModel.startGameSession(it.id) {
+                    if (it.isSuccess) {
+                        val navController =
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController.navigate(R.id.nav_drawing)
+                    }
+                }
+
+            }
+        })
         //add players
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())

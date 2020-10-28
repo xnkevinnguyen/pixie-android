@@ -1,6 +1,10 @@
 mutation CreateGame($input: CreateGameInput!){
     createGame(input:$input){
         id
+        currentDrawerId
+        currentWord
+        currentRound
+        status
         gameHall{
             id,
             name,

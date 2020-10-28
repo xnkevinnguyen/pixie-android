@@ -20,7 +20,8 @@ class GameSessionRepository (
 ){
     private var gameSession= MutableLiveData<GameSessionData>()
     private  var channelID:Double =0.0
-    private var gameSubscriptions= arrayListOf<Job>()
+    private  var gameSessionSubscription:Job?=null
+    private  var timerSubscription:Job?=null
     private var players = MutableLiveData<ArrayList<GamePlayerData>>().apply { this.postValue(
         arrayListOf()) }
 
@@ -37,7 +38,6 @@ class GameSessionRepository (
 
 
     fun startGame(gameID:Double, onResult:(RequestResult)->Unit){
-        gameSubscriptions.clear()
         players.postValue(arrayListOf())
         CoroutineScope(Dispatchers.IO).launch{
             val gameSessionStarted = dataSource.startGame(gameID,userRepository.getUser().userId);
@@ -59,6 +59,7 @@ class GameSessionRepository (
         }
     }
     fun subscribeToTimer(gameID: Double){
+
         val job = CoroutineScope(Dispatchers.IO).launch {
             dataSource.suscribeToTimer(gameID,userRepository.getUser().userId){
                 CoroutineScope(Dispatchers.Main).launch {
@@ -67,7 +68,8 @@ class GameSessionRepository (
 
             }
         }
-        gameSubscriptions.add(job)
+        timerSubscription?.cancel()
+        timerSubscription=job
     }
 
     fun subscribeToGameSessionChange(gameID: Double){
@@ -78,7 +80,8 @@ class GameSessionRepository (
                 }
             }
         }
-        gameSubscriptions.add(job)
+        gameSessionSubscription?.cancel()
+        gameSessionSubscription = job
     }
     // Singleton
     companion object {

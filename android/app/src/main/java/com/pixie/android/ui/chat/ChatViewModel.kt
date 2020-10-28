@@ -12,6 +12,7 @@ import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelMessageObject
 import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
@@ -89,6 +90,9 @@ class ChatViewModel(private val chatRepository: ChatRepository, private val soun
 
     fun startGameSession(gameID: Double, onResult:(RequestResult)->Unit){
         gameSessionRepository.startGame(gameID, onResult)
+    }
+    fun getGameSession():LiveData<GameSessionData>{
+        return gameSessionRepository.getGameSession()
     }
 
 }
