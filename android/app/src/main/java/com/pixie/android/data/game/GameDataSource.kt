@@ -10,6 +10,7 @@ import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.GameData
 import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.CreatedGameData
+import com.pixie.android.model.game.PlayersData
 import com.pixie.android.type.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect

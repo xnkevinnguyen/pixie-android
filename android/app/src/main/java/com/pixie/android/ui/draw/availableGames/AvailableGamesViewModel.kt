@@ -1,7 +1,9 @@
 package com.pixie.android.ui.draw.availableGames
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.game.GameRepository
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.CreatedGameData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
@@ -25,5 +27,9 @@ class AvailableGamesViewModel(private val gameRepository: GameRepository) : View
 
     fun fetchAvailableGames(mode:GameMode, difficulty: GameDifficulty){
         gameRepository.fetchAvailableGames(mode, difficulty)
+    }
+
+    fun getListPlayer(gameID:Double):LiveData<ArrayList<ChannelParticipant>>{
+        return gameRepository.getListPlayers(gameID)
     }
 }

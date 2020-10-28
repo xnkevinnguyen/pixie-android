@@ -70,12 +70,10 @@ class AvailableGamesFragment : Fragment() {
         availableGamesViewModel.fetchAvailableGames(getGameMode(), getGameDifficulty())
 
         val availableGamesList = availableGamesViewModel.getAvailableGames()
-
         availableGamesAdapter.set(availableGamesList.value)
 
         availableGamesList.observe(viewLifecycleOwner, Observer { availableGamesArray->
             availableGamesAdapter.set(availableGamesArray)
-
         })
 
         val itemsLang = arrayOf(resources.getString(R.string.eng), resources.getString(R.string.fr))

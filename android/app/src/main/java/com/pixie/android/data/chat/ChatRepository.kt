@@ -97,6 +97,7 @@ class ChatRepository(
             addUserChannelMessageSubscription(channelData)
             //suscribe to participant changes
             addUserChannelParticipantSubscription(channelData)
+
             userChannels.value?.put(channelData.channelID, channelData)
             userChannels.notifyObserver()
         } else {
