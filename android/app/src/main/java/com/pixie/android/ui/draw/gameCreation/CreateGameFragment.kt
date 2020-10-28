@@ -65,13 +65,12 @@ class CreateGameFragment: Fragment() {
 
             val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
             if (gameData != null) {
-                if(gameData.gameId != null){
-                    chatViewModel.startGameSession(gameData.gameId) {
-                        if (it.isSuccess) {
-                            val navController =
-                                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                            navController.navigate(R.id.nav_drawing)
-                        }
+                //succesfully created game
+                chatViewModel.startGameSession(gameData.id) {
+                    if (it.isSuccess) {
+                        val navController =
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController.navigate(R.id.nav_drawing)
                     }
                 }
             }

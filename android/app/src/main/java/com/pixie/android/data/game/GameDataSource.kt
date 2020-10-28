@@ -10,13 +10,14 @@ import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.GameData
 import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.CreatedGameData
+import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
 
 class GameDataSource() {
-    suspend fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language, userId: Double): CreatedGameData? {
+    suspend fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language, userId: Double, onSuccess:(ChannelData)->Unit): GameSessionData? {
 
         val createGameInput = CreateGameInput(mode, difficulty , language)
         try {
@@ -24,7 +25,7 @@ class GameDataSource() {
                 apolloClient(userId).mutate(CreateGameMutation(createGameInput)).toDeferred()
                     .await()
             val data = response.data?.createGame
-            if (data != null) {
+            if (data != null && data.gameInfo.players!=null) {
                 var gameParticipant = data.gameHall.participants?.map {
                     ChannelParticipant(it.id, it.username, it.isOnline)
                 }
@@ -34,16 +35,12 @@ class GameDataSource() {
                 val separated: List<String> = data.gameHall.name.split("-")
 
                 val gameChannelData = ChannelData(channelID = data.gameHall.id, channelName = separated[0], participantList = gameParticipant, nParticipant = null, gameID = data.id)
-                var playersList = data.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
-                if (playersList == null) {
-                    playersList = arrayListOf()
-                }
-                val gameData = GameData(data.gameInfo.mode, data.gameInfo.language, playersList)
-                return CreatedGameData(
-                    data.id,
-                    gameData,
-                    gameChannelData
-                )
+
+                var playersList = ArrayList(data.gameInfo.players.map { ChannelParticipant(it.id, it.username, it.isOnline) })
+                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.status,
+                data.gameHall.id,playersList,data.gameInfo.mode)
+                onSuccess(gameChannelData)
+                return gameData
 
             } else {
                 Log.d("ApolloException", "CreateChannel Error")

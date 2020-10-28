@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.user.UserRepository
+import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.game.CreatedGameData
+import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
@@ -30,30 +32,25 @@ class GameRepository(private val dataSource: GameDataSource,
         }
     }
 
-    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): CreatedGameData? {
-        val gameData = createGetGame(mode, difficulty, language)
-        if (gameData != null) {
-            // suscribe to messages
-            gameData.gameChannelData?.let { chatRepository.addUserChannelMessageSubscription(it) }
-            //suscribe to participant changes
-            gameData.gameChannelData?.let { chatRepository.addUserChannelParticipantSubscription(it) }
-
-            gameData.gameChannelData?.let { chatRepository.addUserChannels(it) }
-
-        } else {
-            Log.d("ApolloException", "Error on createChannel")
-        }
-        return gameData
-    }
-
-    private fun createGetGame(mode: GameMode, difficulty: GameDifficulty, language: Language): CreatedGameData? {
-        var gameData: CreatedGameData?
+    fun createGame(mode: GameMode, difficulty: GameDifficulty, language: Language): GameSessionData? {
+        var gameData :GameSessionData?
         runBlocking {
-            gameData =
+             gameData =
                 dataSource.createGame(mode, difficulty, language, userRepository.getUser().userId)
+            {
+                // suscribe to channels
+                chatRepository.addUserChannelMessageSubscription(it)
+                chatRepository.addUserChannelParticipantSubscription(it)
+                chatRepository.addUserChannels(it)
+            }
+
+
         }
         return gameData
+
+
     }
+
 
 
     fun exitGame(gameID: Double) {
