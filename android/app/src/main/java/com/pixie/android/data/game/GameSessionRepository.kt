@@ -33,8 +33,12 @@ class GameSessionRepository (
 
     fun getGameSession()=gameSession
 
+    fun getGameChannelID() = channelID
+
 
     fun startGame(gameID:Double, onResult:(RequestResult)->Unit){
+        gameSubscriptions.clear()
+        players.postValue(arrayListOf())
         CoroutineScope(Dispatchers.IO).launch{
             val gameSessionStarted = dataSource.startGame(gameID,userRepository.getUser().userId);
             if(gameSessionStarted !=null){
