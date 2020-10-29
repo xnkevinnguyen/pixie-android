@@ -21,7 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="580dp"
             android:layout_weight="2"
-            android:divider="@android:color/white" />
+            android:divider="@android:color/white"
+            android:transcriptMode="normal"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

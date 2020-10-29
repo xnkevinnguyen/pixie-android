@@ -1,0 +1,7 @@
+subscription OnTimerChange($gameSessionId:Float!){
+    onTimerChange(gameSessionId:$gameSessionId){
+        gameSessionId
+        maxValue
+        currentValue
+    }
+}

@@ -42,7 +42,7 @@ class GameSelectionFragment: Fragment() {
         val coopBtn = root.findViewById<ImageButton>(R.id.coop)
 
         freeBtn.setOnClickListener {
-            setCheckMarkColor(R.color.light_green, freeBtn)
+            setCheckMarkColor(R.color.green, freeBtn)
             setCheckMarkColor(R.color.dark_grey, soloBtn)
             setCheckMarkColor(R.color.dark_grey, coopBtn)
 
@@ -51,7 +51,7 @@ class GameSelectionFragment: Fragment() {
         }
         soloBtn.setOnClickListener {
             setCheckMarkColor(R.color.dark_grey, freeBtn)
-            setCheckMarkColor(R.color.light_green, soloBtn)
+            setCheckMarkColor(R.color.green, soloBtn)
             setCheckMarkColor(R.color.dark_grey, coopBtn)
 
             editorGame.putString(Constants.GAME_MODE, "Solo")
@@ -60,7 +60,7 @@ class GameSelectionFragment: Fragment() {
         coopBtn.setOnClickListener {
             setCheckMarkColor(R.color.dark_grey, freeBtn)
             setCheckMarkColor(R.color.dark_grey, soloBtn)
-            setCheckMarkColor(R.color.light_green, coopBtn)
+            setCheckMarkColor(R.color.green, coopBtn)
 
             editorGame.putString(Constants.GAME_MODE, "Coop")
             editorGame.apply()
@@ -71,7 +71,7 @@ class GameSelectionFragment: Fragment() {
         val hardBtn = root.findViewById<ImageView>(R.id.hard)
 
         easyBtn.setOnClickListener {
-            setDifficultyColor(R.color.light_green, easyBtn)
+            setDifficultyColor(R.color.green, easyBtn)
             setDifficultyColor(R.color.dark_grey, mediumBtn)
             setDifficultyColor(R.color.dark_grey, hardBtn)
 
@@ -97,8 +97,14 @@ class GameSelectionFragment: Fragment() {
 
         val nextBtn = root.findViewById<Button>(R.id.next_btn)
         nextBtn.setOnClickListener {
-            val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_available_games)
+            val mode = preferencesGame.getString(Constants.GAME_MODE, "Free for all")
+            if(mode != "Solo") {
+                val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_available_games)
+            } else {
+                val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_game_creation)
+            }
         }
         return root
     }

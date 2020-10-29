@@ -1,0 +1,30 @@
+mutation EnterGame ($enterGameInput:GameSessionInput!){
+    enterGame(input:$enterGameInput){
+        id
+        currentDrawerId
+        currentWord
+        currentRound
+        status
+        gameHall{
+            id,
+            name,
+            participants{
+                id
+                username
+                isOnline,
+                avatar
+            }
+        }
+        gameInfo{
+            id,
+            players{
+                id,
+                username,
+                isOnline,
+                avatar
+            }
+            mode,
+            language
+        }
+    }
+}

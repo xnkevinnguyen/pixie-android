@@ -48,9 +48,8 @@
             android:paddingRight="10dp"
             android:scrollHorizontally="false"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
-
     </LinearLayout>
+
 
     <TextView
         android:id="@+id/exit_channel"

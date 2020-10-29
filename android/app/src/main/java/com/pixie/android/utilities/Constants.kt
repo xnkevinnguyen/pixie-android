@@ -18,8 +18,12 @@ class Constants {
         const val GAME_LANGUAGE = "Game language"
         const val GAME_CHAT_VALUE = "Game chat value"
 
+
+        const val MAIN_CHANNEL_ID = 1.0
+
     }
 }
+
 
 enum class PathStatus {
     BEGIN,

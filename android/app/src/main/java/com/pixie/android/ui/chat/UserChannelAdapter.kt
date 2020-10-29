@@ -1,5 +1,6 @@
 package com.pixie.android.ui.chat
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources.Theme
 import android.media.MediaPlayer
@@ -14,19 +15,22 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 
-class UserChannelAdapter(context: Context) : BaseAdapter() {
+class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
 
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val context = context
+    val activity = activity
     private var channelList = ArrayList<ChannelData>()
-    private var channelIdSelected:Double = 1.0
+    private var channelIdSelected:Double = Constants.MAIN_CHANNEL_ID
     private var channelUnread = ArrayList<Double>()
 
     fun setChannelIdSelected(id:Double){
@@ -68,7 +72,8 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
         val channel: ChannelData = channelList[position]
         val rowView = inflater.inflate(R.layout.user_channel_row_, parent, false)
         val exit = rowView.findViewById<TextView>(R.id.exit_channel)
-        if(channel.channelID == 1.0){
+
+        if(channel.channelID == Constants.MAIN_CHANNEL_ID){
             exit.visibility = View.GONE
         }
 
@@ -86,7 +91,13 @@ class UserChannelAdapter(context: Context) : BaseAdapter() {
 
         exit.setOnClickListener {
             chatViewModel.exitChannel(channel.channelID)
+            val gameID = channel.gameID
+            if(gameID != null){
+                chatViewModel.exitGame(gameID)
+            }
         }
+
+
         val channelName = rowView.findViewById<TextView>(R.id.channel_name)
         channelName.text = channel.channelName
 

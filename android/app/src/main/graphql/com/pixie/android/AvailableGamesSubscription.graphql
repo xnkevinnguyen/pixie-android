@@ -1,0 +1,16 @@
+subscription onAvailableGameSessionsChange($mode:GameMode!, $difficulty:GameDifficulty!){
+    onAvailableGameSessionsChange(mode:$mode, difficulty:$difficulty){
+        id,
+        gameInfo{
+            id,
+            players{
+                id,
+                username,
+                isOnline,
+                avatar
+            }
+            mode,
+            language
+        }
+    }
+}

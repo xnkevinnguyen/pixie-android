@@ -9,7 +9,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -38,6 +39,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var preferencesSettings: SharedPreferences
 
+//    override fun attachBaseContext(newBase: Context) {
+//        val lang = preferencesSettings.getString(Constants.LANGUAGE, resources.getString(R.string.eng))
+//        var langAcronyme = "en"
+//        val langValue = resources.getString(R.string.fr)
+//        if(lang == langValue) langAcronyme = "fr"
+//        else langAcronyme = "en"
+//
+//        super.attachBaseContext(langAcronyme)
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
         val theme = preferencesSettings.getString(Constants.THEME, "Dark")
@@ -54,16 +65,13 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_drawing, R.id.nav_game_selection), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_game_selection), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
         val avatar: ImageView = header.findViewById(R.id.imageView)
         avatar.setOnClickListener {
-//            val factory = InjectorUtils.provideProfileViewModelFactory()
-//            val profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
-//            profileViewModel.fetchUserInfo()
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
         }
@@ -107,6 +115,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val profileFactory = InjectorUtils.provideProfileViewModelFactory()
         val profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
+
         val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
         val editor = preferences.edit()
         val intent = Intent(this, AuthActivity::class.java)
@@ -135,9 +144,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Disable back press since drawing undo-redo crashes if back pressed to drawing fragment
-    override fun onBackPressed() {
-        return
-    }
+//    override fun onBackPressed() {
+//        return
+//    }
     override fun onDestroy() {
         // stop channel subscriptions
         val factory = InjectorUtils.provideChatViewModelFactory()

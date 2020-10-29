@@ -3,14 +3,20 @@ package com.pixie.android.utilities
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
 import com.pixie.android.data.draw.DrawingParametersRepository
+import com.pixie.android.data.follow.FollowRepository
+import com.pixie.android.data.game.GameRepository
+import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.data.profile.ProfileRepository
 import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.draw.canvas.CanvasViewModelFactory
 import com.pixie.android.ui.chat.ChatViewModelFactory
+import com.pixie.android.ui.chat.GameChatViewModelFactory
+import com.pixie.android.ui.draw.availableGames.AvailableGamesViewModelFactory
 import com.pixie.android.ui.draw.channelList.ChannelViewModelFactory
 import com.pixie.android.ui.draw.channelList.PlayersViewModelFactory
 import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
+import com.pixie.android.ui.draw.gameInformation.GameInformationViewModelFactory
 import com.pixie.android.ui.user.login.LoginViewModelFactory
 import com.pixie.android.ui.draw.home.HomeViewModelFactory
 import com.pixie.android.ui.draw.profile.ProfileViewModelFactory
@@ -65,17 +71,37 @@ object InjectorUtils {
     fun provideChatViewModelFactory():ChatViewModelFactory{
         val chatRepository = ChatRepository.getInstance()
         val soundRepository = SoundRepository.getInstance()
-        return ChatViewModelFactory(chatRepository, soundRepository)
+        val gameRepository = GameRepository.getInstance()
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return ChatViewModelFactory(chatRepository, soundRepository, gameRepository, gameSessionRepository)
     }
 
     fun provideChannelViewModelFactory(): ChannelViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
-        return ChannelViewModelFactory(chatRepository)
+        val followRepository = FollowRepository.getInstance()
+        return ChannelViewModelFactory(chatRepository, followRepository)
     }
 
     fun providePlayersViewModelFactory(): PlayersViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
-        return PlayersViewModelFactory(chatRepository)
+        val followRepository = FollowRepository.getInstance()
+        return PlayersViewModelFactory(chatRepository, followRepository)
+    }
+
+    fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{
+        val gameRepository = GameRepository.getInstance()
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return AvailableGamesViewModelFactory(gameRepository,gameSessionRepository)
+    }
+
+    fun provideGameInformationViewModelFactory():GameInformationViewModelFactory{
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return GameInformationViewModelFactory(gameSessionRepository)
+    }
+    fun provideGameChatViewModelFactory():GameChatViewModelFactory{
+        val chatRepository = ChatRepository.getInstance()
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return GameChatViewModelFactory(chatRepository,gameSessionRepository)
     }
 
 }

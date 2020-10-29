@@ -9,6 +9,8 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:listDivider">@color/colorPrimary</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuHeaderStyle</item>
     </style>
@@ -22,6 +24,8 @@
         <item name="colorAccent">@color/colorLightPrimary</item>
         <item name="android:listDivider">@color/colorLightPrimary</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
     </style>
@@ -43,6 +47,11 @@
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
         <item name="android:overlapAnchor">false</item>
+        <item name="android:popupBackground">?color</item>
+    </style>
+
+    <style name="mySpinnerItemStyle" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:popupBackground">?color</item>
     </style>
 
     <style name="SubmenuHeaderStyle" parent="ThemeOverlay.AppCompat.Light">

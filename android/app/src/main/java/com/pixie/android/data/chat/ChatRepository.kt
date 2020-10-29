@@ -7,7 +7,6 @@ import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelMessageObject
 import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.chat.MessageData
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -28,6 +27,7 @@ class ChatRepository(
         MutableLiveData<MutableMap<ChannelID, ChannelMessageObject>>().apply {
             this.postValue(HashMap())
         }
+
     private var channelMessageSubscriptions = HashMap<ChannelID, Job>()
     private var channelParticipantSubscriptions = HashMap<ChannelID, Job>()
 
@@ -37,11 +37,9 @@ class ChatRepository(
         this.postValue(MAIN_CHANNEL_ID)
     }
 
-
     fun getCurrentChannelID(): LiveData<Double> {
         return currentChannelID
     }
-
 
     fun getChannelMessages(): LiveData<MutableMap<Double, ChannelMessageObject>> {
         return channelMessages
@@ -99,6 +97,7 @@ class ChatRepository(
             addUserChannelMessageSubscription(channelData)
             //suscribe to participant changes
             addUserChannelParticipantSubscription(channelData)
+
             userChannels.value?.put(channelData.channelID, channelData)
             userChannels.notifyObserver()
         } else {
@@ -123,6 +122,10 @@ class ChatRepository(
 
     }
 
+    fun addUserChannels(channelData: ChannelData){
+        userChannels.value?.put(channelData.channelID, channelData)
+        userChannels.notifyObserver()
+    }
 
     fun suscribeToUserChannelsMessages(newUserChannels: ArrayList<ChannelData>) {
         //clear current channels subscriptions
@@ -196,7 +199,6 @@ class ChatRepository(
                         userChannels.value?.get(channelData.channelID)?.participantList =
                             channelData.participantList
                         userChannels.notifyObserver()
-
                     }
                 })
         }
@@ -279,6 +281,8 @@ class ChatRepository(
         channelMessages.value?.remove(channelID)
 
         //unsuscription
+        channelMessageSubscriptions.get(channelID)?.cancel()
+        channelParticipantSubscriptions.get(channelID)?.cancel()
         channelParticipantSubscriptions.remove(channelID)
         channelMessageSubscriptions.remove(channelID)
         CoroutineScope(IO).launch {

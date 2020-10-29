@@ -29,7 +29,7 @@ class GameHistoryFragment: DialogFragment() {
             builder.dismiss()
         }
 
-        val width = 1500
+        val width = 1650
         val height = 1050
         builder.window.setLayout(width, height)
 

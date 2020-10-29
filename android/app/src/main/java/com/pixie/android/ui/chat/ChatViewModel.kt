@@ -4,17 +4,21 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.data.game.GameRepository
+import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelMessageObject
-import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.chat.MessageData
-import java.lang.NullPointerException
+import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.GameSessionData
+import com.pixie.android.type.GameDifficulty
+import com.pixie.android.type.GameMode
+import com.pixie.android.type.Language
 
-class ChatViewModel(private val chatRepository: ChatRepository, private val soundRepository: SoundRepository) : ViewModel() {
+class ChatViewModel(private val chatRepository: ChatRepository, private val soundRepository: SoundRepository,
+                    private val gameRepository: GameRepository,private val gameSessionRepository: GameSessionRepository) : ViewModel() {
 
     fun getCurrentChannelID(): LiveData<Double> = chatRepository.getCurrentChannelID()
 
@@ -53,6 +57,10 @@ class ChatViewModel(private val chatRepository: ChatRepository, private val soun
         return chatRepository.createChannel(channelName)
     }
 
+    fun exitGame(gameID: Double){
+        gameRepository.exitGame(gameID)
+    }
+
     fun exitChannel(channelID: Double) {
         chatRepository.exitChannel(channelID)
     }
@@ -78,6 +86,13 @@ class ChatViewModel(private val chatRepository: ChatRepository, private val soun
         if (channelID != null) {
             chatRepository.sendMessage(channelID, message)
         }
+    }
+
+    fun startGameSession(gameID: Double, onResult:(RequestResult)->Unit){
+        gameSessionRepository.startGame(gameID, onResult)
+    }
+    fun getGameSession():LiveData<GameSessionData>{
+        return gameSessionRepository.getGameSession()
     }
 
 }
