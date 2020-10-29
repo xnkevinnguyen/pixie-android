@@ -15,12 +15,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.pixie.android.R
+import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
-class GameInformationFragment: Fragment() {
+class GameInformationFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,15 +29,16 @@ class GameInformationFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val root =inflater.inflate(R.layout.game_information_fragment, container, false)
+        val root = inflater.inflate(R.layout.game_information_fragment, container, false)
         val factory = InjectorUtils.provideGameInformationViewModelFactory()
-        val gameInfoViewModel = ViewModelProvider(this,factory).get(GameInformationViewModel::class.java)
+        val gameInfoViewModel =
+            ViewModelProvider(this, factory).get(GameInformationViewModel::class.java)
 
         val chatFactory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
 
         val timerElement = root.findViewById<TextView>(R.id.time_left)
-        val guessLeftElement= root.findViewById<TextView>(R.id.number_guess_left)
+        val guessLeftElement = root.findViewById<TextView>(R.id.number_guess_left)
         val mode = root.findViewById<TextView>(R.id.mode_of_game)
         val round = root.findViewById<TextView>(R.id.round_number)
         val listPlayer = root.findViewById<ListView>(R.id.players_in_game)
@@ -58,7 +60,8 @@ class GameInformationFragment: Fragment() {
             navController.navigate(R.id.nav_home)
         }
 
-        guessLeftElement.text=gameInfoViewModel.getGameSession().value?.guessesLeft?.toInt().toString()
+        guessLeftElement.text =
+            gameInfoViewModel.getGameSession().value?.guessesLeft?.toInt().toString()
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
@@ -73,7 +76,8 @@ class GameInformationFragment: Fragment() {
                     }
 
                     val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-                    navController.navigate(R.id.nav_home)                }
+                    navController.navigate(R.id.nav_home)
+                }
             }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
@@ -83,15 +87,19 @@ class GameInformationFragment: Fragment() {
 
 
         gameInfoViewModel.getTimer().observe(viewLifecycleOwner, Observer {
-          timerElement.text = it.toString()
+            timerElement.text = it.toString()
         })
 
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
-            val roundString = resources.getString(R.string.round_turn) + (it.currentRound.toInt() + 1)
+            val roundString =
+                resources.getString(R.string.round_turn) + (it.currentRound.toInt() + 1)
             round.text = roundString
-            guessLeftElement.text=it.guessesLeft?.toInt().toString()
+            guessLeftElement.text = it.guessesLeft?.toInt().toString()
             listPlayerAdapter.set(it.players)
             listPlayerAdapter.setDrawer(it.currentDrawerId)
+            if (it.status.equals(GameStatus.ENDED)) {
+                //TODO Show UI for end game
+            }
         })
 
 //        gameInfoViewModel.getPlayers().observe(viewLifecycleOwner, Observer {
@@ -105,13 +113,14 @@ class GameInformationFragment: Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val factory = InjectorUtils.provideGameInformationViewModelFactory()
-        val gameInfoViewModel = ViewModelProvider(this,factory).get(GameInformationViewModel::class.java)
+        val gameInfoViewModel =
+            ViewModelProvider(this, factory).get(GameInformationViewModel::class.java)
 
         val chatFactory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
         Log.d("here", "item ${item.itemId}")
         return when (item.itemId) {
-            android.R.id.home ->{
+            android.R.id.home -> {
                 gameInfoViewModel.leaveGame()
 
                 val gameID = gameInfoViewModel.getGameSession().value?.id
@@ -129,7 +138,6 @@ class GameInformationFragment: Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
 
 }
