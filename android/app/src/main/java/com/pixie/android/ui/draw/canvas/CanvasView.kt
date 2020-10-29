@@ -58,10 +58,6 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     fun drawFromCommandList(canvasCommandList: List<CanvasCommand>) {
-        if (::bitmap.isInitialized) bitmap.recycle()
-        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        canvas = Canvas(bitmap)
-        canvas.drawColor(backgroundColor)
 
         canvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
         canvasCommandList.forEach {

@@ -21,6 +21,7 @@ class GameSessionRepository(
     private var channelID: Double = 0.0
     private var gameSessionSubscription: Job? = null
     private var timerSubscription: Job? = null
+    private var pathSubscription:Job?=null
     private var players = MutableLiveData<ArrayList<GameParticipant>>().apply {
         this.postValue(
             arrayListOf()
@@ -107,13 +108,15 @@ class GameSessionRepository(
         gameSessionSubscription = job
     }
     fun subscribeToPathChange(gameID:Double){
-        CoroutineScope(Dispatchers.IO).launch {
+        val job = CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToPathChange(gameID,userRepository.getUser().userId){
                 CoroutineScope(Dispatchers.Main).launch {
                     canvasCommandHistoryRepository.addCanvasCommand(it)
                 }
             }
         }
+        pathSubscription?.cancel()
+        pathSubscription= job
     }
 
     fun guessWord(word: String, onResult: (Boolean?)->Unit) {
@@ -133,8 +136,10 @@ class GameSessionRepository(
 
         gameSessionSubscription?.cancel()
         timerSubscription?.cancel()
+        pathSubscription?.cancel()
         gameSessionSubscription = null
         timerSubscription = null
+        pathSubscription=null
         gameSession.value?.status = GameStatus.ENDED
         // send leave request
     }
