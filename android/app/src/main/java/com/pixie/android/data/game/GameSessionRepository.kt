@@ -22,18 +22,11 @@ class GameSessionRepository(
     private var gameSessionSubscription: Job? = null
     private var timerSubscription: Job? = null
     private var pathSubscription:Job?=null
-    private var players = MutableLiveData<ArrayList<GameParticipant>>().apply {
-        this.postValue(
-            arrayListOf()
-        )
-    }
 
-    // should be included in start game response
     private var timer = MutableLiveData<Int>()
 
     fun getTimer() = timer
 
-    fun getPlayers() = players
 
     fun getGameSession() = gameSession
 
@@ -42,7 +35,6 @@ class GameSessionRepository(
 
     fun startGame(gameID: Double, onResult: (RequestResult) -> Unit) {
 
-        players.postValue(arrayListOf())
         CoroutineScope(Dispatchers.IO).launch {
             val gameSessionStarted = dataSource.startGame(gameID, userRepository.getUser().userId);
             if (gameSessionStarted != null) {
@@ -55,11 +47,6 @@ class GameSessionRepository(
                     subscribeToGameSessionChange(gameID)
                     subscribeToPathChange(gameID)
 
-                    for (player in gameSessionStarted.players) {
-                        val gamePlayerData =
-                            GameParticipant(player.id, player.username, player.isOnline, 0.0)
-                        players.value?.add(gamePlayerData)
-                    }
                 }
             }
         }
@@ -86,19 +73,14 @@ class GameSessionRepository(
                     // Handles the case where another user starts the game
                     if (gameSession.value == null || gameSession.value?.status == GameStatus.PENDING || gameSession.value?.status == GameStatus.READY) {
                         channelID = it.channelID
-                        for (player in it.players) {
-                            val gamePlayerData =
-                                GameParticipant(player.id, player.username, player.isOnline, 0.0)
-                            players.value?.add(gamePlayerData)
-                        }
                         subscribeToTimer(it.id)
                         subscribeToPathChange(gameID)
 
                     }
+                    //handles going to the next round
                     if(gameSession.value?.currentRound!=null && it.currentRound>gameSession.value!!.currentRound!! ){
                         canvasCommandHistoryRepository.clear()
                     }
-
                     gameSession.postValue(it)
 
                 }
@@ -125,7 +107,6 @@ class GameSessionRepository(
             CoroutineScope(Dispatchers.IO).launch {
                 val response = dataSource.guessWord(word, gameID, userRepository.getUser().userId)
                 CoroutineScope(Dispatchers.Main).launch {
-
                 onResult(response)}
             }
         }
@@ -140,7 +121,7 @@ class GameSessionRepository(
         gameSessionSubscription = null
         timerSubscription = null
         pathSubscription=null
-        gameSession.value?.status = GameStatus.ENDED
+        gameSession = MutableLiveData()
         // send leave request
     }
 
