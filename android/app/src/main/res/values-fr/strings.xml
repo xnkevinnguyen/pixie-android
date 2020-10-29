@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pixie</string>
+    <string name="cell_width">Entrer largeur cellule</string>
+    <string name="cell_hint">50</string>
+    <string name="cancel">Annuler</string>
+    <string name="apply">Appliquer</string>
+    <string name="ok">Ok</string>
+    <string name="tutorial">Tutoriel</string>
+    <string name="username">Nom utilisateur</string>
+    <string name="nav_header_desc">nav_header_desc</string>
+    <string name="home">Accueil</string>
+    <string name="game_select">Sélection de Jeu</string>
+    <string name="action_settings">action réglage</string>
+    <string name="chat_message_hint">Entrer message ici...</string>
+    <string name="chat_guess_hint">Deviner ici...</string>
+    <string name="welcome">"Bienvenue !"</string>
+    <string name="invalid_username">Nom utilisateur invalide</string>
+    <string name="invalid_name">Nom invalide</string>
+    <string name="invalid_password">Mot de passe doit contenir au moins 6 caractères</string>
+    <string name="invalid_re_password">Mot de passe doit être le même</string>
+    <string name="login_failed">"Authentification échoué"</string>
+    <string name="register"><u>Inscription</u></string>
+    <string name="failed_login">Nom utilisateur ou mot de passe incorrect</string>
+    <string name="failed_registration">Inscription échoué</string>
+    <string name="login_user_hint">Nom utilisateur</string>
+    <string name="login_pass_hint">Entrer mot de passe</string>
+    <string name="login">Connexion</string>
+    <string name="logout">Déconnexion</string>
+    <string name="register_title">Inscription</string>
+    <string name="retype_pass">Entrer mot de passe à nouveau</string>
+    <string name="return_login">Retour page authentification</string>
+    <string name="load_chat_history">Charger historique des discussions</string>
+    <string name="messages">Messages</string>
+    <string name="channel">Vos Cannaux</string>
+    <string name="add_channel">Ajouter canal</string>
+    <string name="players">Joueur</string>
+    <string name="dropdown_1">Profile</string>
+    <string name="dropdown_2">Déconnexion</string>
+    <string name="search_player">Rechercher joueur</string>
+    <string name="follow">Suivre</string>
+    <string name="unfollow">Ne plus suivre</string>
+    <string name="invite">Inviter</string>
+
+    <string name="user_info">Informations Usager</string>
+    <string name="name">Nom: </string>
+    <string name="surname">Prénom: </string>
+    <string name="user_username">Nom utilisateur: </string>
+    <string name="game_play_info">Informations de jeu de usager</string>
+    <string name="number_games">Nombre de parties jouées: </string>
+    <string name="percentage_victory">Pourcentage de victoire: </string>
+    <string name="average_game">Temps moyen de jeu: </string>
+    <string name="total_game">Temps total de jeu: </string>
+    <string name="best_score">Meilleur pointage: </string>
+    <string name="history_con_disc">Historique de Connexions et Déconnexions</string>
+    <string name="last_conn">Dernière connexion: </string>
+    <string name="last_disc">Dernière déconnexion: </string>
+    <string name="registration_date">Date insciption: </string>
+    <string name="show_hist">Montrer Historique</string>
+    <string name="game_history">Historique des Parties</string>
+    <string name="last_game">Dernière partie jouée</string>
+    <string name="date_game">Date: </string>
+    <string name="time_game">Heure: </string>
+    <string name="your_points">Votre pointage: </string>
+    <string name="winner">Gagnant: </string>
+    <string name="difficulty">Difficulté:</string>
+    <string name="game_mode">Mode de jeu: </string>
+    <string name="conn">Connexionn:</string>
+    <string name="disc">Déconnexion: </string>
+
+    <string name="theme">Thème</string>
+    <string name="language">Langage</string>
+    <string name="notif_sound">Son de notification</string>
+    <string name="dark">Sombre</string>
+    <string name="light">Clair</string>
+    <string name="eng">Anglais</string>
+    <string name="fr">Français</string>
+    <string name="setting">Réglage</string>
+
+    <string name="new_channel">Créer nouveau canal</string>
+    <string name="channel_name">Entrer nom du canal...</string>
+    <string name="join_existing_channel">Joindre canaux existants</string>
+
+    <string name="select_game">Sélectionner Mode de Jeu</string>
+    <string name="mode1">Mêlée générale</string>
+    <string name="mode1_explanation">\"Affrontez les autres\"</string>
+    <string name="mode2">Solo</string>
+    <string name="mode2_explanation">\"Rivaliser par vous-même\"</string>
+    <string name="mode3">Coop</string>
+    <string name="mode3_explanation">\"Rivaliser ensemble\"</string>
+    <string name="difficulty_select">Difficulté</string>
+    <string name="diff1">Facile</string>
+    <string name="diff2">Moyen</string>
+    <string name="diff3">Difficile</string>
+    <string name="next">Prochain</string>
+    <string name="previous">Précédent</string>
+
+    <string name="join">Joindre</string>
+    <string name="create">Créer</string>
+    <string name="new_game">Nouvelle Partie</string>
+    <string name="guess">Deviner</string>
+    <string name="message">Message</string>
+    <string name="guess_left">Suppositions restantes</string>
+    <string name="kick">Retirer Joueur</string>
+    <string name="leave">Quitter Partie</string>
+    <string name="not_available">Indisponible</string>
+
+    <string name="start_game">Débuter Partie</string>
+    <string name="add_players">Ajouter un joueur</string>
+    <string name="add_virtual">Ajouter Joueurs Virtuel</string>
+    <string name="create_game">Créer une Nouvelle Partie</string>
+    <string name="add">Ajouter</string>
+    <string name="round">Tours : 3</string>
+    <string name="round_turn">Tour</string>
+    <string name="total_round">de 3</string>
+
+</resources>

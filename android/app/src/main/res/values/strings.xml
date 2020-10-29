@@ -6,11 +6,10 @@
     <string name="apply">Apply</string>
     <string name="ok">Ok</string>
     <string name="tutorial">Tutorial</string>
-    <string name="setting_desc">nav_setting_desc</string>
+    <string name="setting_desc" translatable="false">nav_setting_desc</string>
     <string name="username">Username</string>
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Home</string>
-    <string name="drawing">Drawing</string>
     <string name="game_select">Game Selection</string>
     <string name="action_settings">action settings</string>
     <string name="chat_message_hint">Type message here...</string>
@@ -29,15 +28,11 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="register_title">Register</string>
-    <string name="email">email</string>
     <string name="retype_pass">Re-Enter your password</string>
     <string name="return_login">Return to login page</string>
-    <string name="active_users">Players</string>
     <string name="load_chat_history">Load Chat History</string>
     <string name="messages">Messages</string>
     <string name="channel">Your Channels</string>
-    <string name="join_channel">Join</string>
-    <string name="create_channel">Create</string>
     <string name="add_channel">Add Channel</string>
     <string name="players">Players</string>
     <string name="dropdown_1">Profile</string>
@@ -82,7 +77,6 @@
     <string name="fr">French</string>
     <string name="setting">Settings</string>
 
-    <string name="changing_theme">To apply these changes please logout of Pixie.</string>
     <string name="new_channel">Create new channel</string>
     <string name="channel_name">Enter channel name...</string>
     <string name="join_existing_channel">Join existing channels</string>
@@ -106,7 +100,6 @@
     <string name="new_game">New Game</string>
     <string name="guess">Guess</string>
     <string name="message">Message</string>
-    <string name="hints">Hints</string>
     <string name="guess_left">Guess left</string>
     <string name="kick">Kick player</string>
     <string name="leave">Leave game</string>
@@ -116,4 +109,8 @@
     <string name="add_players">Add Players</string>
     <string name="add_virtual">Add Virtual Player</string>
     <string name="create_game">Create New Game</string>
+    <string name="add">Add</string>
+    <string name="round">Round : 3</string>
+    <string name="round_turn">Round</string>
+    <string name="total_round">of 3</string>
 </resources>
