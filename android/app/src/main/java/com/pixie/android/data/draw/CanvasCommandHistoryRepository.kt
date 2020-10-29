@@ -22,6 +22,10 @@ class CanvasCommandHistoryRepository {
         }
         restoreUndoneCommandList()
     }
+    fun clear(){
+//        resetDrawCommandHistory()
+//        drawCommandHistory.notifyObserver()
+    }
     //undo
     fun popLastDrawCommandFromHistory() {
         val count = drawCommandHistory.value?.count()

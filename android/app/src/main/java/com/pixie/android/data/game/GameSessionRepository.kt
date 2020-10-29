@@ -94,6 +94,9 @@ class GameSessionRepository(
                         subscribeToPathChange(gameID)
 
                     }
+                    if(gameSession.value?.currentRound!=null && it.currentRound>gameSession.value!!.currentRound!! ){
+                        canvasCommandHistoryRepository.clear()
+                    }
 
                     gameSession.postValue(it)
 
@@ -118,7 +121,9 @@ class GameSessionRepository(
         if(gameID!=null) {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = dataSource.guessWord(word, gameID, userRepository.getUser().userId)
-                onResult(response)
+                CoroutineScope(Dispatchers.Main).launch {
+
+                onResult(response)}
             }
         }
     }

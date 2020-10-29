@@ -9,10 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -105,6 +102,15 @@ class GameChatFragment : Fragment() {
 
             gameChatViewModel.sendMessageOrGuess(message){
                 //TODO handle guess UI
+                if(it ==true){
+                    Toast.makeText(requireContext(),
+                    "Correct Answer!",
+                    Toast.LENGTH_LONG).show()
+                }else if( it==false){
+                    Toast.makeText(requireContext(),
+                        "Wrong Answer!",
+                        Toast.LENGTH_LONG).show()
+                }
             }
             editText.text.clear()
 

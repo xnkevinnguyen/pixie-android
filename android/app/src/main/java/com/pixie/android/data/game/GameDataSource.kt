@@ -34,7 +34,7 @@ class GameDataSource() {
                 val gameChannelData = ChannelData(channelID = data.gameHall.id, channelName = separated[0], participantList = gameParticipant, nParticipant = null, gameID = data.id)
 
                 var playersList = ArrayList(data.gameInfo.players.map { GameParticipant(it.id, it.username, it.isOnline) })
-                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,3.0-data.sprintTries!!,data.status,
+                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.sprintTries!!,data.status,
                 data.gameHall.id,playersList,data.gameInfo.mode)
                 onSuccess(gameChannelData)
                 return gameData

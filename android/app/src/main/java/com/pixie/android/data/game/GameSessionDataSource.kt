@@ -30,7 +30,7 @@ class GameSessionDataSource {
                     GameParticipant(it.id,it.username,it.isOnline)
                 })
                 return GameSessionData(data.id, data.currentDrawerId, data.currentWord,
-                data.currentRound,3.0-data.sprintTries!!,data.status,data.gameHall.id,players, data.gameInfo.mode)
+                data.currentRound,data.sprintTries,data.status,data.gameHall.id,players, data.gameInfo.mode)
             }
 
         }catch (e: ApolloException){
@@ -84,7 +84,7 @@ class GameSessionDataSource {
                         data.currentDrawerId,
                         data.currentWord,
                         data.currentRound,
-                        3.0-data.sprintTries!!,
+                        data.sprintTries!!,
                         data.status,
                         data.gameHall.id,
                         players,
