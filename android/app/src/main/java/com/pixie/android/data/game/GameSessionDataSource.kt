@@ -139,13 +139,11 @@ class GameSessionDataSource {
         word:String,
         gameSessionID: Double,
         userID: Double
-        ):Boolean{
+        ):Boolean?{
         val guessWordInput = GuessWordInput(word,gameSessionID)
         try {
             val response = apolloClient(userID).mutate(GuessWordMutation(guessWordInput)).toDeferred().await()
-            if(response.data?.guessWord!=null){
-                return true
-            }
+            return response.data?.guessWord
         }catch(e:ApolloException){
             Log.d("ApolloException", e.message.toString())
 

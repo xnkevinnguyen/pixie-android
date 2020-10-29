@@ -125,6 +125,15 @@ class GameChatFragment : Fragment() {
                     if (message.isNotBlank()) {
                         gameChatViewModel.sendMessageOrGuess(message){
                             //handle UI for good or bad guess
+                            if(it ==true){
+                                Toast.makeText(requireContext(),
+                                    "Correct Answer!",
+                                    Toast.LENGTH_LONG).show()
+                            }else if( it==false){
+                                Toast.makeText(requireContext(),
+                                    "Wrong Answer!",
+                                    Toast.LENGTH_LONG).show()
+                            }
                         }
                         editText.text.clear() //clear text line
                     }
