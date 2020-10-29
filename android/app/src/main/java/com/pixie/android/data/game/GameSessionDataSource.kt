@@ -4,12 +4,10 @@ import android.util.Log
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
 import com.apollographql.apollo.exception.ApolloException
-import com.pixie.android.OnGameSessionChangeSubscription
-import com.pixie.android.OnTimerChangeSubscription
-import com.pixie.android.StartGameMutation
-import com.pixie.android.apolloClient
+import com.pixie.android.*
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.GameSessionData
+import com.pixie.android.type.GuessWordInput
 import com.pixie.android.type.StartGameInput
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -82,5 +80,22 @@ class GameSessionDataSource {
                     onGameSessionChange(gameSession)
                 }
             }
+    }
+    suspend fun guessWord(
+        word:String,
+        gameSessionID: Double,
+        userID: Double
+        ):Boolean{
+        val guessWordInput = GuessWordInput(word,gameSessionID)
+        try {
+            val response = apolloClient(userID).mutate(GuessWordMutation(guessWordInput)).toDeferred().await()
+            if(response.data?.guessWord!=null){
+                return true
+            }
+        }catch(e:ApolloException){
+            Log.d("ApolloException", e.message.toString())
+
+        }
+        return false
     }
 }

@@ -1,0 +1,6 @@
+mutation GuessWordMutation($input:GuessWordInput!){
+    guessWord(input:$input){
+        id
+
+    }
+}

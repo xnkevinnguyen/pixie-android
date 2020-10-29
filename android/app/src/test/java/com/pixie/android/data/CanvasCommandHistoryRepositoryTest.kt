@@ -1,9 +1,8 @@
 package com.pixie.android.data
 
 import android.graphics.Paint
-import android.graphics.Path
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
+import com.pixie.android.data.draw.CanvasCommandHistoryRepository
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.CommandType
 import org.junit.Assert
@@ -19,19 +18,19 @@ class CanvasCommandHistoryRepositoryTest {
     @Test
     fun testAddDrawCommandOnceShouldReturnListofOne(){
         //PREPARE
-        val repostiroy:CanvasCommandHistoryRepostiroy = getRepository()
+        val repository:CanvasCommandHistoryRepository = getRepository()
 
         //PERFORM
         val drawCommand = CanvasCommand( CommandType.DRAW, Paint())
-        repostiroy.addCanvasCommand(drawCommand)
-        val result = repostiroy.getDrawCommandHistory()
+        repository.addCanvasCommand(drawCommand)
+        val result = repository.getDrawCommandHistory()
 
 
         //CHECK
         Assert.assertEquals(result.value!!.size,1)
     }
 
-    private fun getRepository():CanvasCommandHistoryRepostiroy{
-        return CanvasCommandHistoryRepostiroy()
+    private fun getRepository():CanvasCommandHistoryRepository{
+        return CanvasCommandHistoryRepository()
     }
 }
