@@ -112,13 +112,16 @@ class GameSessionDataSource {
                     val length = data.points.size
                     for (i in 0..length){
                         if(i+1<length){
-                            val point=PathPoint(data.points[i].x!!.toFloat(),
-                            data.points[i].y!!.toFloat(),
-                            data.points[i+1].x!!.toFloat(),
-                            data.points[i+1].y!!.toFloat())
+                            val point=PathPoint(data.points[i].y!!.toFloat(),
+                            data.points[i].x!!.toFloat(),
+                            data.points[i+1].y!!.toFloat(),
+                            data.points[i+1].x!!.toFloat())
                             pathList.add(point)
                         }
                     }
+                    if(pathList.size>2){
+                    pathList.removeAt(0)
+                    pathList.removeAt(pathList.size-1)}
                     val paint = Paint().apply {
                         color = Color.parseColor(data.primaryColor)
                         style = Paint.Style.STROKE
