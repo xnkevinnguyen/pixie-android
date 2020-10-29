@@ -87,7 +87,7 @@ class GameInformationFragment: Fragment() {
         })
 
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
-            val roundString = resources.getString(R.string.round_turn) + (it.currentRound.toInt() + 1) + resources.getString(R.string.total_game)
+            val roundString = resources.getString(R.string.round_turn) + (it.currentRound.toInt() + 1)
             round.text = roundString
             guessLeftElement.text=it.guessesLeft?.toInt().toString()
             listPlayerAdapter.set(it.players)

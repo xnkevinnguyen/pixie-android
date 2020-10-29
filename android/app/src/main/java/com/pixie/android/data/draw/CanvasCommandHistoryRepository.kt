@@ -24,7 +24,9 @@ class CanvasCommandHistoryRepository {
     }
     fun clear(){
 //        resetDrawCommandHistory()
+
 //        drawCommandHistory.notifyObserver()
+        drawCommandHistory.postValue(mutableListOf())
     }
     //undo
     fun popLastDrawCommandFromHistory() {
