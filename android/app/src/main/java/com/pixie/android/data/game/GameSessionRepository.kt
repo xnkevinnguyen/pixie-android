@@ -2,6 +2,7 @@ package com.pixie.android.data.game
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pixie.android.data.draw.CanvasCommandHistoryRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelParticipant
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 
 class GameSessionRepository(
     private val dataSource: GameSessionDataSource,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val canvasCommandHistoryRepository: CanvasCommandHistoryRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
     private var channelID: Double = 0.0
@@ -54,6 +56,7 @@ class GameSessionRepository(
                     //start additional subscriptions
                     subscribeToTimer(gameID)
                     subscribeToGameSessionChange(gameID)
+                    subscribeToPathChange(gameID)
 
                     for (player in gameSessionStarted.players) {
                         val gamePlayerData =
@@ -92,6 +95,7 @@ class GameSessionRepository(
                             players.value?.add(gamePlayerData)
                         }
                         subscribeToTimer(it.id)
+                        subscribeToPathChange(gameID)
 
                     }
 
@@ -102,6 +106,13 @@ class GameSessionRepository(
         }
         gameSessionSubscription?.cancel()
         gameSessionSubscription = job
+    }
+    fun subscribeToPathChange(gameID:Double){
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.subscribeToPathChange(gameID,userRepository.getUser().userId){
+                canvasCommandHistoryRepository.addCanvasCommand(it)
+            }
+        }
     }
 
     fun guessWord(word: String, onResult: (Boolean?)->Unit) {
@@ -130,8 +141,10 @@ class GameSessionRepository(
         @Volatile
         private var instance: GameSessionRepository? = null
         private var dataSource: GameSessionDataSource = GameSessionDataSource()
+        private var drawCommandHistoryRepository = CanvasCommandHistoryRepository.getInstance()
         fun getInstance() = instance ?: synchronized(this) {
-            instance ?: GameSessionRepository(dataSource, UserRepository.getInstance()).also {
+            instance ?: GameSessionRepository(dataSource, UserRepository.getInstance(),
+                drawCommandHistoryRepository).also {
                 instance = it
             }
         }

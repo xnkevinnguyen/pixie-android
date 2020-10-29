@@ -1,11 +1,16 @@
 package com.pixie.android.data.game
 
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.Log
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
 import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.*
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.model.draw.CanvasCommand
+import com.pixie.android.model.draw.CommandType
+import com.pixie.android.model.draw.PathPoint
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GuessWordInput
 import com.pixie.android.type.StartGameInput
@@ -79,6 +84,44 @@ class GameSessionDataSource {
                     )
                     onGameSessionChange(gameSession)
                 }
+            }
+    }
+
+    suspend fun subscribeToPathChange(
+        gameSessionID: Double,
+        userID: Double,
+        onPathChange:(CanvasCommand)->Unit
+    ){
+
+        apolloClient(userID).subscribe(OnPathChangeSubscription(gameSessionID)).toFlow()
+            .retryWhen{ _, attempt->
+                delay(attempt * 1000)
+                true
+            }.collect {
+                val data = it.data?.onPathChange
+                if(data!=null){
+                    val pathList = arrayListOf<PathPoint>()
+                    val length = data.points.size
+                    for (i in 0..length){
+                        if(i+1<length){
+                            val point=PathPoint(data.points[i].x!!.toFloat(),
+                            data.points[i].y!!.toFloat(),
+                            data.points[i+1].x!!.toFloat(),
+                            data.points[i+1].y!!.toFloat())
+                            pathList.add(point)
+                        }
+                    }
+                    val paint = Paint().apply {
+                        color = Color.parseColor(data.primaryColor)
+                        style = Paint.Style.STROKE
+                        strokeJoin = Paint.Join.ROUND
+                        strokeCap = Paint.Cap.ROUND
+                        strokeWidth = data.strokeWidth.toFloat()
+                    }
+                    val command = CanvasCommand(CommandType.DRAW,paint,pathList)
+                    onPathChange(command)
+                }
+
             }
     }
     suspend fun guessWord(
