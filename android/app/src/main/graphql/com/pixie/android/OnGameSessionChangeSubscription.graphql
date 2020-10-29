@@ -5,6 +5,8 @@ subscription OnGameSessionChange($gameSessionId:Float!){
         currentWord
         currentRound
         status
+        sprintTries
+        sprintScore
         gameHall{
             id
             name
@@ -26,6 +28,15 @@ subscription OnGameSessionChange($gameSessionId:Float!){
                 id
                 username
                 isOnline
+            }
+            scores{
+                id
+                value
+                user{
+                    id
+                    username
+
+                }
             }
             mode
         }

@@ -54,7 +54,7 @@ class CanvasCommandHistoryRepository {
         } else {
             drawCommandHistory.value?.add(drawCommand)
             //erase needs a reload
-            if(drawCommand.type == CommandType.ERASE)
+//            if(drawCommand.type == CommandType.ERASE)
                 drawCommandHistory.notifyObserver()
         }
 

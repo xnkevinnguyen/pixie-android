@@ -7,10 +7,10 @@ import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
 import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.*
-import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.CommandType
 import com.pixie.android.model.draw.PathPoint
+import com.pixie.android.model.game.GameParticipant
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GuessWordInput
 import com.pixie.android.type.StartGameInput
@@ -27,10 +27,10 @@ class GameSessionDataSource {
             val data = response.data?.startGame
             if(data!=null && data.gameInfo.players !=null){
                 val players = ArrayList(data.gameInfo.players.map {
-                    ChannelParticipant(it.id,it.username,it.isOnline)
+                    GameParticipant(it.id,it.username,it.isOnline)
                 })
                 return GameSessionData(data.id, data.currentDrawerId, data.currentWord,
-                data.currentRound,data.status,data.gameHall.id,players, data.gameInfo.mode)
+                data.currentRound,3.0-data.sprintTries!!,data.status,data.gameHall.id,players, data.gameInfo.mode)
             }
 
         }catch (e: ApolloException){
@@ -70,13 +70,21 @@ class GameSessionDataSource {
                 val data = it.data?.onGameSessionChange
                 if(data !=null && data.gameInfo.players !=null){
                     val players = ArrayList(data.gameInfo.players.map {
-                        ChannelParticipant(it.id,it.username,it.isOnline)
+                        GameParticipant(it.id,it.username,it.isOnline)
                     })
+                    data.gameInfo.scores?.forEach { score->
+                        players.forEach {gameParticipant->
+                            if(score.id == gameParticipant.id && score.value !=null){
+                                gameParticipant.score=score.value
+                            }
+                        }
+                    }
                     val gameSession = GameSessionData(
                         data.id,
                         data.currentDrawerId,
                         data.currentWord,
                         data.currentRound,
+                        3.0-data.sprintTries!!,
                         data.status,
                         data.gameHall.id,
                         players,

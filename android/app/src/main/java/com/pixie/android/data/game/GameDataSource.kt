@@ -7,10 +7,7 @@ import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.*
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.game.GameData
-import com.pixie.android.model.game.AvailableGameData
-import com.pixie.android.model.game.CreatedGameData
-import com.pixie.android.model.game.GameSessionData
+import com.pixie.android.model.game.*
 import com.pixie.android.type.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -36,8 +33,8 @@ class GameDataSource() {
 
                 val gameChannelData = ChannelData(channelID = data.gameHall.id, channelName = separated[0], participantList = gameParticipant, nParticipant = null, gameID = data.id)
 
-                var playersList = ArrayList(data.gameInfo.players.map { ChannelParticipant(it.id, it.username, it.isOnline) })
-                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.status,
+                var playersList = ArrayList(data.gameInfo.players.map { GameParticipant(it.id, it.username, it.isOnline) })
+                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,3.0-data.sprintTries!!,data.status,
                 data.gameHall.id,playersList,data.gameInfo.mode)
                 onSuccess(gameChannelData)
                 return gameData
@@ -175,9 +172,9 @@ class GameDataSource() {
                 val separated: List<String> = data.gameHall.name.split("-")
 
                 val gameChannelData = ChannelData(channelID = data.gameHall.id, channelName = separated[0], participantList = gameParticipant, nParticipant = null, gameID = data.id)
-                var playersList = ArrayList(data.gameInfo.players.map { ChannelParticipant(it.id, it.username, it.isOnline) })
+                var playersList = ArrayList(data.gameInfo.players.map { GameParticipant(it.id, it.username, it.isOnline) })
 
-                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.status,
+                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,3.0-data.sprintTries!!,data.status,
                     data.gameHall.id,playersList,data.gameInfo.mode)
                 onSuccess(gameChannelData)
                 return gameData

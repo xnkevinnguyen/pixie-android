@@ -5,6 +5,7 @@ mutation EnterGame ($enterGameInput:GameSessionInput!){
         currentWord
         currentRound
         status
+        sprintTries
         gameHall{
             id,
             name,

@@ -1,14 +1,10 @@
 package com.pixie.android.data.game
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.draw.CanvasCommandHistoryRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
-import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.game.AvailableGameData
-import com.pixie.android.model.game.GameData
-import com.pixie.android.model.game.GamePlayerData
+import com.pixie.android.model.game.GameParticipant
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameStatus
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +21,7 @@ class GameSessionRepository(
     private var channelID: Double = 0.0
     private var gameSessionSubscription: Job? = null
     private var timerSubscription: Job? = null
-    private var players = MutableLiveData<ArrayList<GamePlayerData>>().apply {
+    private var players = MutableLiveData<ArrayList<GameParticipant>>().apply {
         this.postValue(
             arrayListOf()
         )
@@ -60,7 +56,7 @@ class GameSessionRepository(
 
                     for (player in gameSessionStarted.players) {
                         val gamePlayerData =
-                            GamePlayerData(player.id, player.username, player.isOnline, 0.0)
+                            GameParticipant(player.id, player.username, player.isOnline, 0.0)
                         players.value?.add(gamePlayerData)
                     }
                 }
@@ -91,7 +87,7 @@ class GameSessionRepository(
                         channelID = it.channelID
                         for (player in it.players) {
                             val gamePlayerData =
-                                GamePlayerData(player.id, player.username, player.isOnline, 0.0)
+                                GameParticipant(player.id, player.username, player.isOnline, 0.0)
                             players.value?.add(gamePlayerData)
                         }
                         subscribeToTimer(it.id)
@@ -110,7 +106,9 @@ class GameSessionRepository(
     fun subscribeToPathChange(gameID:Double){
         CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToPathChange(gameID,userRepository.getUser().userId){
-                canvasCommandHistoryRepository.addCanvasCommand(it)
+                CoroutineScope(Dispatchers.Main).launch {
+                    canvasCommandHistoryRepository.addCanvasCommand(it)
+                }
             }
         }
     }

@@ -36,6 +36,7 @@ class GameInformationFragment: Fragment() {
         val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
 
         val timerElement = root.findViewById<TextView>(R.id.time_left)
+        val guessLeftElement= root.findViewById<TextView>(R.id.number_guess_left)
         val mode = root.findViewById<TextView>(R.id.mode_of_game)
         val round = root.findViewById<TextView>(R.id.round_number)
         val listPlayer = root.findViewById<ListView>(R.id.players_in_game)
@@ -56,6 +57,8 @@ class GameInformationFragment: Fragment() {
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)
             navController.navigate(R.id.nav_home)
         }
+
+        guessLeftElement.text=gameInfoViewModel.getGameSession().value?.guessesLeft?.toInt().toString()
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
@@ -86,12 +89,14 @@ class GameInformationFragment: Fragment() {
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
             val roundString = resources.getString(R.string.round_turn) + (it.currentRound.toInt() + 1) + resources.getString(R.string.total_game)
             round.text = roundString
+            guessLeftElement.text=it.guessesLeft?.toInt().toString()
+            listPlayerAdapter.set(it.players)
             listPlayerAdapter.setDrawer(it.currentDrawerId)
         })
 
-        gameInfoViewModel.getPlayers().observe(viewLifecycleOwner, Observer {
-            listPlayerAdapter.set(it)
-        })
+//        gameInfoViewModel.getPlayers().observe(viewLifecycleOwner, Observer {
+//            listPlayerAdapter.set(it)
+//        })
 
         mode.text = gameInfoViewModel.getGameSession().value?.mode.toString()
 
