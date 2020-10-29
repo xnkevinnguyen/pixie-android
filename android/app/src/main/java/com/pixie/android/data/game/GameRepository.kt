@@ -83,8 +83,6 @@ class GameRepository(private val dataSource: GameDataSource,
                     if (it != null) {
                         // Main thread only used to modify values
                         CoroutineScope(Dispatchers.Main).launch {
-                            Log.d("here", "notif 2")
-                            Log.d("here", "it $it")
                             availableGames.value = it
                             availableGames.notifyObserver()
                         }

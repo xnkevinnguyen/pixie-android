@@ -1,5 +1,6 @@
 package com.pixie.android.data.game
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.user.UserRepository
@@ -39,7 +40,6 @@ class GameSessionRepository (
 
 
     fun startGame(gameID:Double, onResult:(RequestResult)->Unit){
-
         players.postValue(arrayListOf())
         CoroutineScope(Dispatchers.IO).launch{
             val gameSessionStarted = dataSource.startGame(gameID,userRepository.getUser().userId);
