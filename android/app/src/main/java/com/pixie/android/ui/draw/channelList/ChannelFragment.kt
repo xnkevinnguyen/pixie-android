@@ -58,7 +58,6 @@ class ChannelFragment : Fragment() {
                     startGameBtn.visibility = View.VISIBLE
                     addPlayerBtn.visibility = View.VISIBLE
                 } else {
-                    Log.d("here", "chan ${currentChannel.participantList}")
                     startGameBtn.visibility = View.GONE
                     addPlayerBtn.visibility = View.GONE
                 }
