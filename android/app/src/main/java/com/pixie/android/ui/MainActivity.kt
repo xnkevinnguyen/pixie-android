@@ -9,7 +9,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -24,7 +25,6 @@ import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
-import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
 import com.pixie.android.ui.draw.settings.SettingsFragment
 import com.pixie.android.ui.user.AuthActivity
@@ -38,6 +38,16 @@ import kotlinx.coroutines.runBlocking
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var preferencesSettings: SharedPreferences
+
+//    override fun attachBaseContext(newBase: Context) {
+//        val lang = preferencesSettings.getString(Constants.LANGUAGE, resources.getString(R.string.eng))
+//        var langAcronyme = "en"
+//        val langValue = resources.getString(R.string.fr)
+//        if(lang == langValue) langAcronyme = "fr"
+//        else langAcronyme = "en"
+//
+//        super.attachBaseContext(langAcronyme)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
