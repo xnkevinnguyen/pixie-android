@@ -9,9 +9,10 @@ data class GameSessionData (
     var currentDrawerId:Double?,
     var currentWord:String,
     var currentRound:Double,
+    var guessesLeft:Double?=3.0,
     var status: GameStatus,
     var channelID:Double,
-    var players:ArrayList<ChannelParticipant>,
+    var players:ArrayList<GameParticipant>,
     var mode: GameMode
 
 )

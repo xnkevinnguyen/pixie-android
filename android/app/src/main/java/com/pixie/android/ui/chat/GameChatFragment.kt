@@ -9,10 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -65,14 +62,23 @@ class GameChatFragment : Fragment() {
         messageBtn.setOnClickListener {
             editText.setHintTextColor(color)
             editText.hint = resources.getString(R.string.chat_message_hint)
-            editorGame.putString(Constants.GAME_CHAT_VALUE, "message")
-            editorGame.apply()
+            gameChatViewModel.setMessageType(MESSAGE_TYPE.MESSAGE)
         }
         guessBtn.setOnClickListener {
             editText.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
             editText.hint = resources.getString(R.string.chat_guess_hint)
-            editorGame.putString(Constants.GAME_CHAT_VALUE, "guess")
-            editorGame.apply()
+            gameChatViewModel.setMessageType(MESSAGE_TYPE.GUESS)
+
+        }
+
+        if(gameChatViewModel.getMessageType().equals(MESSAGE_TYPE.MESSAGE)){
+            editText.setHintTextColor(color)
+            editText.hint = resources.getString(R.string.chat_message_hint)
+
+        }else{
+            editText.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+            editText.hint = resources.getString(R.string.chat_guess_hint)
+
         }
 
         val channelMessages = gameChatViewModel.getChannelMessageList()
@@ -94,14 +100,20 @@ class GameChatFragment : Fragment() {
         sendMessage.setOnClickListener {
             val message = editText.text.toString()
 
-            val valueChat = preferencesGame.getString(Constants.GAME_CHAT_VALUE,"message")
-            if(valueChat == "message") {
-                if (message.isNotBlank()) {
-                    gameChatViewModel.sendMessageToGameChannel(message)
-                    editText.text.clear() //clear text line
-
+            gameChatViewModel.sendMessageOrGuess(message){
+                //TODO handle guess UI
+                if(it ==true){
+                    Toast.makeText(requireContext(),
+                    "Correct Answer!",
+                    Toast.LENGTH_LONG).show()
+                }else if( it==false){
+                    Toast.makeText(requireContext(),
+                        "Wrong Answer!",
+                        Toast.LENGTH_LONG).show()
                 }
             }
+            editText.text.clear()
+
         }
 
         // Enter button on real keyboard if attached to android
@@ -111,7 +123,18 @@ class GameChatFragment : Fragment() {
                     keyCode == KeyEvent.KEYCODE_ENTER) {
                     val message = editText.text.toString()
                     if (message.isNotBlank()) {
-                        gameChatViewModel.sendMessageToGameChannel(message)
+                        gameChatViewModel.sendMessageOrGuess(message){
+                            //handle UI for good or bad guess
+                            if(it ==true){
+                                Toast.makeText(requireContext(),
+                                    "Correct Answer!",
+                                    Toast.LENGTH_LONG).show()
+                            }else if( it==false){
+                                Toast.makeText(requireContext(),
+                                    "Wrong Answer!",
+                                    Toast.LENGTH_LONG).show()
+                            }
+                        }
                         editText.text.clear() //clear text line
                     }
                     return true

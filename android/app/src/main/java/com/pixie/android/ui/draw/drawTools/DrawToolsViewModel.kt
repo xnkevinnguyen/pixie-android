@@ -2,10 +2,10 @@ package com.pixie.android.ui.draw.drawTools
 
 import android.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
+import com.pixie.android.data.draw.CanvasCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
 
-class DrawToolsViewModel(private val drawingParametersRepository: DrawingParametersRepository, private val canvasCommandHistoryRepostiroy: CanvasCommandHistoryRepostiroy):ViewModel() {
+class DrawToolsViewModel(private val drawingParametersRepository: DrawingParametersRepository, private val canvasCommandHistoryRepository: CanvasCommandHistoryRepository):ViewModel() {
 
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
 
@@ -21,9 +21,9 @@ class DrawToolsViewModel(private val drawingParametersRepository: DrawingParamet
     fun setGridValue(grid: Boolean) = drawingParametersRepository.setGrid(grid)
 
     fun undo(){
-        canvasCommandHistoryRepostiroy.popLastDrawCommandFromHistory()
+        canvasCommandHistoryRepository.popLastDrawCommandFromHistory()
     }
     fun redo(){
-        canvasCommandHistoryRepostiroy.popUndoneCommand()
+        canvasCommandHistoryRepository.popUndoneCommand()
     }
 }

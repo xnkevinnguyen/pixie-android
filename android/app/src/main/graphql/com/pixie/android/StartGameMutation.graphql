@@ -5,6 +5,7 @@ mutation startGame($input: StartGameInput!){
         currentWord
         currentRound
         status
+        sprintTries
         gameHall{
             id
             name

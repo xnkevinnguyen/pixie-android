@@ -6,7 +6,7 @@ import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.CommandType
 import java.util.*
 
-class CanvasCommandHistoryRepostiroy {
+class CanvasCommandHistoryRepository {
     private var drawCommandHistory = MutableLiveData<MutableList<CanvasCommand>>()
     private var undoneCommandList: Stack<CanvasCommand> = Stack()
 
@@ -21,6 +21,12 @@ class CanvasCommandHistoryRepostiroy {
             drawCommandHistory = MutableLiveData<MutableList<CanvasCommand>>()
         }
         restoreUndoneCommandList()
+    }
+    fun clear(){
+//        resetDrawCommandHistory()
+
+//        drawCommandHistory.notifyObserver()
+        drawCommandHistory.postValue(mutableListOf())
     }
     //undo
     fun popLastDrawCommandFromHistory() {
@@ -54,7 +60,7 @@ class CanvasCommandHistoryRepostiroy {
         } else {
             drawCommandHistory.value?.add(drawCommand)
             //erase needs a reload
-            if(drawCommand.type == CommandType.ERASE)
+//            if(drawCommand.type == CommandType.ERASE)
                 drawCommandHistory.notifyObserver()
         }
 
@@ -75,9 +81,9 @@ class CanvasCommandHistoryRepostiroy {
     // Singleton
     companion object {
         @Volatile
-        private var instance: CanvasCommandHistoryRepostiroy? = null
+        private var instance: CanvasCommandHistoryRepository? = null
         fun getInstance() = instance ?: synchronized(this) {
-            instance ?: CanvasCommandHistoryRepostiroy().also {
+            instance ?: CanvasCommandHistoryRepository().also {
                 instance = it
             }
         }
