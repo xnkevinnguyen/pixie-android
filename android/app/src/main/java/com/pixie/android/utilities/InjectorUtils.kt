@@ -96,7 +96,10 @@ object InjectorUtils {
 
     fun provideGameInformationViewModelFactory():GameInformationViewModelFactory{
         val gameSessionRepository = GameSessionRepository.getInstance()
-        return GameInformationViewModelFactory(gameSessionRepository)
+        val chatRepository = ChatRepository.getInstance()
+        val gameRepository = GameRepository.getInstance()
+
+        return GameInformationViewModelFactory(gameSessionRepository,chatRepository,gameRepository)
     }
     fun provideGameChatViewModelFactory():GameChatViewModelFactory{
         val chatRepository = ChatRepository.getInstance()

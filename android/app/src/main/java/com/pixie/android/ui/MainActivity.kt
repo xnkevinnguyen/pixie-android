@@ -6,12 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -25,6 +27,7 @@ import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
+import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
 import com.pixie.android.ui.draw.settings.SettingsFragment
 import com.pixie.android.ui.user.AuthActivity
@@ -116,6 +119,10 @@ class MainActivity : AppCompatActivity() {
         val profileFactory = InjectorUtils.provideProfileViewModelFactory()
         val profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
 
+        val factory = InjectorUtils.provideGameInformationViewModelFactory()
+        val gameInfoViewModel =
+            ViewModelProvider(this, factory).get(GameInformationViewModel::class.java)
+
         val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
         val editor = preferences.edit()
         val intent = Intent(this, AuthActivity::class.java)
@@ -134,7 +141,14 @@ class MainActivity : AppCompatActivity() {
                 this.finish()
                 return true
             }
-            else -> super.onOptionsItemSelected(item)
+            android.R.id.home->{
+                // leave the game if user is in a game
+                gameInfoViewModel.leaveGameIfNecessary()
+                super.onOptionsItemSelected(item)
+            }
+
+            else -> {
+                super.onOptionsItemSelected(item)}
         }
     }
 

@@ -1,5 +1,6 @@
 package com.pixie.android.ui.draw.gameInformation
 
+import android.app.ActionBar
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +19,6 @@ import com.pixie.android.R
 import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.InjectorUtils
-import kotlinx.android.synthetic.main.app_bar_main.*
 
 
 class GameInformationFragment : Fragment() {
@@ -46,6 +46,8 @@ class GameInformationFragment : Fragment() {
 
         val gameID = gameInfoViewModel.getGameSession().value?.id
         val channelID = gameInfoViewModel.getGameSession().value?.channelID
+
+
         leaveGameBtn.setOnClickListener {
             gameInfoViewModel.leaveGame()
 
@@ -111,33 +113,6 @@ class GameInformationFragment : Fragment() {
         return root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val factory = InjectorUtils.provideGameInformationViewModelFactory()
-        val gameInfoViewModel =
-            ViewModelProvider(this, factory).get(GameInformationViewModel::class.java)
-
-        val chatFactory = InjectorUtils.provideChatViewModelFactory()
-        val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
-        Log.d("here", "item ${item.itemId}")
-        return when (item.itemId) {
-            android.R.id.home -> {
-                gameInfoViewModel.leaveGame()
-
-                val gameID = gameInfoViewModel.getGameSession().value?.id
-                val channelID = gameInfoViewModel.getGameSession().value?.channelID
-                if (channelID != null) {
-                    chatViewModel.exitChannel(channelID)
-                }
-                if (gameID != null) {
-                    chatViewModel.exitGame(gameID)
-                }
-                val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-                navController.navigate(R.id.nav_home)
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
 
 }

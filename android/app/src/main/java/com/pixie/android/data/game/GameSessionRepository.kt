@@ -111,7 +111,20 @@ class GameSessionRepository(
             }
         }
     }
-
+    fun leaveGameIfRunning():Boolean{
+        if(pathSubscription !=null && timerSubscription!=null) {
+            gameSessionSubscription?.cancel()
+            timerSubscription?.cancel()
+            pathSubscription?.cancel()
+            gameSessionSubscription = null
+            timerSubscription = null
+            pathSubscription = null
+            gameSession = MutableLiveData()
+            return true
+        }else{
+            return false
+        }
+    }
 
     fun leaveGame() {
 
