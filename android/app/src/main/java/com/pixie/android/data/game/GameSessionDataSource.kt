@@ -10,6 +10,7 @@ import com.pixie.android.*
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.CommandType
 import com.pixie.android.model.draw.PathPoint
+import com.pixie.android.model.draw.SinglePoint
 import com.pixie.android.model.game.GameParticipant
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GuessWordInput
@@ -107,21 +108,23 @@ class GameSessionDataSource {
                 true
             }.collect {
                 val data = it.data?.onPathChange
-                if(data!=null){
+                if(data!=null && data.points !=null){
+                    val dataPoints = data.points.trim().split(" ").map{
+                        val pointString = it.split(",")
+                        SinglePoint(pointString[0].toFloat(),pointString[1].toFloat())
+                    }
                     val pathList = arrayListOf<PathPoint>()
-                    val length = data.points.size
+                    val length = dataPoints.size
                     for (i in 0..length){
                         if(i+1<length){
-                            val point=PathPoint(data.points[i].y!!.toFloat(),
-                            data.points[i].x!!.toFloat(),
-                            data.points[i+1].y!!.toFloat(),
-                            data.points[i+1].x!!.toFloat())
+                            val point=PathPoint(dataPoints[i].x,
+                            dataPoints[i].y,
+                            dataPoints[i+1].x,
+                            dataPoints[i+1].y)
                             pathList.add(point)
                         }
                     }
-                    if(pathList.size>2){
-                    pathList.removeAt(0)
-                    pathList.removeAt(pathList.size-1)}
+
                     val paint = Paint().apply {
                         color = Color.parseColor(data.primaryColor)
                         style = Paint.Style.STROKE

@@ -90,7 +90,7 @@ class ChatDataSource() {
         channelID: Double,
         userId: Double
     ): SendMessageMutation.Data? {
-        val addMessageInput = AddMessageInput(message, channelID, userId)
+        val addMessageInput = AddMessageInput(message, channelID)
         try {
             return apolloClient(userId).mutate(SendMessageMutation(addMessageInput)).toDeferred()
                 .await().data
