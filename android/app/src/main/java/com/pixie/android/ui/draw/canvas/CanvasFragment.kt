@@ -28,14 +28,6 @@ class CanvasFragment : Fragment() {
         return rootView
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val factory = InjectorUtils.provideCanvasViewModelFactory()
@@ -49,8 +41,11 @@ class CanvasFragment : Fragment() {
 
         viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
             // should only draw DRAW commands and remove ERASE commands
-            val filteredCommand = it.filter { !it.isErased&& it.type == CommandType.DRAW }
-            my_canvas.drawFromCommandList(filteredCommand)
+            val filteredCommand = it.filter { it.value.type == CommandType.DRAW }
+            if(!filteredCommand.isEmpty()){
+                my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
+            }
+
         })
 
         viewModel.getStrokeWidth().observe(viewLifecycleOwner, Observer {

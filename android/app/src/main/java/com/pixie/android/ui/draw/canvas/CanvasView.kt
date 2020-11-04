@@ -32,6 +32,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
+    private var onDrawingMove:Boolean = false
 
 
     fun setErase(isErase: Boolean) {
@@ -127,6 +128,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         currentX = motionTouchEventX
         currentY = motionTouchEventY
         canvasViewModel.sendPoint(currentX,currentY,PathStatus.BEGIN,Paint(paint))
+        onDrawingMove = true
     }
 
     private fun onTouchMove() {
@@ -148,7 +150,9 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         currentX = motionTouchEventX
         currentY = motionTouchEventY
         canvas.drawPath(path, paint)
-        canvasViewModel.sendPoint(currentX,currentY,PathStatus.ONGOING,Paint(paint))
+        // To prevent an even after ontouch stop
+        if(onDrawingMove)
+            canvasViewModel.sendPoint(currentX,currentY,PathStatus.ONGOING,Paint(paint))
 
         // Invalidate triggers onDraw from the view
         invalidate()
@@ -156,6 +160,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun onTouchStop() {
+        onDrawingMove = false
         if (!erase && !pathData.isNullOrEmpty()) {
             // send point
             canvasViewModel.sendFinalPoint(currentX,currentY,PathStatus.END,Paint(paint),ArrayList(pathData))

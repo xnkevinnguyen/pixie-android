@@ -1,26 +1,28 @@
 package com.pixie.android.data.draw
 
+import android.graphics.Color
+import android.graphics.Paint
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pixie.android.model.draw.CanvasCommand
-import com.pixie.android.model.draw.CommandType
-import com.pixie.android.model.draw.ManualDrawingPoint
-import com.pixie.android.model.draw.ServerDrawHistoryCommand
+import com.pixie.android.model.draw.*
+import com.pixie.android.type.PathStatus
 import java.util.*
+import kotlin.collections.HashMap
+import kotlin.random.Random
 
 class CanvasCommandHistoryRepository {
-    private var drawCommandHistory = MutableLiveData<MutableList<CanvasCommand>>()
-    private var undoneCommandList: Stack<CanvasCommand> = Stack()
+    private var drawCommandHistory = MutableLiveData<HashMap<Double,CanvasCommand>>()
+    private var previousID:Double = 0.0
 
-
-    fun getDrawCommandHistory(): LiveData<MutableList<CanvasCommand>> {
+    fun getDrawCommandHistory(): LiveData<HashMap<Double,CanvasCommand>> {
         return drawCommandHistory
     }
 
     fun resetDrawCommandHistory() {
         val count = drawCommandHistory.value?.count()
         if(count != null && count > 0) {
-            drawCommandHistory = MutableLiveData<MutableList<CanvasCommand>>()
+            drawCommandHistory = MutableLiveData()
         }
         restoreUndoneCommandList()
     }
@@ -28,40 +30,17 @@ class CanvasCommandHistoryRepository {
 //        resetDrawCommandHistory()
 
 //        drawCommandHistory.notifyObserver()
-        drawCommandHistory.postValue(mutableListOf())
-    }
-    //undo
-    fun popLastDrawCommandFromHistory() {
-        val count = drawCommandHistory.value?.count()
-        if (count != null && count > 0) {
-            val commandToRemove = drawCommandHistory.value!!.removeAt(count - 1)
-            if(commandToRemove.type == CommandType.ERASE){
-                commandToRemove.reference?.isErased=false
-            }
-            addUndoneCommand(commandToRemove)
-            drawCommandHistory.notifyObserver()
-        }
+        drawCommandHistory.postValue(hashMapOf())
     }
 
-    fun popUndoneCommand() {
-        if (!undoneCommandList.empty()) {
-            val commandToRedo = undoneCommandList.pop()
-            addCanvasCommand(commandToRedo)
-            if(commandToRedo.type==CommandType.ERASE){
-                commandToRedo.reference?.isErased = true
-            }
-            drawCommandHistory.notifyObserver()
-        }
-    }
 
     // Add Draw command should not notify the observer
-    fun addCanvasCommand(drawCommand:CanvasCommand) {
+    fun addCanvasCommand(id:Double,drawCommand:CanvasCommand) {
         if (drawCommandHistory.value == null) {
-            drawCommandHistory.postValue(arrayListOf(drawCommand))
+            // TODO place correct ID
+            drawCommandHistory.postValue(hashMapOf(Pair(id,drawCommand)))
         } else {
-            drawCommandHistory.value?.add(drawCommand)
-            //erase needs a reload
-//            if(drawCommand.type == CommandType.ERASE)
+            drawCommandHistory.value?.put(id,drawCommand)
                 drawCommandHistory.notifyObserver()
         }
 
@@ -69,23 +48,44 @@ class CanvasCommandHistoryRepository {
 
     // Receiver Manual draw add a point
     fun addManualDrawPoint(point:ManualDrawingPoint){
+        if(point.status.equals(PathStatus.BEGIN)){
+            addNewManualDrawPoint(point)
+        }else{
+            updateCommand(point)
+        }
+    }
+    //add new point
+    fun addNewManualDrawPoint(point:ManualDrawingPoint){
+        val firstPathPoint = PathPoint(point.x,point.y,point.x,point.y)
+        val command = CanvasCommand(CommandType.DRAW, point.paint, arrayListOf(firstPathPoint))
+        addCanvasCommand(point.pathID,command)
+        previousID = point.pathID
 
     }
-    // Sender and Receiver
+
+    //update an existing command with a new point
+    fun updateCommand(point:ManualDrawingPoint){
+        val currentCommand = drawCommandHistory.value?.get(point.pathID)
+
+        if(currentCommand!=null && currentCommand.path?.last()!=null && point.pathID == previousID){
+            val pathPoint = PathPoint(currentCommand.path.last().x2, currentCommand.path.last().y2,
+            point.x,point.y)
+            currentCommand.path.add(pathPoint)
+            drawCommandHistory.notifyObserver()
+        }else{
+            Log.d("ManualDrawingError","ManualDrawing updates a point to a non-existent command")
+        }
+    }
+
+    // Sender and Receiver for UNDO & REDO
     fun handleServerDrawHistoryCommand(serverCommand:ServerDrawHistoryCommand){
 
     }
 
-    // Should not notify the observer
-    fun addUndoneCommand(command: CanvasCommand) {
-        undoneCommandList.add(command)
-    }
 
     // Restore undoneCommandList
     fun restoreUndoneCommandList() {
-        if (!undoneCommandList.isNullOrEmpty()) {
-            undoneCommandList.clear()
-        }
+
     }
 
     // Singleton

@@ -3,6 +3,7 @@ subscription onManualPlayerDrawing($gameSessionId:Float!){
         gameSessionId
         strokeColor
         strokeWidth
+        currentPathId
         point{
             x
             y

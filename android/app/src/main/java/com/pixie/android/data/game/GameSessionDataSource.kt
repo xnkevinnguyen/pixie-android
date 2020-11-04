@@ -108,7 +108,7 @@ class GameSessionDataSource {
     suspend fun subscribeToPathChange(
         gameSessionID: Double,
         userID: Double,
-        onPathChange: (CanvasCommand) -> Unit
+        onPathChange: (id:Double,command:CanvasCommand) -> Unit
     ) {
 
         apolloClient(userID).subscribe(OnPathChangeSubscription(gameSessionID)).toFlow()
@@ -144,7 +144,7 @@ class GameSessionDataSource {
                         strokeWidth = data.strokeWidth.toFloat()
                     }
                     val command = CanvasCommand(CommandType.DRAW, paint, pathList)
-                    onPathChange(command)
+                    onPathChange(data.id,command)
                 }
 
             }
@@ -190,24 +190,22 @@ class GameSessionDataSource {
                 true
             }.collect {
                 val data = it.data?.onManualPlayerDrawing
-                //TODO replace for the correct if statement
+                //TODO replace for the correct if statement and apply correct color
 //                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
                 if ( data?.point != null && data.strokeWidth != null ) {
                     // Handles adding a point
                     val paint = Paint().apply {
-                        color = Color.parseColor(data.strokeColor)
+                        color = Color.BLACK
                         style = Paint.Style.STROKE
                         strokeJoin = Paint.Join.ROUND
                         strokeCap = Paint.Cap.ROUND
                         strokeWidth = data.strokeWidth.toFloat()
                     }
                     val drawPoint = ManualDrawingPoint(
+                        data.currentPathId,
                         data.point.x.toFloat(),
                         data.point.y.toFloat(),
-
-                        commandPathID = 1.0,
                         status = data.status,
-                        commandType = CommandType.DRAW,
                         paint = paint
 
 

@@ -29,7 +29,9 @@ class CanvasViewModel(
         //should return an id
         gameSessionRepository.sendManualDrawingFinalPoint(manualPathPointInput){
             //TODO using id returned, make a tagged command
-            addCommandToHistory(paint,path)
+            val command = CanvasCommand(CommandType.DRAW, paint, path)
+
+            canvasCommandHistoryRepository.addCanvasCommand(it,command)
         }
 
     }
@@ -37,11 +39,11 @@ class CanvasViewModel(
     fun captureEraseAction(x1:Float, y1:Float, x2:Float,y2:Float) {
         //check if coordinates are inside border of previous commands
         val commandHistory = canvasCommandHistoryRepository.getDrawCommandHistory().value ?: return
-        var eraserTarget:ArrayList<CanvasCommand> = arrayListOf()
+//        var eraserTarget:ArrayList<CanvasCommand> = arrayListOf()
         commandHistory.forEach {
-            if(it.type == CommandType.DRAW  && !it.path.isNullOrEmpty() && !it.isErased){
+            if(it.value.type == CommandType.DRAW  && !it.value.path.isNullOrEmpty() && !it.value.isErased){
                     var isContact = false
-                    it.path.forEach {
+                    it.value.path!!.forEach {
 //                        if((it.x2-5) < x1 && x1<(it.x2+5) && (it.y2-5)<y1 && y1<(it.y2+5) ){
 //                            isContact = true
 //                        }
@@ -67,24 +69,18 @@ class CanvasViewModel(
 
                     }
 
-                    if(isContact)eraserTarget.add(it)
+//                    if(isContact)eraserTarget.add(it)
 //                }
             }
         }
-        eraserTarget.forEach{
-            val eraseCommand = CanvasCommand(CommandType.ERASE, reference = it)
-            eraseCommand.reference?.isErased = true
-            canvasCommandHistoryRepository.addCanvasCommand(eraseCommand)
-        }
+//        eraserTarget.forEach{
+//            val eraseCommand = CanvasCommand(CommandType.ERASE, reference = it)
+//            eraseCommand.reference?.isErased = true
+//            canvasCommandHistoryRepository.addCanvasCommand(eraseCommand)
+//        }
     }
 
-    fun addCommandToHistory(paint: Paint, path: ArrayList<PathPoint>) {
 
-        val drawCommand = CanvasCommand(CommandType.DRAW, paint, path)
-        canvasCommandHistoryRepository.addCanvasCommand(drawCommand)
-        // Once user adds a command, they lose redo history
-        canvasCommandHistoryRepository.restoreUndoneCommandList()
-    }
 
     fun resetDrawCommandHistory() = canvasCommandHistoryRepository.resetDrawCommandHistory()
 

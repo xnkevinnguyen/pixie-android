@@ -92,8 +92,9 @@ class GameSessionRepository(
                         subscribeToPathChange(gameID,it.mode)
 
                     }
-                    //handles going to the next round
-                    if (gameSession.value?.currentRound != null && it.currentRound > gameSession.value!!.currentRound!!) {
+                    //handles going to the next round or when drawer switches
+                    if (gameSession.value?.currentRound != null && (it.currentRound > gameSession.value!!.currentRound!! ||
+                                it.currentDrawerId != gameSession.value?.currentDrawerId)) {
                         canvasCommandHistoryRepository.clear()
                     }
                     gameSession.postValue(it)
@@ -151,12 +152,12 @@ class GameSessionRepository(
             }
             pathSubscription?.cancel()
             pathSubscription = job
-        } else if (gameSession.value?.mode == GameMode.COOP || gameSession.value?.mode == GameMode.SOLO) {
+        } else if (mode == GameMode.COOP || mode == GameMode.SOLO) {
             // Handle Solo-Coop drawing
             val job = CoroutineScope(Dispatchers.IO).launch {
-                dataSource.subscribeToPathChange(gameID, userRepository.getUser().userId) {
+                dataSource.subscribeToPathChange(gameID, userRepository.getUser().userId) {id, command->
                     CoroutineScope(Dispatchers.Main).launch {
-                        canvasCommandHistoryRepository.addCanvasCommand(it)
+                        canvasCommandHistoryRepository.addCanvasCommand(id,command)
                     }
                 }
             }
