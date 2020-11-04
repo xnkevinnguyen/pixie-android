@@ -538,7 +538,7 @@
 
                         <TextView
                             android:id="@+id/game_winner"
-                            android:layout_width="wrap_content"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:text="@string/not_available"
                             android:paddingLeft="10dp"

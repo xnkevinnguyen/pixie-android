@@ -108,9 +108,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         tutorial.setOnClickListener {
-            val dialog = Dialog(this)
-            dialog.setContentView(R.layout.tutorial_layout)
-            dialog.show()
+            navController.navigate(R.id.nav_tutorial)
+            drawerLayout.closeDrawer(GravityCompat.START, false)
         }
 
 
