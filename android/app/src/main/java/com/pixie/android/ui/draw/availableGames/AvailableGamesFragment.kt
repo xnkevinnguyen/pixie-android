@@ -88,7 +88,10 @@ class AvailableGamesFragment : Fragment() {
         spinnerLanguage.adapter = adapterLang
 
         createBtn.setOnClickListener {
-            editorGame.putString(Constants.GAME_LANGUAGE, spinnerLanguage.selectedItem.toString())
+            // Forcing value in preferences to always be in English and not change because of the language change
+            val inputValue = if(spinnerLanguage.selectedItem.toString() == requireContext().resources.getString(R.string.eng)) "English"
+            else "French"
+            editorGame.putString(Constants.GAME_LANGUAGE, inputValue)
             editorGame.apply()
 
             val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
@@ -109,13 +112,13 @@ class AvailableGamesFragment : Fragment() {
     }
 
     private fun getGameMode(): GameMode{
-        return if (preferencesGame.getString(Constants.GAME_MODE, "Free for all")== "Free for all") GameMode.FREEFORALL
-        else if(preferencesGame.getString(Constants.GAME_MODE, "Free for all")== "Solo") GameMode.SOLO
+        return if (preferencesGame.getString(Constants.GAME_MODE, "Free for all") == "Free for all") GameMode.FREEFORALL
+        else if(preferencesGame.getString(Constants.GAME_MODE, "Free for all") == "Solo") GameMode.SOLO
         else GameMode.COOP
     }
     private fun getGameDifficulty(): GameDifficulty{
-        return if (preferencesGame.getString(Constants.GAME_DIFF, "Medium")== "Easy") GameDifficulty.EASY
-        else if(preferencesGame.getString(Constants.GAME_DIFF, "Medium")== "Medium") GameDifficulty.MEDIUM
+        return if (preferencesGame.getString(Constants.GAME_DIFF, "Medium") == "Easy") GameDifficulty.EASY
+        else if(preferencesGame.getString(Constants.GAME_DIFF, "Medium") == "Medium") GameDifficulty.MEDIUM
         else GameDifficulty.HARD
     }
 

@@ -60,7 +60,10 @@ class CreateGameFragment: Fragment() {
 
         val createBtn = root.findViewById<TextView>(R.id.create)
         createBtn.setOnClickListener {
-            editorGame.putString(Constants.GAME_LANGUAGE, spinnerLanguage.selectedItem.toString())
+            // Forcing value in preferences to always be in English and not change because of the language change
+            val inputValue = if(spinnerLanguage.selectedItem.toString() == requireContext().resources.getString(R.string.eng)) "English"
+            else "French"
+            editorGame.putString(Constants.GAME_LANGUAGE, inputValue)
             editorGame.apply()
 
             val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
