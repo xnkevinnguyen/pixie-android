@@ -40,4 +40,10 @@
         android:name="com.pixie.android.ui.draw.gameCreation.CreateGameFragment"
         android:label="Game Creation"
         tools:layout="@layout/create_game_fragment" />
+
+    <fragment
+        android:id="@+id/nav_tutorial"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialFragment"
+        android:label="Tutorial"
+        tools:layout="@layout/tutorial_layout" />
 </navigation>

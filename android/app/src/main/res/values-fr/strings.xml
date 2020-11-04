@@ -114,4 +114,21 @@
     <string name="round_turn">Tour</string>
     <string name="total_round">de 3</string>
 
+    <string name="game_result">Résultat de la Partie</string>
+    <string name="goto_home">Retourner à la Page Accueil</string>
+    <string name="rank">Rang:</string>
+    <string name="total_score">Score Total</string>
+
+    <string name="welcome_tutorial">Bienvenue sur Pixie</string>
+    <string name="get_started_exp">Lancez-vous rapidement sur le meilleur jeu de dessin avec ce mini tutoriel.</string>
+    <string name="get_started">Commencer</string>
+    <string name="chat">Discuter avec vos amis</string>
+    <string name="choose_game">Choissisez votre mode de jeu</string>
+    <string name="create_join">Créer ou Rejoigner un jeu</string>
+    <string name="three_modes">Il existe 3 modes de jeux auxquels vous pouvez jouer.</string>
+    <string name="play_game">Jouer le jeu</string>
+    <string name="play_game_expl">Amusez-vous en compétition avec vos amis!</string>
+    <string name="finish">Terminer</string>
+    <string name="view_profile">Visualiser votre profil</string>
+    <string name="view_profile_expl">Find your connections and games history as well as your game statistics and user information.</string>
 </resources>
