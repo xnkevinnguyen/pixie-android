@@ -3,7 +3,7 @@ package com.pixie.android.ui.draw.canvas
 import android.graphics.Paint
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.pixie.android.data.draw.CanvasCommandHistoryRepostiroy
+import com.pixie.android.data.draw.CanvasCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.model.draw.Border
 import com.pixie.android.model.draw.CommandType
@@ -12,17 +12,17 @@ import com.pixie.android.model.draw.PathPoint
 
 class CanvasViewModel(
     private val drawingParametersRepository: DrawingParametersRepository,
-    private val canvasCommandHistoryRepostiroy: CanvasCommandHistoryRepostiroy
+    private val canvasCommandHistoryRepository: CanvasCommandHistoryRepository
 ) :
     ViewModel() {
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
 
-    fun getDrawCommandHistory() = canvasCommandHistoryRepostiroy.getDrawCommandHistory()
+    fun getDrawCommandHistory() = canvasCommandHistoryRepository.getDrawCommandHistory()
 
 
     fun captureEraseAction(x1:Float, y1:Float, x2:Float,y2:Float) {
         //check if coordinates are inside border of previous commands
-        val commandHistory = canvasCommandHistoryRepostiroy.getDrawCommandHistory().value ?: return
+        val commandHistory = canvasCommandHistoryRepository.getDrawCommandHistory().value ?: return
         var eraserTarget:ArrayList<CanvasCommand> = arrayListOf()
         commandHistory.forEach {
             if(it.type == CommandType.DRAW && it.border !=null && !it.path.isNullOrEmpty() && !it.isErased){
@@ -61,7 +61,7 @@ class CanvasViewModel(
         eraserTarget.forEach{
             val eraseCommand = CanvasCommand(CommandType.ERASE, reference = it)
             eraseCommand.reference?.isErased = true
-            canvasCommandHistoryRepostiroy.addCanvasCommand(eraseCommand)
+            canvasCommandHistoryRepository.addCanvasCommand(eraseCommand)
         }
     }
 
@@ -83,12 +83,12 @@ class CanvasViewModel(
 
         }
         val drawCommand = CanvasCommand(CommandType.DRAW, paint, path, Border(xMin,yMin,xMax,yMax))
-        canvasCommandHistoryRepostiroy.addCanvasCommand(drawCommand)
+        canvasCommandHistoryRepository.addCanvasCommand(drawCommand)
         // Once user adds a command, they lose redo history
-        canvasCommandHistoryRepostiroy.restoreUndoneCommandList()
+        canvasCommandHistoryRepository.restoreUndoneCommandList()
     }
 
-    fun resetDrawCommandHistory() = canvasCommandHistoryRepostiroy.resetDrawCommandHistory()
+    fun resetDrawCommandHistory() = canvasCommandHistoryRepository.resetDrawCommandHistory()
 
 
     fun getStrokeWidth() = drawingParametersRepository.getStrokeWidth()

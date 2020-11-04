@@ -153,7 +153,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun onTouchStop() {
-        if (!erase) {
+        if (!erase && !pathData.isNullOrEmpty()) {
             canvasViewModel.addCommandToHistory(Paint(paint), ArrayList(pathData))
         }
         pathData.clear()

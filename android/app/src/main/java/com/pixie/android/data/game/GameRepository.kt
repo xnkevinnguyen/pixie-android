@@ -102,6 +102,7 @@ class GameRepository(private val dataSource: GameDataSource,
                chatRepository.addUserChannelParticipantSubscription(it)
 
                 chatRepository.addUserChannels(it)
+                chatRepository.enterChannel(it.channelID)
             }
         }
 

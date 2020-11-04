@@ -5,6 +5,8 @@
     <color name="dark_grey">#A9A9A9</color>
     <color name="red">#FF0000</color>
     <color name="green">#4FBB5A</color>
+    <color name="light_green">#6eeb83</color>
     <color name="yellow">@android:color/holo_orange_light</color>
+
 
 </resources>

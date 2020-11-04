@@ -74,6 +74,7 @@ class CanvasFragment : Fragment() {
 
     }
 
+
     private fun showGrid(gridOn: Boolean) {
         if (gridOn) {
             my_grid.visibility = View.VISIBLE

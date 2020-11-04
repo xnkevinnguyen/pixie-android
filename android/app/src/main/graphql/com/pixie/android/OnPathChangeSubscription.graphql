@@ -1,0 +1,12 @@
+subscription onPathChange($gameSessionId:Float!){
+    onPathChange(gameSessionId:$gameSessionId){
+        id
+        order
+        points
+
+        primaryColor
+        opacityPrimaryColor
+        strokeWidth
+
+    }
+}
