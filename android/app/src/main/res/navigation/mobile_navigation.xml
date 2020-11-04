@@ -40,4 +40,35 @@
         android:name="com.pixie.android.ui.draw.gameCreation.CreateGameFragment"
         android:label="Game Creation"
         tools:layout="@layout/create_game_fragment" />
+
+    <fragment
+        android:id="@+id/nav_tutorial"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialFragment"
+        android:label="Tutorial"
+        tools:layout="@layout/tutorial_layout" />
+    <fragment
+        android:id="@+id/nav_tutorial_page2"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage2Fragment"
+        android:label="Tutorial"
+        tools:layout="@layout/tutorial_layout_page2" />
+    <fragment
+        android:id="@+id/nav_tutorial_page3"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage3Fragment"
+        android:label="Tutorial"
+        tools:layout="@layout/tutorial_layout_page3" />
+    <fragment
+        android:id="@+id/nav_tutorial_page4"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage4Fragment"
+        android:label="Tutorial"
+        tools:layout="@layout/tutorial_layout_page4" />
+    <fragment
+        android:id="@+id/nav_tutorial_page5"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage5Fragment"
+        android:label="Tutorial"
+        tools:layout="@layout/tutorial_layout_page5" />
+    <fragment
+        android:id="@+id/nav_tutorial_page6"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage6Fragment"
+        android:label="Tutorial"
+        tools:layout="@layout/tutorial_layout_page6" />
 </navigation>

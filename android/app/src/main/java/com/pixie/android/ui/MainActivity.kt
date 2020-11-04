@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -29,6 +30,7 @@ import com.pixie.android.data.user.UserRepository
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
+import com.pixie.android.ui.draw.settings.MyContextWrapper
 import com.pixie.android.ui.draw.settings.SettingsFragment
 import com.pixie.android.ui.user.AuthActivity
 import com.pixie.android.utilities.Constants
@@ -36,21 +38,35 @@ import com.pixie.android.utilities.InjectorUtils
 import com.pixie.android.utilities.OnApplicationStopService
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.runBlocking
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var preferencesSettings: SharedPreferences
 
-//    override fun attachBaseContext(newBase: Context) {
-//        val lang = preferencesSettings.getString(Constants.LANGUAGE, resources.getString(R.string.eng))
-//        var langAcronyme = "en"
-//        val langValue = resources.getString(R.string.fr)
-//        if(lang == langValue) langAcronyme = "fr"
-//        else langAcronyme = "en"
-//
-//        super.attachBaseContext(langAcronyme)
-//    }
+    override fun attachBaseContext(newBase: Context) {
+        preferencesSettings = newBase.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val lang = preferencesSettings.getString(Constants.LANGUAGE, "English")
+        var languageAc = "en"
+        val langValue = "French"
+        languageAc = if(lang == langValue) "fr"
+        else "en"
+        super.attachBaseContext(MyContextWrapper(newBase).wrap(newBase,languageAc))
+    }
+
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) {
+        preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val lang = preferencesSettings.getString(Constants.LANGUAGE, "English")
+        var languageAc = "en"
+        val langValue = "French"
+        languageAc = if(lang == langValue) "fr"
+        else "en"
+
+        val locale = Locale(languageAc)
+        overrideConfiguration.setLocale(locale)
+        super.applyOverrideConfiguration(overrideConfiguration)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
@@ -92,9 +108,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         tutorial.setOnClickListener {
-            val dialog = Dialog(this)
-            dialog.setContentView(R.layout.tutorial_layout)
-            dialog.show()
+            navController.navigate(R.id.nav_tutorial)
+            drawerLayout.closeDrawer(GravityCompat.START, false)
         }
 
 
