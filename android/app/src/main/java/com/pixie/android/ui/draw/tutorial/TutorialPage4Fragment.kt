@@ -23,10 +23,8 @@ class TutorialPage4Fragment: Fragment() {
         val next = root.findViewById<Button>(R.id.next_page4)
 
         next.setOnClickListener {
-            val fragment: Fragment = TutorialPage5Fragment()
-            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
-            transaction.replace(R.id.tutorial_page4, fragment)
-            transaction.commit()
+            val navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.nav_tutorial_page5)
         }
         return root
     }

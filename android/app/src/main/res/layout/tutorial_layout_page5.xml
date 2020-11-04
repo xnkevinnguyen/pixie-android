@@ -18,10 +18,10 @@
         android:gravity="center"/>
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="175dp"
-        android:src="@drawable/ic_flag_of_france"
-        android:layout_marginBottom="25px"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:src="@drawable/join_game"
+        android:layout_marginBottom="45px"
         android:layout_gravity="center"/>
 
     <Button

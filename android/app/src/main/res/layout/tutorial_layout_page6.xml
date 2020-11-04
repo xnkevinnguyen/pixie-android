@@ -11,24 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:layout_marginBottom="55dp"
+        android:layout_marginBottom="35dp"
         android:textSize="30dp"
         android:textColor="@android:color/white"
         android:text="@string/play_game"
         android:gravity="center"/>
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="175dp"
-        android:src="@drawable/ic_flag_of_france"
-        android:layout_marginBottom="25px"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:src="@drawable/play_game"
+        android:layout_marginBottom="35px"
         android:layout_gravity="center"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:textColor="@android:color/white"
         android:text="@string/play_game_expl"
         android:gravity="center"/>

@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.Navigation
 import com.pixie.android.R
 
 
@@ -24,10 +25,8 @@ class TutorialFragment: Fragment() {
         val getStarted = root.findViewById<Button>(R.id.get_started)
 
         getStarted.setOnClickListener {
-            val fragment: Fragment = TutorialPage2Fragment()
-            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
-            transaction.replace(R.id.tutorial_page1, fragment)
-            transaction.commit()
+            val navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.nav_tutorial_page2)
         }
         return root
     }
