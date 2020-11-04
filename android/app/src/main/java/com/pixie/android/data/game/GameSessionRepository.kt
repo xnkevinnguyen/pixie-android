@@ -60,7 +60,7 @@ class GameSessionRepository(
                     //start additional subscriptions
                     subscribeToTimer(gameID)
                     subscribeToGameSessionChange(gameID)
-                    subscribeToPathChange(gameID)
+                    subscribeToPathChange(gameID, gameSessionStarted.mode)
 
                 }
             }
@@ -89,7 +89,7 @@ class GameSessionRepository(
                     if (gameSession.value == null || gameSession.value?.status == GameStatus.PENDING || gameSession.value?.status == GameStatus.READY) {
                         channelID = it.channelID
                         subscribeToTimer(it.id)
-                        subscribeToPathChange(gameID)
+                        subscribeToPathChange(gameID,it.mode)
 
                     }
                     //handles going to the next round
@@ -131,8 +131,8 @@ class GameSessionRepository(
         }
     }
 
-    fun subscribeToPathChange(gameID: Double) {
-        if (gameSession.value?.mode == GameMode.FREEFORALL) {
+    fun subscribeToPathChange(gameID: Double, mode: GameMode) {
+        if (mode == GameMode.FREEFORALL) {
             // Handle Free for all drawing from OTHER players
             val job = CoroutineScope(Dispatchers.IO).launch {
                 dataSource.subscribeToManualDrawing(

@@ -190,7 +190,9 @@ class GameSessionDataSource {
                 true
             }.collect {
                 val data = it.data?.onManualPlayerDrawing
-                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
+                //TODO replace for the correct if statement
+//                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
+                if ( data?.point != null && data.strokeWidth != null ) {
                     // Handles adding a point
                     val paint = Paint().apply {
                         color = Color.parseColor(data.strokeColor)
@@ -203,7 +205,7 @@ class GameSessionDataSource {
                         data.point.x.toFloat(),
                         data.point.y.toFloat(),
 
-                        commandPathID = data.commandPathId,
+                        commandPathID = 1.0,
                         status = data.status,
                         commandType = CommandType.DRAW,
                         paint = paint
