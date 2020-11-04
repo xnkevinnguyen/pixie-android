@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
+import com.pixie.android.type.PathStatus
 
 
 class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -125,6 +126,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         path.moveTo(motionTouchEventX, motionTouchEventY)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
+        canvasViewModel.sendPoint(currentX,currentY,PathStatus.BEGIN,Paint(paint))
     }
 
     private fun onTouchMove() {
@@ -146,6 +148,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         currentX = motionTouchEventX
         currentY = motionTouchEventY
         canvas.drawPath(path, paint)
+        canvasViewModel.sendPoint(currentX,currentY,PathStatus.ONGOING,Paint(paint))
 
         // Invalidate triggers onDraw from the view
         invalidate()
@@ -154,6 +157,8 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private fun onTouchStop() {
         if (!erase && !pathData.isNullOrEmpty()) {
+            // send poin
+            canvasViewModel.sendPoint(currentX,currentY,PathStatus.END,Paint(paint))
             canvasViewModel.addCommandToHistory(Paint(paint), ArrayList(pathData))
         }
         pathData.clear()

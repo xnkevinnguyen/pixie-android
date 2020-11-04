@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.CommandType
+import com.pixie.android.model.draw.ManualDrawingPoint
+import com.pixie.android.model.draw.ServerDrawHistoryCommand
 import java.util.*
 
 class CanvasCommandHistoryRepository {
@@ -52,7 +54,6 @@ class CanvasCommandHistoryRepository {
         }
     }
 
-
     // Add Draw command should not notify the observer
     fun addCanvasCommand(drawCommand:CanvasCommand) {
         if (drawCommandHistory.value == null) {
@@ -63,6 +64,15 @@ class CanvasCommandHistoryRepository {
 //            if(drawCommand.type == CommandType.ERASE)
                 drawCommandHistory.notifyObserver()
         }
+
+    }
+
+    // Receiver Manual draw add a point
+    fun addManualDrawPoint(point:ManualDrawingPoint){
+
+    }
+    // Sender and Receiver
+    fun handleServerDrawHistoryCommand(serverCommand:ServerDrawHistoryCommand){
 
     }
 
