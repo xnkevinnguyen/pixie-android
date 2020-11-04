@@ -21,7 +21,7 @@ class CanvasViewModel(
 
     fun sendPoint(x:Float,y:Float, pathStatus: PathStatus, paint:Paint){
         val manualPathPointInput = ManualPathPointInput(x,y,pathStatus,paint)
-        gameSessionRepository.sendManualDrawingFinalPoint(manualPathPointInput)
+        gameSessionRepository.sendManualDrawingPoint(manualPathPointInput)
 
     }
     fun sendFinalPoint(x:Float,y:Float, pathStatus: PathStatus, paint:Paint,path: ArrayList<PathPoint>){

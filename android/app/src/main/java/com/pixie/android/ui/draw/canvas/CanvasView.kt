@@ -157,9 +157,9 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private fun onTouchStop() {
         if (!erase && !pathData.isNullOrEmpty()) {
-            // send poin
-            canvasViewModel.sendPoint(currentX,currentY,PathStatus.END,Paint(paint))
-            canvasViewModel.addCommandToHistory(Paint(paint), ArrayList(pathData))
+            // send point
+            canvasViewModel.sendFinalPoint(currentX,currentY,PathStatus.END,Paint(paint),ArrayList(pathData))
+//            canvasViewModel.addCommandToHistory(Paint(paint), ArrayList(pathData))
         }
         pathData.clear()
         path.reset()

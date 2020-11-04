@@ -35,8 +35,9 @@ object InjectorUtils {
     fun provideCanvasViewModelFactory(): CanvasViewModelFactory {
         val drawingParametersRepository = DrawingParametersRepository.getInstance()
         val drawCommandHistoryRepository = CanvasCommandHistoryRepository.getInstance()
+        val gameSessionRepository = GameSessionRepository.getInstance()
         return CanvasViewModelFactory(
-            drawingParametersRepository,drawCommandHistoryRepository
+            drawingParametersRepository,drawCommandHistoryRepository,gameSessionRepository
         )
     }
 

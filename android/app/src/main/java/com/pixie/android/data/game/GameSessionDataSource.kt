@@ -163,6 +163,7 @@ class GameSessionDataSource {
             pathPointInput.pathStatus
         )
         try {
+            Log.d("ManualDraw",pathPointInput.pathStatus.rawValue + " "+pathPointInput.x+","+pathPointInput.y)
             val response =
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data

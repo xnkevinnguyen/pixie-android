@@ -104,9 +104,10 @@ class GameSessionRepository(
         gameSessionSubscription?.cancel()
         gameSessionSubscription = job
     }
-    fun sendManualDrawingFinalPoint(pathPointInput:ManualPathPointInput){
+    fun sendManualDrawingPoint(pathPointInput:ManualPathPointInput){
         //Only send a manual drawing if it's user's turn
-        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
+//        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
+        if( gameSession.value?.mode == GameMode.FREEFORALL){
             CoroutineScope(Dispatchers.IO).launch {
                 dataSource.sendManualDraw(getGameSessionID(),userRepository.getUser().userId,pathPointInput)
 
@@ -116,11 +117,15 @@ class GameSessionRepository(
     }
     fun sendManualDrawingFinalPoint(pathPointInput:ManualPathPointInput, onResult:(Double)->Unit){
         //Only send a manual drawing if it's user's turn
-        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id !=null){
+//        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id !=null){
+        if( gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id !=null){
             CoroutineScope(Dispatchers.IO).launch {
                 val pathID = dataSource.sendManualDraw(getGameSessionID(),userRepository.getUser().userId,pathPointInput)
                 if(pathID!=null){
-                    onResult(pathID)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        onResult(pathID)
+                    }
+
                 }
             }
         }
