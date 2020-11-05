@@ -55,6 +55,7 @@
             android:layout_alignParentBottom="true"
             android:visibility="gone"/>
 
+
         <Button
             android:id="@+id/add_players"
             android:layout_width="match_parent"

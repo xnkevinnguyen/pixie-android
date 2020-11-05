@@ -157,9 +157,6 @@ class GameInformationFragment : Fragment() {
             }
         })
 
-//        gameInfoViewModel.getPlayers().observe(viewLifecycleOwner, Observer {
-//            listPlayerAdapter.set(it)
-//        })
 
         mode.text = gameInfoViewModel.getGameSession().value?.mode.toString()
 

@@ -21,9 +21,7 @@ class DrawToolsViewModel(private val drawingParametersRepository: DrawingParamet
     fun setGridValue(grid: Boolean) = drawingParametersRepository.setGrid(grid)
 
     fun undo(){
-        canvasCommandHistoryRepository.popLastDrawCommandFromHistory()
     }
     fun redo(){
-        canvasCommandHistoryRepository.popUndoneCommand()
     }
 }

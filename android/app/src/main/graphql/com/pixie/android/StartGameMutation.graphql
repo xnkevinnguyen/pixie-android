@@ -6,12 +6,14 @@ mutation startGame($input: StartGameInput!){
         currentRound
         status
         sprintTries
+        gameState
         gameHall{
             id
             name
             isLobby
             participants{
                 username
+                isVirtual
             }
         }
         gameInfo{
@@ -19,9 +21,20 @@ mutation startGame($input: StartGameInput!){
             players{
                 id
                 username
-                isOnline
+                isVirtual
             }
             mode
+            scores{
+                id
+                user{
+                    id
+                    username
+                    isVirtual
+                    isOnline
+                }
+                value
+
+            }
         }
 
     }

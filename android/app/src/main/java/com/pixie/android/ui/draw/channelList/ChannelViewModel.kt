@@ -15,6 +15,7 @@ class ChannelViewModel(private val chatRepository: ChatRepository, private val f
         return getUserChannels().value?.get(channelID)
     }
 
+
     fun getFollowList():LiveData<ArrayList<ChannelParticipant>>{
         return followRepository.getListFollow()
     }

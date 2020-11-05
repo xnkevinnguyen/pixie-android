@@ -1,0 +1,16 @@
+subscription onManualPlayerDrawing($gameSessionId:Float!){
+    onManualPlayerDrawing(gameSessionId:$gameSessionId){
+        gameSessionId
+        strokeColor
+        strokeWidth
+        currentPathId
+        point{
+            x
+            y
+        }
+        status
+        commandPathId
+        commandStatus
+    }
+
+}

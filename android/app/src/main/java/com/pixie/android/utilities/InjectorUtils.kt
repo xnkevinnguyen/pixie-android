@@ -4,6 +4,7 @@ import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.follow.FollowRepository
+import com.pixie.android.data.game.GameInviteRepository
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.data.profile.ProfileRepository
@@ -35,8 +36,9 @@ object InjectorUtils {
     fun provideCanvasViewModelFactory(): CanvasViewModelFactory {
         val drawingParametersRepository = DrawingParametersRepository.getInstance()
         val drawCommandHistoryRepository = CanvasCommandHistoryRepository.getInstance()
+        val gameSessionRepository = GameSessionRepository.getInstance()
         return CanvasViewModelFactory(
-            drawingParametersRepository,drawCommandHistoryRepository
+            drawingParametersRepository,drawCommandHistoryRepository,gameSessionRepository
         )
     }
 
@@ -73,7 +75,8 @@ object InjectorUtils {
         val soundRepository = SoundRepository.getInstance()
         val gameRepository = GameRepository.getInstance()
         val gameSessionRepository = GameSessionRepository.getInstance()
-        return ChatViewModelFactory(chatRepository, soundRepository, gameRepository, gameSessionRepository)
+        val gameInviteRepository = GameInviteRepository.getInstance()
+        return ChatViewModelFactory(chatRepository, soundRepository, gameRepository, gameSessionRepository,gameInviteRepository)
     }
 
     fun provideChannelViewModelFactory(): ChannelViewModelFactory {

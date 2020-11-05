@@ -1,5 +1,6 @@
 package com.pixie.android.ui.draw.canvas
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.data.game.ShowWordinGameType
 import com.pixie.android.model.draw.CommandType
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.canvas_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CanvasFragment : Fragment() {
     override fun onCreateView(
@@ -28,14 +33,6 @@ class CanvasFragment : Fragment() {
         return rootView
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val factory = InjectorUtils.provideCanvasViewModelFactory()
@@ -49,8 +46,21 @@ class CanvasFragment : Fragment() {
 
         viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
             // should only draw DRAW commands and remove ERASE commands
-            val filteredCommand = it.filter { !it.isErased&& it.type == CommandType.DRAW }
-            my_canvas.drawFromCommandList(filteredCommand)
+            val filteredCommand = it.filter { it.value.type == CommandType.DRAW }
+            my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
+
+        })
+
+        viewModel.getShouldShowWord().observe(viewLifecycleOwner,Observer{
+            if(it.shouldShowWordBig){
+                display_word.visibility = View.VISIBLE
+                if(it.type == ShowWordinGameType.IS_DRAWER)
+                    display_word_top.text = String.format(resources.getString(R.string.display_word_top),it.word)
+                else if (it.type == ShowWordinGameType.OTHER_DRAWER)
+                    display_word_top.text = String.format(resources.getString(R.string.next_drawer),it.word)
+            }else{
+                display_word.visibility = View.GONE
+            }
         })
 
         viewModel.getStrokeWidth().observe(viewLifecycleOwner, Observer {
@@ -85,12 +95,5 @@ class CanvasFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        // Set DrawCommandHistory whenever you enter the canvas page or else it crashes
-        val factory = InjectorUtils.provideCanvasViewModelFactory()
-        val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
 
-        viewModel.resetDrawCommandHistory()
-        super.onDestroyView()
-    }
 }

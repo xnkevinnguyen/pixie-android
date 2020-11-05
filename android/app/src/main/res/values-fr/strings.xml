@@ -107,7 +107,7 @@
 
     <string name="start_game">Débuter Partie</string>
     <string name="add_players">Ajouter un joueur</string>
-    <string name="add_virtual">Ajouter Joueurs Virtuel</string>
+    <string name="add_virtual">Ajouter Joueur Virtuel</string>
     <string name="create_game">Créer une Nouvelle Partie</string>
     <string name="add">Ajouter</string>
     <string name="round">Tours : 3</string>
@@ -131,4 +131,10 @@
     <string name="finish">Terminer</string>
     <string name="view_profile">Visualiser votre profil</string>
     <string name="view_profile_expl">Find your connections and games history as well as your game statistics and user information.</string>
+    <string name="display_word_top">Ton mot est: %1$s</string>
+    <string name="next_drawer">Prochain dessinateur: %1$s</string>
+    <string name="success">Réussite</string>
+    <string name="error">Erreur</string>
+
+
 </resources>

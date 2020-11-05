@@ -35,7 +35,7 @@ class GameDataSource() {
 
                 var playersList = ArrayList(data.gameInfo.players.map { GameParticipant(it.id, it.username, it.isOnline) })
                 val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.sprintTries!!,data.status,
-                data.gameHall.id,playersList,data.gameInfo.mode)
+                data.gameHall.id,playersList,data.gameInfo.mode,data.gameState)
                 onSuccess(gameChannelData)
                 return gameData
 
@@ -175,7 +175,7 @@ class GameDataSource() {
                 var playersList = ArrayList(data.gameInfo.players.map { GameParticipant(it.id, it.username, it.isOnline) })
 
                 val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,3.0-data.sprintTries!!,data.status,
-                    data.gameHall.id,playersList,data.gameInfo.mode)
+                    data.gameHall.id,playersList,data.gameInfo.mode,data.gameState)
                 onSuccess(gameChannelData)
                 return gameData
 

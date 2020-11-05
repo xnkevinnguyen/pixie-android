@@ -1,11 +1,16 @@
 package com.pixie.android.data.game
 
+import android.content.res.Resources
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.R
 import com.pixie.android.data.draw.CanvasCommandHistoryRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
-import com.pixie.android.model.game.GameParticipant
+import com.pixie.android.model.draw.ManualPathPointInput
 import com.pixie.android.model.game.GameSessionData
+import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameState
 import com.pixie.android.type.GameStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,10 +23,16 @@ class GameSessionRepository(
     private val canvasCommandHistoryRepository: CanvasCommandHistoryRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
+
+    // word is displayed to the user who is drawing
+    private var shouldShowWord = MutableLiveData<ShowWordinGame>()
     private var channelID: Double = 0.0
     private var gameSessionSubscription: Job? = null
     private var timerSubscription: Job? = null
-    private var pathSubscription:Job?=null
+    private var pathSubscription: Job? = null
+    private var manualPathSubscription: Job? = null
+    private var pathIDGenerator = 0.0
+
 
     private var timer = MutableLiveData<Int>()
 
@@ -30,7 +41,24 @@ class GameSessionRepository(
 
     fun getGameSession() = gameSession
 
+    // used for the current user to display current word to draw
+    fun getShouldShowWord() = shouldShowWord
+
+    fun getGameSessionID(): Double {
+        val gameSessionID = gameSession.value?.id
+        if (gameSessionID != null) {
+            return gameSessionID
+        } else {
+            throw error("GameSessionID is null")
+        }
+    }
+
     fun getGameChannelID() = channelID
+
+    // returns true if the user should be drawing
+    fun isUserDrawingTurn(): Boolean {
+        return gameSession.value?.currentDrawerId == userRepository.getUser().userId
+    }
 
 
     fun startGame(gameID: Double, onResult: (RequestResult) -> Unit) {
@@ -45,7 +73,7 @@ class GameSessionRepository(
                     //start additional subscriptions
                     subscribeToTimer(gameID)
                     subscribeToGameSessionChange(gameID)
-                    subscribeToPathChange(gameID)
+                    subscribeToPathChange(gameID, gameSessionStarted.mode)
 
                 }
             }
@@ -58,6 +86,7 @@ class GameSessionRepository(
             dataSource.suscribeToTimer(gameID, userRepository.getUser().userId) {
                 CoroutineScope(Dispatchers.Main).launch {
                     timer.postValue(it.toInt())
+
                 }
 
             }
@@ -74,12 +103,46 @@ class GameSessionRepository(
                     if (gameSession.value == null || gameSession.value?.status == GameStatus.PENDING || gameSession.value?.status == GameStatus.READY) {
                         channelID = it.channelID
                         subscribeToTimer(it.id)
-                        subscribeToPathChange(gameID)
+                        subscribeToPathChange(gameID, it.mode)
 
                     }
-                    //handles going to the next round
-                    if(gameSession.value?.currentRound!=null && it.currentRound>gameSession.value!!.currentRound!! ){
+                    //handles going to the next round or when drawer switches
+                    if (gameSession.value?.currentRound != null && (it.currentRound > gameSession.value!!.currentRound!! ||
+                                (it.currentDrawerId != gameSession.value?.currentDrawerId && gameSession.value!!.currentDrawerId!! >= 0.0))
+                    ) {
                         canvasCommandHistoryRepository.clear()
+                    }
+
+                    if (it.state == GameState.DRAWER_SELECTION) {
+                        Log.d("GameSessionRepository",it.currentDrawerId.toString() + " ")
+                        if (it.currentDrawerId == userRepository.getUser().userId) {
+                            shouldShowWord.postValue(
+                                ShowWordinGame(
+                                    true,
+                                    ShowWordinGameType.IS_DRAWER,
+                                    it.currentWord
+                                )
+                            )
+                        } else {
+                            val currentDrawerList =
+                                it.players.filter { gameParticipant ->
+                                    Log.d("GameSessionRepository",it.currentDrawerId.toString() + " "+gameParticipant.id)
+
+                                    gameParticipant.id == it.currentDrawerId
+                                }
+
+                            if (!currentDrawerList.isEmpty())
+                                shouldShowWord.postValue(
+                                    ShowWordinGame(
+                                        true,
+                                        ShowWordinGameType.OTHER_DRAWER,
+                                        currentDrawerList.first().username
+                                    )
+                                )
+                        }
+
+                    } else {
+                        shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE, ""))
                     }
                     gameSession.postValue(it)
 
@@ -89,51 +152,122 @@ class GameSessionRepository(
         gameSessionSubscription?.cancel()
         gameSessionSubscription = job
     }
-    fun subscribeToPathChange(gameID:Double){
+
+    fun sendManualDrawingPoint(pathPointInput: ManualPathPointInput) {
+        //Only send a manual drawing if it's user's turn
+//        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
+        if (gameSession.value?.mode == GameMode.FREEFORALL) {
+            CoroutineScope(Dispatchers.IO).launch {
+                dataSource.sendManualDraw(
+                    getGameSessionID(),
+                    userRepository.getUser().userId,
+                    pathPointInput,
+                    pathIDGenerator
+                )
+
+            }
+
+        }
+    }
+
+    fun sendManualDrawingFinalPoint(
+        pathPointInput: ManualPathPointInput,
+        onResult: (Double) -> Unit
+    ) {
+        //Only send a manual drawing if it's user's turn
+//        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id !=null){
+        if (gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val pathID = dataSource.sendManualDraw(
+                    getGameSessionID(),
+                    userRepository.getUser().userId,
+                    pathPointInput,
+                    pathIDGenerator
+                )
+                if (pathID != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        onResult(pathID)
+                    }
+
+                }
+            }
+        }
+        pathIDGenerator += 1
+    }
+
+    fun subscribeToPathChange(gameID: Double, mode: GameMode) {
+        if (mode == GameMode.FREEFORALL) {
+            subscribeToManualDrawing(gameID)
+        }
+//        else if (mode == GameMode.COOP || mode == GameMode.SOLO) {
+        // Handle Solo-Coop drawing
         val job = CoroutineScope(Dispatchers.IO).launch {
-            dataSource.subscribeToPathChange(gameID,userRepository.getUser().userId){
+            dataSource.subscribeToPathChange(
+                gameID,
+                userRepository.getUser().userId
+            ) { id, command ->
                 CoroutineScope(Dispatchers.Main).launch {
-                    canvasCommandHistoryRepository.addCanvasCommand(it)
+                    canvasCommandHistoryRepository.addCanvasCommand(id, command)
                 }
             }
         }
         pathSubscription?.cancel()
-        pathSubscription= job
+        pathSubscription = job
+    }
+//}
+
+    fun subscribeToManualDrawing(gameID: Double) {
+        // Handle Free for all drawing from OTHER players
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            dataSource.subscribeToManualDrawing(
+                gameID,
+                userRepository.getUser().userId,
+                onDraw = {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        // Only draw on the canvas if it is not from the server
+                        if (!isUserDrawingTurn())
+                            canvasCommandHistoryRepository.addManualDrawPoint(it)
+                    }
+                },
+                onServerDrawHistoryCommand = {
+                    canvasCommandHistoryRepository.handleServerDrawHistoryCommand(it)
+                })
+        }
+        manualPathSubscription?.cancel()
+        manualPathSubscription = job
     }
 
-    fun guessWord(word: String, onResult: (Boolean?)->Unit) {
+    fun guessWord(word: String, onResult: (Boolean?) -> Unit) {
         val gameID = gameSession.value?.id
-        if(gameID!=null) {
+        if (gameID != null) {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = dataSource.guessWord(word, gameID, userRepository.getUser().userId)
                 CoroutineScope(Dispatchers.Main).launch {
-                onResult(response)}
+                    onResult(response)
+                }
             }
         }
     }
-    fun leaveGameIfRunning():Boolean{
-        if(pathSubscription !=null && timerSubscription!=null) {
-            gameSessionSubscription?.cancel()
-            timerSubscription?.cancel()
-            pathSubscription?.cancel()
-            gameSessionSubscription = null
-            timerSubscription = null
-            pathSubscription = null
-            gameSession = MutableLiveData()
+
+    fun leaveGameIfRunning(): Boolean {
+        if (pathSubscription != null && timerSubscription != null) {
+            leaveGame()
             return true
-        }else{
+        } else {
             return false
         }
     }
 
     fun leaveGame() {
-
+        canvasCommandHistoryRepository.clear()
         gameSessionSubscription?.cancel()
         timerSubscription?.cancel()
         pathSubscription?.cancel()
+        manualPathSubscription?.cancel()
         gameSessionSubscription = null
         timerSubscription = null
-        pathSubscription=null
+        pathSubscription = null
+        manualPathSubscription = null
         gameSession = MutableLiveData()
         // send leave request
     }
@@ -145,8 +279,10 @@ class GameSessionRepository(
         private var dataSource: GameSessionDataSource = GameSessionDataSource()
         private var drawCommandHistoryRepository = CanvasCommandHistoryRepository.getInstance()
         fun getInstance() = instance ?: synchronized(this) {
-            instance ?: GameSessionRepository(dataSource, UserRepository.getInstance(),
-                drawCommandHistoryRepository).also {
+            instance ?: GameSessionRepository(
+                dataSource, UserRepository.getInstance(),
+                drawCommandHistoryRepository
+            ).also {
                 instance = it
             }
         }
