@@ -191,8 +191,12 @@ class GameSessionDataSource {
 //                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
                 if ( data?.point != null && data.strokeWidth != null ) {
                     // Handles adding a point
+                    var colorStroke = data.strokeColor?.toInt()
+                    if (colorStroke ==null){
+                        colorStroke = Color.BLACK
+                    }
                     val paint = Paint().apply {
-                        color = Color.BLACK
+                        color = colorStroke
                         style = Paint.Style.STROKE
                         strokeJoin = Paint.Join.ROUND
                         strokeCap = Paint.Cap.ROUND
