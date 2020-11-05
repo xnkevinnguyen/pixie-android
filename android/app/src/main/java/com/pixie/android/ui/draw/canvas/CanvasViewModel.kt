@@ -79,14 +79,13 @@ class CanvasViewModel(
 //        }
     }
 
-
-
-//    fun resetDrawCommandHistory() = canvasCommandHistoryRepository.resetDrawCommandHistory()
-
+    
 
     fun getStrokeWidth() = drawingParametersRepository.getStrokeWidth()
     fun getCellWidthGrid() = drawingParametersRepository.getCellWidthGrid()
     fun getEraser() = drawingParametersRepository.getErase()
     fun getGridVal() = drawingParametersRepository.getGrid()
+
+    fun getShouldShowWord() = gameSessionRepository.getShouldShowWord()
 
 }

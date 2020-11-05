@@ -19,10 +19,14 @@ class GameSessionRepository(
     private val canvasCommandHistoryRepository: CanvasCommandHistoryRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
+    // word is displayed to the user who is drawing
+    private var shouldShowWord = MutableLiveData<ShowWordinGame>()
     private var channelID: Double = 0.0
     private var gameSessionSubscription: Job? = null
     private var timerSubscription: Job? = null
     private var pathSubscription: Job? = null
+    private var pathIDGenerator =0.0
+
 
     private var timer = MutableLiveData<Int>()
 
@@ -30,6 +34,8 @@ class GameSessionRepository(
 
 
     fun getGameSession() = gameSession
+    // used for the current user to display current word to draw
+    fun getShouldShowWord() = shouldShowWord
 
     fun getGameSessionID():Double {
         val gameSessionID= gameSession.value?.id
@@ -97,6 +103,12 @@ class GameSessionRepository(
                                 (it.currentDrawerId != gameSession.value?.currentDrawerId && gameSession.value!!.currentDrawerId!! >=0.0))) {
                         canvasCommandHistoryRepository.clear()
                     }
+
+                    if(gameSession.value?.currentDrawerId == userRepository.getUser().userId){
+                        shouldShowWord.postValue(ShowWordinGame(false,it.currentWord))
+                    }else{
+                        shouldShowWord.postValue(ShowWordinGame(false,""))
+                    }
                     gameSession.postValue(it)
 
                 }
@@ -110,7 +122,7 @@ class GameSessionRepository(
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
         if( gameSession.value?.mode == GameMode.FREEFORALL){
             CoroutineScope(Dispatchers.IO).launch {
-                dataSource.sendManualDraw(getGameSessionID(),userRepository.getUser().userId,pathPointInput)
+                dataSource.sendManualDraw(getGameSessionID(),userRepository.getUser().userId,pathPointInput,pathIDGenerator)
 
             }
 
@@ -121,7 +133,7 @@ class GameSessionRepository(
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id !=null){
         if( gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id !=null){
             CoroutineScope(Dispatchers.IO).launch {
-                val pathID = dataSource.sendManualDraw(getGameSessionID(),userRepository.getUser().userId,pathPointInput)
+                val pathID = dataSource.sendManualDraw(getGameSessionID(),userRepository.getUser().userId,pathPointInput,pathIDGenerator)
                 if(pathID!=null){
                     CoroutineScope(Dispatchers.Main).launch {
                         onResult(pathID)
@@ -130,6 +142,7 @@ class GameSessionRepository(
                 }
             }
         }
+        pathIDGenerator+=1
     }
 
     fun subscribeToPathChange(gameID: Double, mode: GameMode) {
@@ -194,7 +207,7 @@ class GameSessionRepository(
     }
 
     fun leaveGame() {
-
+        canvasCommandHistoryRepository.clear()
         gameSessionSubscription?.cancel()
         timerSubscription?.cancel()
         pathSubscription?.cancel()

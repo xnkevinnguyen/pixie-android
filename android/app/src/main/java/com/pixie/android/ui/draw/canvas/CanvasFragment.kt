@@ -1,5 +1,6 @@
 package com.pixie.android.ui.draw.canvas
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -45,11 +46,17 @@ class CanvasFragment : Fragment() {
         viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
             // should only draw DRAW commands and remove ERASE commands
             val filteredCommand = it.filter { it.value.type == CommandType.DRAW }
-
             my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
 
-//            }
+        })
 
+        viewModel.getShouldShowWord().observe(viewLifecycleOwner,Observer{
+            if(it.shouldShowWordBig){
+                display_word.visibility = View.VISIBLE
+                display_word_top.text = String.format(resources.getString(R.string.display_word_top),it.word)
+            }else{
+                display_word.visibility = View.GONE
+            }
         })
 
         viewModel.getStrokeWidth().observe(viewLifecycleOwner, Observer {

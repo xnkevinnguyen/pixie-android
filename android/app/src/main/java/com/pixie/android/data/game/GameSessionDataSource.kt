@@ -153,10 +153,13 @@ class GameSessionDataSource {
     suspend fun sendManualDraw(
         gameSessionID: Double,
         userID: Double,
-        pathPointInput: ManualPathPointInput
+        pathPointInput: ManualPathPointInput,
+        pathIDGenerator:Double
     ): Double? {
+        val pathUniqueID = 1000000*userID+gameSessionID*10000+pathIDGenerator
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
+            pathUniqueID,
             DataPoints(pathPointInput.x.toDouble(), pathPointInput.y.toDouble()),
             pathPointInput.paint.color.toString().toInput(),
             pathPointInput.paint.strokeWidth.toDouble().toInput(),
@@ -168,7 +171,7 @@ class GameSessionDataSource {
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data
             if(data!=null){
-                return data.manualDraw.toDouble()
+                return pathUniqueID
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.toString())

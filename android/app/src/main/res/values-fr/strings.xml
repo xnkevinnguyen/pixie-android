@@ -131,4 +131,7 @@
     <string name="finish">Terminer</string>
     <string name="view_profile">Visualiser votre profil</string>
     <string name="view_profile_expl">Find your connections and games history as well as your game statistics and user information.</string>
+    <string name="display_word_top">Ton mot est: %1$s</string>
+
+
 </resources>
