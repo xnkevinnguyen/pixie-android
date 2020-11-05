@@ -79,6 +79,9 @@ class GameSessionRepository(
             dataSource.suscribeToTimer(gameID, userRepository.getUser().userId) {
                 CoroutineScope(Dispatchers.Main).launch {
                     timer.postValue(it.toInt())
+                    if(it ==0.0){
+                        shouldShowWord.postValue(ShowWordinGame(false,""))
+                    }
                 }
 
             }
@@ -104,8 +107,8 @@ class GameSessionRepository(
                         canvasCommandHistoryRepository.clear()
                     }
 
-                    if(gameSession.value?.currentDrawerId == userRepository.getUser().userId){
-                        shouldShowWord.postValue(ShowWordinGame(false,it.currentWord))
+                    if(it.currentDrawerId == userRepository.getUser().userId){
+                        shouldShowWord.postValue(ShowWordinGame(true,it.currentWord))
                     }else{
                         shouldShowWord.postValue(ShowWordinGame(false,""))
                     }

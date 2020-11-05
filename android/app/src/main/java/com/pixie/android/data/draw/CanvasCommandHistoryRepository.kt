@@ -12,74 +12,75 @@ import kotlin.collections.HashMap
 import kotlin.random.Random
 
 class CanvasCommandHistoryRepository {
-    private var drawCommandHistory = MutableLiveData<HashMap<Double,CanvasCommand>>()
-    private var previousID:Double = 0.0
+    private var drawCommandHistory = MutableLiveData<HashMap<Double, CanvasCommand>>()
+    private var previousID: Double = 0.0
 
-    fun getDrawCommandHistory(): LiveData<HashMap<Double,CanvasCommand>> {
+    fun getDrawCommandHistory(): LiveData<HashMap<Double, CanvasCommand>> {
         return drawCommandHistory
     }
 
 
-    fun clear(){
+    fun clear() {
 
-        Log.d("CanvasCommandHistoryRepository","clear")
-            drawCommandHistory.postValue(hashMapOf())
-//        }
+        Log.d("CanvasCommandHistoryRepository", "clear")
+        drawCommandHistory.postValue(hashMapOf())
 
     }
 
 
     // Add Draw command should not notify the observer
-    fun addCanvasCommand(id:Double,drawCommand:CanvasCommand) {
-        Log.d("CanvasCommandHistoryRepository","addCanvasCommand")
+    fun addCanvasCommand(id: Double, drawCommand: CanvasCommand) {
+        Log.d("CanvasCommandHistoryRepository", "addCanvasCommand")
 
         if (drawCommandHistory.value == null) {
-            drawCommandHistory.postValue(hashMapOf(Pair(id,drawCommand)))
+            drawCommandHistory.postValue(hashMapOf(Pair(id, drawCommand)))
         } else {
-            drawCommandHistory.value?.put(id,drawCommand)
-                drawCommandHistory.notifyObserver()
+            drawCommandHistory.value?.put(id, drawCommand)
+            drawCommandHistory.notifyObserver()
         }
 
     }
 
     // Receiver Manual draw add a point
-    fun addManualDrawPoint(point:ManualDrawingPoint){
-        if(point.status.equals(PathStatus.BEGIN)){
+    fun addManualDrawPoint(point: ManualDrawingPoint) {
+        if (point.status.equals(PathStatus.BEGIN)) {
             addNewManualDrawPoint(point)
-        }else{
+        } else {
             updateCommand(point)
         }
     }
+
     //add new point
-    fun addNewManualDrawPoint(point:ManualDrawingPoint){
-        val firstPathPoint = PathPoint(point.x,point.y,point.x,point.y)
+    fun addNewManualDrawPoint(point: ManualDrawingPoint) {
+        val firstPathPoint = PathPoint(point.x, point.y, point.x, point.y)
         val command = CanvasCommand(CommandType.DRAW, point.paint, arrayListOf(firstPathPoint))
-        addCanvasCommand(point.pathID,command)
+        addCanvasCommand(point.pathID, command)
         previousID = point.pathID
 
     }
 
     //update an existing command with a new point
-    fun updateCommand(point:ManualDrawingPoint){
+    fun updateCommand(point: ManualDrawingPoint) {
         val currentCommand = drawCommandHistory.value?.get(point.pathID)
 
-        if(currentCommand!=null && currentCommand.path?.last()!=null && point.pathID == previousID){
-            val pathPoint = PathPoint(currentCommand.path.last().x2, currentCommand.path.last().y2,
-            point.x,point.y)
+        if (currentCommand != null && currentCommand.path?.last() != null && point.pathID == previousID) {
+            val pathPoint = PathPoint(
+                currentCommand.path.last().x2, currentCommand.path.last().y2,
+                point.x, point.y
+            )
             currentCommand.path.add(pathPoint)
             drawCommandHistory.notifyObserver()
-            Log.d("CanvasCommandHistoryRepository","updateCommand")
+            Log.d("CanvasCommandHistoryRepository", "updateCommand")
 
-        }else{
-            Log.d("ManualDrawingError","ManualDrawing updates a point to a non-existent command")
+        } else {
+            Log.d("ManualDrawingError", "ManualDrawing updates a point to a non-existent command")
         }
     }
 
     // Sender and Receiver for UNDO & REDO
-    fun handleServerDrawHistoryCommand(serverCommand:ServerDrawHistoryCommand){
+    fun handleServerDrawHistoryCommand(serverCommand: ServerDrawHistoryCommand) {
 
     }
-
 
 
     // Singleton
