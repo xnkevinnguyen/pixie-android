@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.data.game.GameInviteRepository
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.data.sound.SoundRepository
@@ -17,18 +18,24 @@ import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
 
-class ChatViewModel(private val chatRepository: ChatRepository, private val soundRepository: SoundRepository,
-                    private val gameRepository: GameRepository,private val gameSessionRepository: GameSessionRepository) : ViewModel() {
+class ChatViewModel(
+    private val chatRepository: ChatRepository,
+    private val soundRepository: SoundRepository,
+    private val gameRepository: GameRepository,
+    private val gameSessionRepository: GameSessionRepository,
+    private val gameInviteRepository: GameInviteRepository
+) : ViewModel() {
 
     fun getCurrentChannelID(): LiveData<Double> = chatRepository.getCurrentChannelID()
 
-    fun createMediaPlayer(id: Int, context: Context): MediaPlayer{
+    fun createMediaPlayer(id: Int, context: Context): MediaPlayer {
         return soundRepository.createMediaPlayer(id, context)
     }
 
     fun startMediaPlayer(mediaPlayer: MediaPlayer) = soundRepository.startMediaPlayer(mediaPlayer)
 
-    fun releaseMediaPlayer(mediaPlayer: MediaPlayer) = soundRepository.releaseMediaPlayer(mediaPlayer)
+    fun releaseMediaPlayer(mediaPlayer: MediaPlayer) =
+        soundRepository.releaseMediaPlayer(mediaPlayer)
 
     fun setCurrentChannelID(id: Double) {
         chatRepository.setCurrentChannelID(id)
@@ -57,7 +64,7 @@ class ChatViewModel(private val chatRepository: ChatRepository, private val soun
         return chatRepository.createChannel(channelName)
     }
 
-    fun exitGame(gameID: Double){
+    fun exitGame(gameID: Double) {
         gameRepository.exitGame(gameID)
     }
 
@@ -88,11 +95,22 @@ class ChatViewModel(private val chatRepository: ChatRepository, private val soun
         }
     }
 
-    fun startGameSession(gameID: Double, onResult:(RequestResult)->Unit){
+    fun startGameSession(gameID: Double, onResult: (RequestResult) -> Unit) {
         gameSessionRepository.startGame(gameID, onResult)
     }
-    fun getGameSession():LiveData<GameSessionData>{
+
+    fun getGameSession(): LiveData<GameSessionData> {
         return gameSessionRepository.getGameSession()
+    }
+
+    fun addVirtualPlayer(onResult:(RequestResult)->Unit) {
+        val id = getCurrentChannelID().value
+        val gameID = getUserChannels().value?.get(id)?.gameID
+        if (gameID != null) {
+            gameInviteRepository.addVirtualPlayer(gameID,onResult)
+        }
+
+
     }
 
 }

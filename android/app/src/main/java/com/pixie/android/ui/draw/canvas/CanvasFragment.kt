@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.data.game.ShowWordinGameType
 import com.pixie.android.model.draw.CommandType
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.canvas_fragment.*
@@ -53,7 +54,10 @@ class CanvasFragment : Fragment() {
         viewModel.getShouldShowWord().observe(viewLifecycleOwner,Observer{
             if(it.shouldShowWordBig){
                 display_word.visibility = View.VISIBLE
-                display_word_top.text = String.format(resources.getString(R.string.display_word_top),it.word)
+                if(it.type == ShowWordinGameType.IS_DRAWER)
+                    display_word_top.text = String.format(resources.getString(R.string.display_word_top),it.word)
+                else if (it.type == ShowWordinGameType.OTHER_DRAWER)
+                    display_word_top.text = String.format(resources.getString(R.string.next_drawer),it.word)
             }else{
                 display_word.visibility = View.GONE
             }

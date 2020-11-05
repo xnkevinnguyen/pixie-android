@@ -26,8 +26,8 @@ class GameSessionDataSource {
                     .await()
             val data = response.data?.startGame
             if (data != null && data.gameInfo.players != null) {
-                val players = ArrayList(data.gameInfo.players.map {
-                    GameParticipant(it.id, it.username, it.isOnline)
+                val players = ArrayList(data.gameInfo.scores!!.map {
+                    GameParticipant(it.user.id, it.user.username, it.user.isOnline,it.value!!,it.user.isVirtual!! )
                 })
                 return GameSessionData(
                     data.id,
@@ -80,16 +80,9 @@ class GameSessionDataSource {
 
                 val data = it.data?.onGameSessionChange
                 if (data != null && data.gameInfo.players != null) {
-                    val players = ArrayList(data.gameInfo.players.map {
-                        GameParticipant(it.id, it.username, it.isOnline)
+                    val players = ArrayList(data.gameInfo.scores!!.map {
+                        GameParticipant(it.user.id, it.user.username, it.user.isOnline,it.value!!,it.user.isVirtual!! )
                     })
-                    data.gameInfo.scores?.forEach { score ->
-                        players.forEach { gameParticipant ->
-                            if (score.id == gameParticipant.id && score.value != null) {
-                                gameParticipant.score = score.value
-                            }
-                        }
-                    }
                     val gameSession = GameSessionData(
                         data.id,
                         data.currentDrawerId,

@@ -107,6 +107,18 @@ class ChannelFragment : Fragment() {
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)
             createVirtualPlayer.setOnClickListener {
                 Log.d("here", "Create virtual player")
+                chatViewModel.addVirtualPlayer{
+                        if(it.isSuccess ==true){
+                            Toast.makeText(requireContext(),
+                                resources.getString(R.string.success),
+                                Toast.LENGTH_LONG).show()
+                        }else if( it.isSuccess==false){
+                            Toast.makeText(requireContext(),
+                                resources.getString(R.string.error),
+                                Toast.LENGTH_LONG).show()
+                        }
+
+                }
             }
             val listAddPlayer = dialog.findViewById<ListView>(R.id.list_add_player)
             listAddPlayer.adapter = addPlayerAdapter

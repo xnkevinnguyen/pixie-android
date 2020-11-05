@@ -132,4 +132,8 @@
     <string name="view_profile">View your profile</string>
     <string name="view_profile_expl">Retrouvez vos historique de connexions et de jeux ainsi que vos statistiques de jeu et vos informations utilisateur.</string>
     <string name="display_word_top">Your word is: %1$s </string>
+    <string name="next_drawer">Next drawer: %1$s</string>
+
+    <string name="success">Success</string>
+    <string name="error">Error</string>
 </resources>

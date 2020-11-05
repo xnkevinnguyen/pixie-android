@@ -29,15 +29,18 @@ subscription OnGameSessionChange($gameSessionId:Float!){
                 id
                 username
                 isOnline
+                isVirtual
             }
             scores{
                 id
-                value
                 user{
                     id
                     username
-
+                    isVirtual
+                    isOnline
                 }
+                value
+
             }
             mode
         }
