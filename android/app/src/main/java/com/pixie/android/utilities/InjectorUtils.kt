@@ -20,6 +20,7 @@ import com.pixie.android.ui.draw.drawTools.DrawToolsViewModelFactory
 import com.pixie.android.ui.draw.gameInformation.GameInformationViewModelFactory
 import com.pixie.android.ui.user.login.LoginViewModelFactory
 import com.pixie.android.ui.draw.home.HomeViewModelFactory
+import com.pixie.android.ui.draw.leaderboard.LeaderboardViewModelFactory
 import com.pixie.android.ui.draw.profile.ProfileViewModelFactory
 import com.pixie.android.ui.draw.settings.SettingsViewModelFactory
 import com.pixie.android.ui.user.register.RegisterViewModelFactory
@@ -108,6 +109,10 @@ object InjectorUtils {
         val chatRepository = ChatRepository.getInstance()
         val gameSessionRepository = GameSessionRepository.getInstance()
         return GameChatViewModelFactory(chatRepository,gameSessionRepository)
+    }
+
+    fun provideLeaderboardViewModelFactory(): LeaderboardViewModelFactory{
+        return LeaderboardViewModelFactory()
     }
 
 }

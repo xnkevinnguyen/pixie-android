@@ -17,5 +17,10 @@
             android:icon="@drawable/ic_baseline_games"
             android:title="@string/game_select" />
 
+        <item
+            android:id="@+id/nav_leaderboard"
+            android:icon="@drawable/ic_baseline_bar"
+            android:title="@string/leaderboard" />
+
     </group>
 </menu>

@@ -1,0 +1,370 @@
+<?xml version="1.0"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="?colorAccent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="30dp"
+        android:textColor="@android:color/white"
+        android:text="@string/leaderboard"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:textSize="25dp"
+        android:textColor="@android:color/white"
+        android:text="@string/mode_free"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/best_score"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginStart="240dp"/>
+
+        <TextView
+            android:id="@+id/best_free_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_free_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="800dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_divider"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:tint="@android:color/white"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cumulative_score"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginStart="240dp"/>
+
+        <TextView
+            android:id="@+id/cumulative_free_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_free_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="800dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_divider"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:tint="@android:color/white"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/most_games_won"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_marginStart="240dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/most_free_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/most_free_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="800dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_divider"
+        android:layout_marginBottom="35dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:tint="@android:color/white"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:textSize="25dp"
+        android:textColor="@android:color/white"
+        android:text="@string/mode_solo"
+        android:gravity="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/best_score"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_marginStart="240dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_solo_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_solo_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="800dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_divider"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:tint="@android:color/white"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cumulative_score"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_marginStart="240dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_solo_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_solo_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="800dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_divider"
+        android:layout_marginBottom="35dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:tint="@android:color/white"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:textSize="25dp"
+        android:textColor="@android:color/white"
+        android:text="@string/mode_coop"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/best_score"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_marginStart="240dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_coop_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_coop_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="800dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_divider"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:tint="@android:color/white"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cumulative_score"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_marginStart="240dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_coop_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_coop_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="800dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_divider"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:tint="@android:color/white"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

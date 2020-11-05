@@ -11,6 +11,9 @@
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Accueil</string>
     <string name="game_select">Sélection de Jeu</string>
+    <string name="available_games">Jeux disponibles</string>
+    <string name="drawing">Dessin</string>
+    <string name="game_creation">Création de Jeu</string>
     <string name="action_settings">action réglage</string>
     <string name="chat_message_hint">Entrer message ici...</string>
     <string name="chat_guess_hint">Deviner ici...</string>
@@ -136,5 +139,6 @@
     <string name="success">Réussite</string>
     <string name="error">Erreur</string>
 
+    <string name="leaderboard">Classement</string>
 
 </resources>

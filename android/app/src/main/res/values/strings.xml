@@ -11,6 +11,9 @@
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Home</string>
     <string name="game_select">Game Selection</string>
+    <string name="available_games">Available Games</string>
+    <string name="drawing">Drawing</string>
+    <string name="game_creation">Game Creation</string>
     <string name="action_settings">action settings</string>
     <string name="chat_message_hint">Type message here...</string>
     <string name="chat_guess_hint">Type guess here...</string>
@@ -136,4 +139,11 @@
 
     <string name="success">Success</string>
     <string name="error">Error</string>
+
+    <string name="leaderboard">Leaderboard</string>
+    <string name="mode_solo">Mode Solo</string>
+    <string name="mode_coop"> Mode Coop</string>
+    <string name="mode_free">Mode Free For All</string>
+    <string name="cumulative_score">Best cumulative score:</string>
+    <string name="most_games_won">Most games won:</string>
 </resources>
