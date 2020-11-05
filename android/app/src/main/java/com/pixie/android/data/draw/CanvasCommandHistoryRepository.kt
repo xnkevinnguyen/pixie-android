@@ -24,7 +24,6 @@ class CanvasCommandHistoryRepository {
 
         Log.d("CanvasCommandHistoryRepository","clear")
             drawCommandHistory.postValue(hashMapOf())
-            drawCommandHistory.notifyObserver()
 //        }
 
     }
