@@ -15,20 +15,6 @@ class CanvasCommandHistoryRepositoryTest {
     // Rule used to test MutableLiveData https://medium.com/pxhouse/unit-testing-with-mutablelivedata-22b3283a7819
     @Rule @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
-    @Test
-    fun testAddDrawCommandOnceShouldReturnListofOne(){
-        //PREPARE
-        val repository:CanvasCommandHistoryRepository = getRepository()
-
-        //PERFORM
-        val drawCommand = CanvasCommand( CommandType.DRAW, Paint())
-        repository.addCanvasCommand(drawCommand)
-        val result = repository.getDrawCommandHistory()
-
-
-        //CHECK
-        Assert.assertEquals(result.value!!.size,1)
-    }
 
     private fun getRepository():CanvasCommandHistoryRepository{
         return CanvasCommandHistoryRepository()
