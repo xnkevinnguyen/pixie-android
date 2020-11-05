@@ -2,6 +2,7 @@ package com.pixie.android.model.game
 
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameState
 import com.pixie.android.type.GameStatus
 
 data class GameSessionData (
@@ -13,6 +14,7 @@ data class GameSessionData (
     var status: GameStatus,
     var channelID:Double,
     var players:ArrayList<GameParticipant>,
-    var mode: GameMode
+    var mode: GameMode,
+    var state:GameState?
 
 )

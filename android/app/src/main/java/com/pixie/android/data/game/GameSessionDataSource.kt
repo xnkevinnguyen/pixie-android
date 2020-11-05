@@ -38,7 +38,8 @@ class GameSessionDataSource {
                     data.status,
                     data.gameHall.id,
                     players,
-                    data.gameInfo.mode
+                    data.gameInfo.mode,
+                    data.gameState
                 )
             }
 
@@ -98,7 +99,8 @@ class GameSessionDataSource {
                         data.status,
                         data.gameHall.id,
                         players,
-                        data.gameInfo.mode
+                        data.gameInfo.mode,
+                        data.gameState
                     )
                     onGameSessionChange(gameSession)
                 }

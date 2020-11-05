@@ -7,6 +7,7 @@ import com.pixie.android.model.RequestResult
 import com.pixie.android.model.draw.ManualPathPointInput
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameState
 import com.pixie.android.type.GameStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -107,9 +108,13 @@ class GameSessionRepository(
                         canvasCommandHistoryRepository.clear()
                     }
 
-                    if(it.currentDrawerId == userRepository.getUser().userId){
+                    if(it.currentDrawerId == userRepository.getUser().userId && it.state == GameState.DRAWER_SELECTION){
                         shouldShowWord.postValue(ShowWordinGame(true,it.currentWord))
-                    }else{
+                    }else if(it.currentDrawerId == userRepository.getUser().userId){
+                        shouldShowWord.postValue(ShowWordinGame(false,it.currentWord))
+
+                    }
+                    else{
                         shouldShowWord.postValue(ShowWordinGame(false,""))
                     }
                     gameSession.postValue(it)

@@ -6,6 +6,7 @@ mutation CreateGame($input: CreateGameInput!){
         currentRound
         status
         sprintTries
+        gameState
         gameHall{
             id,
             name,
