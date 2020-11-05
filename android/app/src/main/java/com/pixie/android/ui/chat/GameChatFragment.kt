@@ -101,7 +101,6 @@ class GameChatFragment : Fragment() {
             val message = editText.text.toString()
 
             gameChatViewModel.sendMessageOrGuess(message){
-                //TODO handle guess UI
                 if(it ==true){
                     Toast.makeText(requireContext(),
                     "Correct Answer!",

@@ -12,6 +12,9 @@ import com.pixie.android.R
 import com.pixie.android.model.draw.CommandType
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.canvas_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CanvasFragment : Fragment() {
     override fun onCreateView(
@@ -42,9 +45,10 @@ class CanvasFragment : Fragment() {
         viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
             // should only draw DRAW commands and remove ERASE commands
             val filteredCommand = it.filter { it.value.type == CommandType.DRAW }
-            if(!filteredCommand.isEmpty()){
-                my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
-            }
+
+            my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
+
+//            }
 
         })
 
@@ -80,12 +84,5 @@ class CanvasFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        // Set DrawCommandHistory whenever you enter the canvas page or else it crashes
-        val factory = InjectorUtils.provideCanvasViewModelFactory()
-        val viewModel = ViewModelProvider(this, factory).get(CanvasViewModel::class.java)
 
-        viewModel.resetDrawCommandHistory()
-        super.onDestroyView()
-    }
 }

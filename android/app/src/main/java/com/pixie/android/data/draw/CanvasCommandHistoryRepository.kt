@@ -19,25 +19,22 @@ class CanvasCommandHistoryRepository {
         return drawCommandHistory
     }
 
-    fun resetDrawCommandHistory() {
-        val count = drawCommandHistory.value?.count()
-        if(count != null && count > 0) {
-            drawCommandHistory = MutableLiveData()
-        }
-        restoreUndoneCommandList()
-    }
-    fun clear(){
-//        resetDrawCommandHistory()
 
-//        drawCommandHistory.notifyObserver()
-        drawCommandHistory.postValue(hashMapOf())
+    fun clear(){
+
+        Log.d("CanvasCommandHistoryRepository","clear")
+            drawCommandHistory.postValue(hashMapOf())
+            drawCommandHistory.notifyObserver()
+//        }
+
     }
 
 
     // Add Draw command should not notify the observer
     fun addCanvasCommand(id:Double,drawCommand:CanvasCommand) {
+        Log.d("CanvasCommandHistoryRepository","addCanvasCommand")
+
         if (drawCommandHistory.value == null) {
-            // TODO place correct ID
             drawCommandHistory.postValue(hashMapOf(Pair(id,drawCommand)))
         } else {
             drawCommandHistory.value?.put(id,drawCommand)
@@ -72,6 +69,8 @@ class CanvasCommandHistoryRepository {
             point.x,point.y)
             currentCommand.path.add(pathPoint)
             drawCommandHistory.notifyObserver()
+            Log.d("CanvasCommandHistoryRepository","updateCommand")
+
         }else{
             Log.d("ManualDrawingError","ManualDrawing updates a point to a non-existent command")
         }
@@ -83,10 +82,6 @@ class CanvasCommandHistoryRepository {
     }
 
 
-    // Restore undoneCommandList
-    fun restoreUndoneCommandList() {
-
-    }
 
     // Singleton
     companion object {

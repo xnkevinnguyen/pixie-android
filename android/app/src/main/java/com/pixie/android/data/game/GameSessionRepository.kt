@@ -94,7 +94,7 @@ class GameSessionRepository(
                     }
                     //handles going to the next round or when drawer switches
                     if (gameSession.value?.currentRound != null && (it.currentRound > gameSession.value!!.currentRound!! ||
-                                it.currentDrawerId != gameSession.value?.currentDrawerId)) {
+                                (it.currentDrawerId != gameSession.value?.currentDrawerId && gameSession.value!!.currentDrawerId!! >=0.0))) {
                         canvasCommandHistoryRepository.clear()
                     }
                     gameSession.postValue(it)

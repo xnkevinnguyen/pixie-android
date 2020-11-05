@@ -150,6 +150,7 @@ class GameInformationFragment : Fragment() {
                     val navController =
                         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                     navController.navigate(R.id.nav_home)
+                    gameInfoViewModel.leaveGame()
                     dialog.dismiss()
                 }
 
@@ -157,9 +158,6 @@ class GameInformationFragment : Fragment() {
             }
         })
 
-//        gameInfoViewModel.getPlayers().observe(viewLifecycleOwner, Observer {
-//            listPlayerAdapter.set(it)
-//        })
 
         mode.text = gameInfoViewModel.getGameSession().value?.mode.toString()
 

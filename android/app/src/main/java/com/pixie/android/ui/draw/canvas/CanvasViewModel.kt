@@ -28,7 +28,6 @@ class CanvasViewModel(
         val manualPathPointInput = ManualPathPointInput(x,y,pathStatus,paint)
         //should return an id
         gameSessionRepository.sendManualDrawingFinalPoint(manualPathPointInput){
-            //TODO using id returned, make a tagged command
             val command = CanvasCommand(CommandType.DRAW, paint, path)
 
             canvasCommandHistoryRepository.addCanvasCommand(it,command)
@@ -82,7 +81,7 @@ class CanvasViewModel(
 
 
 
-    fun resetDrawCommandHistory() = canvasCommandHistoryRepository.resetDrawCommandHistory()
+//    fun resetDrawCommandHistory() = canvasCommandHistoryRepository.resetDrawCommandHistory()
 
 
     fun getStrokeWidth() = drawingParametersRepository.getStrokeWidth()

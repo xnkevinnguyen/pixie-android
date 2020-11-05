@@ -168,8 +168,7 @@ class GameSessionDataSource {
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data
             if(data!=null){
-                // TODO should return id in data
-                return 1.0
+                return data.manualDraw.toDouble()
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.toString())
