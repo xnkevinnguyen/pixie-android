@@ -133,7 +133,7 @@
     <string name="play_game_expl">Amusez-vous en compétition avec vos amis!</string>
     <string name="finish">Terminer</string>
     <string name="view_profile">Visualiser votre profil</string>
-    <string name="view_profile_expl">Find your connections and games history as well as your game statistics and user information.</string>
+    <string name="view_profile_expl">Retrouvez vos historique de connexions et de jeux ainsi que vos statistiques de jeu et vos informations utilisateur.</string>
     <string name="display_word_top">Ton mot est: %1$s</string>
     <string name="next_drawer">Prochain dessinateur: %1$s</string>
     <string name="success">Réussite</string>
