@@ -140,5 +140,10 @@
     <string name="error">Erreur</string>
 
     <string name="leaderboard">Classement</string>
+    <string name="mode_solo">Mode Solo</string>
+    <string name="mode_coop"> Mode Coop</string>
+    <string name="mode_free">Mode Free For All</string>
+    <string name="cumulative_score">Meilleur score cumulatif:</string>
+    <string name="most_games_won">Plus de jeux gagnés</string>
 
 </resources>
