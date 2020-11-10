@@ -1,17 +1,13 @@
 package com.pixie.android.data.draw
 
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.model.draw.*
 import com.pixie.android.type.PathStatus
-import java.util.*
 import kotlin.collections.HashMap
-import kotlin.random.Random
 
-class CanvasCommandHistoryRepository {
+class CanvasRepository {
     private var drawCommandHistory = MutableLiveData<HashMap<Double, CanvasCommand>>()
     private var previousID: Double = 0.0
 
@@ -22,15 +18,20 @@ class CanvasCommandHistoryRepository {
 
     fun clear() {
 
-        Log.d("CanvasCommandHistoryRepository", "clear")
+        Log.d("CanvasRepository", "clear")
         drawCommandHistory.postValue(hashMapOf())
+
+    }
+    fun eraseCommand(commandID:Double){
+        drawCommandHistory.value?.get(commandID)?.type = CommandType.ERASE
+        drawCommandHistory.notifyObserver()
 
     }
 
 
     // Add Draw command should not notify the observer
     fun addCanvasCommand(id: Double, drawCommand: CanvasCommand) {
-        Log.d("CanvasCommandHistoryRepository", "addCanvasCommand")
+        Log.d("CanvasRepository", "addCanvasCommand")
 
         if (drawCommandHistory.value == null) {
             drawCommandHistory.postValue(hashMapOf(Pair(id, drawCommand)))
@@ -70,7 +71,7 @@ class CanvasCommandHistoryRepository {
             )
             currentCommand.path.add(pathPoint)
             drawCommandHistory.notifyObserver()
-            Log.d("CanvasCommandHistoryRepository", "updateCommand")
+            Log.d("CanvasRepository", "updateCommand")
 
         } else {
             Log.d("ManualDrawingError", "ManualDrawing updates a point to a non-existent command")
@@ -79,6 +80,18 @@ class CanvasCommandHistoryRepository {
 
     // Sender and Receiver for UNDO & REDO
     fun handleServerDrawHistoryCommand(serverCommand: ServerDrawHistoryCommand) {
+        Log.d("CanvasRepository","Received Command from server "+serverCommand.commandType)
+
+        if(serverCommand.commandType == CommandType.ERASE){
+            drawCommandHistory.value?.get(serverCommand.commandPathID)?.type = CommandType.ERASE
+        }else if(serverCommand.commandType ==CommandType.REDO || serverCommand.commandType ==CommandType.UNDO){
+            if(drawCommandHistory.value?.get(serverCommand.commandPathID)?.type == CommandType.DRAW){
+                drawCommandHistory.value?.get(serverCommand.commandPathID)?.type = serverCommand.commandType
+            }else{
+                drawCommandHistory.value?.get(serverCommand.commandPathID)?.type =CommandType.DRAW
+            }
+        }
+        drawCommandHistory.notifyObserver()
 
     }
 
@@ -86,9 +99,9 @@ class CanvasCommandHistoryRepository {
     // Singleton
     companion object {
         @Volatile
-        private var instance: CanvasCommandHistoryRepository? = null
+        private var instance: CanvasRepository? = null
         fun getInstance() = instance ?: synchronized(this) {
-            instance ?: CanvasCommandHistoryRepository().also {
+            instance ?: CanvasRepository().also {
                 instance = it
             }
         }

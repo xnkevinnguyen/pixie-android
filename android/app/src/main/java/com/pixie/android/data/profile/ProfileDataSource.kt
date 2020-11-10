@@ -76,7 +76,8 @@ class ProfileDataSource {
                     if (scoreList == null) {
                         scoreList = arrayListOf()
                     }
-                    GameHistory(date = it.createdAt.toString(), points = scoreList, winner = it.winner?.username, score = it.bestScore,
+                    GameHistory(date = it.createdAt.toString(), points = scoreList,
+                        winner = "undefined", score = it.bestScore,
                     difficulty = it.difficulty.rawValue, gameMode = it.mode.rawValue)
                 })
                 onReceiveMessage(gameData)

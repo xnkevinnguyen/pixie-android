@@ -3,7 +3,7 @@ package com.pixie.android.ui.draw.canvas
 import android.graphics.Paint
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.pixie.android.data.draw.CanvasCommandHistoryRepository
+import com.pixie.android.data.draw.CanvasRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.model.draw.*
@@ -11,13 +11,13 @@ import com.pixie.android.type.PathStatus
 
 class CanvasViewModel(
     private val drawingParametersRepository: DrawingParametersRepository,
-    private val canvasCommandHistoryRepository: CanvasCommandHistoryRepository,
+    private val canvasRepository: CanvasRepository,
     private val gameSessionRepository:GameSessionRepository
 ) :
     ViewModel() {
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
 
-    fun getDrawCommandHistory() = canvasCommandHistoryRepository.getDrawCommandHistory()
+    fun getDrawCommandHistory() = canvasRepository.getDrawCommandHistory()
 
     fun sendPoint(x:Float,y:Float, pathStatus: PathStatus, paint:Paint){
         val manualPathPointInput = ManualPathPointInput(x,y,pathStatus,paint)
@@ -30,22 +30,20 @@ class CanvasViewModel(
         gameSessionRepository.sendManualDrawingFinalPoint(manualPathPointInput){
             val command = CanvasCommand(CommandType.DRAW, paint, path)
 
-            canvasCommandHistoryRepository.addCanvasCommand(it,command)
+            canvasRepository.addCanvasCommand(it,command)
         }
 
     }
 
     fun captureEraseAction(x1:Float, y1:Float, x2:Float,y2:Float) {
         //check if coordinates are inside border of previous commands
-        val commandHistory = canvasCommandHistoryRepository.getDrawCommandHistory().value ?: return
+        val commandHistory = canvasRepository.getDrawCommandHistory().value ?: return
 //        var eraserTarget:ArrayList<CanvasCommand> = arrayListOf()
         commandHistory.forEach {
             if(it.value.type == CommandType.DRAW  && !it.value.path.isNullOrEmpty() && !it.value.isErased){
                     var isContact = false
                     it.value.path!!.forEach {
-//                        if((it.x2-5) < x1 && x1<(it.x2+5) && (it.y2-5)<y1 && y1<(it.y2+5) ){
-//                            isContact = true
-//                        }
+
                         //calculate  t = (q − p) × s / (r × s) https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
                         val r = Pair(x2-x1,y2-y1) // P+t*R
                         val s = Pair(it.x2-it.x1, it.y2-it.y1) // Q+u*S
@@ -67,16 +65,15 @@ class CanvasViewModel(
                         }
 
                     }
+                    if(isContact){
+                        canvasRepository.eraseCommand(it.key)
+                        gameSessionRepository.sendManualCommand(CommandType.ERASE,it.key)
+                    }
 
-//                    if(isContact)eraserTarget.add(it)
-//                }
+
             }
         }
-//        eraserTarget.forEach{
-//            val eraseCommand = CanvasCommand(CommandType.ERASE, reference = it)
-//            eraseCommand.reference?.isErased = true
-//            canvasCommandHistoryRepository.addCanvasCommand(eraseCommand)
-//        }
+
     }
 
     

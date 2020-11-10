@@ -1,0 +1,3 @@
+mutation ManualCommand($input: manualCommandInput!){
+    manualCommand(input:$input)
+}
