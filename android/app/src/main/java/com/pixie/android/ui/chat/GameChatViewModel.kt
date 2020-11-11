@@ -21,14 +21,14 @@ class GameChatViewModel(private val chatRepository: ChatRepository, private val 
     fun getGameChannelID() = gameSessionRepository.getGameChannelID()
     // non optimal since this will refresh a change on any channels
     fun getChannelMessageList() = chatRepository.getChannelMessages()
-    fun sendMessageOrGuess(message: String, onResult:(Boolean?)->Unit){
-        if(messageType.equals(MESSAGE_TYPE.MESSAGE)){
+
+    fun sendMessage(message: String){
             sendMessageToGameChannel(message)
-            // OnResult null when it is a message and not a guess
-            onResult(null)
-        }else if(messageType.equals(MESSAGE_TYPE.GUESS)){
-            gameSessionRepository.guessWord(message,onResult)
-        }
+    }
+
+    fun sendGuess(message: String, onResult:(Boolean?)->Unit) {
+            gameSessionRepository.guessWord(message, onResult)
+
     }
 
     fun sendMessageToGameChannel(message: String) {

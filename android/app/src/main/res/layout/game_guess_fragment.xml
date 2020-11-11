@@ -3,33 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="200px"
     android:background="?color"
     android:clipToPadding="false"
     android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/messages_list"
-            android:layout_width="match_parent"
-            android:layout_height="580dp"
-            android:layout_weight="2"
-            android:divider="@android:color/white"
-            android:transcriptMode="normal"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
 
 
             <EditText
@@ -38,20 +18,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ems="10"
-                android:hint="@string/chat_message_hint"
+                android:textSize="@dimen/big_size"
+                android:hint="@string/chat_guess_hint"
                 android:textColorHint="?colorSecondary"
                 android:inputType="text"
                 android:paddingHorizontal="10dp"
-                android:text="" />
+                android:layout_gravity="center"
+                />
 
             <ImageButton
                 android:id="@+id/send_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="75px"
+                android:layout_height="75px"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/ic_send_black"
                 android:scaleType="fitCenter" />
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>
