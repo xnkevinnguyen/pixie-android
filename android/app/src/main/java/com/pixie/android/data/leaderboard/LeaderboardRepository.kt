@@ -1,12 +1,11 @@
 package com.pixie.android.data.leaderboard
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.leaderboard.LeaderboardData
 import com.pixie.android.type.GameMode
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LeaderboardRepository(private val dataSource: LeaderboardDataSource,
                             private val userRepository: UserRepository) {
@@ -38,70 +37,98 @@ class LeaderboardRepository(private val dataSource: LeaderboardDataSource,
 
     fun fetchBestFreeScore(){
         val mode = GameMode.FREEFORALL
-        var bestScores: ArrayList<LeaderboardData>
-        runBlocking {
-            bestScores = dataSource.getBestScore(mode, userRepository.getUser().userId)
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.getBestScore(mode, userRepository.getUser().userId, onReceiveMessage = {
+                if (it != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        bestFreeScoreList = it
+                    }
+                }
+            })
         }
-        bestFreeScoreList = bestScores
         bestFreeScoreList.sortByDescending { it.value }
     }
 
     fun fetchBestSoloScore(){
         val mode = GameMode.SOLO
-        var bestScores: ArrayList<LeaderboardData>
-        runBlocking {
-            bestScores = dataSource.getBestScore(mode, userRepository.getUser().userId)
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.getBestScore(mode, userRepository.getUser().userId, onReceiveMessage = {
+                if (it != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        bestSoloScoreList = it
+                    }
+                }
+            })
         }
-        bestSoloScoreList = bestScores
         bestSoloScoreList.sortByDescending { it.value }
     }
 
     fun fetchBestCoopScore(){
         val mode = GameMode.COOP
-        var bestScores: ArrayList<LeaderboardData>
-        runBlocking {
-            bestScores = dataSource.getBestScore(mode, userRepository.getUser().userId)
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.getBestScore(mode, userRepository.getUser().userId, onReceiveMessage = {
+                if (it != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        bestCoopScoreList = it
+                    }
+                }
+            })
         }
-        bestCoopScoreList = bestScores
         bestCoopScoreList.sortByDescending { it.value }
     }
 
     fun fetchBestFreeCumulativeScore(){
         val mode = GameMode.FREEFORALL
-        var bestScores: ArrayList<LeaderboardData>
-        runBlocking {
-            bestScores = dataSource.getBestCumulativeScore(mode, userRepository.getUser().userId)
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.getBestCumulativeScore(mode, userRepository.getUser().userId, onReceiveMessage = {
+                if (it != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        bestFreeCumulativeScoreList = it
+                    }
+                }
+            })
         }
-        bestFreeCumulativeScoreList = bestScores
         bestFreeCumulativeScoreList.sortByDescending { it.value }
     }
 
     fun fetchBestSoloCumulativeScore(){
         val mode = GameMode.SOLO
-        var bestScores: ArrayList<LeaderboardData>
-        runBlocking {
-            bestScores = dataSource.getBestCumulativeScore(mode, userRepository.getUser().userId)
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.getBestCumulativeScore(mode, userRepository.getUser().userId, onReceiveMessage = {
+                if (it != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        bestSoloCumulativeScoreList = it
+                    }
+                }
+            })
         }
-        bestSoloCumulativeScoreList = bestScores
         bestSoloCumulativeScoreList.sortByDescending { it.value }
     }
 
     fun fetchBestCoopCumulativeScore(){
         val mode = GameMode.COOP
-        var bestScores: ArrayList<LeaderboardData>
-        runBlocking {
-            bestScores = dataSource.getBestCumulativeScore(mode, userRepository.getUser().userId)
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.getBestCumulativeScore(mode, userRepository.getUser().userId, onReceiveMessage = {
+                if (it != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        bestCoopCumulativeScoreList = it
+                    }
+                }
+            })
         }
-        bestCoopCumulativeScoreList = bestScores
         bestCoopCumulativeScoreList.sortByDescending { it.value }
     }
 
     fun fetchMostGameWon(){
-        var bestScores: ArrayList<LeaderboardData>
-        runBlocking {
-            bestScores = dataSource.getMostGameWon(userRepository.getUser().userId)
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.getMostGameWon( userRepository.getUser().userId, onReceiveMessage = {
+                if (it != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        mostGameWonList = it
+                    }
+                }
+            })
         }
-        mostGameWonList = bestScores
         mostGameWonList.sortByDescending { it.value }
     }
     // Singleton
