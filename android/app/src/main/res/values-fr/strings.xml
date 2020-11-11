@@ -11,6 +11,9 @@
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Accueil</string>
     <string name="game_select">Sélection de Jeu</string>
+    <string name="available_games">Jeux disponibles</string>
+    <string name="drawing">Dessin</string>
+    <string name="game_creation">Création de Jeu</string>
     <string name="action_settings">action réglage</string>
     <string name="chat_message_hint">Entrer message ici...</string>
     <string name="chat_guess_hint">Deviner ici...</string>
@@ -133,11 +136,18 @@
     <string name="play_game_expl">Amusez-vous en compétition avec vos amis!</string>
     <string name="finish">Terminer</string>
     <string name="view_profile">Visualiser votre profil</string>
-    <string name="view_profile_expl">Find your connections and games history as well as your game statistics and user information.</string>
+    <string name="view_profile_expl">Retrouvez vos historique de connexions et de jeux ainsi que vos statistiques de jeu et vos informations utilisateur.</string>
     <string name="display_word_top">Ton mot est: %1$s</string>
     <string name="next_drawer">Prochain dessinateur: %1$s</string>
     <string name="success">Réussite</string>
     <string name="error">Erreur</string>
+
+    <string name="leaderboard">Classement</string>
+    <string name="mode_solo">Mode Solo</string>
+    <string name="mode_coop"> Mode Coop</string>
+    <string name="mode_free">Mode Free For All</string>
+    <string name="cumulative_score">Meilleur score cumulatif:</string>
+    <string name="most_games_won">Plus de jeux gagnés</string>
     <string name="accept">Accepter</string>
     <string name="decline">Refuser</string>
     <string name="game_invitation_title">%1$s vous a invité</string>
