@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="?colorAccent"
+    android:id="@+id/tutorial_page2">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="25dp"
+        android:textSize="30dp"
+        android:textColor="@android:color/white"
+        android:text="@string/chat"
+        android:gravity="center"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="450dp"
+        android:src="@drawable/main_chat"
+        android:layout_marginBottom="35px"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/next_page2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:background="?colorSecondary"
+        android:textSize="@dimen/profile_titles"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
+</LinearLayout>

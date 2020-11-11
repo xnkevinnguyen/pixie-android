@@ -35,9 +35,9 @@ fun apolloClient(authToken:Double?): ApolloClient {
     }
 
     instance = ApolloClient.builder()
-        .serverUrl("https://pixie-server.herokuapp.com/graphql")
+        .serverUrl("https://pixie-server-dev.herokuapp.com/graphql")
         .subscriptionConnectionParams(subParams)
-        .subscriptionTransportFactory(WebSocketSubscriptionTransport.Factory("wss://pixie-server.herokuapp.com/graphql", okHttpClient))
+        .subscriptionTransportFactory(WebSocketSubscriptionTransport.Factory("wss://pixie-server-dev.herokuapp.com/graphql", okHttpClient))
         .okHttpClient(okHttpClient)
         .build()
 

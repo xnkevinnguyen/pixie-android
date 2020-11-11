@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="?colorAccent"
+    android:id="@+id/tutorial_page3">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="30dp"
+        android:textColor="@android:color/white"
+        android:text="@string/view_profile"
+        android:minLines="2"
+        android:gravity="center"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="350dp"
+        android:src="@drawable/profile"
+        android:layout_marginBottom="35px"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="80dp"
+        android:textSize="25dp"
+        android:textColor="@android:color/white"
+        android:text="@string/view_profile_expl"
+        android:minLines="2"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/next_page3"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:background="?colorSecondary"
+        android:textSize="@dimen/profile_titles"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"/>
+</LinearLayout>

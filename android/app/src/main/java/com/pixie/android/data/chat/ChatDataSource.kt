@@ -33,7 +33,7 @@ class ChatDataSource() {
                     if (participantList == null) {
                         participantList = arrayListOf()
                     }
-                    ChannelData(it.id, it.name, participantList)
+                    ChannelData(it.id, it.name, participantList, nParticipant = null)
                 })
                 onReceiveMessage(channelData)
             }
@@ -43,9 +43,29 @@ class ChatDataSource() {
         }
     }
 
+    suspend fun getChatHistory(
+        userId: Double,
+        channelID: Double,
+        onReceiveChannel: (ArrayList<MessageData>) -> Unit
+    ) {
+        try {
+            val response = apolloClient(userId).query(GetChannelQuery(channelID))
+                .toDeferred().await().data
+            val channelQueryData = response?.channel
+            if (channelQueryData?.messages != null) {
+                onReceiveChannel(ArrayList(channelQueryData.messages.map {
+                    MessageData(it.content, userId == it.sender.id, it.sender.username, it.postedAt)
+                }))
+            }
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.toString())
+
+        }
+    }
+
     suspend fun getJoinableChannels(
         userId: Double
-    ):ArrayList<ChannelData>{
+    ): ArrayList<ChannelData> {
         try {
             val response = apolloClient(userId).query(GetJoinableChannelsQuery())
                 .toDeferred().await().data
@@ -53,9 +73,9 @@ class ChatDataSource() {
             if (channelQueryData != null) {
                 val channelData = ArrayList(channelQueryData.map {
 
-                    ChannelData(it.id, it.name, null)
+                    ChannelData(it.id, it.name, null, nParticipant = it.nParticipants.toInt())
                 })
-               return channelData
+                return channelData
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
@@ -70,7 +90,7 @@ class ChatDataSource() {
         channelID: Double,
         userId: Double
     ): SendMessageMutation.Data? {
-        val addMessageInput = AddMessageInput(message, channelID, userId)
+        val addMessageInput = AddMessageInput(message, channelID)
         try {
             return apolloClient(userId).mutate(SendMessageMutation(addMessageInput)).toDeferred()
                 .await().data
@@ -99,7 +119,8 @@ class ChatDataSource() {
                 return ChannelData(
                     data.id,
                     data.name,
-                    channelParticipant
+                    channelParticipant,
+                    nParticipant = null
                 )
 
 
@@ -111,6 +132,7 @@ class ChatDataSource() {
         }
         return null
     }
+
     suspend fun createChannel(channelName: String, userId: Double): ChannelData? {
         val createChannelInput = CreateChannelInput(channelName)
         try {
@@ -129,7 +151,7 @@ class ChatDataSource() {
                 return ChannelData(
                     data.id,
                     data.name,
-                    channelParticipant
+                    channelParticipant, nParticipant = null
                 )
 
 
@@ -190,15 +212,19 @@ class ChatDataSource() {
                 delay(attempt * 1000)
                 true
             }.collect {
-                val subscriptionData =it.data?.onChannelAdded
-                if(subscriptionData!=null && subscriptionData.participants !=null){
-                    val channelData = ChannelData(subscriptionData.id,subscriptionData.name,subscriptionData.participants.map{
-                        ChannelParticipant(it.id,it.username,it.isOnline)
-                    })
+                val subscriptionData = it.data?.onChannelAdded
+                if (subscriptionData != null && subscriptionData.participants != null) {
+                    val channelData = ChannelData(
+                        subscriptionData.id,
+                        subscriptionData.name,
+                        subscriptionData.participants.map {
+                            ChannelParticipant(it.id, it.username, it.isOnline)
+                        }, nParticipant = null
+                    )
                     onChannelAdded(channelData)
 
-                }else{
-                    Log.d("ApolloException","Error onCollect for ChannelAddedSubscription")
+                } else {
+                    Log.d("ApolloException", "Error onCollect for ChannelAddedSubscription")
                 }
             }
         apolloClient(userID).subscribe(OnChannelDeletedSubscription()).toFlow()
@@ -206,15 +232,19 @@ class ChatDataSource() {
                 delay(attempt * 1000)
                 true
             }.collect {
-                val subscriptionData =it.data?.onChannelDeleted
-                if(subscriptionData!=null && subscriptionData.participants !=null){
-                    val channelData = ChannelData(subscriptionData.id,subscriptionData.name,subscriptionData.participants.map{
-                        ChannelParticipant(it.id,it.username,it.isOnline)
-                    })
+                val subscriptionData = it.data?.onChannelDeleted
+                if (subscriptionData != null && subscriptionData.participants != null) {
+                    val channelData = ChannelData(
+                        subscriptionData.id,
+                        subscriptionData.name,
+                        subscriptionData.participants.map {
+                            ChannelParticipant(it.id, it.username, it.isOnline)
+                        }, nParticipant = null
+                    )
                     onChannelRemoved(channelData)
 
-                }else{
-                    Log.d("ApolloException","Error onCollect for ChannelAddedSubscription")
+                } else {
+                    Log.d("ApolloException", "Error onCollect for ChannelAddedSubscription")
                 }
             }
     }
@@ -244,7 +274,7 @@ class ChatDataSource() {
                     val channelData = ChannelData(
                         data.id,
                         data.name,
-                        channelParticipant
+                        channelParticipant, nParticipant = null
                     )
                     onChannelChange(channelData)
 

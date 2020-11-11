@@ -4,32 +4,51 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.data.follow.FollowRepository
+import com.pixie.android.data.game.GameInviteRepository
+import com.pixie.android.data.game.GameSessionRepository
+import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.model.game.GameSessionData
 import java.lang.IndexOutOfBoundsException
 
-class PlayersViewModel(private val chatRepository: ChatRepository) : ViewModel() {
+class PlayersViewModel(
+    private val chatRepository: ChatRepository,
+    private val followRepository: FollowRepository,
+    private val gameInviteRepository: GameInviteRepository,
+    private val gameSessionRepository: GameSessionRepository
+) : ViewModel() {
     fun getCurrentChannelID(): LiveData<Double> = chatRepository.getCurrentChannelID()
 
-    fun getMainChannelParticipants()= chatRepository.getMainChannelParticipantList()
-    fun getCurrentChannelParticipants(channelID:Double?):ArrayList<ChannelParticipant>{
-        try{
-        val participantList = chatRepository.getUserChannels().value?.filter {
-            it.channelID.equals(channelID)
-        }?.get(0)?.participantList
-            if(participantList.isNullOrEmpty()){
-                return arrayListOf()
-            }
+    fun getCurrentChannelParticipants(channelID: Double?): ArrayList<ChannelParticipant> {
+
+        val participantList = getUserChannels().value?.get(channelID)?.participantList
+        if (participantList != null) {
             return ArrayList(participantList)
-        }
-        catch(e:IndexOutOfBoundsException){
-            Log.d("PlayersViewModel",e.toString())
         }
         return arrayListOf()
     }
-    fun getCurrentChannelParticipants():ArrayList<ChannelParticipant>{
-        val currentChannelID= chatRepository.getCurrentChannelID().value
-     return getCurrentChannelParticipants(currentChannelID)
 
-    }    fun getUserChannels()=chatRepository.getUserChannels()
+    fun getCurrentChannelParticipants(): ArrayList<ChannelParticipant> {
+        val currentChannelID = chatRepository.getCurrentChannelID().value
+        return getCurrentChannelParticipants(currentChannelID)
 
+    }
+
+    fun getUserChannels() = chatRepository.getUserChannels()
+
+    fun addUserFollowList(user: ChannelParticipant) = followRepository.addUserFollowList(user)
+
+    fun removeUserFollowList(user: ChannelParticipant) = followRepository.removeUserFollowList(user)
+
+    fun isUserInFollowList(user: ChannelParticipant): Boolean =
+        followRepository.isUserInFollowList(user)
+
+    fun getGameSession(): LiveData<GameSessionData> {
+        return gameSessionRepository.getGameSession()
+    }
+
+    fun sendGameInvitation(receiverID: Double, onresult: (RequestResult) -> Unit) {
+        gameInviteRepository.sendGameInvitation(receiverID, onresult)
+    }
 }

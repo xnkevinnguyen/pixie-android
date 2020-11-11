@@ -1,0 +1,9 @@
+mutation ExitGame($gameSessionInput: GameSessionInput!){
+    exitGame(input:$gameSessionInput){
+        id
+        gameHall{
+            id,
+            name
+        }
+    }
+}

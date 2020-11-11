@@ -1,0 +1,16 @@
+query getAvailableGames($input: AvailableGamesInput!){
+    availableGames(input:$input){
+        id,
+        gameInfo{
+            id,
+            players{
+                id,
+                username,
+                isOnline,
+                avatar
+            }
+            mode,
+            language
+        }
+    }
+}

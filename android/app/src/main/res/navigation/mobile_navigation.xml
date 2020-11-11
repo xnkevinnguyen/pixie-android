@@ -8,14 +8,20 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.pixie.android.ui.draw.home.HomeFragment"
-        android:label="Home"
+        android:label="@string/home"
         tools:layout="@layout/home_fragment" />
 
     <fragment
         android:id="@+id/nav_drawing"
         android:name="com.pixie.android.ui.draw.DrawFragment"
-        android:label="Drawing"
+        android:label="@string/drawing"
         tools:layout="@layout/draw_fragment" />
+
+    <fragment
+        android:id="@+id/nav_leaderboard"
+        android:name="com.pixie.android.ui.draw.leaderboard.LeaderboardFragment"
+        android:label="@string/leaderboard"
+        tools:layout="@layout/leaderboard_layout" />
 
     <fragment
         android:id="@+id/nav_profile"
@@ -26,12 +32,49 @@
     <fragment
         android:id="@+id/nav_available_games"
         android:name="com.pixie.android.ui.draw.availableGames.AvailableGamesFragment"
-        android:label="Available Games"
+        android:label="@string/available_games"
         tools:layout="@layout/available_game_fragment" />
 
     <fragment
         android:id="@+id/nav_game_selection"
         android:name="com.pixie.android.ui.draw.gameSelection.GameSelectionFragment"
-        android:label="Game Selection"
+        android:label="@string/game_select"
         tools:layout="@layout/game_selection_fragment" />
+
+    <fragment
+        android:id="@+id/nav_game_creation"
+        android:name="com.pixie.android.ui.draw.gameCreation.CreateGameFragment"
+        android:label="@string/game_creation"
+        tools:layout="@layout/create_game_fragment" />
+
+    <fragment
+        android:id="@+id/nav_tutorial"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialFragment"
+        android:label="@string/tutorial"
+        tools:layout="@layout/tutorial_layout" />
+    <fragment
+        android:id="@+id/nav_tutorial_page2"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage2Fragment"
+        android:label="@string/tutorial"
+        tools:layout="@layout/tutorial_layout_page2" />
+    <fragment
+        android:id="@+id/nav_tutorial_page3"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage3Fragment"
+        android:label="@string/tutorial"
+        tools:layout="@layout/tutorial_layout_page3" />
+    <fragment
+        android:id="@+id/nav_tutorial_page4"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage4Fragment"
+        android:label="@string/tutorial"
+        tools:layout="@layout/tutorial_layout_page4" />
+    <fragment
+        android:id="@+id/nav_tutorial_page5"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage5Fragment"
+        android:label="@string/tutorial"
+        tools:layout="@layout/tutorial_layout_page5" />
+    <fragment
+        android:id="@+id/nav_tutorial_page6"
+        android:name="com.pixie.android.ui.draw.tutorial.TutorialPage6Fragment"
+        android:label="@string/tutorial"
+        tools:layout="@layout/tutorial_layout_page6" />
 </navigation>

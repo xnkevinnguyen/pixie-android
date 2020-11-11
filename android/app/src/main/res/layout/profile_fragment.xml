@@ -68,14 +68,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/name"
+                            android:text="@string/surname"
                             android:textSize="@dimen/profile_text"
                             android:layout_marginTop="10dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/surname"
+                            android:text="@string/name"
                             android:textSize="@dimen/profile_text"
                             android:layout_marginTop="10dp"/>
 
@@ -95,6 +95,18 @@
                         android:layout_marginStart="30dp"
                         android:layout_weight="1">
 
+                       <TextView
+                            android:id="@+id/surname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/not_available"
+                            android:textSize="@dimen/profile_text"
+                            android:layout_marginTop="10dp"
+                            android:paddingLeft="30dp"
+                            android:paddingRight="30dp"
+                            android:gravity="center"
+                            android:background="?color"/>
+
                         <TextView
                             android:id="@+id/name"
                             android:layout_width="match_parent"
@@ -104,17 +116,7 @@
                             android:layout_marginTop="10dp"
                             android:paddingLeft="30dp"
                             android:paddingRight="30dp"
-                            android:background="?color"/>
-
-                        <TextView
-                            android:id="@+id/surname"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/not_available"
-                            android:textSize="@dimen/profile_text"
-                            android:layout_marginTop="10dp"
-                            android:paddingLeft="30dp"
-                            android:paddingRight="30dp"
+                            android:gravity="center"
                             android:background="?color"/>
 
                         <TextView
@@ -126,6 +128,7 @@
                             android:layout_marginTop="10dp"
                             android:paddingLeft="30dp"
                             android:paddingRight="30dp"
+                            android:gravity="center"
                             android:background="?color"/>
                     </LinearLayout>
 
@@ -213,6 +216,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:background="?color" />
 
 
@@ -225,6 +229,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:background="?color" />
 
                     <TextView
@@ -236,6 +241,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:background="?color" />
                 </LinearLayout>
             </LinearLayout>
@@ -350,6 +356,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:background="?color"/>
 
                     <TextView
@@ -361,6 +368,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:background="?color"/>
 
                     <TextView
@@ -372,6 +380,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:background="?color"/>
 
                     <TextView
@@ -383,6 +392,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:background="?color"/>
 
                     <TextView
@@ -394,6 +404,7 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:background="?color"/>
 
                 </LinearLayout>
@@ -463,14 +474,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/winner"
+                        android:text="@string/game_mode"
                         android:textSize="@dimen/profile_text"
                         android:layout_marginTop="10dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/game_mode"
+                        android:text="@string/winner"
                         android:textSize="@dimen/profile_text"
                         android:layout_marginTop="10dp"/>
 
@@ -485,13 +496,14 @@
 
                     <TextView
                         android:id="@+id/game_date"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/not_available"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
                         android:background="?color"
+                        android:gravity="center"
                         android:layout_marginTop="10dp"/>
 
                     <TextView
@@ -503,6 +515,7 @@
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
                         android:background="?color"
+                        android:gravity="center"
                         android:layout_marginTop="10dp"/>
 
                     <TextView
@@ -514,6 +527,19 @@
                         android:paddingRight="30dp"
                         android:textSize="@dimen/profile_text"
                         android:background="?color"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"/>
+
+                    <TextView
+                        android:id="@+id/game_mode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_available"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:textSize="@dimen/profile_text"
+                        android:background="?color"
+                        android:gravity="center"
                         android:layout_marginTop="10dp"/>
 
                     <LinearLayout
@@ -524,12 +550,13 @@
 
                         <TextView
                             android:id="@+id/game_winner"
-                            android:layout_width="wrap_content"
+                            android:layout_width="175dp"
                             android:layout_height="wrap_content"
                             android:text="@string/not_available"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:textSize="@dimen/profile_text"
+                            android:gravity="center"
                             android:background="?color"/>
 
                         <TextView
@@ -541,20 +568,10 @@
                             android:paddingRight="10dp"
                             android:layout_marginStart="10dp"
                             android:textSize="@dimen/profile_text"
+                            android:gravity="center"
                             android:background="?color"/>
 
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/game_mode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/not_available"
-                        android:paddingLeft="30dp"
-                        android:paddingRight="30dp"
-                        android:textSize="@dimen/profile_text"
-                        android:background="?color"
-                        android:layout_marginTop="10dp"/>
 
                 </LinearLayout>
 

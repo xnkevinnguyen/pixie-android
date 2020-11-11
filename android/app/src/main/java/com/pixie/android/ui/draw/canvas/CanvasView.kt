@@ -3,29 +3,27 @@ package com.pixie.android.ui.draw.canvas
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.MutableLiveData
-import com.pixie.android.R
-import com.pixie.android.model.draw.DrawCommand
-import com.pixie.android.model.draw.PathData
+import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
+import com.pixie.android.type.PathStatus
 
 
 class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     // Holds the path you are currently drawing.
     private var path = Path()
     var drawStroke: Float = 12f
-    var completedCommand = MutableLiveData<DrawCommand>()
-    var pathData: PathData = PathData(arrayListOf())
+    var pathData = ArrayList<PathPoint>()
+    private lateinit var canvasViewModel: CanvasViewModel
 
 
     var drawColor: Int = 0 // Should be replaced at runtime with default BLACK value from repository
     private val backgroundColor = Color.TRANSPARENT
     private var erase = false
 
-    private lateinit var canvas: Canvas
+    private  var canvas: Canvas? = null
     private lateinit var bitmap: Bitmap
 
     private var paint = generatePaint()
@@ -35,11 +33,17 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
+    private var onDrawingMove:Boolean = false
+
 
     fun setErase(isErase: Boolean) {
         erase = isErase
         if (erase) paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         else paint.xfermode = null
+    }
+
+    fun setViewModel(viewModel: CanvasViewModel) {
+        canvasViewModel = viewModel
     }
 
     fun reinitializeDrawingParameters() {
@@ -56,13 +60,24 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             drawStroke
     }
 
-    fun drawFromCommandList(drawCommandList: List<DrawCommand>) {
+    fun drawFromCommandList(canvasCommandList: List<CanvasCommand>) {
+        if(canvas !=null) {
+            canvas?.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
+            canvasCommandList.forEach {
+                if (it.paint != null && it.path != null) {
+                    val pathToDraw = Path()
+                    pathToDraw.moveTo(it.path.first().x1, it.path.first().y1)
+                    it.path.forEach {
+                        pathToDraw.quadTo(it.x1, it.y1, it.x2, it.y2)
 
-        canvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
-        drawCommandList.forEach {
-            canvas.drawPath(it.path, it.paint)
+                    }
+                    canvas?.drawPath(pathToDraw, it.paint)
+                }
+            }
+            invalidate()
+        }else{
+            Log.d("CanvasError","Canvas is null")
         }
-        invalidate()
     }
 
 
@@ -72,7 +87,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         if (::bitmap.isInitialized) bitmap.recycle()
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
-        canvas.drawColor(backgroundColor)
+        canvas?.drawColor(backgroundColor)
 
 
     }
@@ -85,24 +100,43 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         motionTouchEventX = event.x
         motionTouchEventY = event.y
-
+        if(!erase){//draw actions
         when (event.action) {
             MotionEvent.ACTION_DOWN -> onTouchStart()
             MotionEvent.ACTION_MOVE -> onTouchMove()
             MotionEvent.ACTION_UP -> onTouchStop()
         }
+        }else if(erase){
+            when(event.action){
+                MotionEvent.ACTION_DOWN ->onEraseStart()
+                MotionEvent.ACTION_MOVE ->onEraseMove()
+            }
+        }
         return true
     }
-
-    private fun onTouchStart() {
-        path.reset()
-        path.moveTo(motionTouchEventX, motionTouchEventY)
+    private fun onEraseStart(){
+//        canvasViewModel.captureEraseAction(motionTouchEventX,motionTouchEventY,)
+        currentX = motionTouchEventX
+        currentY = motionTouchEventY
+    }
+    private fun onEraseMove(){
+        canvasViewModel.captureEraseAction(currentX,currentY,motionTouchEventX,motionTouchEventY)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
     }
 
+    private fun onTouchStart() {
+        pathData.clear()
+        path.reset()
+        path.moveTo(motionTouchEventX, motionTouchEventY)
+        currentX = motionTouchEventX
+        currentY = motionTouchEventY
+        canvasViewModel.sendPoint(currentX,currentY,PathStatus.BEGIN,Paint(paint))
+        onDrawingMove = true
+    }
+
     private fun onTouchMove() {
-        pathData.pointList.add(
+        pathData.add(
             PathPoint(
                 currentX,
                 currentY,
@@ -119,7 +153,10 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         currentX = motionTouchEventX
         currentY = motionTouchEventY
-        canvas.drawPath(path, paint)
+        canvas?.drawPath(path, paint)
+        // To prevent an even after ontouch stop
+        if(onDrawingMove)
+            canvasViewModel.sendPoint(currentX,currentY,PathStatus.ONGOING,Paint(paint))
 
         // Invalidate triggers onDraw from the view
         invalidate()
@@ -127,7 +164,13 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun onTouchStop() {
-        completedCommand.postValue(DrawCommand(Path(path), Paint(paint)))
+        onDrawingMove = false
+        if (!erase && !pathData.isNullOrEmpty()) {
+            // send point
+            canvasViewModel.sendFinalPoint(currentX,currentY,PathStatus.END,Paint(paint),ArrayList(pathData))
+//            canvasViewModel.addCommandToHistory(Paint(paint), ArrayList(pathData))
+        }
+        pathData.clear()
         path.reset()
     }
 }

@@ -1,17 +1,16 @@
 package com.pixie.android.ui.chat
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.TextView
+import android.widget.*
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
+import kotlin.random.Random
 
 
 class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
@@ -23,28 +22,31 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     var filteredListOfParticipants = ArrayList<ChannelParticipant>()
 
     fun add(channelParticipant: ChannelParticipant) {
-        if(channelParticipant.isOnline==true) {
+        if (channelParticipant.isOnline == true) {
             this.listOfParticipants.add(channelParticipant)
             this.filteredListOfParticipants.add(channelParticipant)
             notifyDataSetChanged()
         }
     }
-    fun clear(){
+
+    fun clear() {
         filteredListOfParticipants.clear()
     }
-    fun reset(){
+
+    fun reset() {
         clear()
         listOfParticipants.clear()
     }
 
-    fun set(participantList:ArrayList<ChannelParticipant>){
+    fun set(participantList: ArrayList<ChannelParticipant>) {
         reset()
-
-        listOfParticipants = ArrayList(participantList.filter { it.isOnline==true })
-        filteredListOfParticipants=ArrayList(participantList.filter { it.isOnline==true })
+        participantList.sortByDescending { it.isOnline }
+        listOfParticipants = participantList
+        filteredListOfParticipants = participantList
         notifyDataSetChanged()
 
     }
+
     override fun getCount(): Int {
         return filteredListOfParticipants.size
     }
@@ -62,6 +64,29 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val participantUserName = rowView.findViewById<TextView>(R.id.participant_username)
         participantUserName.text = participant.username
+
+        val onlineIconElement = rowView.findViewById<ImageView>(R.id.online_badge)
+        if (participant.isOnline == false) {
+            onlineIconElement.setColorFilter(Color.GRAY)
+        }
+        val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
+
+
+        avatarElement.setColorFilter(
+            Color.argb(
+                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
+                    256
+                )
+            )
+        )
+
+        avatarElement.backgroundTintList = ColorStateList.valueOf(
+            Color.argb(
+                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
+                    256
+                )
+            )
+        )
         return rowView
 
     }

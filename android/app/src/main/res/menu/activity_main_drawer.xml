@@ -8,14 +8,19 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="@string/home" />
-        <item
-        android:id="@+id/nav_drawing"
-            android:icon="@drawable/ic_palette"
-            android:title="@string/drawing" />
+<!--        <item-->
+<!--        android:id="@+id/nav_drawing"-->
+<!--            android:icon="@drawable/ic_palette"-->
+<!--            android:title="@string/drawing" />-->
         <item
             android:id="@+id/nav_game_selection"
             android:icon="@drawable/ic_baseline_games"
             android:title="@string/game_select" />
+
+        <item
+            android:id="@+id/nav_leaderboard"
+            android:icon="@drawable/ic_baseline_bar"
+            android:title="@string/leaderboard" />
 
     </group>
 </menu>

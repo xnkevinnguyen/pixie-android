@@ -1,9 +1,11 @@
 package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +13,12 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.chat.ChannelParticipantAdapter
 import com.pixie.android.ui.chat.ChatViewModel
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 
@@ -37,35 +41,20 @@ class PlayersFragment : Fragment() {
         val participantAdapter = ChannelParticipantAdapter(requireContext())
         participantListElement.adapter = participantAdapter
 
-        //TODO should be removed and replaced with players from current channel
-        val mainChannelParticipantList = playersViewModel.getMainChannelParticipants()
-        mainChannelParticipantList.observe(viewLifecycleOwner, Observer { participantList ->
-            if (!participantList.isNullOrEmpty()) {
-                participantAdapter.clear()
-                participantList.forEach {
-                    participantAdapter.add(it)
-                }
-
-            }
-
-        })
         val currentChannelID = playersViewModel.getCurrentChannelID()
 
         currentChannelID.observe(viewLifecycleOwner, Observer {id->
             // on channel change
-
-            // load new channel messages
             val participantList = playersViewModel.getCurrentChannelParticipants(id)
             participantAdapter.set(participantList)
-
         })
 
         val userChannels= playersViewModel.getUserChannels()
         userChannels.observe(viewLifecycleOwner, Observer {
             val participantList = playersViewModel.getCurrentChannelParticipants()
             participantAdapter.set(participantList)
-
         })
+
         participantListElement.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
                 val user: ChannelParticipant =
@@ -74,10 +63,39 @@ class PlayersFragment : Fragment() {
                 dialog.setContentView(R.layout.other_user_info)
                 dialog.findViewById<TextView>(R.id.user_name).text = user.username
                 val follow = dialog.findViewById<Button>(R.id.follow)
+                if(isUser(user)) follow.visibility = View.GONE
+                if (!playersViewModel.isUserInFollowList(user)) follow.text = resources.getString(R.string.follow)
+                else follow.text = resources.getString(R.string.unfollow)
                 follow.setOnClickListener {
-                    if (follow.text == "Follow") {
+                    if (!playersViewModel.isUserInFollowList(user)) {
+                        playersViewModel.addUserFollowList(user)
                         follow.text = resources.getString(R.string.unfollow)
-                    } else follow.text = resources.getString(R.string.follow)
+                    } else {
+                        playersViewModel.removeUserFollowList(user)
+                        follow.text = resources.getString(R.string.follow)
+                    }
+                }
+                val invite = dialog.findViewById<Button>(R.id.invite)
+
+                if(playersViewModel.getGameSession().value?.id ==null){
+                 invite.visibility = View.GONE
+                }else{
+                    invite.visibility = View.VISIBLE
+                }
+                invite.setOnClickListener{
+                    invite.isEnabled= false
+                    playersViewModel.sendGameInvitation(user.id){
+                        if(it.isSuccess ==true){
+                            Toast.makeText(context,
+                                "Success",
+                                Toast.LENGTH_LONG).show()
+                        }else if(!it.isSuccess){
+                            Toast.makeText(context,
+                                it.error,
+                                Toast.LENGTH_LONG).show()
+                        }
+                        invite.isEnabled=true
+                    }
                 }
 
                 dialog.show()
@@ -105,5 +123,13 @@ class PlayersFragment : Fragment() {
         return root
     }
 
+    fun isUser(user: ChannelParticipant): Boolean{
+        val preferences = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        val userIDPreference = preferences.getString(Constants.USER_ID, null)
+        if(userIDPreference.toDouble() == user.id){
+            return true
+        }
+        return false
+    }
 
 }

@@ -3,20 +3,15 @@ package com.pixie.android.ui.chat
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -53,9 +48,9 @@ class GameChatFragment : Fragment() {
 
         val messageAdapter = MessagingAdapter(requireContext())
         //val participantAdapter = ChannelParticipantAdapter(requireContext())
-        val factory = InjectorUtils.provideChatViewModelFactory()
+        val factory = InjectorUtils.provideGameChatViewModelFactory()
 
-        val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
+        val gameChatViewModel = ViewModelProvider(this, factory).get(GameChatViewModel::class.java)
 
         messageList.adapter = messageAdapter
         //participantListElement.adapter = participantAdapter
@@ -67,27 +62,57 @@ class GameChatFragment : Fragment() {
         messageBtn.setOnClickListener {
             editText.setHintTextColor(color)
             editText.hint = resources.getString(R.string.chat_message_hint)
-            editorGame.putString(Constants.GAME_CHAT_VALUE, "message")
-            editorGame.apply()
+            gameChatViewModel.setMessageType(MESSAGE_TYPE.MESSAGE)
         }
         guessBtn.setOnClickListener {
             editText.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
             editText.hint = resources.getString(R.string.chat_guess_hint)
-            editorGame.putString(Constants.GAME_CHAT_VALUE, "guess")
-            editorGame.apply()
+            gameChatViewModel.setMessageType(MESSAGE_TYPE.GUESS)
+
         }
+
+        if(gameChatViewModel.getMessageType().equals(MESSAGE_TYPE.MESSAGE)){
+            editText.setHintTextColor(color)
+            editText.hint = resources.getString(R.string.chat_message_hint)
+
+        }else{
+            editText.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+            editText.hint = resources.getString(R.string.chat_guess_hint)
+
+        }
+
+        val channelMessages = gameChatViewModel.getChannelMessageList()
+        channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
+            if (!channelMessagesMap.isNullOrEmpty()){
+                val messageObject = channelMessagesMap[gameChatViewModel.getGameChannelID()]
+
+                // Repopulating the adapter
+                if(messageObject !=null) {
+                    messageAdapter.set(messageObject.messageList)
+
+                }
+
+
+            }
+
+        })
 
         sendMessage.setOnClickListener {
             val message = editText.text.toString()
 
-            val valueChat = preferencesGame.getString(Constants.GAME_CHAT_VALUE,"message")
-            if(valueChat == "message") {
-                if (message.isNotBlank()) {
-                    chatViewModel.sendMessageToCurrentChannel(message)
-                    editText.text.clear() //clear text line
-
+            gameChatViewModel.sendMessageOrGuess(message){
+                if(it ==true){
+                    Toast.makeText(requireContext(),
+                    "Correct Answer!",
+                    Toast.LENGTH_LONG).show()
+                }else if( it==false){
+                    Toast.makeText(requireContext(),
+                        "Wrong Answer!",
+                        Toast.LENGTH_LONG).show()
                 }
             }
+            editText.text.clear()
+
         }
 
         // Enter button on real keyboard if attached to android
@@ -97,7 +122,18 @@ class GameChatFragment : Fragment() {
                     keyCode == KeyEvent.KEYCODE_ENTER) {
                     val message = editText.text.toString()
                     if (message.isNotBlank()) {
-                        chatViewModel.sendMessageToCurrentChannel(message)
+                        gameChatViewModel.sendMessageOrGuess(message){
+                            //handle UI for good or bad guess
+                            if(it ==true){
+                                Toast.makeText(requireContext(),
+                                    "Correct Answer!",
+                                    Toast.LENGTH_LONG).show()
+                            }else if( it==false){
+                                Toast.makeText(requireContext(),
+                                    "Wrong Answer!",
+                                    Toast.LENGTH_LONG).show()
+                            }
+                        }
                         editText.text.clear() //clear text line
                     }
                     return true
@@ -112,7 +148,7 @@ class GameChatFragment : Fragment() {
                 val message = editText.text.toString()
 
                 if (message.isNotBlank()) {
-                    chatViewModel.sendMessageToCurrentChannel(message)
+                    gameChatViewModel.sendMessageToGameChannel(message)
                     editText.text.clear()
                 }
                 true
@@ -120,33 +156,6 @@ class GameChatFragment : Fragment() {
                 false
             }
         }
-
-        val mainChannelMessageList = chatViewModel.getMainChannelMessage()
-        //val mainChannelParticipantList = chatViewModel.getMainChannelParticipants()
-        mainChannelMessageList.observe(viewLifecycleOwner, Observer {messageList->
-            if (!messageList.isNullOrEmpty()){
-                if(messageAdapter.isEmpty){
-                    // Repopulating the adapter
-                    messageList.forEach {
-                        messageAdapter.add(it)
-                    }
-
-                }else{
-                    messageAdapter.add(messageList.last())
-                }
-            }
-
-        })
-//        mainChannelParticipantList.observe(viewLifecycleOwner, Observer { participantList->
-//            if(!participantList.isNullOrEmpty()){
-//                participantAdapter.clear()
-//                participantList.forEach{
-//                    participantAdapter.add(it)
-//                }
-//
-//            }
-//
-//        })
 
 
         return root

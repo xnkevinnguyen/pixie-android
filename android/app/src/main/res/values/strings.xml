@@ -6,12 +6,14 @@
     <string name="apply">Apply</string>
     <string name="ok">Ok</string>
     <string name="tutorial">Tutorial</string>
-    <string name="setting_desc">nav_setting_desc</string>
+    <string name="setting_desc" translatable="false">nav_setting_desc</string>
     <string name="username">Username</string>
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Home</string>
-    <string name="drawing">Drawing</string>
     <string name="game_select">Game Selection</string>
+    <string name="available_games">Available Games</string>
+    <string name="drawing">Drawing</string>
+    <string name="game_creation">Game Creation</string>
     <string name="action_settings">action settings</string>
     <string name="chat_message_hint">Type message here...</string>
     <string name="chat_guess_hint">Type guess here...</string>
@@ -29,14 +31,11 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="register_title">Register</string>
-    <string name="email">email</string>
     <string name="retype_pass">Re-Enter your password</string>
     <string name="return_login">Return to login page</string>
-    <string name="active_users">Players</string>
+    <string name="load_chat_history">Load Chat History</string>
     <string name="messages">Messages</string>
     <string name="channel">Your Channels</string>
-    <string name="join_channel">Join</string>
-    <string name="create_channel">Create</string>
     <string name="add_channel">Add Channel</string>
     <string name="players">Players</string>
     <string name="dropdown_1">Profile</string>
@@ -74,13 +73,16 @@
 
     <string name="theme">Theme</string>
     <string name="language">Language</string>
+    <string name="notif_sound">Notification sound</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
+    <string name="pink">Pink-Brown</string>
+    <string name="green">Green-Grey</string>
+    <string name="blue">Blue</string>
     <string name="eng">English</string>
     <string name="fr">French</string>
     <string name="setting">Settings</string>
 
-    <string name="changing_theme">To apply these changes please logout of Pixie.</string>
     <string name="new_channel">Create new channel</string>
     <string name="channel_name">Enter channel name...</string>
     <string name="join_existing_channel">Join existing channels</string>
@@ -99,18 +101,57 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="game1">Game 1</string>
-    <string name="game2">Game 2</string>
-    <string name="game3">Game 3</string>
-    <string name="game4">Game 4</string>
     <string name="join">Join</string>
     <string name="create">Create</string>
     <string name="new_game">New Game</string>
     <string name="guess">Guess</string>
     <string name="message">Message</string>
-    <string name="hints">Hints</string>
     <string name="guess_left">Guess left</string>
     <string name="kick">Kick player</string>
     <string name="leave">Leave game</string>
     <string name="not_available">Not Available</string>
+
+    <string name="start_game">Start Game</string>
+    <string name="add_players">Add Players</string>
+    <string name="add_virtual">Add Virtual Player</string>
+    <string name="create_game">Create New Game</string>
+    <string name="add">Add</string>
+    <string name="round">Round : 3</string>
+    <string name="round_turn">Round</string>
+    <string name="total_round">of 3</string>
+
+    <string name="game_result">Game Result</string>
+    <string name="goto_home">Go To Home</string>
+    <string name="rank">Rank:</string>
+    <string name="total_score">Total Score</string>
+
+    <string name="welcome_tutorial">Welcome to Pixie</string>
+    <string name="get_started_exp">Get started quickly on the best drawing game with this mini tutorial.</string>
+    <string name="get_started">Get Started</string>
+    <string name="chat">Chat with your friends</string>
+    <string name="choose_game">Choose a game mode</string>
+    <string name="create_join">Create or Join a game</string>
+    <string name="three_modes">There are 3 modes of games you can play.</string>
+    <string name="play_game">Play the game</string>
+    <string name="play_game_expl">Have fun competing with your friends!</string>
+    <string name="finish">Finish</string>
+    <string name="view_profile">View your profile</string>
+    <string name="view_profile_expl">Find your connections and games history as well as your game statistics and user information.</string>
+    <string name="display_word_top">Your word is: %1$s </string>
+    <string name="next_drawer">Next drawer: %1$s</string>
+
+    <string name="success">Success</string>
+    <string name="error">Error</string>
+
+    <string name="leaderboard">Leaderboard</string>
+    <string name="mode_solo">Mode Solo</string>
+    <string name="mode_coop"> Mode Coop</string>
+    <string name="mode_free">Mode Free For All</string>
+    <string name="cumulative_score">Best cumulative score:</string>
+    <string name="most_games_won">Most games won:</string>
+
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+
+    <string name="game_invitation_title">%1$s has invited you</string>
 </resources>
