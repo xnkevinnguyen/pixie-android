@@ -66,15 +66,7 @@
         android:textColor="@android:color/white"
         android:textSize="@dimen/profile_titles" />
 
-    <TextView
-        android:id="@+id/rank_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="20dp"
-        android:gravity="center"
-        android:textSize="@dimen/profile_titles" />
+
 
     <Button
         android:id="@+id/got_to_home"

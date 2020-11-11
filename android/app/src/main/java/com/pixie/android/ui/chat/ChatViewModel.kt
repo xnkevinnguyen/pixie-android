@@ -13,6 +13,7 @@ import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelMessageObject
 import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.GameInvitation
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
@@ -66,6 +67,7 @@ class ChatViewModel(
 
     fun exitGame(gameID: Double) {
         gameRepository.exitGame(gameID)
+        gameSessionRepository.leaveGame()
     }
 
     fun exitChannel(channelID: Double) {
@@ -108,6 +110,30 @@ class ChatViewModel(
         val gameID = getUserChannels().value?.get(id)?.gameID
         if (gameID != null) {
             gameInviteRepository.addVirtualPlayer(gameID,onResult)
+        }
+    }
+    fun sendGameInvitation(receiverID:Double,onresult:(RequestResult)->Unit){
+        gameInviteRepository.sendGameInvitation(receiverID,onresult)
+    }
+
+    fun subscribeToGameInvitation(){
+        gameInviteRepository.subscribeToGameInvitation()
+    }
+    fun getGameInvitation():LiveData<GameInvitation>{
+        return gameInviteRepository.getGameInvitation()
+    }
+    fun getHasGameInvitationBeenShown():Boolean{
+        return gameInviteRepository.getHasInvitationBeenShown()
+    }
+    fun confirmInvitationBeenShown(){
+        gameInviteRepository.confirmInvitationBeenShown()
+    }
+    fun acceptInvitation(gameID: Double){
+        val game= gameRepository.joinGame(gameID)
+        if(game!=null) {
+            gameSessionRepository.subscribeToGameSessionChange(game.id)
+            gameSessionRepository.setGameSession(game)
+            setCurrentChannelID(game.channelID)
         }
 
 

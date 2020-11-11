@@ -3,7 +3,7 @@ package com.pixie.android.model.draw
 import android.graphics.Paint
 
 data class CanvasCommand (
-    val type: CommandType,
+    var type: CommandType,
     val paint: Paint?=null,
     val path:ArrayList<PathPoint>?=null,
     val reference:CanvasCommand? = null, //Use for eraser to point to target command,

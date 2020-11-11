@@ -149,6 +149,9 @@ class RegisterFragment : Fragment() {
                         // Once register succeeds, we are loggin in the user
 
                         val intent = Intent(view.context, MainActivity::class.java)
+                        val param = Bundle();
+                        param.putInt("isNewUser", 1); //Your id
+                        intent.putExtras(param)
                         // Store for next time user opens application
                         editor.putBoolean(Constants.SHARED_PREFERENCES_LOGIN_STATUS, true)
                         editor.putString(

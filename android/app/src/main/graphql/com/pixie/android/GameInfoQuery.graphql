@@ -1,9 +1,7 @@
 query getGames{
     me{
         playedGames{
-            winner{
-                username
-            }
+
             createdAt,
             bestScore,
             mode,

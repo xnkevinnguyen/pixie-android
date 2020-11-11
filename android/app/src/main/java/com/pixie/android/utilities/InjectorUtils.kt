@@ -1,7 +1,7 @@
 package com.pixie.android.utilities
 
 import com.pixie.android.data.chat.ChatRepository
-import com.pixie.android.data.draw.CanvasCommandHistoryRepository
+import com.pixie.android.data.draw.CanvasRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.follow.FollowRepository
 import com.pixie.android.data.game.GameInviteRepository
@@ -27,15 +27,15 @@ import com.pixie.android.ui.user.register.RegisterViewModelFactory
 object InjectorUtils {
     fun provideDrawViewModelFactory(): DrawToolsViewModelFactory {
         val drawingParametersRepository = DrawingParametersRepository.getInstance()
-        val drawCommandHistoryRepository = CanvasCommandHistoryRepository.getInstance()
+        val gameSessionRepository = GameSessionRepository.getInstance()
         return DrawToolsViewModelFactory(
-            drawingParametersRepository,drawCommandHistoryRepository
+            drawingParametersRepository,gameSessionRepository
         )
     }
 
     fun provideCanvasViewModelFactory(): CanvasViewModelFactory {
         val drawingParametersRepository = DrawingParametersRepository.getInstance()
-        val drawCommandHistoryRepository = CanvasCommandHistoryRepository.getInstance()
+        val drawCommandHistoryRepository = CanvasRepository.getInstance()
         val gameSessionRepository = GameSessionRepository.getInstance()
         return CanvasViewModelFactory(
             drawingParametersRepository,drawCommandHistoryRepository,gameSessionRepository
@@ -88,7 +88,9 @@ object InjectorUtils {
     fun providePlayersViewModelFactory(): PlayersViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
         val followRepository = FollowRepository.getInstance()
-        return PlayersViewModelFactory(chatRepository, followRepository)
+        val gameInviteRepository = GameInviteRepository.getInstance()
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return PlayersViewModelFactory(chatRepository, followRepository,gameInviteRepository,gameSessionRepository)
     }
 
     fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{

@@ -1,13 +1,8 @@
 package com.pixie.android.data
 
-import android.graphics.Paint
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.pixie.android.data.draw.CanvasCommandHistoryRepository
-import com.pixie.android.model.draw.CanvasCommand
-import com.pixie.android.model.draw.CommandType
-import org.junit.Assert
+import com.pixie.android.data.draw.CanvasRepository
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TestRule
 
 
@@ -30,7 +25,7 @@ class CanvasCommandHistoryRepositoryTest {
 //        Assert.assertEquals(result.value!!.size,1)
 //    }
 
-    private fun getRepository():CanvasCommandHistoryRepository{
-        return CanvasCommandHistoryRepository()
+    private fun getRepository():CanvasRepository{
+        return CanvasRepository()
     }
 }
