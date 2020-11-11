@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPinkPrimary">#3A405A</color>
+    <color name="colorPinkSecondary">#685044</color>
+    <color name="colorPinkTertiary">#99B2DD</color>
+    <color name="colorPinkFourth">#E9AFA3</color>
+    <color name="colorPinkFifth">#F9DEC9</color>
+</resources>

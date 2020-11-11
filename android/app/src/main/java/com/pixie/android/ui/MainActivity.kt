@@ -78,7 +78,10 @@ class MainActivity : AppCompatActivity() {
         )
         val theme = preferencesSettings.getString(Constants.THEME, "Dark")
         if (theme == "Dark") setTheme(R.style.AppTheme_NoActionBar)
-        else setTheme(R.style.AppLightTheme_NoActionBar)
+        else if(theme == "Light") setTheme(R.style.AppLightTheme_NoActionBar)
+        else if (theme == "Pink-Brown") setTheme(R.style.AppPinkTheme_NoActionBar)
+        else if(theme == "Green-Gray") setTheme(R.style.AppGreenTheme_NoActionBar)
+        else setTheme(R.style.AppBlueTheme_NoActionBar)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)

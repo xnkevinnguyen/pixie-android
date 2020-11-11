@@ -73,6 +73,9 @@
     <string name="notif_sound">Son de notification</string>
     <string name="dark">Sombre</string>
     <string name="light">Clair</string>
+    <string name="pink">Rose-Brun</string>
+    <string name="green">Vert-Gris</string>
+    <string name="blue">Bleu</string>
     <string name="eng">Anglais</string>
     <string name="fr">Français</string>
     <string name="setting">Réglage</string>
