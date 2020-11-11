@@ -23,7 +23,6 @@ import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.availableGames.adapters.AvailableGamesAdapter
-import com.pixie.android.ui.draw.channelList.PlayersViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 

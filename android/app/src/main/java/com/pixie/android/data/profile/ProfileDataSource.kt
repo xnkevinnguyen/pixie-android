@@ -1,5 +1,6 @@
 package com.pixie.android.data.profile
 
+import android.service.autofill.UserData
 import android.util.Log
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
@@ -76,8 +77,15 @@ class ProfileDataSource {
                     if (scoreList == null) {
                         scoreList = arrayListOf()
                     }
-                    GameHistory(date = it.createdAt.toString(), points = scoreList,
-                        winner = "undefined", score = it.bestScore,
+
+                    var winnersList= it.winners?.map{
+                        it.username
+                    }
+                    if(winnersList == null){
+                        winnersList = arrayListOf()
+                    }
+                    GameHistory(date = it.createdAt.toString(), points = scoreList, winner = winnersList, score = it.bestScore,
+
                     difficulty = it.difficulty.rawValue, gameMode = it.mode.rawValue)
                 })
                 onReceiveMessage(gameData)
