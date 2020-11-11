@@ -193,12 +193,12 @@ class GameSessionRepository(
                 if (pathID != null) {
                     CoroutineScope(Dispatchers.Main).launch {
                         onResult(pathID)
+                        pathIDGenerator += 1
                     }
 
                 }
             }
         }
-        pathIDGenerator += 1
     }
     fun sendManualCommand(
         commandType: CommandType,
