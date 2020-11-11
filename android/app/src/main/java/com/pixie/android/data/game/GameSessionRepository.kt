@@ -34,6 +34,7 @@ class GameSessionRepository(
     private var pathSubscription: Job? = null
     private var manualPathSubscription: Job? = null
     private var pathIDGenerator = 0.0
+    private var isCanvasLocked = MutableLiveData<Boolean>()
 
 
 
@@ -43,6 +44,8 @@ class GameSessionRepository(
 
 
     fun getGameSession() = gameSession
+
+    fun getIsCanvasLocked()=isCanvasLocked
 
     // used for the current user to display current word to draw
     fun getShouldShowWord() = shouldShowWord
@@ -149,6 +152,11 @@ class GameSessionRepository(
 
                     } else {
                         shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE, ""))
+                    }
+                    if(it.state == GameState.DRAWING && it.currentDrawerId == userRepository.getUser().userId){
+                        isCanvasLocked.postValue(false)
+                    }else{
+                        isCanvasLocked.postValue(true)
                     }
                     gameSession.postValue(it)
 
