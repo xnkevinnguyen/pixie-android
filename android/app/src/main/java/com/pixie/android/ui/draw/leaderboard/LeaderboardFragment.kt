@@ -188,17 +188,17 @@ class LeaderboardFragment: Fragment() {
         if(mostGameWonValues.size != 0){
             if(mostGameWonValues.size >= 1){
                 mostFreeUser.text = mostGameWonValues[0].username
-                mostFreeScore.text = mostGameWonValues[0].value.toString()
+                mostFreeScore.text = mostGameWonValues[0].value?.toInt().toString()
             }
 
             if(mostGameWonValues.size >= 2){
                 mostFreeUser2.text = mostGameWonValues[1].username
-                mostFreeScore2.text = mostGameWonValues[1].value.toString()
+                mostFreeScore2.text = mostGameWonValues[1].value?.toInt().toString()
             }
 
             if(mostGameWonValues.size >= 3){
                 mostFreeUser3.text = mostGameWonValues[2].username
-                mostFreeScore3.text = mostGameWonValues[2].value.toString()
+                mostFreeScore3.text = mostGameWonValues[2].value?.toInt().toString()
             }
         }
 
