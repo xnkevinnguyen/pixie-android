@@ -67,6 +67,7 @@ class ChatViewModel(
 
     fun exitGame(gameID: Double) {
         gameRepository.exitGame(gameID)
+        gameSessionRepository.leaveGame()
     }
 
     fun exitChannel(channelID: Double) {
