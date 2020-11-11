@@ -83,6 +83,7 @@ class PlayersFragment : Fragment() {
                     invite.visibility = View.VISIBLE
                 }
                 invite.setOnClickListener{
+                    invite.isEnabled= false
                     playersViewModel.sendGameInvitation(user.id){
                         if(it.isSuccess ==true){
                             Toast.makeText(context,
@@ -93,6 +94,7 @@ class PlayersFragment : Fragment() {
                                 it.error,
                                 Toast.LENGTH_LONG).show()
                         }
+                        invite.isEnabled=true
                     }
                 }
 

@@ -1,22 +1,18 @@
 package com.pixie.android.ui
 
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -47,17 +43,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var preferencesSettings: SharedPreferences
 
     override fun attachBaseContext(newBase: Context) {
-        preferencesSettings = newBase.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        preferencesSettings = newBase.getSharedPreferences(
+            Constants.SHARED_PREFERENCES_SETTING,
+            Context.MODE_PRIVATE
+        )
         val lang = preferencesSettings.getString(Constants.LANGUAGE, "English")
         var languageAc = "en"
         val langValue = "French"
         languageAc = if(lang == langValue) "fr"
         else "en"
-        super.attachBaseContext(MyContextWrapper(newBase).wrap(newBase,languageAc))
+        super.attachBaseContext(MyContextWrapper(newBase).wrap(newBase, languageAc))
     }
 
     override fun applyOverrideConfiguration(overrideConfiguration: Configuration) {
-        preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        preferencesSettings = this.getSharedPreferences(
+            Constants.SHARED_PREFERENCES_SETTING,
+            Context.MODE_PRIVATE
+        )
         val lang = preferencesSettings.getString(Constants.LANGUAGE, "English")
         var languageAc = "en"
         val langValue = "French"
@@ -70,7 +72,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        preferencesSettings = this.getSharedPreferences(
+            Constants.SHARED_PREFERENCES_SETTING,
+            Context.MODE_PRIVATE
+        )
         val theme = preferencesSettings.getString(Constants.THEME, "Dark")
         if (theme == "Dark") setTheme(R.style.AppTheme_NoActionBar)
         else setTheme(R.style.AppLightTheme_NoActionBar)
@@ -85,7 +90,10 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_game_selection), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.nav_home, R.id.nav_game_selection),
+            drawerLayout
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
@@ -96,7 +104,10 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START, false)
         }
 
-        val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        val preferences = this.getSharedPreferences(
+            Constants.SHARED_PREFERENCES_LOGIN,
+            Context.MODE_PRIVATE
+        )
         val usernamePreference = preferences.getString(Constants.USERNAME, null)
         val username = header.findViewById<TextView>(R.id.username)
         username.text = usernamePreference
@@ -111,6 +122,18 @@ class MainActivity : AppCompatActivity() {
         tutorial.setOnClickListener {
             navController.navigate(R.id.nav_tutorial)
             drawerLayout.closeDrawer(GravityCompat.START, false)
+        }
+
+        // handle new user
+        val params = intent.extras
+        var value = -1 // or other values
+        if (params != null) value = params.getInt("isNewUser")
+
+        if(value>0 && params!=null){
+            params.putInt("isNewUser", -1); //Your id
+            intent.putExtras(params)
+            navController.navigate(R.id.nav_tutorial)
+
         }
 
 
@@ -139,17 +162,20 @@ class MainActivity : AppCompatActivity() {
         val gameInfoViewModel =
             ViewModelProvider(this, factory).get(GameInformationViewModel::class.java)
 
-        val preferences = this.getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        val preferences = this.getSharedPreferences(
+            Constants.SHARED_PREFERENCES_LOGIN,
+            Context.MODE_PRIVATE
+        )
         val editor = preferences.edit()
         val intent = Intent(this, AuthActivity::class.java)
 
         return when (item.itemId) {
-            R.id.action_dropdown1 ->{
+            R.id.action_dropdown1 -> {
                 val navController = findNavController(R.id.nav_host_fragment)
                 navController.navigate(R.id.nav_profile)
                 return true
             }
-            R.id.action_dropdown2 ->{
+            R.id.action_dropdown2 -> {
                 profileViewModel.logout()
                 editor.remove("isLoggedIn")
                 editor.apply()
@@ -157,7 +183,7 @@ class MainActivity : AppCompatActivity() {
                 this.finish()
                 return true
             }
-            android.R.id.home->{
+            android.R.id.home -> {
                 // leave the game if user is in a game
                 gameInfoViewModel.leaveGameIfNecessary()
                 super.onOptionsItemSelected(item)

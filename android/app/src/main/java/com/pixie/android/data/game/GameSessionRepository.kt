@@ -2,6 +2,7 @@ package com.pixie.android.data.game
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 class GameSessionRepository(
     private val dataSource: GameSessionDataSource,
     private val userRepository: UserRepository,
-    private val canvasRepository: CanvasRepository
+    private val canvasRepository: CanvasRepository,
+    private val chatRepository: ChatRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
 
@@ -68,6 +70,7 @@ class GameSessionRepository(
     fun startGame(gameID: Double, onResult: (RequestResult) -> Unit) {
 
         CoroutineScope(Dispatchers.IO).launch {
+            subscribeToTimer(gameID)
             val gameSessionStarted = dataSource.startGame(gameID, userRepository.getUser().userId);
             if (gameSessionStarted != null) {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -75,8 +78,7 @@ class GameSessionRepository(
                     channelID = gameSessionStarted.channelID
                     onResult(RequestResult(true))
                     //start additional subscriptions
-                    subscribeToTimer(gameID)
-                    subscribeToGameSessionChange(gameID)
+
                     subscribeToPathChange(gameID, gameSessionStarted.mode)
 
                 }
@@ -290,6 +292,9 @@ class GameSessionRepository(
     }
 
     fun leaveGame() {
+        val channelID = gameSession.value?.channelID
+        if(channelID!=null)
+            chatRepository.exitChannel(channelID)
         canvasRepository.clear()
         gameSessionSubscription?.cancel()
         timerSubscription?.cancel()
@@ -312,7 +317,7 @@ class GameSessionRepository(
         fun getInstance() = instance ?: synchronized(this) {
             instance ?: GameSessionRepository(
                 dataSource, UserRepository.getInstance(),
-                drawCommandHistoryRepository
+                drawCommandHistoryRepository, ChatRepository.getInstance()
             ).also {
                 instance = it
             }
