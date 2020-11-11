@@ -152,7 +152,14 @@ class ProfileFragment: Fragment() {
                 }
                 date.text = dateGame
                 points.text = findUserPoints(it[it.size - 1].points)
-                winner.text = it[it.size - 1].winner
+                var winnerString: String = ""
+                it[it.size - 1].winner?.forEach{
+                    winnerString += "$it, "
+                }
+                if(it[it.size - 1].winner?.size ?: 0 == 0){
+                    winnerString = "Unavailable"
+                }
+                winner.text = winnerString
                 winnerScore.text = it[it.size - 1].score.toString()
                 difficulty.text = it[it.size - 1].difficulty
                 mode.text = it[it.size - 1].gameMode

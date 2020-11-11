@@ -11,21 +11,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="30dp"
-        android:textColor="@android:color/white"
-        android:text="@string/leaderboard"
-        android:gravity="center"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:textSize="25dp"
         android:textColor="@android:color/white"
         android:text="@string/mode_free"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +25,7 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
-        android:weightSum="3">
+        android:weightSum="9">
 
         <TextView
             android:layout_width="100dp"
@@ -41,14 +33,13 @@
             android:text="@string/best_score"
             android:textColor="@android:color/white"
             android:textSize="25dp"
-            android:layout_weight="1"
-            android:layout_marginStart="240dp"/>
+            android:layout_weight="3"
+            android:layout_marginStart="100dp"/>
 
         <TextView
             android:id="@+id/best_free_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
@@ -57,14 +48,47 @@
             android:id="@+id/best_free_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/best_free_user2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_free_score2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/best_free_user3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_free_score3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
     </LinearLayout>
 
     <ImageView
-        android:layout_width="800dp"
+        android:layout_width="1100dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_divider"
         android:layout_marginBottom="15dp"
@@ -79,7 +103,7 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
-        android:weightSum="3">
+        android:weightSum="9">
 
         <TextView
             android:layout_width="100dp"
@@ -87,14 +111,13 @@
             android:text="@string/cumulative_score"
             android:textColor="@android:color/white"
             android:textSize="25dp"
-            android:layout_weight="1"
-            android:layout_marginStart="240dp"/>
+            android:layout_weight="3"
+            android:layout_marginStart="100dp"/>
 
         <TextView
             android:id="@+id/cumulative_free_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
@@ -103,14 +126,47 @@
             android:id="@+id/cumulative_free_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/cumulative_free_user2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_free_score2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/cumulative_free_user3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_free_score3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
     </LinearLayout>
 
     <ImageView
-        android:layout_width="800dp"
+        android:layout_width="1100dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_divider"
         android:layout_marginBottom="15dp"
@@ -125,7 +181,7 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
-        android:weightSum="3">
+        android:weightSum="9">
 
         <TextView
             android:layout_width="100dp"
@@ -133,14 +189,13 @@
             android:text="@string/most_games_won"
             android:textColor="@android:color/white"
             android:textSize="25dp"
-            android:layout_marginStart="240dp"
-            android:layout_weight="1"/>
+            android:layout_marginStart="100dp"
+            android:layout_weight="3"/>
 
         <TextView
             android:id="@+id/most_free_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
@@ -149,14 +204,47 @@
             android:id="@+id/most_free_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/most_free_user2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/most_free_score2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/most_free_user3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/most_free_score3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <ImageView
-        android:layout_width="800dp"
+        android:layout_width="1100dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_divider"
         android:layout_marginBottom="35dp"
@@ -172,7 +260,9 @@
         android:textSize="25dp"
         android:textColor="@android:color/white"
         android:text="@string/mode_solo"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -180,7 +270,7 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
-        android:weightSum="3">
+        android:weightSum="9">
 
         <TextView
             android:layout_width="100dp"
@@ -188,14 +278,13 @@
             android:text="@string/best_score"
             android:textColor="@android:color/white"
             android:textSize="25dp"
-            android:layout_marginStart="240dp"
-            android:layout_weight="1"/>
+            android:layout_marginStart="100dp"
+            android:layout_weight="3"/>
 
         <TextView
             android:id="@+id/best_solo_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
@@ -204,14 +293,47 @@
             android:id="@+id/best_solo_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/best_solo_user2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_solo_score2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/best_solo_user3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_solo_score3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
     </LinearLayout>
 
     <ImageView
-        android:layout_width="800dp"
+        android:layout_width="1100dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_divider"
         android:layout_marginBottom="15dp"
@@ -226,7 +348,7 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
-        android:weightSum="3">
+        android:weightSum="9">
 
         <TextView
             android:layout_width="100dp"
@@ -234,14 +356,13 @@
             android:text="@string/cumulative_score"
             android:textColor="@android:color/white"
             android:textSize="25dp"
-            android:layout_marginStart="240dp"
-            android:layout_weight="1"/>
+            android:layout_marginStart="100dp"
+            android:layout_weight="3"/>
 
         <TextView
             android:id="@+id/cumulative_solo_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
@@ -250,14 +371,45 @@
             android:id="@+id/cumulative_solo_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+        <TextView
+            android:id="@+id/cumulative_solo_user2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_solo_score2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+        <TextView
+            android:id="@+id/cumulative_solo_user3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_solo_score3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <ImageView
-        android:layout_width="800dp"
+        android:layout_width="1100dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_divider"
         android:layout_marginBottom="35dp"
@@ -273,7 +425,9 @@
         android:textSize="25dp"
         android:textColor="@android:color/white"
         android:text="@string/mode_coop"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -281,7 +435,7 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
-        android:weightSum="3">
+        android:weightSum="9">
 
         <TextView
             android:layout_width="100dp"
@@ -289,14 +443,13 @@
             android:text="@string/best_score"
             android:textColor="@android:color/white"
             android:textSize="25dp"
-            android:layout_marginStart="240dp"
-            android:layout_weight="1"/>
+            android:layout_marginStart="100dp"
+            android:layout_weight="3"/>
 
         <TextView
             android:id="@+id/best_coop_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
@@ -305,14 +458,47 @@
             android:id="@+id/best_coop_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/best_coop_user2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_coop_score2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/best_coop_user3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/best_coop_score3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <ImageView
-        android:layout_width="800dp"
+        android:layout_width="1100dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_divider"
         android:layout_marginBottom="15dp"
@@ -327,7 +513,7 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
-        android:weightSum="3">
+        android:weightSum="9">
 
         <TextView
             android:layout_width="100dp"
@@ -335,14 +521,13 @@
             android:text="@string/cumulative_score"
             android:textColor="@android:color/white"
             android:textSize="25dp"
-            android:layout_marginStart="240dp"
-            android:layout_weight="1"/>
+            android:layout_marginStart="100dp"
+            android:layout_weight="3"/>
 
         <TextView
             android:id="@+id/cumulative_coop_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
@@ -351,14 +536,47 @@
             android:id="@+id/cumulative_coop_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="80"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/cumulative_coop_user2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="25dp"
             android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_coop_score2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="40dp"/>
+
+        <TextView
+            android:id="@+id/cumulative_coop_user3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cumulative_coop_score3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <ImageView
-        android:layout_width="800dp"
+        android:layout_width="1100dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_divider"
         android:layout_marginBottom="15dp"

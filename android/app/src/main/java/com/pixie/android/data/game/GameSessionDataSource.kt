@@ -136,7 +136,7 @@ class GameSessionDataSource {
                         style = Paint.Style.STROKE
                         strokeJoin = Paint.Join.ROUND
                         strokeCap = Paint.Cap.ROUND
-                        strokeWidth = data.strokeWidth.toFloat()
+                        strokeWidth = data.strokeWidth!!.toFloat()
                     }
                     val command = CanvasCommand(CommandType.DRAW, paint, pathList)
                     onPathChange(data.id,command)

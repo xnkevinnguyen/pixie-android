@@ -7,6 +7,7 @@ import com.pixie.android.data.follow.FollowRepository
 import com.pixie.android.data.game.GameInviteRepository
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.game.GameSessionRepository
+import com.pixie.android.data.leaderboard.LeaderboardRepository
 import com.pixie.android.data.profile.ProfileRepository
 import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.data.user.UserRepository
@@ -112,7 +113,8 @@ object InjectorUtils {
     }
 
     fun provideLeaderboardViewModelFactory(): LeaderboardViewModelFactory{
-        return LeaderboardViewModelFactory()
+        val leaderboardRepository = LeaderboardRepository.getInstance()
+        return LeaderboardViewModelFactory(leaderboardRepository)
     }
 
 }

@@ -1,7 +1,7 @@
 query getGames{
     me{
         playedGames{
-            winner{
+            winners{
                 username
             }
             createdAt,
