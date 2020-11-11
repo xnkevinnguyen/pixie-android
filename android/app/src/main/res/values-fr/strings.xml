@@ -145,5 +145,8 @@
     <string name="mode_free">Mode Free For All</string>
     <string name="cumulative_score">Meilleur score cumulatif:</string>
     <string name="most_games_won">Plus de jeux gagnés</string>
+    <string name="accept">Accepter</string>
+    <string name="decline">Refuser</string>
+    <string name="game_invitation_title">%1$s vous a invité</string>
 
 </resources>

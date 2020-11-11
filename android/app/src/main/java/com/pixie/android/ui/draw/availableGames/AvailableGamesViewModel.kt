@@ -17,6 +17,7 @@ class AvailableGamesViewModel(private val gameRepository: GameRepository,private
         val game= gameRepository.createGame(mode, difficulty, language)
         if(game!=null) {
             gameSessionRepository.subscribeToGameSessionChange(game.id)
+            gameSessionRepository.setGameSession(game)
         }
         return game
     }
@@ -29,6 +30,7 @@ class AvailableGamesViewModel(private val gameRepository: GameRepository,private
         val game= gameRepository.joinGame(gameID)
         if(game!=null) {
             gameSessionRepository.subscribeToGameSessionChange(game.id)
+            gameSessionRepository.setGameSession(game)
         }
         return game
     }

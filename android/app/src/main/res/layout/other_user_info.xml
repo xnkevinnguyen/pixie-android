@@ -65,15 +65,15 @@
             android:background="?colorAccent"
             android:layout_marginRight="10dp"/>
 
-<!--        <Button-->
-<!--            android:id="@+id/invite"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/invite"-->
-<!--            android:textSize="15dp"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="@android:color/white"-->
-<!--            android:background="?colorAccent"/>-->
+        <Button
+            android:id="@+id/invite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invite"
+            android:textSize="15dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:background="?colorAccent"/>
     </LinearLayout>
 
 

@@ -141,9 +141,6 @@ class GameInformationFragment : Fragment() {
                 val roundsString = resources.getString(R.string.round_turn) + ": " + (it.currentRound.toInt() + 1).toString()
                 rounds.text = roundsString
 
-                val rank = dialog.findViewById<TextView>(R.id.rank_number)
-                val rankString = resources.getString(R.string.rank)
-                rank.text = rankString
 
                 val goToHome = dialog.findViewById<Button>(R.id.got_to_home)
                 goToHome.setOnClickListener {

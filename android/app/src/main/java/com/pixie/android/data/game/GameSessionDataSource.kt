@@ -173,6 +173,26 @@ class GameSessionDataSource {
         }
         return null
     }
+    suspend fun sendManualCommand(
+        gameSessionID: Double,
+        userID: Double,
+        commandType:CommandStatus,
+        pathID:Double?=null
+
+        ){
+        val input = ManualCommandInput(
+            pathID.toInput(),
+            commandType.toInput(),
+            gameSessionID.toInput()
+        )
+        try{
+            val response = apolloClient(userID).mutate(ManualCommandMutation(input)).toDeferred().await()
+            Log.d("sendManualCommand",response.toString())
+        }catch(e:ApolloException){
+            Log.d("ApolloException",e.toString())
+        }
+
+    }
 
     suspend fun subscribeToManualDrawing(
         gameSessionID: Double,
@@ -187,7 +207,6 @@ class GameSessionDataSource {
                 true
             }.collect {
                 val data = it.data?.onManualPlayerDrawing
-                //TODO replace for the correct if statement and apply correct color
 //                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
                 if ( data?.point != null && data.strokeWidth != null ) {
                     // Handles adding a point
@@ -220,6 +239,11 @@ class GameSessionDataSource {
                     val serverDrawHistoryCommand =
                         ServerDrawHistoryCommand(data.commandPathId, CommandType.UNDO)
                     onServerDrawHistoryCommand(serverDrawHistoryCommand)
+                }else if(data?.commandStatus == CommandStatus.DELETE &&data.commandPathId!=null){
+                    val serverDrawHistoryCommand =
+                        ServerDrawHistoryCommand(data.commandPathId, CommandType.ERASE)
+                    onServerDrawHistoryCommand(serverDrawHistoryCommand)
+
                 }
             }
     }

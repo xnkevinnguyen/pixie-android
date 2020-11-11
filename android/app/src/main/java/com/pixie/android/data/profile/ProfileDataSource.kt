@@ -85,6 +85,7 @@ class ProfileDataSource {
                         winnersList = arrayListOf()
                     }
                     GameHistory(date = it.createdAt.toString(), points = scoreList, winner = winnersList, score = it.bestScore,
+
                     difficulty = it.difficulty.rawValue, gameMode = it.mode.rawValue)
                 })
                 onReceiveMessage(gameData)

@@ -1,14 +1,15 @@
 package com.pixie.android.data.game
 
-import android.content.res.Resources
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.R
-import com.pixie.android.data.draw.CanvasCommandHistoryRepository
+import com.pixie.android.data.chat.ChatRepository
+import com.pixie.android.data.draw.CanvasRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
+import com.pixie.android.model.draw.CommandType
 import com.pixie.android.model.draw.ManualPathPointInput
 import com.pixie.android.model.game.GameSessionData
+import com.pixie.android.type.CommandStatus
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.GameState
 import com.pixie.android.type.GameStatus
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 class GameSessionRepository(
     private val dataSource: GameSessionDataSource,
     private val userRepository: UserRepository,
-    private val canvasCommandHistoryRepository: CanvasCommandHistoryRepository
+    private val canvasRepository: CanvasRepository,
+    private val chatRepository: ChatRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
 
@@ -32,6 +34,7 @@ class GameSessionRepository(
     private var pathSubscription: Job? = null
     private var manualPathSubscription: Job? = null
     private var pathIDGenerator = 0.0
+
 
 
     private var timer = MutableLiveData<Int>()
@@ -52,6 +55,9 @@ class GameSessionRepository(
             throw error("GameSessionID is null")
         }
     }
+    fun setGameSession(newGameSession:GameSessionData){
+        gameSession.postValue(newGameSession)
+    }
 
     fun getGameChannelID() = channelID
 
@@ -64,6 +70,7 @@ class GameSessionRepository(
     fun startGame(gameID: Double, onResult: (RequestResult) -> Unit) {
 
         CoroutineScope(Dispatchers.IO).launch {
+            subscribeToTimer(gameID)
             val gameSessionStarted = dataSource.startGame(gameID, userRepository.getUser().userId);
             if (gameSessionStarted != null) {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -71,8 +78,7 @@ class GameSessionRepository(
                     channelID = gameSessionStarted.channelID
                     onResult(RequestResult(true))
                     //start additional subscriptions
-                    subscribeToTimer(gameID)
-                    subscribeToGameSessionChange(gameID)
+
                     subscribeToPathChange(gameID, gameSessionStarted.mode)
 
                 }
@@ -110,7 +116,7 @@ class GameSessionRepository(
                     if (gameSession.value?.currentRound != null && (it.currentRound > gameSession.value!!.currentRound!! ||
                                 (it.currentDrawerId != gameSession.value?.currentDrawerId && gameSession.value!!.currentDrawerId!! >= 0.0))
                     ) {
-                        canvasCommandHistoryRepository.clear()
+                        canvasRepository.clear()
                     }
 
                     if (it.state == GameState.DRAWER_SELECTION) {
@@ -194,6 +200,33 @@ class GameSessionRepository(
         }
         pathIDGenerator += 1
     }
+    fun sendManualCommand(
+        commandType: CommandType,
+        pathID:Double?=null
+
+        ){
+        if (gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id != null) {
+            CoroutineScope(Dispatchers.IO).launch{
+                if(commandType.equals(CommandType.ERASE) && pathID!=null) {
+                    dataSource.sendManualCommand(
+                        getGameSessionID(), userRepository.getUser().userId,
+                        CommandStatus.DELETE,pathID
+                    )
+                }else if(commandType.equals(CommandType.UNDO)){
+                    dataSource.sendManualCommand(
+                        getGameSessionID(), userRepository.getUser().userId,
+                         CommandStatus.UNDO
+                    )
+                }else if(commandType.equals(CommandType.REDO)){
+                    dataSource.sendManualCommand(
+                        getGameSessionID(), userRepository.getUser().userId,
+                         CommandStatus.REDO
+                    )
+                }
+            }
+        }
+    }
+
 
     fun subscribeToPathChange(gameID: Double, mode: GameMode) {
         if (mode == GameMode.FREEFORALL) {
@@ -207,7 +240,7 @@ class GameSessionRepository(
                 userRepository.getUser().userId
             ) { id, command ->
                 CoroutineScope(Dispatchers.Main).launch {
-                    canvasCommandHistoryRepository.addCanvasCommand(id, command)
+                    canvasRepository.addCanvasCommand(id, command)
                 }
             }
         }
@@ -226,11 +259,11 @@ class GameSessionRepository(
                     CoroutineScope(Dispatchers.Main).launch {
                         // Only draw on the canvas if it is not from the server
                         if (!isUserDrawingTurn())
-                            canvasCommandHistoryRepository.addManualDrawPoint(it)
+                            canvasRepository.addManualDrawPoint(it)
                     }
                 },
                 onServerDrawHistoryCommand = {
-                    canvasCommandHistoryRepository.handleServerDrawHistoryCommand(it)
+                    canvasRepository.handleServerDrawHistoryCommand(it)
                 })
         }
         manualPathSubscription?.cancel()
@@ -259,7 +292,10 @@ class GameSessionRepository(
     }
 
     fun leaveGame() {
-        canvasCommandHistoryRepository.clear()
+        val channelID = gameSession.value?.channelID
+        if(channelID!=null)
+            chatRepository.exitChannel(channelID)
+        canvasRepository.clear()
         gameSessionSubscription?.cancel()
         timerSubscription?.cancel()
         pathSubscription?.cancel()
@@ -277,11 +313,11 @@ class GameSessionRepository(
         @Volatile
         private var instance: GameSessionRepository? = null
         private var dataSource: GameSessionDataSource = GameSessionDataSource()
-        private var drawCommandHistoryRepository = CanvasCommandHistoryRepository.getInstance()
+        private var drawCommandHistoryRepository = CanvasRepository.getInstance()
         fun getInstance() = instance ?: synchronized(this) {
             instance ?: GameSessionRepository(
                 dataSource, UserRepository.getInstance(),
-                drawCommandHistoryRepository
+                drawCommandHistoryRepository, ChatRepository.getInstance()
             ).also {
                 instance = it
             }
