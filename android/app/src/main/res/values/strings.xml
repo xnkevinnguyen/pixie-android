@@ -76,6 +76,9 @@
     <string name="notif_sound">Notification sound</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
+    <string name="pink">Pink-Brown</string>
+    <string name="green">Green-Grey</string>
+    <string name="blue">Blue</string>
     <string name="eng">English</string>
     <string name="fr">French</string>
     <string name="setting">Settings</string>
