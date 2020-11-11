@@ -88,7 +88,9 @@ object InjectorUtils {
     fun providePlayersViewModelFactory(): PlayersViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
         val followRepository = FollowRepository.getInstance()
-        return PlayersViewModelFactory(chatRepository, followRepository)
+        val gameInviteRepository = GameInviteRepository.getInstance()
+        val gameSessionRepository = GameSessionRepository.getInstance()
+        return PlayersViewModelFactory(chatRepository, followRepository,gameInviteRepository,gameSessionRepository)
     }
 
     fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{

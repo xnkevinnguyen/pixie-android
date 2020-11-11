@@ -1,5 +1,6 @@
 package com.pixie.android.ui.chat
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -117,6 +118,16 @@ class ChatFragment : Fragment() {
             }
 
         })
+        chatViewModel.getGameInvitation().observe(viewLifecycleOwner, Observer {
+            if(!chatViewModel.getHasGameInvitationBeenShown()){
+                val dialog = Dialog(requireContext())
+                dialog.setContentView(R.layout.game_invitation)
+                dialog.show()
+                chatViewModel.confirmInvitationBeenShown()
+            }
+
+        })
+        chatViewModel.subscribeToGameInvitation()
 
 
 

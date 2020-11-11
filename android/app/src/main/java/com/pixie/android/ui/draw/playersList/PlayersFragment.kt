@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.chat.ChannelParticipantAdapter
@@ -53,6 +54,7 @@ class PlayersFragment : Fragment() {
             val participantList = playersViewModel.getCurrentChannelParticipants()
             participantAdapter.set(participantList)
         })
+
         participantListElement.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, childView, position, id ->
                 val user: ChannelParticipant =
@@ -71,6 +73,26 @@ class PlayersFragment : Fragment() {
                     } else {
                         playersViewModel.removeUserFollowList(user)
                         follow.text = resources.getString(R.string.follow)
+                    }
+                }
+                val invite = dialog.findViewById<Button>(R.id.invite)
+
+                if(playersViewModel.getGameSession().value?.id ==null){
+                 invite.visibility = View.GONE
+                }else{
+                    invite.visibility = View.VISIBLE
+                }
+                invite.setOnClickListener{
+                    playersViewModel.sendGameInvitation(user.id){
+                        if(it.isSuccess ==true){
+                            Toast.makeText(context,
+                                "Success",
+                                Toast.LENGTH_LONG).show()
+                        }else if(!it.isSuccess){
+                            Toast.makeText(context,
+                                it.error,
+                                Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
 

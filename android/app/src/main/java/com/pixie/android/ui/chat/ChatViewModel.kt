@@ -13,6 +13,7 @@ import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelMessageObject
 import com.pixie.android.model.game.AvailableGameData
+import com.pixie.android.model.game.GameInvitation
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
@@ -109,8 +110,22 @@ class ChatViewModel(
         if (gameID != null) {
             gameInviteRepository.addVirtualPlayer(gameID,onResult)
         }
+    }
+    fun sendGameInvitation(receiverID:Double,onresult:(RequestResult)->Unit){
+        gameInviteRepository.sendGameInvitation(receiverID,onresult)
+    }
 
-
+    fun subscribeToGameInvitation(){
+        gameInviteRepository.subscribeToGameInvitation()
+    }
+    fun getGameInvitation():LiveData<GameInvitation>{
+        return gameInviteRepository.getGameInvitation()
+    }
+    fun getHasGameInvitationBeenShown():Boolean{
+        return gameInviteRepository.getHasInvitationBeenShown()
+    }
+    fun confirmInvitationBeenShown(){
+        gameInviteRepository.confirmInvitationBeenShown()
     }
 
 }

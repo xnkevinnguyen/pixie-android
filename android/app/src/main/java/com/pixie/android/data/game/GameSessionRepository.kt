@@ -34,6 +34,7 @@ class GameSessionRepository(
     private var pathIDGenerator = 0.0
 
 
+
     private var timer = MutableLiveData<Int>()
 
     fun getTimer() = timer
@@ -51,6 +52,9 @@ class GameSessionRepository(
         } else {
             throw error("GameSessionID is null")
         }
+    }
+    fun setGameSession(newGameSession:GameSessionData){
+        gameSession.postValue(newGameSession)
     }
 
     fun getGameChannelID() = channelID

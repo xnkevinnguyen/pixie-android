@@ -1,0 +1,7 @@
+mutation SendInvitation($input:InvitationInput!){
+    sendInvitation(input:$input){
+        id
+        receiverId
+        isAccepted
+    }
+}
