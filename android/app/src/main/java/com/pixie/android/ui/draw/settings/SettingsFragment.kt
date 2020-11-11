@@ -47,7 +47,8 @@ class SettingsFragment : DialogFragment() {
             itemsLang
         )
 
-        val itemsTheme = arrayOf(resources.getString(R.string.dark), resources.getString(R.string.light))
+        val itemsTheme = arrayOf(resources.getString(R.string.dark), resources.getString(R.string.light), resources.getString(R.string.green),
+            resources.getString(R.string.pink), resources.getString(R.string.blue))
         val adapterTheme: ArrayAdapter<String> = ArrayAdapter(
             requireContext(),
             R.layout.spinner_layout,
@@ -105,7 +106,10 @@ class SettingsFragment : DialogFragment() {
     private fun applyThemeSettings(themeValue:String){
         // Forcing value in preferences to always be in English and not change because of the language change
         val inputValue = if(themeValue == requireContext().resources.getString(R.string.dark)) "Dark"
-        else "Light"
+        else if(themeValue == requireContext().resources.getString(R.string.light)) "Light"
+        else if(themeValue == requireContext().resources.getString(R.string.pink)) "Pink-Brown"
+        else if(themeValue == requireContext().resources.getString(R.string.green)) "Green-Grey"
+        else "Blue"
 
         editorSettings.putString(Constants.THEME, inputValue)
         editorSettings.apply()

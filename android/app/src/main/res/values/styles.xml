@@ -30,6 +30,51 @@
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
     </style>
 
+    <style name="AppGreenTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorGreenTertiary</item>
+        <item name="colorPrimaryDark">@color/colorGreenSecondary</item>
+        <item name="colorSecondary">@color/colorGreenFourth</item>
+        <item name="color">@color/colorGreenFifth</item>
+        <item name="colorAccent">@color/colorGreenPrimary</item>
+        <item name="android:listDivider">@color/colorGreenPrimary</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@drawable/menu_popup_selector</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
+    </style>
+
+    <style name="AppPinkTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPinkTertiary</item>
+        <item name="colorPrimaryDark">@color/colorPinkSecondary</item>
+        <item name="colorSecondary">@color/colorPinkFourth</item>
+        <item name="color">@color/colorPinkFifth</item>
+        <item name="colorAccent">@color/colorPinkPrimary</item>
+        <item name="android:listDivider">@color/colorPinkPrimary</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@drawable/menu_popup_selector</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
+    </style>
+
+    <style name="AppBlueTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorBlueTertiary</item>
+        <item name="colorPrimaryDark">@color/colorBlueSecondary</item>
+        <item name="colorSecondary">@color/colorBlueFourth</item>
+        <item name="color">@color/colorBlueFifth</item>
+        <item name="colorAccent">@color/colorBluePrimary</item>
+        <item name="android:listDivider">@color/colorBluePrimary</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@drawable/menu_popup_selector</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
+    </style>
+
     <!--Needed for navigation to work -->
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -37,6 +82,21 @@
     </style>
 
     <style name="AppLightTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppGreenTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppPinkTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppBlueTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

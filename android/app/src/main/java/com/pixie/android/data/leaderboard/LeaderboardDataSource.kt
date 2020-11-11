@@ -13,8 +13,9 @@ import com.pixie.android.type.*
 class LeaderboardDataSource {
     suspend fun getBestScore(
         mode: GameMode,
-        userId: Double
-    ): ArrayList<LeaderboardData> {
+        userId: Double,
+        onReceiveMessage: (ArrayList<LeaderboardData>?) -> Unit
+    )  {
         val createLeaderboardInput = LeaderBoardInput(mode)
         try {
             val response = apolloClient(userId).query(GetBestScoreQuery(createLeaderboardInput))
@@ -25,20 +26,20 @@ class LeaderboardDataSource {
 
                     LeaderboardData(it.username, it.value)
                 })
-                return bestScoreData
+                onReceiveMessage(bestScoreData)
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
 
         }
         Log.d("ApolloException", "Error fetching available games")
-        return arrayListOf()
     }
 
     suspend fun getBestCumulativeScore(
         mode: GameMode,
-        userId: Double
-    ): ArrayList<LeaderboardData> {
+        userId: Double,
+        onReceiveMessage: (ArrayList<LeaderboardData>?) -> Unit
+    ) {
         val createLeaderboardInput = LeaderBoardInput(mode)
         try {
             val response = apolloClient(userId).query(GetBestCumulativeScoreQuery(createLeaderboardInput))
@@ -49,19 +50,19 @@ class LeaderboardDataSource {
 
                     LeaderboardData(it.username, it.value)
                 })
-                return bestCumulativeScoreData
+                onReceiveMessage(bestCumulativeScoreData)
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
 
         }
         Log.d("ApolloException", "Error fetching available games")
-        return arrayListOf()
     }
 
     suspend fun getMostGameWon(
-        userId: Double
-    ): ArrayList<LeaderboardData> {
+        userId: Double,
+        onReceiveMessage: (ArrayList<LeaderboardData>?) -> Unit
+    ){
         try {
             val response = apolloClient(userId).query(GetMostWonGamesQuery())
                 .toDeferred().await().data
@@ -71,13 +72,12 @@ class LeaderboardDataSource {
 
                     LeaderboardData(it.username, it.value)
                 })
-                return mostGameWonData
+                onReceiveMessage(mostGameWonData)
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
 
         }
         Log.d("ApolloException", "Error fetching available games")
-        return arrayListOf()
     }
 }
