@@ -19,7 +19,10 @@ class OnStartActivity:AppCompatActivity() {
         preferencesSettings = this.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
         val theme = preferencesSettings.getString(Constants.THEME, "Dark")
         if (theme == "Dark") setTheme(R.style.AppTheme)
-        else setTheme(R.style.AppLightTheme)
+        else if(theme == "Light") setTheme(R.style.AppLightTheme_NoActionBar)
+        else if (theme == "Pink-Brown") setTheme(R.style.AppPinkTheme_NoActionBar)
+        else if(theme == "Green-Grey") setTheme(R.style.AppGreenTheme_NoActionBar)
+        else setTheme(R.style.AppBlueTheme_NoActionBar)
 
         super.onCreate(savedInstanceState)
 
