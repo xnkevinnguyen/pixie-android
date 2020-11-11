@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200px"
+    android:layout_height="100px"
     android:background="?color"
     android:clipToPadding="false"
     android:focusableInTouchMode="true"
@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ems="10"
-                android:textSize="@dimen/big_size"
+                android:textSize="@dimen/regular_size"
                 android:hint="@string/chat_guess_hint"
                 android:textColorHint="?colorSecondary"
                 android:inputType="text"
@@ -28,8 +28,8 @@
 
             <ImageButton
                 android:id="@+id/send_message"
-                android:layout_width="75px"
-                android:layout_height="75px"
+                android:layout_width="50px"
+                android:layout_height="50px"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/ic_send_black"

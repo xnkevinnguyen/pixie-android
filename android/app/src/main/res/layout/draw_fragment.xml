@@ -30,7 +30,7 @@
             android:id="@+id/canvas_fragment"
             android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
             android:layout_width="1000px"
-            android:layout_height="800px" />
+            android:layout_height="900px" />
 
         <fragment
             android:id="@+id/draw_tools_fragment"
@@ -43,7 +43,7 @@
     </FrameLayout>
     <fragment
         android:layout_width="1000px"
-        android:layout_height="200px"
+        android:layout_height="100px"
         android:name="com.pixie.android.ui.chat.GameGuessFragment"
         />
 </LinearLayout>
