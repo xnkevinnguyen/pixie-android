@@ -28,6 +28,7 @@ subscription OnNewInvitation{
             }
             gameInfo{
                 id,
+                difficulty,
                 players{
                     id,
                     username,

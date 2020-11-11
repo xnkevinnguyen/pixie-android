@@ -68,7 +68,8 @@ class GameInviteDataSource {
                 val data = it.data?.onNewInvitation
                 if(data !=null){
                     val sender = ChannelParticipant(data.sender.id,data.sender.username,data.sender.isOnline)
-                    onNewInvitation(GameInvitation(sender,data.gameSession.id,data.gameSession.gameHall.id,data.gameSession.gameInfo.mode))
+                    onNewInvitation(GameInvitation(sender,data.gameSession.id,data.gameSession.gameHall.id,data.gameSession.gameInfo.mode
+                    ,data.gameSession.gameInfo.difficulty,data.gameSession.gameInfo.language))
                 }else{
                     Log.d("ApolloException","Error from Game invite subscription.")
                 }

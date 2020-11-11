@@ -7,12 +7,12 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/invite_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="15dp"
         android:gravity="center"
-        android:text="@string/game_result"
         android:textColor="@android:color/white"
         android:textSize="@dimen/profile_titles"
         android:textStyle="bold" />
@@ -45,25 +45,36 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/total_score"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/profile_titles" />
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
-    <TextView
-        android:id="@+id/number_round"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/profile_titles" />
+        <ImageView
+            android:id="@+id/language_icon"
+            android:layout_width="50dp"
+
+            android:layout_height="25dp"
+
+            android:layout_gravity="center"
+            android:gravity="center"
+             />
+
+        <ImageView
+            android:gravity="center"
+
+            android:layout_gravity="center"
+            android:paddingLeft="25dp"
+            android:id="@+id/difficulty_icon"
+            android:layout_width="100dp"
+
+            android:layout_height="50dp"
+
+             />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -82,7 +93,7 @@
             android:background="?colorSecondary"
             android:gravity="center"
             android:padding="10dp"
-            android:text="@string/goto_home"
+            android:text="@string/decline"
             android:textSize="@dimen/regular_size" />
 
         <Button
@@ -96,7 +107,7 @@
             android:background="?colorSecondary"
             android:gravity="center"
             android:padding="10dp"
-            android:text="@string/goto_home"
+            android:text="@string/accept"
             android:textSize="@dimen/regular_size" />
     </LinearLayout>
 

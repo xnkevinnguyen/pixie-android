@@ -135,6 +135,8 @@
     <string name="next_drawer">Prochain dessinateur: %1$s</string>
     <string name="success">Réussite</string>
     <string name="error">Erreur</string>
-
+    <string name="accept">Accepter</string>
+    <string name="decline">Refuser</string>
+    <string name="game_invitation_title">%1$s vous a invité</string>
 
 </resources>

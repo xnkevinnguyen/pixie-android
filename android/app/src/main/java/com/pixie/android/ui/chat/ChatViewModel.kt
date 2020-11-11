@@ -127,5 +127,15 @@ class ChatViewModel(
     fun confirmInvitationBeenShown(){
         gameInviteRepository.confirmInvitationBeenShown()
     }
+    fun acceptInvitation(gameID: Double){
+        val game= gameRepository.joinGame(gameID)
+        if(game!=null) {
+            gameSessionRepository.subscribeToGameSessionChange(game.id)
+            gameSessionRepository.setGameSession(game)
+            setCurrentChannelID(game.channelID)
+        }
+
+
+    }
 
 }
