@@ -44,7 +44,7 @@ class AuthActivity : AppCompatActivity() {
         if (theme == "Dark") setTheme(R.style.AppTheme)
         else if(theme == "Light") setTheme(R.style.AppLightTheme_NoActionBar)
         else if (theme == "Pink-Brown") setTheme(R.style.AppPinkTheme_NoActionBar)
-        else if(theme == "Green-Gray") setTheme(R.style.AppGreenTheme_NoActionBar)
+        else if(theme == "Green-Grey") setTheme(R.style.AppGreenTheme_NoActionBar)
         else setTheme(R.style.AppBlueTheme_NoActionBar)
 
         super.onCreate(savedInstanceState)
