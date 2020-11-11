@@ -11,6 +11,9 @@
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Home</string>
     <string name="game_select">Game Selection</string>
+    <string name="available_games">Available Games</string>
+    <string name="drawing">Drawing</string>
+    <string name="game_creation">Game Creation</string>
     <string name="action_settings">action settings</string>
     <string name="chat_message_hint">Type message here...</string>
     <string name="chat_guess_hint">Type guess here...</string>
@@ -130,12 +133,19 @@
     <string name="play_game_expl">Have fun competing with your friends!</string>
     <string name="finish">Finish</string>
     <string name="view_profile">View your profile</string>
-    <string name="view_profile_expl">Retrouvez vos historique de connexions et de jeux ainsi que vos statistiques de jeu et vos informations utilisateur.</string>
+    <string name="view_profile_expl">Find your connections and games history as well as your game statistics and user information.</string>
     <string name="display_word_top">Your word is: %1$s </string>
     <string name="next_drawer">Next drawer: %1$s</string>
 
     <string name="success">Success</string>
     <string name="error">Error</string>
+
+    <string name="leaderboard">Leaderboard</string>
+    <string name="mode_solo">Mode Solo</string>
+    <string name="mode_coop"> Mode Coop</string>
+    <string name="mode_free">Mode Free For All</string>
+    <string name="cumulative_score">Best cumulative score:</string>
+    <string name="most_games_won">Most games won:</string>
 
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>

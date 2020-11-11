@@ -74,7 +74,15 @@ class GameAdapter (context: Context) : BaseAdapter() {
         date.text = gameDate
         time.text = gameTime
         points.text = findUserPoints(history.points)
-        winner.text = history.winner
+        var winnerString: String = ""
+        history.winner?.forEach{
+            winnerString += "$it, "
+        }
+        if(history.winner?.size ?: 0 == 0){
+            winnerString = "Unavailable"
+        }
+
+        winner.text = winnerString
         score.text= history.score.toString()
         difficulty.text = history.difficulty
         mode.text = history.gameMode
