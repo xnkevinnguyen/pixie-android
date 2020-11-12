@@ -87,11 +87,11 @@ class PlayersFragment : Fragment() {
                     playersViewModel.sendGameInvitation(user.id){
                         if(it.isSuccess ==true){
                             Toast.makeText(context,
-                                "Success",
+                                resources.getString(R.string.success),
                                 Toast.LENGTH_LONG).show()
                         }else if(!it.isSuccess){
                             Toast.makeText(context,
-                                it.error,
+                                resources.getString(R.string.error),
                                 Toast.LENGTH_LONG).show()
                         }
                         invite.isEnabled=true

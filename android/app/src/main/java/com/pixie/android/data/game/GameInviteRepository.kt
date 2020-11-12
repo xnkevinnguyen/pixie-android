@@ -38,6 +38,18 @@ class GameInviteRepository(
         }
     }
 
+    fun removeVirtualPlayer(gameID: Double, playerID: Double, onResult: (RequestResult) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = dataSource.removeVirtualPlayer(
+                gameID,
+                playerID, userRepository.getUser().userId
+            )
+            CoroutineScope(Dispatchers.Main).launch {
+                onResult(RequestResult(result))
+            }
+        }
+    }
+
     fun sendGameInvitation(receiverID: Double, onResult: (RequestResult) -> Unit) {
 
         CoroutineScope(Dispatchers.IO).launch {
