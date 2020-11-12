@@ -1,6 +1,5 @@
 package com.pixie.android.ui.draw.channelList
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
@@ -10,7 +9,6 @@ import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.GameSessionData
-import java.lang.IndexOutOfBoundsException
 
 class PlayersViewModel(
     private val chatRepository: ChatRepository,
@@ -48,7 +46,16 @@ class PlayersViewModel(
         return gameSessionRepository.getGameSession()
     }
 
-    fun sendGameInvitation(receiverID: Double, onresult: (RequestResult) -> Unit) {
-        gameInviteRepository.sendGameInvitation(receiverID, onresult)
+    fun sendGameInvitation(receiverID: Double, onResult: (RequestResult) -> Unit) {
+        gameInviteRepository.sendGameInvitation(receiverID, onResult)
+    }
+
+    fun removeVirtualPlayer(playerID: Double, onResult: (RequestResult) -> Unit) {
+        val id = getCurrentChannelID().value
+        val gameID = getUserChannels().value?.get(id)?.gameID
+        if (gameID != null) {
+            gameInviteRepository.removeVirtualPlayer(gameID,playerID, onResult)
+        }
+
     }
 }

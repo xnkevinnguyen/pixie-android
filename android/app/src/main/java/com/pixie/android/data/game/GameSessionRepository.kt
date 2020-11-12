@@ -34,6 +34,7 @@ class GameSessionRepository(
     private var pathSubscription: Job? = null
     private var manualPathSubscription: Job? = null
     private var pathIDGenerator = 0.0
+    private var isCanvasLocked = MutableLiveData<Boolean>()
 
 
 
@@ -43,6 +44,8 @@ class GameSessionRepository(
 
 
     fun getGameSession() = gameSession
+
+    fun getIsCanvasLocked()=isCanvasLocked
 
     // used for the current user to display current word to draw
     fun getShouldShowWord() = shouldShowWord
@@ -147,8 +150,16 @@ class GameSessionRepository(
                                 )
                         }
 
-                    } else {
-                        shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE, ""))
+                    } else if(it.state == GameState.DRAWING && it.currentDrawerId == userRepository.getUser().userId) {
+                        shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE ,it.currentWord))
+                    }else{
+                        shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE ))
+
+                    }
+                    if(it.state == GameState.DRAWING && it.currentDrawerId == userRepository.getUser().userId){
+                        isCanvasLocked.postValue(false)
+                    }else{
+                        isCanvasLocked.postValue(true)
                     }
                     gameSession.postValue(it)
 
@@ -193,12 +204,12 @@ class GameSessionRepository(
                 if (pathID != null) {
                     CoroutineScope(Dispatchers.Main).launch {
                         onResult(pathID)
+                        pathIDGenerator += 1
                     }
 
                 }
             }
         }
-        pathIDGenerator += 1
     }
     fun sendManualCommand(
         commandType: CommandType,

@@ -1,0 +1,3 @@
+mutation RemoveVirtualPlayer($input: RemoveVirtualPlayerInput!){
+    removeVirtualPlayer(input:$input)
+}

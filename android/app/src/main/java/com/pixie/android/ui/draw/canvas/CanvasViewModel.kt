@@ -75,7 +75,7 @@ class CanvasViewModel(
         }
 
     }
-
+    fun getIsCanvasLocked()=gameSessionRepository.getIsCanvasLocked()
     
 
     fun getStrokeWidth() = drawingParametersRepository.getStrokeWidth()
