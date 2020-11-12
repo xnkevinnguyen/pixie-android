@@ -76,131 +76,139 @@ class LeaderboardFragment: Fragment() {
         val cumulativeCoopUser3 = root.findViewById<TextView>(R.id.cumulative_coop_user3)
         val cumulativeCoopScore3 = root.findViewById<TextView>(R.id.cumulative_coop_score3)
 
-        val freeValues = leaderboardViewModel.getBestScore("Free")
-        if(freeValues.size != 0){
-            if(freeValues.size >= 1){
-                bestFreeUser.text = freeValues[0].username
-                bestFreeScore.text = freeValues[0].value.toString()
-            }
+        leaderboardViewModel.getBestScore("Free").observe(viewLifecycleOwner, Observer {
+            if(it.size != 0){
+                if(it.size >= 1){
+                    bestFreeUser.text = it[0].username
+                    bestFreeScore.text = it[0].value.toString()
+                }
 
-            if(freeValues.size >= 2){
-                bestFreeUser2.text = freeValues[1].username
-                bestFreeScore2.text = freeValues[1].value.toString()
-            }
+                if(it.size >= 2){
+                    bestFreeUser2.text = it[1].username
+                    bestFreeScore2.text = it[1].value.toString()
+                }
 
-            if(freeValues.size >= 3){
-                bestFreeUser3.text = freeValues[2].username
-                bestFreeScore3.text = freeValues[2].value.toString()
+                if(it.size >= 3){
+                    bestFreeUser3.text = it[2].username
+                    bestFreeScore3.text = it[2].value.toString()
+                }
             }
-        }
+        })
 
-        val soloValues = leaderboardViewModel.getBestScore("Solo")
-        if(soloValues.size != 0){
-            if(soloValues.size >= 1){
-                bestSoloUser.text = soloValues[0].username
-                bestSoloScore.text = soloValues[0].value.toString()
-            }
 
-            if(soloValues.size >= 2){
-                bestSoloUser2.text = soloValues[1].username
-                bestSoloScore2.text = soloValues[1].value.toString()
-            }
+        leaderboardViewModel.getBestScore("Solo").observe(viewLifecycleOwner, Observer {
+            if (it.size != 0) {
+                if (it.size >= 1) {
+                    bestSoloUser.text = it[0].username
+                    bestSoloScore.text = it[0].value.toString()
+                }
 
-            if(soloValues.size >= 3){
-                bestSoloUser3.text = soloValues[2].username
-                bestSoloScore3.text = soloValues[2].value.toString()
-            }
-        }
+                if (it.size >= 2) {
+                    bestSoloUser2.text = it[1].username
+                    bestSoloScore2.text = it[1].value.toString()
+                }
 
-        val coopValues = leaderboardViewModel.getBestScore("Coop")
-        if(coopValues.size != 0){
-            if(coopValues.size >= 1){
-                bestCoopUser.text = coopValues[0].username
-                bestCoopScore.text = coopValues[0].value.toString()
+                if (it.size >= 3) {
+                    bestSoloUser3.text = it[2].username
+                    bestSoloScore3.text = it[2].value.toString()
+                }
             }
+        })
 
-            if(coopValues.size >= 2){
-                bestCoopUser2.text = coopValues[1].username
-                bestCoopScore2.text = coopValues[1].value.toString()
-            }
+        leaderboardViewModel.getBestScore("Coop").observe(viewLifecycleOwner, Observer {
+            if (it.size != 0) {
+                if (it.size >= 1) {
+                    bestCoopUser.text = it[0].username
+                    bestCoopScore.text = it[0].value.toString()
+                }
 
-            if(coopValues.size >= 3){
-                bestCoopUser3.text = coopValues[2].username
-                bestCoopScore3.text = coopValues[2].value.toString()
-            }
-        }
+                if (it.size >= 2) {
+                    bestCoopUser2.text = it[1].username
+                    bestCoopScore2.text = it[1].value.toString()
+                }
 
-        val cumulativeFreeValues = leaderboardViewModel.getBestCumulativeScore("Free")
-        if(cumulativeFreeValues.size != 0){
-            if(cumulativeFreeValues.size >= 1){
-                cumulativeFreeUser.text = cumulativeFreeValues[0].username
-                cumulativeFreeScore.text = cumulativeFreeValues[0].value.toString()
+                if (it.size >= 3) {
+                    bestCoopUser3.text = it[2].username
+                    bestCoopScore3.text = it[2].value.toString()
+                }
             }
+        })
 
-            if(cumulativeFreeValues.size >= 2){
-                cumulativeFreeUser2.text = cumulativeFreeValues[1].username
-                cumulativeFreeScore2.text = cumulativeFreeValues[1].value.toString()
-            }
+        leaderboardViewModel.getBestCumulativeScore("Free").observe(viewLifecycleOwner, Observer {
+            if (it.size != 0) {
+                if (it.size >= 1) {
+                    cumulativeFreeUser.text = it[0].username
+                    cumulativeFreeScore.text = it[0].value.toString()
+                }
 
-            if(cumulativeFreeValues.size >= 3){
-                cumulativeFreeUser3.text = cumulativeFreeValues[2].username
-                cumulativeFreeScore3.text = cumulativeFreeValues[2].value.toString()
-            }
-        }
+                if (it.size >= 2) {
+                    cumulativeFreeUser2.text = it[1].username
+                    cumulativeFreeScore2.text = it[1].value.toString()
+                }
 
-        val cumulativeSoloValues = leaderboardViewModel.getBestCumulativeScore("Solo")
-        if(cumulativeSoloValues.size != 0){
-            if(cumulativeSoloValues.size >= 1){
-                cumulativeSoloUser.text = cumulativeSoloValues[0].username
-                cumulativeSoloScore.text = cumulativeSoloValues[0].value.toString()
+                if (it.size >= 3) {
+                    cumulativeFreeUser3.text = it[2].username
+                    cumulativeFreeScore3.text = it[2].value.toString()
+                }
             }
+        })
 
-            if(cumulativeSoloValues.size >= 2){
-                cumulativeSoloUser2.text = cumulativeSoloValues[1].username
-                cumulativeSoloScore2.text = cumulativeSoloValues[1].value.toString()
-            }
+        leaderboardViewModel.getBestCumulativeScore("Solo").observe(viewLifecycleOwner, Observer {
+            if (it.size != 0) {
+                if (it.size >= 1) {
+                    cumulativeSoloUser.text = it[0].username
+                    cumulativeSoloScore.text = it[0].value.toString()
+                }
 
-            if(cumulativeSoloValues.size >= 3){
-                cumulativeSoloUser3.text = cumulativeSoloValues[2].username
-                cumulativeSoloScore3.text = cumulativeSoloValues[2].value.toString()
-            }
-        }
+                if (it.size >= 2) {
+                    cumulativeSoloUser2.text = it[1].username
+                    cumulativeSoloScore2.text = it[1].value.toString()
+                }
 
-        val cumulativeCoopValues = leaderboardViewModel.getBestCumulativeScore("Coop")
-        if(cumulativeCoopValues.size != 0){
-            if(cumulativeCoopValues.size >= 1){
-                cumulativeCoopUser.text = cumulativeCoopValues[0].username
-                cumulativeCoopScore.text = cumulativeCoopValues[0].value.toString()
+                if (it.size >= 3) {
+                    cumulativeSoloUser3.text = it[2].username
+                    cumulativeSoloScore3.text = it[2].value.toString()
+                }
             }
+        })
 
-            if(cumulativeCoopValues.size >= 2){
-                cumulativeCoopUser2.text = cumulativeCoopValues[1].username
-                cumulativeCoopScore2.text = cumulativeCoopValues[1].value.toString()
-            }
+        leaderboardViewModel.getBestCumulativeScore("Coop").observe(viewLifecycleOwner, Observer {
+            if (it.size != 0) {
+                if (it.size >= 1) {
+                    cumulativeCoopUser.text = it[0].username
+                    cumulativeCoopScore.text = it[0].value.toString()
+                }
 
-            if(cumulativeCoopValues.size >= 3){
-                cumulativeCoopUser3.text = cumulativeCoopValues[2].username
-                cumulativeCoopScore3.text = cumulativeCoopValues[2].value.toString()
-            }
-        }
+                if (it.size >= 2) {
+                    cumulativeCoopUser2.text = it[1].username
+                    cumulativeCoopScore2.text = it[1].value.toString()
+                }
 
-        val mostGameWonValues = leaderboardViewModel.getMostGameWon()
-        if(mostGameWonValues.size != 0){
-            if(mostGameWonValues.size >= 1){
-                mostFreeUser.text = mostGameWonValues[0].username
-                mostFreeScore.text = mostGameWonValues[0].value?.toInt().toString()
+                if (it.size >= 3) {
+                    cumulativeCoopUser3.text = it[2].username
+                    cumulativeCoopScore3.text = it[2].value.toString()
+                }
             }
+        })
 
-            if(mostGameWonValues.size >= 2){
-                mostFreeUser2.text = mostGameWonValues[1].username
-                mostFreeScore2.text = mostGameWonValues[1].value?.toInt().toString()
-            }
+        leaderboardViewModel.getMostGameWon().observe(viewLifecycleOwner, Observer {
+            if (it.size != 0) {
+                if (it.size >= 1) {
+                    mostFreeUser.text = it[0].username
+                    mostFreeScore.text = it[0].value?.toInt().toString()
+                }
 
-            if(mostGameWonValues.size >= 3){
-                mostFreeUser3.text = mostGameWonValues[2].username
-                mostFreeScore3.text = mostGameWonValues[2].value?.toInt().toString()
+                if (it.size >= 2) {
+                    mostFreeUser2.text = it[1].username
+                    mostFreeScore2.text = it[1].value?.toInt().toString()
+                }
+
+                if (it.size >= 3) {
+                    mostFreeUser3.text = it[2].username
+                    mostFreeScore3.text = it[2].value?.toInt().toString()
+                }
             }
-        }
+        })
 
         return root
     }
