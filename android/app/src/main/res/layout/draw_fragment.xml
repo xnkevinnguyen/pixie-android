@@ -11,8 +11,13 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignStart="@id/drawing_surface"/>
-
+        android:layout_alignStart="@id/action_area"/>
+<LinearLayout
+    android:id="@+id/action_area"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_alignParentEnd="true">
     <FrameLayout
         android:id="@+id/drawing_surface"
         android:layout_width="wrap_content"
@@ -25,7 +30,7 @@
             android:id="@+id/canvas_fragment"
             android:name="com.pixie.android.ui.draw.canvas.CanvasFragment"
             android:layout_width="1000px"
-            android:layout_height="1000px" />
+            android:layout_height="900px" />
 
         <fragment
             android:id="@+id/draw_tools_fragment"
@@ -34,8 +39,14 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"/>
 
-    </FrameLayout>
 
+    </FrameLayout>
+    <fragment
+        android:layout_width="1000px"
+        android:layout_height="100px"
+        android:name="com.pixie.android.ui.chat.GameGuessFragment"
+        />
+</LinearLayout>
     <fragment
         android:id="@+id/second_chat_fragment"
         android:name="com.pixie.android.ui.chat.GameChatFragment"

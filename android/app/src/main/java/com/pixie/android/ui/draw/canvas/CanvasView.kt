@@ -34,7 +34,11 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
     private var onDrawingMove:Boolean = false
+    private var isCanvasLocked:Boolean= false
 
+    fun setIsCanvasLocked(isLocked:Boolean){
+        isCanvasLocked =isLocked
+    }
 
     fun setErase(isErase: Boolean) {
         erase = isErase
@@ -98,18 +102,20 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        motionTouchEventX = event.x
-        motionTouchEventY = event.y
-        if(!erase){//draw actions
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> onTouchStart()
-            MotionEvent.ACTION_MOVE -> onTouchMove()
-            MotionEvent.ACTION_UP -> onTouchStop()
-        }
-        }else if(erase){
-            when(event.action){
-                MotionEvent.ACTION_DOWN ->onEraseStart()
-                MotionEvent.ACTION_MOVE ->onEraseMove()
+        if(!isCanvasLocked) {
+            motionTouchEventX = event.x
+            motionTouchEventY = event.y
+            if (!erase) {//draw actions
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> onTouchStart()
+                    MotionEvent.ACTION_MOVE -> onTouchMove()
+                    MotionEvent.ACTION_UP -> onTouchStop()
+                }
+            } else if (erase) {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> onEraseStart()
+                    MotionEvent.ACTION_MOVE -> onEraseMove()
+                }
             }
         }
         return true
@@ -134,6 +140,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         canvasViewModel.sendPoint(currentX,currentY,PathStatus.BEGIN,Paint(paint))
         onDrawingMove = true
     }
+
 
     private fun onTouchMove() {
         pathData.add(

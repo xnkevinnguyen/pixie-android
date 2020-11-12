@@ -62,6 +62,9 @@ class CanvasFragment : Fragment() {
                 display_word.visibility = View.GONE
             }
         })
+        viewModel.getIsCanvasLocked().observe(viewLifecycleOwner,Observer{
+                my_canvas.setIsCanvasLocked(it)
+        })
 
         viewModel.getStrokeWidth().observe(viewLifecycleOwner, Observer {
             my_canvas.drawStroke = it
