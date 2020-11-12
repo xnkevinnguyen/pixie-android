@@ -6,4 +6,4 @@ enum class ShowWordinGameType{
     NONE
 }
 
-data class ShowWordinGame (val shouldShowWordBig:Boolean, val type:ShowWordinGameType,val word:String)
+data class ShowWordinGame (val shouldShowWordBig:Boolean, val type:ShowWordinGameType,val word:String?=null)

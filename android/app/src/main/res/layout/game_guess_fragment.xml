@@ -7,7 +7,8 @@
     android:background="?color"
     android:clipToPadding="false"
     android:focusableInTouchMode="true"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    >
 
 
 
@@ -24,6 +25,7 @@
                 android:inputType="text"
                 android:paddingHorizontal="10dp"
                 android:layout_gravity="center"
+
                 />
 
             <ImageButton

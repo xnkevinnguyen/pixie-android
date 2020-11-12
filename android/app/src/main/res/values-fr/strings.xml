@@ -154,5 +154,6 @@
     <string name="game_invitation_title">%1$s vous a invité</string>
     <string name="correct_guess">Bonne réponse!</string>
     <string name="incorrect_guess">Mauvaise réponse!</string>
+    <string name="your_word"> Ton mot: %1$s</string>
 
 </resources>

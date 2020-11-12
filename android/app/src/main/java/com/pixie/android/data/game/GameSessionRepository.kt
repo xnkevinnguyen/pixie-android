@@ -150,8 +150,11 @@ class GameSessionRepository(
                                 )
                         }
 
-                    } else {
-                        shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE, ""))
+                    } else if(it.state == GameState.DRAWING && it.currentDrawerId == userRepository.getUser().userId) {
+                        shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE ,it.currentWord))
+                    }else{
+                        shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE ))
+
                     }
                     if(it.state == GameState.DRAWING && it.currentDrawerId == userRepository.getUser().userId){
                         isCanvasLocked.postValue(false)
