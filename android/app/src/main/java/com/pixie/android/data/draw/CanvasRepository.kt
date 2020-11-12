@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.model.draw.*
 import com.pixie.android.type.PathStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.collections.HashMap
 
 class CanvasRepository {
@@ -17,12 +20,11 @@ class CanvasRepository {
 
 
     fun clear() {
-
-        Log.d("CanvasRepository", "clear")
         drawCommandHistory.postValue(hashMapOf())
 
     }
-    fun eraseCommand(commandID:Double){
+
+    fun eraseCommand(commandID: Double) {
         drawCommandHistory.value?.get(commandID)?.type = CommandType.ERASE
         drawCommandHistory.notifyObserver()
 
@@ -31,8 +33,6 @@ class CanvasRepository {
 
     // Add Draw command should not notify the observer
     fun addCanvasCommand(id: Double, drawCommand: CanvasCommand) {
-        Log.d("CanvasRepository", "addCanvasCommand")
-
         if (drawCommandHistory.value == null) {
             drawCommandHistory.postValue(hashMapOf(Pair(id, drawCommand)))
         } else {
@@ -71,7 +71,6 @@ class CanvasRepository {
             )
             currentCommand.path.add(pathPoint)
             drawCommandHistory.notifyObserver()
-            Log.d("CanvasRepository", "updateCommand")
 
         } else {
             Log.d("ManualDrawingError", "ManualDrawing updates a point to a non-existent command")
@@ -80,18 +79,22 @@ class CanvasRepository {
 
     // Sender and Receiver for UNDO & REDO
     fun handleServerDrawHistoryCommand(serverCommand: ServerDrawHistoryCommand) {
-        Log.d("CanvasRepository","Received Command from server "+serverCommand.commandType)
-
-        if(serverCommand.commandType == CommandType.ERASE){
-            drawCommandHistory.value?.get(serverCommand.commandPathID)?.type = CommandType.ERASE
-        }else if(serverCommand.commandType ==CommandType.REDO || serverCommand.commandType ==CommandType.UNDO){
-            if(drawCommandHistory.value?.get(serverCommand.commandPathID)?.type == CommandType.DRAW){
-                drawCommandHistory.value?.get(serverCommand.commandPathID)?.type = serverCommand.commandType
-            }else{
-                drawCommandHistory.value?.get(serverCommand.commandPathID)?.type =CommandType.DRAW
+        Log.d("CanvasRepository", "Received Command from server " + serverCommand.commandType)
+        CoroutineScope(Dispatchers.Main).launch {
+            if (serverCommand.commandType == CommandType.ERASE) {
+                drawCommandHistory.value?.get(serverCommand.commandPathID)?.type = CommandType.ERASE
             }
+            else if (serverCommand.commandType == CommandType.REDO || serverCommand.commandType == CommandType.UNDO) {
+                if (drawCommandHistory.value?.get(serverCommand.commandPathID)?.type == CommandType.DRAW) {
+                    drawCommandHistory.value?.get(serverCommand.commandPathID)?.type =
+                        serverCommand.commandType
+                } else {
+                    drawCommandHistory.value?.get(serverCommand.commandPathID)?.type =
+                        CommandType.DRAW
+                }
+            }
+            drawCommandHistory.notifyObserver()
         }
-        drawCommandHistory.notifyObserver()
 
     }
 

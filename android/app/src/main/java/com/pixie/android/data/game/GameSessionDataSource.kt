@@ -161,7 +161,8 @@ class GameSessionDataSource {
             pathPointInput.pathStatus
         )
         try {
-            Log.d("ManualDraw",pathPointInput.pathStatus.rawValue + " "+pathPointInput.x+","+pathPointInput.y)
+            if(pathPointInput.pathStatus == PathStatus.END)
+                Log.d("ManualCommand - ",  "Send draw--"+pathUniqueID.toString())
             val response =
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data
@@ -208,7 +209,7 @@ class GameSessionDataSource {
             }.collect {
                 val data = it.data?.onManualPlayerDrawing
 //                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
-                if ( data?.point != null && data.strokeWidth != null ) {
+                if ( data?.commandStatus ==CommandStatus.NONE &&data?.point != null && data.strokeWidth != null ) {
                     // Handles adding a point
                     var colorStroke = data.strokeColor?.toInt()
                     if (colorStroke ==null){
@@ -245,6 +246,10 @@ class GameSessionDataSource {
                     onServerDrawHistoryCommand(serverDrawHistoryCommand)
 
                 }
+                if(data?.commandStatus == CommandStatus.NONE && data?.status == PathStatus.END)
+                    Log.d("ManualCommand - ",data?.commandStatus.toString() + "--"+data?.currentPathId.toString())
+                if(data?.commandStatus != CommandStatus.NONE)
+                    Log.d("ManualCommand - ",data?.commandStatus.toString() +"--"+data?.commandPathId.toString())
             }
     }
 

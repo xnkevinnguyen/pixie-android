@@ -11,16 +11,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 
-class GameChatFragment : Fragment() {
+class GameGuessFragment : Fragment() {
     private lateinit var preferencesGame: SharedPreferences
     private lateinit var editorGame: SharedPreferences.Editor
     override fun onCreateView(
@@ -30,7 +28,7 @@ class GameChatFragment : Fragment() {
     ): View? {
 
         val root = inflater.inflate(
-            R.layout.game_chat_fragment,
+            R.layout.game_guess_fragment,
             container, false
         )
 
@@ -40,45 +38,41 @@ class GameChatFragment : Fragment() {
         editorGame.putString(Constants.GAME_CHAT_VALUE, "message")
         editorGame.apply()
 
-        val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
-        val messageList = root.findViewById<ListView>(R.id.messages_list)
         val editText = root.findViewById<EditText>(R.id.editText)
 
+        val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
 
-        val messageAdapter = MessagingAdapter(requireContext())
-        //val participantAdapter = ChannelParticipantAdapter(requireContext())
+
+
         val factory = InjectorUtils.provideGameChatViewModelFactory()
 
         val gameChatViewModel = ViewModelProvider(this, factory).get(GameChatViewModel::class.java)
 
-        messageList.adapter = messageAdapter
-        //participantListElement.adapter = participantAdapter
 
         val typedValue = TypedValue()
         val theme = requireContext().theme
         theme.resolveAttribute(R.attr.colorSecondary, typedValue, true)
+        @ColorInt val color = typedValue.data
 
 
-        val channelMessages = gameChatViewModel.getChannelMessageList()
-        channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
-            if (!channelMessagesMap.isNullOrEmpty()){
-                val messageObject = channelMessagesMap[gameChatViewModel.getGameChannelID()]
-
-                // Repopulating the adapter
-                if(messageObject !=null) {
-                    messageAdapter.set(messageObject.messageList)
-
-                }
 
 
-            }
 
-        })
 
         sendMessage.setOnClickListener {
             val message = editText.text.toString()
 
-            gameChatViewModel.sendMessage(message)
+            gameChatViewModel.sendGuess(message){
+                if(it ==true){
+                    Toast.makeText(requireContext(),
+                    resources.getString(R.string.correct_guess),
+                    Toast.LENGTH_LONG).show()
+                }else if( it==false){
+                    Toast.makeText(requireContext(),
+                        resources.getString(R.string.incorrect_guess),
+                        Toast.LENGTH_LONG).show()
+                }
+            }
             editText.text.clear()
 
         }
@@ -90,7 +84,17 @@ class GameChatFragment : Fragment() {
                     keyCode == KeyEvent.KEYCODE_ENTER) {
                     val message = editText.text.toString()
                     if (message.isNotBlank()) {
-                        gameChatViewModel.sendMessage(message)
+                        gameChatViewModel.sendGuess(message){
+                            if(it ==true){
+                                Toast.makeText(requireContext(),
+                                    resources.getString(R.string.correct_guess),
+                                    Toast.LENGTH_LONG).show()
+                            }else if( it==false){
+                                Toast.makeText(requireContext(),
+                                    resources.getString(R.string.incorrect_guess),
+                                    Toast.LENGTH_LONG).show()
+                            }
+                        }
                         editText.text.clear() //clear text line
                     }
                     return true
