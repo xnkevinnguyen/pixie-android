@@ -1,12 +1,14 @@
 package com.pixie.android.ui.draw.gameInformation
 
-import android.app.ActionBar
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.util.DisplayMetrics
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
@@ -24,6 +26,9 @@ import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
+import nl.dionsegijn.konfetti.KonfettiView
+import nl.dionsegijn.konfetti.models.Shape
+import nl.dionsegijn.konfetti.models.Size
 
 
 class GameInformationFragment : Fragment() {
@@ -100,6 +105,10 @@ class GameInformationFragment : Fragment() {
             timerElement.text = it.toString()
         })
 
+        val preferencesSettings = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val soundOn:Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
+        val mediaPlayer = chatViewModel.createMediaPlayer(R.raw.end_game, requireContext())
+
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
             val roundString =
                 resources.getString(R.string.round_turn) + " " + (it.currentRound.toInt() + 1)
@@ -150,7 +159,22 @@ class GameInformationFragment : Fragment() {
                     dialog.dismiss()
                 }
 
+                val viewKonfetti = dialog.findViewById<KonfettiView>(R.id.viewKonfetti)
+                viewKonfetti.build()
+                    .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                    .setDirection(0.0, 359.0)
+                    .setSpeed(1f, 5f)
+                    .setFadeOutEnabled(true)
+                    .setTimeToLive(2000L)
+                    .addShapes(Shape.Square, Shape.Circle)
+                    .addSizes(Size(12))
+                    .setPosition(-50f, 850 + 50f, -50f, -50f)
+                    .streamFor(300, 5000L)
+
                 dialog.show()
+
+                if(soundOn)chatViewModel.startMediaPlayer(mediaPlayer)
+                else chatViewModel.releaseMediaPlayer(mediaPlayer)
             }
         })
 
