@@ -54,7 +54,9 @@ class ChatDataSource() {
             val channelQueryData = response?.channel
             if (channelQueryData?.messages != null) {
                 onReceiveChannel(ArrayList(channelQueryData.messages.map {
-                    MessageData(it.content, userId == it.sender.id, it.sender.username, it.postedAt)
+                    MessageData(it.content, userId == it.sender.id, it.sender.username,
+                        it.postedAt as String
+                    )
                 }))
             }
         } catch (e: ApolloException) {
@@ -195,7 +197,9 @@ class ChatDataSource() {
 
                 if (messageContent != null && messageSenderUsername != null && messageTimePosted != null) {
                     val messageData =
-                        MessageData(messageContent, null, messageSenderUsername, messageTimePosted)
+                        MessageData(messageContent, null, messageSenderUsername,
+                            messageTimePosted as String
+                        )
                     onReceiveMessage(messageData)
                 }
             }
