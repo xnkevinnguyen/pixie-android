@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:background="?colorAccent">
 
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <fragment
         android:id="@+id/game_info_fragment"
         android:name="com.pixie.android.ui.draw.gameInformation.GameInformationFragment"
@@ -62,6 +67,5 @@
         android:layout_width="290dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true" />
-
 
 </RelativeLayout>
