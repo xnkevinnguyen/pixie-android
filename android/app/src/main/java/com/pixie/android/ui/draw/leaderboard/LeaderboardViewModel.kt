@@ -19,15 +19,15 @@ class LeaderboardViewModel(private val leaderboardRepository: LeaderboardReposit
         leaderboardRepository.fetchMostGameWon()
     }
 
-    fun getBestScore(mode: String): ArrayList<LeaderboardData>{
+    fun getBestScore(mode: String): LiveData<ArrayList<LeaderboardData>>{
         return leaderboardRepository.getBestScore(mode)
     }
 
-    fun getBestCumulativeScore(mode: String): ArrayList<LeaderboardData>{
+    fun getBestCumulativeScore(mode: String): LiveData<ArrayList<LeaderboardData>>{
         return leaderboardRepository.getBestCumulativeScore(mode)
     }
 
-    fun getMostGameWon(): ArrayList<LeaderboardData>{
+    fun getMostGameWon(): LiveData<ArrayList<LeaderboardData>>{
         return leaderboardRepository.getMostGameWon()
     }
 }
