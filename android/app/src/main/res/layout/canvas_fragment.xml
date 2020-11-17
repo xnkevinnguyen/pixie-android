@@ -11,7 +11,17 @@
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:visibility="gone" />
-
+    <TextView
+        android:id="@+id/display_word_canvas"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="5dp"
+        android:textSize="@dimen/regular_size"
+        android:textColor="@color/dark_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
     <com.pixie.android.ui.draw.canvas.CanvasView
         android:id="@+id/my_canvas"
         android:layout_width="match_parent"

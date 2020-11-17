@@ -6,6 +6,7 @@ mutation EnterChannel ($enterChannelInput:EnterChannelInput!){
             id
             username
             isOnline
+            isVirtual
         }
     }
 }

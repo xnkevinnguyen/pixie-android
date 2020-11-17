@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import com.pixie.android.R
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
 import com.pixie.android.type.PathStatus
@@ -38,6 +39,13 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun setIsCanvasLocked(isLocked:Boolean){
         isCanvasLocked =isLocked
+    }
+    fun displayWord(word:String){
+        val wordPaint = Paint().apply {
+            color = Color.BLACK
+            textSize = 25.toFloat()
+        }
+        canvas?.drawText(String.format(resources.getString(R.string.your_word),word),90.toFloat(),30.toFloat(),wordPaint)
     }
 
     fun setErase(isErase: Boolean) {

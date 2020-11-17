@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
@@ -55,9 +56,12 @@ class GameGuessFragment : Fragment() {
         @ColorInt val color = typedValue.data
 
 
-
-
-
+        val factoryChat = InjectorUtils.provideChatViewModelFactory()
+        val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)
+        val preferencesSettings = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val soundOn:Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
+        val mediaPlayerCorrectAnswer = chatViewModel.createMediaPlayer(R.raw.correct, requireContext())
+        val mediaPlayerIncorrectAnswer = chatViewModel.createMediaPlayer(R.raw.incorrect, requireContext())
 
         sendMessage.setOnClickListener {
             val message = editText.text.toString()
@@ -67,10 +71,14 @@ class GameGuessFragment : Fragment() {
                     Toast.makeText(requireContext(),
                     resources.getString(R.string.correct_guess),
                     Toast.LENGTH_LONG).show()
+                    if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
+                    else chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
                 }else if( it==false){
                     Toast.makeText(requireContext(),
                         resources.getString(R.string.incorrect_guess),
                         Toast.LENGTH_LONG).show()
+                    if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
+                    else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
                 }
             }
             editText.text.clear()

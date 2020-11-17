@@ -73,6 +73,7 @@
 
     <string name="theme">Thème</string>
     <string name="language">Langage</string>
+    <string name="language_2">Langage:</string>
     <string name="notif_sound">Son de notification</string>
     <string name="dark">Sombre</string>
     <string name="light">Clair</string>
@@ -153,5 +154,6 @@
     <string name="game_invitation_title">%1$s vous a invité</string>
     <string name="correct_guess">Bonne réponse!</string>
     <string name="incorrect_guess">Mauvaise réponse!</string>
+    <string name="your_word"> Ton mot: %1$s</string>
 
 </resources>

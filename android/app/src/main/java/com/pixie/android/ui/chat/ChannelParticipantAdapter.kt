@@ -8,8 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.ui.draw.channelList.PlayersViewModel
+import com.pixie.android.utilities.InjectorUtils
 import kotlin.random.Random
 
 
@@ -60,9 +64,31 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val factory = InjectorUtils.providePlayersViewModelFactory()
+        val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
         val participant: ChannelParticipant = filteredListOfParticipants[position]
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val participantUserName = rowView.findViewById<TextView>(R.id.participant_username)
+        val removeVirtualElement = rowView.findViewById<TextView>(R.id.remove_virtual_player)
+
+        if(participant.isVirtual ==true){
+            removeVirtualElement.visibility = View.VISIBLE
+            removeVirtualElement.setOnClickListener {
+                playersViewModel.removeVirtualPlayer(participant.id){
+                    if(it.isSuccess ==true){
+                        Toast.makeText(rowView.context,
+                            rowView.context.resources.getString(R.string.success),
+                            Toast.LENGTH_LONG).show()
+                    }else if(!it.isSuccess){
+                        Toast.makeText(rowView.context,
+                            rowView.context.resources.getString(R.string.error),
+                            Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }else{
+            removeVirtualElement.visibility = View.GONE
+        }
         participantUserName.text = participant.username
 
         val onlineIconElement = rowView.findViewById<ImageView>(R.id.online_badge)
