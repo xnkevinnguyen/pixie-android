@@ -65,21 +65,15 @@ class PlayersFragment : Fragment() {
                 val follow = dialog.findViewById<Button>(R.id.follow)
                 if(isUser(user)) follow.visibility = View.GONE
 
-                playersViewModel.fetchFriendList()
-                var friendList = playersViewModel.getFriendList().value
-                Log.d("here players fragment", "$friendList")
-
-//                playersViewModel.getFriendList().observe(viewLifecycleOwner, Observer {
-//                    if(it.contains(user)) follow.text = resources.getString(R.string.unfollow)
-//                    else follow.text = resources.getString(R.string.follow)
-//
-//                    friendList = it
-//                    Log.d("here players fragment", "$friendList")
-//
-//                })
+                val friendList = playersViewModel.getFriendList().value
+                if (friendList != null) {
+                    if(friendList.contains(user)) follow.text = resources.getString(R.string.unfollow)
+                    else follow.text = resources.getString(R.string.follow)
+                } else {
+                    follow.text = resources.getString(R.string.follow)
+                }
 
                 follow.setOnClickListener {
-                    Log.d("here players fragment 2", "$friendList")
                     if (friendList != null) {
                         if (!friendList.contains(user)) {
                             playersViewModel.addFriend(user.id){
@@ -106,10 +100,10 @@ class PlayersFragment : Fragment() {
                                 }
                             }
                         }
+                        val participantList = playersViewModel.getCurrentChannelParticipants()
+                        participantAdapter.set(participantList)
                     }
                 }
-//                if (!playersViewModel.isUserInFollowList(user)) follow.text = resources.getString(R.string.follow)
-//                else follow.text = resources.getString(R.string.unfollow)
 
                 val invite = dialog.findViewById<Button>(R.id.invite)
 

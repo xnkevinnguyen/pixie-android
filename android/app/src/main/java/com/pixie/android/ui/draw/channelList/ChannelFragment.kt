@@ -37,6 +37,7 @@ class ChannelFragment : Fragment() {
         val channelListElement = root.findViewById<ListView>(R.id.channels_list)
         val addBtn = root.findViewById<Button>(R.id.add_channel)
         val startGameBtn = root.findViewById<Button>(R.id.start_game)
+        val leaveGameBtn = root.findViewById<Button>(R.id.leave_game)
         val addPlayerBtn = root.findViewById<Button>(R.id.add_players)
 
         val userChannelAdapter = UserChannelAdapter(requireContext(), requireActivity())
@@ -56,9 +57,11 @@ class ChannelFragment : Fragment() {
             if (currentChannel != null) {
                 if (currentChannel.gameID != null) {
                     startGameBtn.visibility = View.VISIBLE
+                    leaveGameBtn.visibility = View.VISIBLE
                     addPlayerBtn.visibility = View.VISIBLE
                 } else {
                     startGameBtn.visibility = View.GONE
+                    leaveGameBtn.visibility = View.GONE
                     addPlayerBtn.visibility = View.GONE
                 }
             }
@@ -84,6 +87,18 @@ class ChannelFragment : Fragment() {
             }
 
         }
+
+        leaveGameBtn.setOnClickListener {
+            val gameID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID
+            val channelID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.channelID
+            if (channelID != null) {
+                chatViewModel.exitChannel(channelID)
+            }
+            if(gameID != null){
+                chatViewModel.exitGame(gameID)
+            }
+        }
+
         //handles if someone else started the game
         val gameSession = chatViewModel.getGameSession()
         gameSession.observe(viewLifecycleOwner, Observer {
@@ -99,14 +114,14 @@ class ChannelFragment : Fragment() {
         //add players
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
-            val listFollow = channelViewModel.getFriendList()
-            listFollow.observe(viewLifecycleOwner, Observer { listUserFollow ->
+
+            val listUsers = channelViewModel.getAllUsers()
+            listUsers.observe(viewLifecycleOwner, Observer { listUserFollow ->
                 addPlayerAdapter.set(listUserFollow)
             })
             dialog.setContentView(R.layout.add_player)
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)
             createVirtualPlayer.setOnClickListener {
-                Log.d("here", "Create virtual player")
                 chatViewModel.addVirtualPlayer{
                         if(it.isSuccess ==true){
                             Toast.makeText(requireContext(),

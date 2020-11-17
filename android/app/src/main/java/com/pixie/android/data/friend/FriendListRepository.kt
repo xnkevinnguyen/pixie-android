@@ -5,10 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
+import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class FriendListRepository(private val dataSource: FriendListDataSource,
                            private val userRepository: UserRepository) {
@@ -19,7 +21,7 @@ class FriendListRepository(private val dataSource: FriendListDataSource,
         }
 
     fun getFriendList(): LiveData<ArrayList<ChannelParticipant>> {
-        //fetchFriendList()
+        fetchFriendList()
         return friendList
     }
 
@@ -49,20 +51,27 @@ class FriendListRepository(private val dataSource: FriendListDataSource,
         }
     }
 
+//    fun fetchFriendList(){
+//        CoroutineScope(Dispatchers.IO).launch {
+//            dataSource.getFriendList(userRepository.getUser().userId, onReceiveMessage = {
+//                if (it != null) {
+//                    CoroutineScope(Dispatchers.Main).launch {
+//                        friendList.postValue(it)
+//                    }
+//                }
+//                else {
+//                    friendList.postValue(arrayListOf())
+//                }
+//            })
+//        }
+//    }
+
     fun fetchFriendList(){
-        CoroutineScope(Dispatchers.IO).launch {
-            dataSource.getFriendList(userRepository.getUser().userId, onReceiveMessage = {
-                if (it != null) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        friendList.postValue(it)
-                        Log.d("here", "repo ${friendList.value}")
-                    }
-                }
-                else {
-                    friendList.postValue(arrayListOf())
-                }
-            })
+        var friends: ArrayList<ChannelParticipant>
+        runBlocking {
+            friends = dataSource.getFriendList(userRepository.getUser().userId)
         }
+        friendList.postValue(friends)
     }
 
     // Singleton

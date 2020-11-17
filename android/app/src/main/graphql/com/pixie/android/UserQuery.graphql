@@ -1,0 +1,9 @@
+query getUsers{
+    users{
+        id,
+        username,
+        avatar,
+        isOnline,
+        isVirtual
+    }
+}

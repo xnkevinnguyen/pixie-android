@@ -113,6 +113,7 @@
     <string name="not_available">Indisponible</string>
 
     <string name="start_game">Débuter Partie</string>
+    <string name="leave_game">Quitter la Partie</string>
     <string name="add_players">Ajouter un joueur</string>
     <string name="add_virtual">Ajouter Joueur Virtuel</string>
     <string name="create_game">Créer une Nouvelle Partie</string>

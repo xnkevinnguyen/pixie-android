@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
@@ -28,7 +31,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     val factory = InjectorUtils.providePlayersViewModelFactory()
     val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
 
-    private val listOfFriends = playersViewModel.getFriendList()
+    //private val listOfFriends = playersViewModel.getFriendList()
 
     fun add(channelParticipant: ChannelParticipant) {
         if (channelParticipant.isOnline == true) {
@@ -49,6 +52,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
 
     fun set(participantList: ArrayList<ChannelParticipant>) {
         reset()
+        val listOfFriends = playersViewModel.getFriendList()
         participantList.sortByDescending { it.isOnline }
         participantList.sortByDescending { listOfFriends.value?.contains(it) }
         listOfParticipants = participantList
@@ -70,8 +74,6 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-//        val factory = InjectorUtils.providePlayersViewModelFactory()
-//        val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
         val participant: ChannelParticipant = filteredListOfParticipants[position]
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val participantUserName = rowView.findViewById<TextView>(R.id.participant_username)

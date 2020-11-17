@@ -12,27 +12,29 @@ import com.pixie.android.type.*
 class FriendListDataSource {
 
     suspend fun getFriendList(
-        userId: Double,
-        onReceiveMessage: (ArrayList<ChannelParticipant>?) -> Unit
-    )  {
+        userId: Double
+        //onReceiveMessage: (ArrayList<ChannelParticipant>?) -> Unit
+    ): ArrayList<ChannelParticipant>  {
         try {
             val response = apolloClient(userId).query(GetFriendListQuery())
                 .toDeferred().await().data
             val friendListQueryData = response?.me?.friends
-            //Log.d("here", "here data source $friendListQueryData")
             if (friendListQueryData != null) {
 
                 val friendList = ArrayList(friendListQueryData.map {
 
-                    ChannelParticipant(it.id, it.username, it.isOnline)
+                    ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual)
                 })
-                onReceiveMessage(friendList)
+                //onReceiveMessage(friendList)
+                return friendList
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.message.toString())
 
         }
         Log.d("ApolloException", "Error fetching available games")
+
+        return arrayListOf()
     }
 
     suspend fun addFriend(friendId: Double, userId: Double): Boolean {
