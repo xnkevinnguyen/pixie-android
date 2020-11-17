@@ -99,7 +99,7 @@ class ChannelFragment : Fragment() {
         //add players
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
-            val listFollow = channelViewModel.getFollowList()
+            val listFollow = channelViewModel.getFriendList()
             listFollow.observe(viewLifecycleOwner, Observer { listUserFollow ->
                 addPlayerAdapter.set(listUserFollow)
             })

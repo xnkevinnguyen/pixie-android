@@ -67,32 +67,50 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
             listPlayerAdapter.set(ArrayList(players))
         }
 
-        val playerFactory = InjectorUtils.providePlayersViewModelFactory()
-        val playersViewModel = ViewModelProvider(ViewModelStore(), playerFactory).get(PlayersViewModel::class.java)
-        viewHolder.listPlayer.onItemClickListener =
-            AdapterView.OnItemClickListener { _, _, pos, _ ->
-                val user: ChannelParticipant =
-                    viewHolder.listPlayer.getItemAtPosition(pos) as ChannelParticipant
-                val dialog = Dialog(viewContext)
-                dialog.setContentView(R.layout.other_user_info)
-                dialog.findViewById<TextView>(R.id.user_name).text = user.username
-                val follow = dialog.findViewById<Button>(R.id.follow)
-
-                if(isUser(user)) follow.visibility = View.GONE
-                if (!playersViewModel.isUserInFollowList(user)) follow.text = viewContext.getString(R.string.follow)
-                else follow.text = viewContext.getString(R.string.unfollow)
-                follow.setOnClickListener {
-                    if (!playersViewModel.isUserInFollowList(user)) {
-                        playersViewModel.addUserFollowList(user)
-                        follow.text = viewContext.resources.getString(R.string.unfollow)
-                    } else {
-                        playersViewModel.removeUserFollowList(user)
-                        follow.text = viewContext.resources.getString(R.string.follow)
-                    }
-                }
-
-                dialog.show()
-            }
+//        val playerFactory = InjectorUtils.providePlayersViewModelFactory()
+//        val playersViewModel = ViewModelProvider(ViewModelStore(), playerFactory).get(PlayersViewModel::class.java)
+//        viewHolder.listPlayer.onItemClickListener =
+//            AdapterView.OnItemClickListener { _, _, pos, _ ->
+//                val user: ChannelParticipant =
+//                    viewHolder.listPlayer.getItemAtPosition(pos) as ChannelParticipant
+//                val dialog = Dialog(viewContext)
+//                dialog.setContentView(R.layout.other_user_info)
+//                dialog.findViewById<TextView>(R.id.user_name).text = user.username
+//                val follow = dialog.findViewById<Button>(R.id.follow)
+//
+//                if(isUser(user)) follow.visibility = View.GONE
+//                if (!playersViewModel.isUserInFollowList(user)) follow.text = viewContext.getString(R.string.follow)
+//                else follow.text = viewContext.getString(R.string.unfollow)
+//                follow.setOnClickListener {
+//                    if (!playersViewModel.isUserInFollowList(user)) {
+//                        playersViewModel.addFriend(user.id){
+//                            if(it.isSuccess){
+//                                Toast.makeText(viewContext,viewContext.resources.getString(R.string.success),
+//                                    Toast.LENGTH_LONG).show()
+//                                follow.text = viewContext.resources.getString(R.string.unfollow)
+//                            }else if(!it.isSuccess){
+//                                Toast.makeText(viewContext, viewContext.resources.getString(R.string.error),
+//                                    Toast.LENGTH_LONG).show()
+//                                follow.text = viewContext.resources.getString(R.string.follow)
+//                            }
+//                        }
+//                    } else {
+//                        playersViewModel.removeFriend(user.id){
+//                            if(it.isSuccess){
+//                                Toast.makeText(viewContext,viewContext.resources.getString(R.string.success),
+//                                    Toast.LENGTH_LONG).show()
+//                                follow.text = viewContext.getString(R.string.follow)
+//                            }else if(!it.isSuccess){
+//                                Toast.makeText(viewContext, viewContext.resources.getString(R.string.error),
+//                                    Toast.LENGTH_LONG).show()
+//                                follow.text = viewContext.resources.getString(R.string.unfollow)
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                dialog.show()
+//            }
 
         val gameFactory = InjectorUtils.provideAvailableGamesViewModelFactory()
         val gameViewModel = ViewModelProvider(ViewModelStore(), gameFactory).get(AvailableGamesViewModel::class.java)

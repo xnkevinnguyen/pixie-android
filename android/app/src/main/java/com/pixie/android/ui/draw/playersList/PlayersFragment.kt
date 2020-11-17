@@ -64,17 +64,53 @@ class PlayersFragment : Fragment() {
                 dialog.findViewById<TextView>(R.id.user_name).text = user.username
                 val follow = dialog.findViewById<Button>(R.id.follow)
                 if(isUser(user)) follow.visibility = View.GONE
-                if (!playersViewModel.isUserInFollowList(user)) follow.text = resources.getString(R.string.follow)
-                else follow.text = resources.getString(R.string.unfollow)
+
+                playersViewModel.fetchFriendList()
+                var friendList = playersViewModel.getFriendList().value
+                Log.d("here players fragment", "$friendList")
+
+//                playersViewModel.getFriendList().observe(viewLifecycleOwner, Observer {
+//                    if(it.contains(user)) follow.text = resources.getString(R.string.unfollow)
+//                    else follow.text = resources.getString(R.string.follow)
+//
+//                    friendList = it
+//                    Log.d("here players fragment", "$friendList")
+//
+//                })
+
                 follow.setOnClickListener {
-                    if (!playersViewModel.isUserInFollowList(user)) {
-                        playersViewModel.addUserFollowList(user)
-                        follow.text = resources.getString(R.string.unfollow)
-                    } else {
-                        playersViewModel.removeUserFollowList(user)
-                        follow.text = resources.getString(R.string.follow)
+                    Log.d("here players fragment 2", "$friendList")
+                    if (friendList != null) {
+                        if (!friendList.contains(user)) {
+                            playersViewModel.addFriend(user.id){
+                                if(it.isSuccess){
+                                    Toast.makeText(requireContext(),requireContext().resources.getString(R.string.success),
+                                        Toast.LENGTH_LONG).show()
+                                    follow.text = resources.getString(R.string.unfollow)
+                                }else if(!it.isSuccess){
+                                    Toast.makeText(requireContext(), requireContext().resources.getString(R.string.error),
+                                        Toast.LENGTH_LONG).show()
+                                    follow.text = resources.getString(R.string.follow)
+                                }
+                            }
+                        } else {
+                            playersViewModel.removeFriend(user.id){
+                                if(it.isSuccess){
+                                    Toast.makeText(requireContext(),requireContext().resources.getString(R.string.success),
+                                        Toast.LENGTH_LONG).show()
+                                    follow.text = resources.getString(R.string.follow)
+                                }else if(!it.isSuccess){
+                                    Toast.makeText(requireContext(), requireContext().resources.getString(R.string.error),
+                                        Toast.LENGTH_LONG).show()
+                                    follow.text = resources.getString(R.string.unfollow)
+                                }
+                            }
+                        }
                     }
                 }
+//                if (!playersViewModel.isUserInFollowList(user)) follow.text = resources.getString(R.string.follow)
+//                else follow.text = resources.getString(R.string.unfollow)
+
                 val invite = dialog.findViewById<Button>(R.id.invite)
 
                 if(playersViewModel.getGameSession().value?.id ==null){

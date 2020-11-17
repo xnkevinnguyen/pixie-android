@@ -3,7 +3,7 @@ package com.pixie.android.utilities
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
-import com.pixie.android.data.follow.FollowRepository
+import com.pixie.android.data.friend.FriendListRepository
 import com.pixie.android.data.game.GameInviteRepository
 import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.game.GameSessionRepository
@@ -83,16 +83,16 @@ object InjectorUtils {
 
     fun provideChannelViewModelFactory(): ChannelViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
-        val followRepository = FollowRepository.getInstance()
-        return ChannelViewModelFactory(chatRepository, followRepository)
+        val friendListRepository = FriendListRepository.getInstance()
+        return ChannelViewModelFactory(chatRepository, friendListRepository)
     }
 
     fun providePlayersViewModelFactory(): PlayersViewModelFactory {
         val chatRepository = ChatRepository.getInstance()
-        val followRepository = FollowRepository.getInstance()
+        val friendListRepository = FriendListRepository.getInstance()
         val gameInviteRepository = GameInviteRepository.getInstance()
         val gameSessionRepository = GameSessionRepository.getInstance()
-        return PlayersViewModelFactory(chatRepository, followRepository,gameInviteRepository,gameSessionRepository)
+        return PlayersViewModelFactory(chatRepository, friendListRepository,gameInviteRepository,gameSessionRepository)
     }
 
     fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{

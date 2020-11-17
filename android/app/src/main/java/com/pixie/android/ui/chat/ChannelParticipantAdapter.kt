@@ -25,6 +25,11 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     private var listOfParticipants = ArrayList<ChannelParticipant>()
     var filteredListOfParticipants = ArrayList<ChannelParticipant>()
 
+    val factory = InjectorUtils.providePlayersViewModelFactory()
+    val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
+
+    private val listOfFriends = playersViewModel.getFriendList()
+
     fun add(channelParticipant: ChannelParticipant) {
         if (channelParticipant.isOnline == true) {
             this.listOfParticipants.add(channelParticipant)
@@ -45,6 +50,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     fun set(participantList: ArrayList<ChannelParticipant>) {
         reset()
         participantList.sortByDescending { it.isOnline }
+        participantList.sortByDescending { listOfFriends.value?.contains(it) }
         listOfParticipants = participantList
         filteredListOfParticipants = participantList
         notifyDataSetChanged()
@@ -64,8 +70,8 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val factory = InjectorUtils.providePlayersViewModelFactory()
-        val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
+//        val factory = InjectorUtils.providePlayersViewModelFactory()
+//        val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
         val participant: ChannelParticipant = filteredListOfParticipants[position]
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val participantUserName = rowView.findViewById<TextView>(R.id.participant_username)
