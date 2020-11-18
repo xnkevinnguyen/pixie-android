@@ -30,19 +30,19 @@
                 android:layout_height="wrap_content"
                 android:textSize="25dp"
                 android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/user_games_played"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 games played"
-                android:textSize="15dp" />
+<!--            <TextView-->
+<!--                android:id="@+id/user_games_played"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="0 games played"-->
+<!--                android:textSize="15dp" />-->
 
-            <TextView
-                android:id="@+id/user_games_won"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 games won"
-                android:textSize="15dp" />
+<!--            <TextView-->
+<!--                android:id="@+id/user_games_won"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="0 games won"-->
+<!--                android:textSize="15dp" />-->
 
         </LinearLayout>
     </LinearLayout>

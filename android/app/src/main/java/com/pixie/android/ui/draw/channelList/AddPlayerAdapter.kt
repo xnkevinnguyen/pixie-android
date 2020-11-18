@@ -1,13 +1,12 @@
 package com.pixie.android.ui.draw.channelList
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -15,6 +14,7 @@ import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.InjectorUtils
+import kotlin.random.Random
 
 class AddPlayerAdapter(context: Context) : BaseAdapter() {
 
@@ -24,15 +24,20 @@ class AddPlayerAdapter(context: Context) : BaseAdapter() {
 
     private var listPlayersToAdd = ArrayList<ChannelParticipant>()
 
+    val factory = InjectorUtils.providePlayersViewModelFactory()
+    val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
+
     fun add(user: ChannelParticipant) {
         this.listPlayersToAdd.add(user)
         notifyDataSetChanged()
     }
 
-    fun set(newParticipantList:ArrayList<ChannelParticipant>?){
-        if(newParticipantList!=null) {
-            listPlayersToAdd= ArrayList(newParticipantList)
-        }
+    fun set(newParticipantList:ArrayList<ChannelParticipant>){
+        val listOfFriends = playersViewModel.getFriendList()
+        newParticipantList.sortByDescending { it.isOnline }
+        newParticipantList.sortByDescending { listOfFriends.value?.contains(it) }
+        listPlayersToAdd = ArrayList(newParticipantList)
+        //listPlayersToAdd= ArrayList(newParticipantList)
         notifyDataSetChanged()
     }
 
@@ -75,6 +80,29 @@ class AddPlayerAdapter(context: Context) : BaseAdapter() {
             }
 
         }
+
+        val onlineIconElement = rowView.findViewById<ImageView>(R.id.online_badge)
+        if (participant.isOnline == false) {
+            onlineIconElement.setColorFilter(Color.GRAY)
+        }
+        val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
+
+
+        avatarElement.setColorFilter(
+            Color.argb(
+                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
+                    256
+                )
+            )
+        )
+
+        avatarElement.backgroundTintList = ColorStateList.valueOf(
+            Color.argb(
+                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
+                    256
+                )
+            )
+        )
         return rowView
 
     }

@@ -1,6 +1,5 @@
 package com.pixie.android.model.game
 
-import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.GameState
 import com.pixie.android.type.GameStatus

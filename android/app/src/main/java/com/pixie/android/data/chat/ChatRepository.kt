@@ -49,6 +49,24 @@ class ChatRepository(
         return userChannels
     }
 
+    fun isUserInAGame(): Boolean{
+        userChannels.value?.forEach {
+            if(it.value.gameID !=  null){
+                return true
+            }
+        }
+        return false
+    }
+
+    fun getUserGameInfo(): ChannelData? {
+        userChannels.value?.forEach {
+            if(it.value.gameID !=  null){
+                return it.value
+            }
+        }
+        return null
+    }
+
 
     fun getJoinableChannels(): ArrayList<ChannelData> {
         var joinableChannels: ArrayList<ChannelData>
