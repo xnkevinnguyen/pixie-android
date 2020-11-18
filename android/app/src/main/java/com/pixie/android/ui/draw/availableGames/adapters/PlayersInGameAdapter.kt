@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import android.widget.Toast
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
 
@@ -49,6 +50,11 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val usernameParticipant = rowView.findViewById<TextView>(R.id.participant_username)
         usernameParticipant.text = participant.username
+        val removeVirtualElement = rowView.findViewById<TextView>(R.id.remove_virtual_player)
+
+        if(participant.isVirtual == false){
+            removeVirtualElement.visibility = View.GONE
+        }
         return rowView
     }
 }

@@ -41,14 +41,15 @@
     <string name="dropdown_1">Profile</string>
     <string name="dropdown_2">Déconnexion</string>
     <string name="search_player">Rechercher joueur</string>
-    <string name="follow">Suivre</string>
-    <string name="unfollow">Ne plus suivre</string>
+    <string name="follow">Ajouter Ami</string>
+    <string name="unfollow">Enlever Ami</string>
     <string name="invite">Inviter</string>
 
     <string name="user_info">Informations Usager</string>
     <string name="name">Nom: </string>
     <string name="surname">Prénom: </string>
     <string name="user_username">Nom utilisateur: </string>
+    <string name="show_list_friend">Montrer Liste Amis</string>
     <string name="game_play_info">Informations de jeu de usager</string>
     <string name="number_games">Nombre de parties jouées: </string>
     <string name="percentage_victory">Pourcentage de victoire: </string>

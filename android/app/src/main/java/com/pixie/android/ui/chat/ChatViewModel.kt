@@ -11,6 +11,7 @@ import com.pixie.android.data.game.GameRepository
 import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.data.sound.SoundRepository
 import com.pixie.android.model.RequestResult
+import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelMessageObject
 import com.pixie.android.model.game.AvailableGameData
 import com.pixie.android.model.game.GameInvitation
@@ -130,6 +131,15 @@ class ChatViewModel(
     }
     fun acceptInvitation(gameID: Double){
         val game= gameRepository.joinGame(gameID)
+
+        // remove user from old game if they accept invitation
+        if(isUserInAGame()){
+            val gameInfo = getUserGameData()
+            if(gameInfo != null) {
+                exitChannel(gameInfo.channelID)
+                gameInfo.gameID?.let { exitGame(it) }
+            }
+        }
         if(game!=null) {
             gameSessionRepository.subscribeToGameSessionChange(game.id)
             gameSessionRepository.setGameSession(game)
@@ -137,6 +147,14 @@ class ChatViewModel(
         }
 
 
+    }
+
+    fun isUserInAGame():Boolean{
+        return chatRepository.isUserInAGame()
+    }
+
+    private fun getUserGameData():ChannelData?{
+        return chatRepository.getUserGameInfo()
     }
 
 }

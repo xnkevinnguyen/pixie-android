@@ -24,8 +24,14 @@ class EverybodyRepository(private val dataSource: EverybodyDataSource,
         runBlocking {
             users = dataSource.getAllUsers(userRepository.getUser().userId)
         }
-        users.forEach {
-            if(it.id == userRepository.getUser().userId) users.remove(it)
+
+        var me: ChannelParticipant? = null
+        for (user in users){
+            if(user.id == userRepository.getUser().userId) me = user
+        }
+
+        if(me != null){
+            users.remove(me)
         }
         userList.postValue(users)
     }

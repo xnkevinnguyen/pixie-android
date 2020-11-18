@@ -86,6 +86,10 @@ class AvailableGamesFragment : Fragment() {
         )
         spinnerLanguage.adapter = adapterLang
 
+        if(chatViewModel.isUserInAGame()){
+            createBtn.isEnabled = false
+            createBtn.isClickable = false
+        }
         createBtn.setOnClickListener {
             // Forcing value in preferences to always be in English and not change because of the language change
             val inputValue = if(spinnerLanguage.selectedItem.toString() == requireContext().resources.getString(R.string.eng)) "English"

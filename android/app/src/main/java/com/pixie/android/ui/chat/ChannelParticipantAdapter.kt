@@ -29,9 +29,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     var filteredListOfParticipants = ArrayList<ChannelParticipant>()
 
     val factory = InjectorUtils.providePlayersViewModelFactory()
-    val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
-
-    //private val listOfFriends = playersViewModel.getFriendList()
+    private val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
 
     fun add(channelParticipant: ChannelParticipant) {
         if (channelParticipant.isOnline == true) {
