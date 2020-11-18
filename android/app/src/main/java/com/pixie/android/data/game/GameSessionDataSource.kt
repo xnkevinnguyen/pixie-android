@@ -3,7 +3,6 @@ package com.pixie.android.data.game
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.Log
-import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
@@ -16,6 +15,7 @@ import com.pixie.android.type.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
+import kotlin.random.Random
 
 class GameSessionDataSource {
     suspend fun startGame(gameID: Double, userID: Double): GameSessionData? {
@@ -27,7 +27,13 @@ class GameSessionDataSource {
             val data = response.data?.startGame
             if (data != null && data.gameInfo.players != null) {
                 val players = ArrayList(data.gameInfo.scores!!.map {
-                    GameParticipant(it.user.id, it.user.username, it.user.isOnline,it.value!!,it.user.isVirtual!! )
+                    GameParticipant(
+                        it.user.id,
+                        it.user.username,
+                        it.user.isOnline,
+                        it.value!!,
+                        it.user.isVirtual!!
+                    )
                 })
                 return GameSessionData(
                     data.id,
@@ -81,7 +87,13 @@ class GameSessionDataSource {
                 val data = it.data?.onGameSessionChange
                 if (data != null && data.gameInfo.players != null) {
                     val players = ArrayList(data.gameInfo.scores!!.map {
-                        GameParticipant(it.user.id, it.user.username, it.user.isOnline,it.value!!,it.user.isVirtual!! )
+                        GameParticipant(
+                            it.user.id,
+                            it.user.username,
+                            it.user.isOnline,
+                            it.value!!,
+                            it.user.isVirtual!!
+                        )
                     })
                     val gameSession = GameSessionData(
                         data.id,
@@ -103,19 +115,19 @@ class GameSessionDataSource {
     suspend fun subscribeToPathChange(
         gameSessionID: Double,
         userID: Double,
-        onPathChange: (id:Double,command:CanvasCommand) -> Unit
+        onPathBegin: (id: Double, command: CanvasCommand) -> Unit,
+        onPathUpdate: (id: Double, command: CanvasCommand) -> Unit
     ) {
 
-        apolloClient(userID).subscribe(OnPathChangeSubscription(gameSessionID)).toFlow()
+        apolloClient(userID).subscribe(OnVirtualPlayerDrawingSubscription(gameSessionID)).toFlow()
             .retryWhen { _, attempt ->
                 delay(attempt * 1000)
                 true
             }.collect {
-                val data = it.data?.onPathChange
+                val data = it.data?.onVirtualPlayerDrawing
                 if (data != null && data.points != null) {
-                    val dataPoints = data.points.trim().split(" ").map {
-                        val pointString = it.split(",")
-                        SinglePoint(pointString[0].toFloat(), pointString[1].toFloat())
+                    val dataPoints = data.points.map {
+                        SinglePoint(it.x.toFloat(), it.y.toFloat())
                     }
                     val pathList = arrayListOf<PathPoint>()
                     val length = dataPoints.size
@@ -130,28 +142,63 @@ class GameSessionDataSource {
                             pathList.add(point)
                         }
                     }
+                    Log.d("GameSessionDataSource", "subscribetoPahtchange")
+                    var colorStroke: Int? = null
+                    if (!data.strokeColor.isNullOrEmpty()) {
+                        colorStroke = Color.parseColor(data.strokeColor)
+                    }
+                    if (colorStroke == null) {
+                        colorStroke = Color.BLACK
+                    }
+                    Log.d("GameSessionDataSource", "subscribetoPahtchange2")
+
 
                     val paint = Paint().apply {
-                        color = Color.parseColor(data.primaryColor)
+                        color = colorStroke
                         style = Paint.Style.STROKE
                         strokeJoin = Paint.Join.ROUND
                         strokeCap = Paint.Cap.ROUND
-                        strokeWidth = data.strokeWidth!!.toFloat()
+                        if (data.strokeWidth != null)
+                            strokeWidth = data.strokeWidth.toFloat()
                     }
                     val command = CanvasCommand(CommandType.DRAW, paint, pathList)
-                    onPathChange(data.id,command)
+//                    if(data.isProtrace==true){
+//                        val paint = Paint().apply {
+//                            color = colorStroke
+//                            style = Paint.Style.STROKE
+//                            strokeJoin = Paint.Join.ROUND
+//                            strokeCap = Paint.Cap.ROUND
+//                            strokeWidth = 10f
+//                        }
+//                        data.points.forEach {
+//                            val commandPoint = CanvasCommand(CommandType.DRAW, paint, arrayListOf(PathPoint(it.x
+//                                .toFloat(),it.y.toFloat(),it.x.toFloat(),it.y.toFloat())))
+//                            onPathBegin(generateID(data.currentPathId),commandPoint)
+//
+//                        }
+//
+//                    }
+//                    else
+                        if (data.status == PathStatus.BEGIN)
+                        onPathBegin(data.currentPathId, command)
+                    else
+                        onPathUpdate(data.currentPathId, command)
+
                 }
 
             }
+    }
+    private fun generateID(pathID:Double):Double{
+        return pathID*100000+ Random.nextDouble()
     }
 
     suspend fun sendManualDraw(
         gameSessionID: Double,
         userID: Double,
         pathPointInput: ManualPathPointInput,
-        pathIDGenerator:Double
+        pathIDGenerator: Double
     ): Double? {
-        val pathUniqueID = 1000000*userID+gameSessionID*10000+pathIDGenerator
+        val pathUniqueID = 1000000 * userID + gameSessionID * 10000 + pathIDGenerator
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
             pathUniqueID,
@@ -161,12 +208,12 @@ class GameSessionDataSource {
             pathPointInput.pathStatus
         )
         try {
-            if(pathPointInput.pathStatus == PathStatus.END)
-                Log.d("ManualCommand - ",  "Send draw--"+pathUniqueID.toString())
+            if (pathPointInput.pathStatus == PathStatus.END)
+                Log.d("ManualCommand - ", "Send draw--" + pathUniqueID.toString())
             val response =
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data
-            if(data!=null){
+            if (data != null) {
                 return pathUniqueID
             }
         } catch (e: ApolloException) {
@@ -174,23 +221,25 @@ class GameSessionDataSource {
         }
         return null
     }
+
     suspend fun sendManualCommand(
         gameSessionID: Double,
         userID: Double,
-        commandType:CommandStatus,
-        pathID:Double?=null
+        commandType: CommandStatus,
+        pathID: Double? = null
 
-        ){
+    ) {
         val input = ManualCommandInput(
             pathID.toInput(),
             commandType.toInput(),
             gameSessionID.toInput()
         )
-        try{
-            val response = apolloClient(userID).mutate(ManualCommandMutation(input)).toDeferred().await()
-            Log.d("sendManualCommand",response.toString())
-        }catch(e:ApolloException){
-            Log.d("ApolloException",e.toString())
+        try {
+            val response =
+                apolloClient(userID).mutate(ManualCommandMutation(input)).toDeferred().await()
+            Log.d("sendManualCommand", response.toString())
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.toString())
         }
 
     }
@@ -209,10 +258,10 @@ class GameSessionDataSource {
             }.collect {
                 val data = it.data?.onManualPlayerDrawing
 //                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
-                if ( data?.commandStatus ==CommandStatus.NONE &&data?.point != null && data.strokeWidth != null ) {
+                if (data?.commandStatus == CommandStatus.NONE && data?.point != null && data.strokeWidth != null) {
                     // Handles adding a point
                     var colorStroke = data.strokeColor?.toInt()
-                    if (colorStroke ==null){
+                    if (colorStroke == null) {
                         colorStroke = Color.BLACK
                     }
                     val paint = Paint().apply {
@@ -230,7 +279,7 @@ class GameSessionDataSource {
                         paint = paint
 
 
-                        )
+                    )
                     onDraw(drawPoint)
                 } else if (data?.commandStatus == CommandStatus.REDO && data.commandPathId != null) {
                     val serverDrawHistoryCommand =
@@ -240,16 +289,22 @@ class GameSessionDataSource {
                     val serverDrawHistoryCommand =
                         ServerDrawHistoryCommand(data.commandPathId, CommandType.UNDO)
                     onServerDrawHistoryCommand(serverDrawHistoryCommand)
-                }else if(data?.commandStatus == CommandStatus.DELETE &&data.commandPathId!=null){
+                } else if (data?.commandStatus == CommandStatus.DELETE && data.commandPathId != null) {
                     val serverDrawHistoryCommand =
                         ServerDrawHistoryCommand(data.commandPathId, CommandType.ERASE)
                     onServerDrawHistoryCommand(serverDrawHistoryCommand)
 
                 }
-                if(data?.commandStatus == CommandStatus.NONE && data?.status == PathStatus.END)
-                    Log.d("ManualCommand - ",data?.commandStatus.toString() + "--"+data?.currentPathId.toString())
-                if(data?.commandStatus != CommandStatus.NONE)
-                    Log.d("ManualCommand - ",data?.commandStatus.toString() +"--"+data?.commandPathId.toString())
+                if (data?.commandStatus == CommandStatus.NONE && data?.status == PathStatus.END)
+                    Log.d(
+                        "ManualCommand - ",
+                        data?.commandStatus.toString() + "--" + data?.currentPathId.toString()
+                    )
+                if (data?.commandStatus != CommandStatus.NONE)
+                    Log.d(
+                        "ManualCommand - ",
+                        data?.commandStatus.toString() + "--" + data?.commandPathId.toString()
+                    )
             }
     }
 

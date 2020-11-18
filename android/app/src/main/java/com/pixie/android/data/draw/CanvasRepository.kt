@@ -41,6 +41,14 @@ class CanvasRepository {
         }
 
     }
+    fun appendCanvasCommand(id:Double,drawCommand: CanvasCommand){
+        if (drawCommandHistory.value != null && !drawCommand.path.isNullOrEmpty()) {
+
+            val currentCommand =drawCommandHistory.value?.get(id)
+            currentCommand?.path?.addAll(drawCommand.path.toList())
+            drawCommandHistory.notifyObserver()
+        }
+    }
 
     // Receiver Manual draw add a point
     fun addManualDrawPoint(point: ManualDrawingPoint) {
