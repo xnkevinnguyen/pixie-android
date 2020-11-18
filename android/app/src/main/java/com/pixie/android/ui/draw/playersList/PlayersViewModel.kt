@@ -35,7 +35,7 @@ class PlayersViewModel(
 
     fun getUserChannels() = chatRepository.getUserChannels()
 
-    fun addFriend(userId: Double, onResult: (RequestResult) -> Unit) = friendListRepository.addPlayer(userId, onResult)
+    fun addFriend(user: ChannelParticipant, onResult: (RequestResult) -> Unit) = friendListRepository.addFriend(user, onResult)
 
     fun removeFriend(userId: Double, onResult: (RequestResult) -> Unit) = friendListRepository.removeFriend(userId, onResult)
 

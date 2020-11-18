@@ -12,8 +12,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class FriendListRepository(private val dataSource: FriendListDataSource,
-                           private val userRepository: UserRepository) {
+class FriendListRepository(
+    private val dataSource: FriendListDataSource,
+    private val userRepository: UserRepository
+) {
 
     private var friendList =
         MutableLiveData<ArrayList<ChannelParticipant>>().apply {
@@ -21,19 +23,22 @@ class FriendListRepository(private val dataSource: FriendListDataSource,
         }
 
     fun getFriendList(): LiveData<ArrayList<ChannelParticipant>> {
-        fetchFriendList()
         return friendList
     }
 
-    fun addPlayer(friendId: Double, onResult: (RequestResult) -> Unit){
+    fun addFriend(friend: ChannelParticipant, onResult: (RequestResult) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val result = dataSource.addFriend(
-                friendId,
+                friend.id,
                 userRepository.getUser().userId
 
             )
             CoroutineScope(Dispatchers.Main).launch {
                 onResult(RequestResult(result))
+                if (result) {
+                    friendList.value?.add(friend)
+                    friendList.notifyObserver()
+                }
             }
 
         }
@@ -47,31 +52,26 @@ class FriendListRepository(private val dataSource: FriendListDataSource,
             )
             CoroutineScope(Dispatchers.Main).launch {
                 onResult(RequestResult(result))
+                val pastFriendList = friendList.value
+                if (!pastFriendList.isNullOrEmpty()) {
+                    val newFriendList = ArrayList(pastFriendList.filter { it.id != friendId })
+                    friendList.postValue(newFriendList)
+                }
             }
         }
     }
 
-//    fun fetchFriendList(){
-//        CoroutineScope(Dispatchers.IO).launch {
-//            dataSource.getFriendList(userRepository.getUser().userId, onReceiveMessage = {
-//                if (it != null) {
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        friendList.postValue(it)
-//                    }
-//                }
-//                else {
-//                    friendList.postValue(arrayListOf())
-//                }
-//            })
-//        }
-//    }
 
-    fun fetchFriendList(){
-        var friends: ArrayList<ChannelParticipant>
-        runBlocking {
-            friends = dataSource.getFriendList(userRepository.getUser().userId)
+    fun fetchFriendList() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val friends = dataSource.getFriendList(userRepository.getUser().userId)
+            CoroutineScope(Dispatchers.Main).launch {
+
+                friendList.postValue(friends)
+            }
         }
-        friendList.postValue(friends)
+
+
     }
 
     // Singleton

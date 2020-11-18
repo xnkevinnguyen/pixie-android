@@ -48,12 +48,19 @@ class PlayersFragment : Fragment() {
             val participantList = playersViewModel.getCurrentChannelParticipants(id)
             participantAdapter.set(participantList)
         })
+        playersViewModel.fetchFriendList()
 
         val userChannels= playersViewModel.getUserChannels()
         userChannels.observe(viewLifecycleOwner, Observer {
             val participantList = playersViewModel.getCurrentChannelParticipants()
             participantAdapter.set(participantList)
         })
+        // update list on new friend as well
+        playersViewModel.getFriendList().observe(viewLifecycleOwner, Observer {
+            val participantList = playersViewModel.getCurrentChannelParticipants()
+            participantAdapter.set(participantList)
+        })
+
 
         participantListElement.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -78,7 +85,7 @@ class PlayersFragment : Fragment() {
                     follow.setOnClickListener {
                         if (friendList != null) {
                             if (!friendList.contains(user)) {
-                                playersViewModel.addFriend(user.id) {
+                                playersViewModel.addFriend(user) {
                                     if (it.isSuccess) {
                                         Toast.makeText(
                                             requireContext(),
@@ -86,7 +93,6 @@ class PlayersFragment : Fragment() {
                                             Toast.LENGTH_LONG
                                         ).show()
                                         follow.text = resources.getString(R.string.unfollow)
-                                        playersViewModel.fetchFriendList()
                                     } else if (!it.isSuccess) {
                                         Toast.makeText(
                                             requireContext(),
@@ -94,7 +100,6 @@ class PlayersFragment : Fragment() {
                                             Toast.LENGTH_LONG
                                         ).show()
                                         follow.text = resources.getString(R.string.follow)
-                                        playersViewModel.fetchFriendList()
 
                                     }
                                 }
