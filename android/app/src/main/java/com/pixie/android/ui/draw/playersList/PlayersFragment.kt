@@ -86,6 +86,7 @@ class PlayersFragment : Fragment() {
                                             Toast.LENGTH_LONG
                                         ).show()
                                         follow.text = resources.getString(R.string.unfollow)
+                                        playersViewModel.fetchFriendList()
                                     } else if (!it.isSuccess) {
                                         Toast.makeText(
                                             requireContext(),
@@ -93,6 +94,8 @@ class PlayersFragment : Fragment() {
                                             Toast.LENGTH_LONG
                                         ).show()
                                         follow.text = resources.getString(R.string.follow)
+                                        playersViewModel.fetchFriendList()
+
                                     }
                                 }
                             } else {
