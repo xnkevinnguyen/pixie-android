@@ -24,6 +24,9 @@ class Constants {
         const val LANGUAGE_ENGLISH = "English"
         const val LANGUAGE_FRENCH = "French"
 
+        const val AVATAR_RING_COLOR_YELLOW = "#FFDF00"
+        const val AVATAR_RING_COLOR_SILVER = "#C0C0C0"
+
     }
 }
 
