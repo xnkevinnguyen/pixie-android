@@ -203,7 +203,7 @@ class GameSessionDataSource {
             gameSessionID,
             pathUniqueID,
             DataPoints(pathPointInput.x.toDouble(), pathPointInput.y.toDouble()),
-            pathPointInput.paint.color.toString().toInput(),
+            ("#"+Integer.toHexString(pathPointInput.paint.color).substring(2)).toInput(),
             pathPointInput.paint.strokeWidth.toDouble().toInput(),
             pathPointInput.pathStatus
         )
@@ -260,7 +260,10 @@ class GameSessionDataSource {
 //                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
                 if (data?.commandStatus == CommandStatus.NONE && data?.point != null && data.strokeWidth != null) {
                     // Handles adding a point
-                    var colorStroke = data.strokeColor?.toInt()
+                    var colorStroke: Int? = null
+                    if (!data.strokeColor.isNullOrEmpty()) {
+                        colorStroke = Color.parseColor(data.strokeColor)
+                    }
                     if (colorStroke == null) {
                         colorStroke = Color.BLACK
                     }
@@ -280,7 +283,8 @@ class GameSessionDataSource {
 
 
                     )
-                    onDraw(drawPoint)
+                    if(drawPoint.x>=0 && drawPoint.y>=0)
+                        onDraw(drawPoint)
                 } else if (data?.commandStatus == CommandStatus.REDO && data.commandPathId != null) {
                     val serverDrawHistoryCommand =
                         ServerDrawHistoryCommand(data.commandPathId, CommandType.REDO)

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -52,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         val langValue = "French"
         languageAc = if(lang == langValue) "fr"
         else "en"
+        Log.d("MainActivity","Load language")
+
         super.attachBaseContext(MyContextWrapper(newBase).wrap(newBase, languageAc))
     }
 
@@ -68,6 +71,7 @@ class MainActivity : AppCompatActivity() {
 
         val locale = Locale(languageAc)
         overrideConfiguration.setLocale(locale)
+        Log.d("MainActivity","Load language")
         super.applyOverrideConfiguration(overrideConfiguration)
     }
 
@@ -79,8 +83,8 @@ class MainActivity : AppCompatActivity() {
         val theme = preferencesSettings.getString(Constants.THEME, "Dark")
         if (theme == "Dark") setTheme(R.style.AppTheme_NoActionBar)
         else if(theme == "Light") setTheme(R.style.AppLightTheme_NoActionBar)
-        else if (theme == "Pink-Brown") setTheme(R.style.AppPinkTheme_NoActionBar)
-        else if(theme == "Green-Grey") setTheme(R.style.AppGreenTheme_NoActionBar)
+        else if (theme == resources.getString(R.string.pink)) setTheme(R.style.AppPinkTheme_NoActionBar)
+        else if(theme == "Christmas") setTheme(R.style.AppGreenTheme_NoActionBar)
         else setTheme(R.style.AppBlueTheme_NoActionBar)
 
         super.onCreate(savedInstanceState)

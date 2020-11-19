@@ -1,10 +1,10 @@
 subscription OnVirtualPlayerDrawing($gameSessionID:Float!){
-    onVirtualPlayerDrawing(gameSeesionId:$gameSessionID){
+    onVirtualPlayerDrawing(gameSessionId:$gameSessionID){
         currentPathId,
         strokeColor,
         strokeWidth,
         opacity,
-        isProtrace,
+        isPotrace,
         points{
             x,
             y

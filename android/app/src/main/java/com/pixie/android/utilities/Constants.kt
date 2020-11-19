@@ -21,6 +21,8 @@ class Constants {
 
 
         const val MAIN_CHANNEL_ID = 1.0
+        const val LANGUAGE_ENGLISH = "English"
+        const val LANGUAGE_FRENCH = "French"
 
     }
 }
