@@ -9,6 +9,7 @@ import android.view.View
 import com.pixie.android.R
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
+import com.pixie.android.model.draw.PotraceCommand
 import com.pixie.android.type.PathStatus
 
 
@@ -84,6 +85,34 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
                     }
                     canvas?.drawPath(pathToDraw, it.paint)
+                }
+            }
+            invalidate()
+        }else{
+            Log.d("CanvasError","Canvas is null")
+        }
+    }
+
+    fun drawFromCommandListPotrace(canvasCommandList: List<CanvasCommand>){
+        if(canvas !=null) {
+            canvas?.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
+            canvasCommandList.forEach {command->
+                if (command.paint != null && !command.potracePoints.isNullOrEmpty()) {
+
+                    val pathToDraw = Path()
+
+                    command.potracePoints.forEach {
+                        val secondaryCoordinates = it.secondaryCoordinates
+                        if(it.command.equals(PotraceCommand.M)){
+                            pathToDraw.moveTo(it.primaryCoordinates.x,it.primaryCoordinates.y)
+                        }else if(it.command.equals(PotraceCommand.C) && secondaryCoordinates !=null){
+
+                            pathToDraw.cubicTo(secondaryCoordinates.x1,secondaryCoordinates.y1,secondaryCoordinates.x2,
+                            secondaryCoordinates.y2,it.primaryCoordinates.x,it.primaryCoordinates.y)
+                        }
+
+                    }
+                    canvas?.drawPath(pathToDraw, command.paint)
                 }
             }
             invalidate()

@@ -49,6 +49,8 @@ class CanvasFragment : Fragment() {
             val filteredCommand = it.filter { it.value.type == CommandType.DRAW }
             my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
 
+            val filteredPotraceComand = it.filter{it.value.type.equals(CommandType.DRAW_POTRACE)}
+            my_canvas.drawFromCommandListPotrace(ArrayList(filteredPotraceComand.values))
 
         })
 

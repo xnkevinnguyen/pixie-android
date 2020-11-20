@@ -256,7 +256,7 @@ class GameSessionRepository(
 //        else if (mode == GameMode.COOP || mode == GameMode.SOLO) {
         // Handle Solo-Coop drawing
         val job = CoroutineScope(Dispatchers.IO).launch {
-            dataSource.subscribeToPathChange(
+            dataSource.subscribeToVirtualPlayerDrawing(
                 gameID,
                 userRepository.getUser().userId, onPathBegin = { id, command ->
                     CoroutineScope(Dispatchers.Main).launch {

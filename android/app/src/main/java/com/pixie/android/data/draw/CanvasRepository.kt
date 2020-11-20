@@ -47,6 +47,17 @@ class CanvasRepository {
             val currentCommand =drawCommandHistory.value?.get(id)
             currentCommand?.path?.addAll(drawCommand.path.toList())
             drawCommandHistory.notifyObserver()
+        }else if(drawCommandHistory.value != null && !drawCommand.potracePoints.isNullOrEmpty()){
+            val currentCommand = drawCommandHistory.value?.get(id)
+            if(currentCommand == null){
+                drawCommandHistory.value?.put(id, drawCommand)
+            }else {
+                currentCommand?.potracePoints?.addAll(drawCommand.potracePoints.toList())
+            }
+            drawCommandHistory.notifyObserver()
+
+        }else{
+            addCanvasCommand(id,drawCommand)
         }
     }
 
