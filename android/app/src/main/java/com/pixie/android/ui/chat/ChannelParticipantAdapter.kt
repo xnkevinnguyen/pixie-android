@@ -52,9 +52,9 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
 
     fun set(participantList: ArrayList<ChannelParticipant>) {
         reset()
-        val listOfFriends = playersViewModel.getFriendList()
+        val listOfFriends = playersViewModel.getFriendList().value
         participantList.sortByDescending { it.isOnline }
-        participantList.sortByDescending { listOfFriends.value?.contains(it) }
+        participantList.sortByDescending { listOfFriends?.contains(it) }
         listOfParticipants = participantList
         filteredListOfParticipants = participantList
         notifyDataSetChanged()

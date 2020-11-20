@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
         val loading = view.findViewById<ProgressBar>(R.id.loading)
         val errorMessageField = view.findViewById<TextView>(R.id.error_login)
         preferences = requireContext().getSharedPreferences(
-            Constants.SHARED_PREFERENCES_SETTING,
+            Constants.SHARED_PREFERENCES_LOGIN,
             Context.MODE_PRIVATE
         )
         editor = preferences.edit()
@@ -105,26 +105,28 @@ class LoginFragment : Fragment() {
                 )
             }
 
-
+        val preferencesSetting =    context.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val editorSetting = preferencesSetting.edit()
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString()) {
                     loading.visibility = View.INVISIBLE
                     if (it.success != null && activity != null) {
+
                         if(it.success.language!=null){
                             if(it.success.language.equals(Language.ENGLISH)){
-                                editor.putString(Constants.LANGUAGE, LANGUAGE_ENGLISH)
+                                editorSetting.putString(Constants.LANGUAGE, LANGUAGE_ENGLISH)
 
                             }else{
-                                editor.putString(Constants.LANGUAGE, LANGUAGE_FRENCH)
+                                editorSetting.putString(Constants.LANGUAGE, LANGUAGE_FRENCH)
 
                             }
                         }
                         if(it.success.theme !=null){
-                            editor.putString(Constants.THEME, it.success.theme)
+                            editorSetting.putString(Constants.THEME, it.success.theme)
 
                         }
-                        editor.apply()
+                        editorSetting.apply()
                         Log.d("LoginFragment","Set User Language")
                         val intent = Intent(view?.context, MainActivity::class.java)
 
