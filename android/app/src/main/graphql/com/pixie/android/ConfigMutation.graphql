@@ -1,0 +1,5 @@
+mutation setConfig($input:UserConfigInput!){
+    setConfig(input:$input)
+
+
+}

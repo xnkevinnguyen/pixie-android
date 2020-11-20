@@ -6,6 +6,8 @@ mutation login ($user:LoginInput!){
             username
             createdAt
             isOnline
+            language
+            theme
         }
         error
     }

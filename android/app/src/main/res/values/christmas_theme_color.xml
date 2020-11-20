@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorGreenPrimary">#013220</color>
+    <color name="colorGreenSecondary">#013220</color>
+    <color name="colorGreenTertiary">#bb2528</color>
+    <color name="colorGreenFourth">#84E084</color>
+    <color name="colorGreenFifth">#fcf3f6</color>
+</resources>
