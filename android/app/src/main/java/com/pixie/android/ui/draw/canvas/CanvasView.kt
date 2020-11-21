@@ -77,7 +77,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         if(canvas !=null) {
             canvas?.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
             canvasCommandList.forEach {
-                if (it.paint != null && it.path != null) {
+                if (it.paint != null && !it.path.isNullOrEmpty()) {
                     val pathToDraw = Path()
                     pathToDraw.moveTo(it.path.first().x1, it.path.first().y1)
                     it.path.forEach {

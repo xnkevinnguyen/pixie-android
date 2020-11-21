@@ -41,22 +41,38 @@ class CanvasRepository {
         }
 
     }
+    // used only for virtual player drawing
     fun appendCanvasCommand(id:Double,drawCommand: CanvasCommand){
         if (drawCommandHistory.value != null && !drawCommand.path.isNullOrEmpty()) {
 
-            val currentCommand =drawCommandHistory.value?.get(id)
-            currentCommand?.path?.addAll(drawCommand.path.toList())
+            val currentCommand = drawCommandHistory.value?.get(id)
+
+            var insertionPoint =1
+            currentCommand?.path?.forEachIndexed {index, point->
+                val orderID=drawCommand.path[0].orderID
+                if(orderID !=null && point.orderID!=null&& point.orderID<orderID){
+                    insertionPoint = index+1
+                }
+            }
+
+            currentCommand?.path?.addAll(insertionPoint,drawCommand.path.toList())
             drawCommandHistory.notifyObserver()
         }else if(drawCommandHistory.value != null && !drawCommand.potracePoints.isNullOrEmpty()){
             val currentCommand = drawCommandHistory.value?.get(id)
             if(currentCommand == null){
                 drawCommandHistory.value?.put(id, drawCommand)
             }else {
-                currentCommand?.potracePoints?.addAll(drawCommand.potracePoints.toList())
+                var insertionPoint =1
+                currentCommand.potracePoints?.forEachIndexed {index, point->
+                    if(point.orderID<drawCommand.potracePoints[0].orderID){
+                        insertionPoint = index+1
+                    }
+                }
+                currentCommand.potracePoints?.addAll(insertionPoint,drawCommand.potracePoints.toList())
             }
             drawCommandHistory.notifyObserver()
 
-        }else{
+        }else if(drawCommandHistory.value.isNullOrEmpty()){
             addCanvasCommand(id,drawCommand)
         }
     }

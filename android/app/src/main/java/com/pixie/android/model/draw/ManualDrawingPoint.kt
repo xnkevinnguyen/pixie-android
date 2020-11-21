@@ -6,6 +6,7 @@ import com.pixie.android.type.PathStatus
 
 data class ManualDrawingPoint (
     val pathID:Double,
+    val orderID:Double,
     val x:Float = 0f,
     val y :Float = 0f,
     val status: PathStatus,

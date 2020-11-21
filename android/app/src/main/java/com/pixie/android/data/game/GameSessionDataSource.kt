@@ -147,7 +147,7 @@ class GameSessionDataSource {
     ) {
         if (data.potracePoints != null) {
             val potraceDataPoints = ArrayList(data.potracePoints.map {
-                val singlePoint = SinglePoint(it.x.toFloat(), it.y.toFloat())
+                val singlePoint = SinglePoint(it.x.toFloat(), it.y.toFloat(),it.order.toDouble())
                 var command: PotraceCommand = PotraceCommand.M
                 if (it.code.equals(PotraceCommand.M.toString())) {
                     command = PotraceCommand.M
@@ -155,7 +155,7 @@ class GameSessionDataSource {
                     command = PotraceCommand.C
                 }
                 val potraceDataPoint = PotraceDataPoint(
-                    command, singlePoint, xAxisRotation = it.xAxisRotation,
+                    it.order.toDouble(), command, singlePoint, xAxisRotation = it.xAxisRotation,
                     largeArc = it.largeArc, sweep = it.sweep
                 )
                 if (it.x1 != null && it.x2 != null && it.y1 != null && it.y2 != null) {
@@ -202,7 +202,7 @@ class GameSessionDataSource {
     ) {
         if (data.points != null) {
             val dataPoints = data.points.map {
-                SinglePoint(it.x.toFloat(), it.y.toFloat())
+                SinglePoint(it.x.toFloat(), it.y.toFloat(),it.order)
             }
             val pathList = arrayListOf<PathPoint>()
             val length = dataPoints.size
@@ -212,7 +212,8 @@ class GameSessionDataSource {
                         dataPoints[i].x,
                         dataPoints[i].y,
                         dataPoints[i + 1].x,
-                        dataPoints[i + 1].y
+                        dataPoints[i + 1].y,
+                        dataPoints[i].orderID
                     )
                     pathList.add(point)
                 }
@@ -249,13 +250,14 @@ class GameSessionDataSource {
         gameSessionID: Double,
         userID: Double,
         pathPointInput: ManualPathPointInput,
-        pathIDGenerator: Double
+        pathIDGenerator: Double,
+        pathOrderGenerator:Double
     ): Double? {
         val pathUniqueID = 1000000 * userID + gameSessionID * 10000 + pathIDGenerator
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
             pathUniqueID,
-            DataPoints(pathPointInput.x.toDouble(), pathPointInput.y.toDouble()),
+            DataPoints(pathPointInput.x.toDouble(), pathPointInput.y.toDouble(),pathOrderGenerator),
             ("#" + Integer.toHexString(pathPointInput.paint.color).substring(2)).toInput(),
             pathPointInput.paint.strokeWidth.toDouble().toInput(),
             pathPointInput.pathStatus
@@ -329,6 +331,7 @@ class GameSessionDataSource {
                     }
                     val drawPoint = ManualDrawingPoint(
                         data.currentPathId,
+                        data.point.order,
                         data.point.x.toFloat(),
                         data.point.y.toFloat(),
                         status = data.status,

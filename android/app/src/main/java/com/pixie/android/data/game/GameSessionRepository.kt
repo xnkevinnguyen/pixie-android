@@ -34,6 +34,7 @@ class GameSessionRepository(
     private var pathSubscription: Job? = null
     private var manualPathSubscription: Job? = null
     private var pathIDGenerator = 0.0
+    private var pathOrderGenerator = 0.0
     private var isCanvasLocked = MutableLiveData<Boolean>()
 
 
@@ -188,10 +189,15 @@ class GameSessionRepository(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
-                    pathIDGenerator
+                    pathIDGenerator,
+                    pathOrderGenerator
                 )
+                CoroutineScope(Dispatchers.Main).launch {
+                    pathOrderGenerator += 1;
 
-            }
+                }
+
+                }
 
         }
     }
@@ -208,12 +214,14 @@ class GameSessionRepository(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
-                    pathIDGenerator
+                    pathIDGenerator,
+                    pathOrderGenerator
                 )
                 if (pathID != null) {
                     CoroutineScope(Dispatchers.Main).launch {
                         onResult(pathID)
                         pathIDGenerator += 1
+                        pathOrderGenerator = 0.0
                     }
 
                 }
