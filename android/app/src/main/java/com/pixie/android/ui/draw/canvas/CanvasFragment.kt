@@ -47,10 +47,15 @@ class CanvasFragment : Fragment() {
         viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
             // should only draw DRAW commands and remove ERASE commands
             val filteredCommand = it.filter { it.value.type == CommandType.DRAW }
-            my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
 
             val filteredPotraceComand = it.filter{it.value.type.equals(CommandType.DRAW_POTRACE)}
-            my_canvas.drawFromCommandListPotrace(ArrayList(filteredPotraceComand.values))
+            if(filteredCommand.values.isEmpty()){
+                my_canvas.drawFromCommandListPotrace(ArrayList(filteredPotraceComand.values))
+
+            }else{
+                my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
+
+            }
 
         })
 
