@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +20,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUserView
+import com.pixie.android.type.Language
 import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.Constants
+import com.pixie.android.utilities.Constants.Companion.LANGUAGE_ENGLISH
+import com.pixie.android.utilities.Constants.Companion.LANGUAGE_FRENCH
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.login_fragment.*
 
@@ -65,7 +69,7 @@ class LoginFragment : Fragment() {
         val loading = view.findViewById<ProgressBar>(R.id.loading)
         val errorMessageField = view.findViewById<TextView>(R.id.error_login)
         preferences = requireContext().getSharedPreferences(
-            Constants.SHARED_PREFERENCES_LOGIN,
+            Constants.SHARED_PREFERENCES_SETTING,
             Context.MODE_PRIVATE
         )
         editor = preferences.edit()
@@ -107,6 +111,21 @@ class LoginFragment : Fragment() {
                 loginViewModel.login(username.text.toString(), password.text.toString()) {
                     loading.visibility = View.INVISIBLE
                     if (it.success != null && activity != null) {
+                        if(it.success.language!=null){
+                            if(it.success.language.equals(Language.ENGLISH)){
+                                editor.putString(Constants.LANGUAGE, LANGUAGE_ENGLISH)
+
+                            }else{
+                                editor.putString(Constants.LANGUAGE, LANGUAGE_FRENCH)
+
+                            }
+                        }
+                        if(it.success.theme !=null){
+                            editor.putString(Constants.THEME, it.success.theme)
+
+                        }
+                        editor.apply()
+                        Log.d("LoginFragment","Set User Language")
                         val intent = Intent(view?.context, MainActivity::class.java)
 
                         // Store for next time user opens application

@@ -3,7 +3,7 @@ package com.pixie.android.ui.draw.channelList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.chat.ChatRepository
-import com.pixie.android.data.follow.FollowRepository
+import com.pixie.android.data.friend.FriendListRepository
 import com.pixie.android.data.game.GameInviteRepository
 import com.pixie.android.data.game.GameSessionRepository
 import com.pixie.android.model.RequestResult
@@ -12,7 +12,7 @@ import com.pixie.android.model.game.GameSessionData
 
 class PlayersViewModel(
     private val chatRepository: ChatRepository,
-    private val followRepository: FollowRepository,
+    private val friendListRepository: FriendListRepository,
     private val gameInviteRepository: GameInviteRepository,
     private val gameSessionRepository: GameSessionRepository
 ) : ViewModel() {
@@ -35,12 +35,19 @@ class PlayersViewModel(
 
     fun getUserChannels() = chatRepository.getUserChannels()
 
-    fun addUserFollowList(user: ChannelParticipant) = followRepository.addUserFollowList(user)
+    fun addFriend(user: ChannelParticipant, onResult: (RequestResult) -> Unit) = friendListRepository.addFriend(user, onResult)
 
-    fun removeUserFollowList(user: ChannelParticipant) = followRepository.removeUserFollowList(user)
+    fun removeFriend(userId: Double, onResult: (RequestResult) -> Unit) = friendListRepository.removeFriend(userId, onResult)
 
-    fun isUserInFollowList(user: ChannelParticipant): Boolean =
-        followRepository.isUserInFollowList(user)
+//    fun isUserInFollowList(user: ChannelParticipant): Boolean =
+//        friendListRepository.isUserInFollowList(user)
+
+    fun fetchFriendList(){
+        friendListRepository.fetchFriendList()
+    }
+    fun getFriendList(): LiveData<ArrayList<ChannelParticipant>>{
+        return friendListRepository.getFriendList()
+    }
 
     fun getGameSession(): LiveData<GameSessionData> {
         return gameSessionRepository.getGameSession()

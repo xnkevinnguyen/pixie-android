@@ -4,16 +4,21 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.draw.channelList.PlayersViewModel
+import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
+import kotlin.coroutines.coroutineContext
 import kotlin.random.Random
 
 
@@ -24,6 +29,9 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
 
     private var listOfParticipants = ArrayList<ChannelParticipant>()
     var filteredListOfParticipants = ArrayList<ChannelParticipant>()
+
+    val factory = InjectorUtils.providePlayersViewModelFactory()
+    private val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
 
     fun add(channelParticipant: ChannelParticipant) {
         if (channelParticipant.isOnline == true) {
@@ -44,7 +52,9 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
 
     fun set(participantList: ArrayList<ChannelParticipant>) {
         reset()
+        val listOfFriends = playersViewModel.getFriendList()
         participantList.sortByDescending { it.isOnline }
+        participantList.sortByDescending { listOfFriends.value?.contains(it) }
         listOfParticipants = participantList
         filteredListOfParticipants = participantList
         notifyDataSetChanged()
@@ -64,8 +74,6 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val factory = InjectorUtils.providePlayersViewModelFactory()
-        val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
         val participant: ChannelParticipant = filteredListOfParticipants[position]
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val participantUserName = rowView.findViewById<TextView>(R.id.participant_username)
@@ -113,6 +121,14 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
                 )
             )
         )
+
+        val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
+        if(playersViewModel.getFriendList().value?.contains(participant)==true){
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
+        }else{
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
+
+        }
         return rowView
 
     }

@@ -1,0 +1,12 @@
+query getFriendList{
+    me{
+        id,
+        friends{
+            id,
+            username,
+            avatar,
+            isOnline,
+            isVirtual
+        }
+    }
+}

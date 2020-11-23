@@ -21,6 +21,11 @@ class Constants {
 
 
         const val MAIN_CHANNEL_ID = 1.0
+        const val LANGUAGE_ENGLISH = "English"
+        const val LANGUAGE_FRENCH = "French"
+
+        const val AVATAR_RING_COLOR_YELLOW = "#FFDF00"
+        const val AVATAR_RING_COLOR_SILVER = "#C0C0C0"
 
     }
 }
