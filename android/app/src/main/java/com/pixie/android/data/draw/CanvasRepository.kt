@@ -41,12 +41,27 @@ class CanvasRepository {
         }
 
     }
-    fun appendCanvasCommand(id:Double,drawCommand: CanvasCommand){
-        if (drawCommandHistory.value != null && !drawCommand.path.isNullOrEmpty()) {
 
-            val currentCommand =drawCommandHistory.value?.get(id)
-            currentCommand?.path?.addAll(drawCommand.path.toList())
+    // used only for virtual player drawing
+    fun appendCanvasCommand(id: Double, drawCommand: CanvasCommand) {
+        val currentCommand = drawCommandHistory.value?.get(id)
+
+        if (drawCommandHistory.value != null && !drawCommand.pathDataPoints.isNullOrEmpty() && currentCommand != null) {
+
+            currentCommand?.pathDataPoints?.addAll(drawCommand.pathDataPoints.toList())
+            currentCommand.potracePoints?.sortBy { it.orderID }
+
             drawCommandHistory.notifyObserver()
+        } else if (drawCommandHistory.value != null && !drawCommand.potracePoints.isNullOrEmpty() && currentCommand != null) {
+
+            currentCommand.potracePoints?.addAll(drawCommand.potracePoints.toList())
+            currentCommand.potracePoints?.sortBy { it.orderID }
+
+
+            drawCommandHistory.notifyObserver()
+
+        } else if (drawCommandHistory.value.isNullOrEmpty()) {
+            addCanvasCommand(id, drawCommand)
         }
     }
 
@@ -61,8 +76,8 @@ class CanvasRepository {
 
     //add new point
     fun addNewManualDrawPoint(point: ManualDrawingPoint) {
-        val firstPathPoint = PathPoint(point.x, point.y, point.x, point.y)
-        val command = CanvasCommand(CommandType.DRAW, point.paint, arrayListOf(firstPathPoint))
+        val firstPathDataPoint = SinglePoint(point.x, point.y,point.orderID)
+        val command = CanvasCommand(CommandType.DRAW, point.paint, arrayListOf(firstPathDataPoint))
         addCanvasCommand(point.pathID, command)
         previousID = point.pathID
 
@@ -72,12 +87,14 @@ class CanvasRepository {
     fun updateCommand(point: ManualDrawingPoint) {
         val currentCommand = drawCommandHistory.value?.get(point.pathID)
 
-        if (currentCommand != null && currentCommand.path?.last() != null && point.pathID == previousID) {
-            val pathPoint = PathPoint(
-                currentCommand.path.last().x2, currentCommand.path.last().y2,
-                point.x, point.y
+        if (currentCommand != null && currentCommand.pathDataPoints?.last() != null && point.pathID == previousID) {
+            val pathDataPoint = SinglePoint(
+                point.x, point.y,point.orderID
             )
-            currentCommand.path.add(pathPoint)
+            currentCommand.pathDataPoints.add(pathDataPoint)
+            currentCommand.pathDataPoints.sortBy {
+                it.orderID
+            }
             drawCommandHistory.notifyObserver()
 
         } else {
@@ -91,8 +108,7 @@ class CanvasRepository {
         CoroutineScope(Dispatchers.Main).launch {
             if (serverCommand.commandType == CommandType.ERASE) {
                 drawCommandHistory.value?.get(serverCommand.commandPathID)?.type = CommandType.ERASE
-            }
-            else if (serverCommand.commandType == CommandType.REDO || serverCommand.commandType == CommandType.UNDO) {
+            } else if (serverCommand.commandType == CommandType.REDO || serverCommand.commandType == CommandType.UNDO) {
                 if (drawCommandHistory.value?.get(serverCommand.commandPathID)?.type == CommandType.DRAW) {
                     drawCommandHistory.value?.get(serverCommand.commandPathID)?.type =
                         serverCommand.commandType
@@ -119,7 +135,7 @@ class CanvasRepository {
     }
 
     // Function to make sure observer is notified when a data structure is modified
-    // https://stackoverflow.com/questions/47941537/notify-observer-when-item-is-added-to-list-of-livedata
+// https://stackoverflow.com/questions/47941537/notify-observer-when-item-is-added-to-list-of-livedata
     fun <T> MutableLiveData<T>.notifyObserver() {
         this.value = this.value
     }

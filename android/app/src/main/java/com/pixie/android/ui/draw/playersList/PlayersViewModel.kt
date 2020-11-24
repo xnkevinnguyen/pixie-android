@@ -6,15 +6,18 @@ import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.friend.FriendListRepository
 import com.pixie.android.data.game.GameInviteRepository
 import com.pixie.android.data.game.GameSessionRepository
+import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.game.GameSessionData
+import com.pixie.android.model.user.LoggedInUser
 
 class PlayersViewModel(
     private val chatRepository: ChatRepository,
     private val friendListRepository: FriendListRepository,
     private val gameInviteRepository: GameInviteRepository,
-    private val gameSessionRepository: GameSessionRepository
+    private val gameSessionRepository: GameSessionRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     fun getCurrentChannelID(): LiveData<Double> = chatRepository.getCurrentChannelID()
 
@@ -26,6 +29,7 @@ class PlayersViewModel(
         }
         return arrayListOf()
     }
+    fun getUser():LoggedInUser? = userRepository.getUserSafe()
 
     fun getCurrentChannelParticipants(): ArrayList<ChannelParticipant> {
         val currentChannelID = chatRepository.getCurrentChannelID().value

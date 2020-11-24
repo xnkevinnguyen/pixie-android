@@ -1,8 +1,14 @@
 package com.pixie.android.data.game
 
 import android.graphics.Color
+import android.graphics.Color.argb
+import android.graphics.Color.valueOf
 import android.graphics.Paint
 import android.util.Log
+import androidx.core.graphics.alpha
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
@@ -112,7 +118,7 @@ class GameSessionDataSource {
             }
     }
 
-    suspend fun subscribeToPathChange(
+    suspend fun subscribeToVirtualPlayerDrawing(
         gameSessionID: Double,
         userID: Double,
         onPathBegin: (id: Double, command: CanvasCommand) -> Unit,
@@ -124,92 +130,135 @@ class GameSessionDataSource {
                 delay(attempt * 1000)
                 true
             }.collect {
-                val data = it.data?.onVirtualPlayerDrawing
-                if (data != null && data.points != null) {
-                    val dataPoints = data.points.map {
-                        SinglePoint(it.x.toFloat(), it.y.toFloat())
+                val data: OnVirtualPlayerDrawingSubscription.OnVirtualPlayerDrawing? =
+                    it.data?.onVirtualPlayerDrawing
+                if (data != null) {
+                    if (data.isPotrace == true) {
+                        handlePotraceDrawing(data, onPathBegin, onPathUpdate)
+                    } else {
+                        handleRegularVirtualDrawing(data, onPathBegin, onPathUpdate)
                     }
-                    val pathList = arrayListOf<PathPoint>()
-                    val length = dataPoints.size
-                    for (i in 0..length) {
-                        if (i + 1 < length) {
-                            val point = PathPoint(
-                                dataPoints[i].x,
-                                dataPoints[i].y,
-                                dataPoints[i + 1].x,
-                                dataPoints[i + 1].y
-                            )
-                            pathList.add(point)
-                        }
-                    }
-                    Log.d("GameSessionDataSource", "subscribetoPahtchange")
-                    var colorStroke: Int? = null
-                    if (!data.strokeColor.isNullOrEmpty()) {
-                        colorStroke = Color.parseColor(data.strokeColor)
-                    }
-                    if (colorStroke == null) {
-                        colorStroke = Color.BLACK
-                    }
-                    Log.d("GameSessionDataSource", "subscribetoPahtchange2")
 
-
-                    val paint = Paint().apply {
-                        color = colorStroke
-                        style = Paint.Style.STROKE
-                        strokeJoin = Paint.Join.ROUND
-                        strokeCap = Paint.Cap.ROUND
-                        if (data.strokeWidth != null)
-                            strokeWidth = data.strokeWidth.toFloat()
-                    }
-                    val command = CanvasCommand(CommandType.DRAW, paint, pathList)
-//                    if(data.isProtrace==true){
-//                        val paint = Paint().apply {
-//                            color = colorStroke
-//                            style = Paint.Style.STROKE
-//                            strokeJoin = Paint.Join.ROUND
-//                            strokeCap = Paint.Cap.ROUND
-//                            strokeWidth = 10f
-//                        }
-//                        data.points.forEach {
-//                            val commandPoint = CanvasCommand(CommandType.DRAW, paint, arrayListOf(PathPoint(it.x
-//                                .toFloat(),it.y.toFloat(),it.x.toFloat(),it.y.toFloat())))
-//                            onPathBegin(generateID(data.currentPathId),commandPoint)
-//
-//                        }
-//
-//                    }
-//                    else
-                        if (data.status == PathStatus.BEGIN)
-                        onPathBegin(data.currentPathId, command)
-                    else
-                        onPathUpdate(data.currentPathId, command)
-
+                } else {
+                    Log.d("OnVirtualPlayerDrawing", "Data is null")
                 }
 
             }
     }
-    private fun generateID(pathID:Double):Double{
-        return pathID*100000+ Random.nextDouble()
+
+    private fun handlePotraceDrawing(
+        data: OnVirtualPlayerDrawingSubscription.OnVirtualPlayerDrawing,
+        onPathBegin: (id: Double, command: CanvasCommand) -> Unit,
+        onPathUpdate: (id: Double, command: CanvasCommand) -> Unit
+    ) {
+        if (data.potracePoints != null) {
+            val potraceDataPoints = ArrayList(data.potracePoints.map {
+                val singlePoint = SinglePoint(it.x.toFloat(), it.y.toFloat(),it.order.toDouble())
+                var command: PotraceCommand = PotraceCommand.M
+                if (it.code.equals(PotraceCommand.M.toString())) {
+                    command = PotraceCommand.M
+                } else if (it.code.equals(PotraceCommand.C.toString())) {
+                    command = PotraceCommand.C
+                }else if (it.code.equals(PotraceCommand.L.toString())){
+                    command = PotraceCommand.L
+                }
+                val potraceDataPoint = PotraceDataPoint(
+                    it.order.toDouble(), command, singlePoint, xAxisRotation = it.xAxisRotation,
+                    largeArc = it.largeArc, sweep = it.sweep
+                )
+                if (it.x1 != null && it.x2 != null && it.y1 != null && it.y2 != null) {
+                    val secondaryCoordinates = PathPoint(
+                        it.x1.toFloat(),
+                        it.y1.toFloat(),
+                        it.x2.toFloat(),
+                        it.y2.toFloat()
+                    )
+                    potraceDataPoint.secondaryCoordinates = secondaryCoordinates
+                }
+                potraceDataPoint
+            })
+            var colorStroke: Int? = null
+            if (!data.strokeColor.isNullOrEmpty() && data.opacity !=null) {
+                colorStroke = Color.parseColor(data.strokeColor)
+                colorStroke= argb((data.opacity *255).toInt(),colorStroke.red,colorStroke.green,colorStroke.blue)
+            }
+            if (colorStroke == null) {
+                colorStroke = Color.BLACK
+            }
+
+
+            val paint = Paint().apply {
+                color = colorStroke
+                style = Paint.Style.FILL
+                if (data.strokeWidth != null)
+                    strokeWidth = data.strokeWidth.toFloat()
+            }
+            val command =
+                CanvasCommand(CommandType.DRAW_POTRACE, paint, potracePoints = potraceDataPoints)
+            if (data.status == PathStatus.BEGIN)
+                onPathBegin(data.currentPathId, command)
+            else
+                onPathUpdate(data.currentPathId, command)
+        }
     }
+
+    private fun handleRegularVirtualDrawing(
+        data: OnVirtualPlayerDrawingSubscription.OnVirtualPlayerDrawing,
+        onPathBegin: (id: Double, command: CanvasCommand) -> Unit,
+        onPathUpdate: (id: Double, command: CanvasCommand) -> Unit
+    ) {
+        if (data.points != null) {
+            val dataPoints = ArrayList(data.points.map {
+                SinglePoint(it.x.toFloat(), it.y.toFloat(),it.order)
+            })
+
+            var colorStroke: Int? = null
+            if (!data.strokeColor.isNullOrEmpty()) {
+                colorStroke = Color.parseColor(data.strokeColor)
+            }
+            if (colorStroke == null) {
+                colorStroke = Color.BLACK
+            }
+
+
+            val paint = Paint().apply {
+                color = colorStroke
+                style = Paint.Style.STROKE
+                strokeJoin = Paint.Join.ROUND
+                strokeCap = Paint.Cap.ROUND
+                if (data.strokeWidth != null)
+                    strokeWidth = data.strokeWidth.toFloat()
+            }
+            val command = CanvasCommand(CommandType.DRAW, paint, dataPoints)
+
+            if (data.status == PathStatus.BEGIN)
+                onPathBegin(data.currentPathId, command)
+            else
+                onPathUpdate(data.currentPathId, command)
+
+        }
+    }
+
 
     suspend fun sendManualDraw(
         gameSessionID: Double,
         userID: Double,
         pathPointInput: ManualPathPointInput,
-        pathIDGenerator: Double
+        pathIDGenerator: Double,
+        pathOrderGenerator:Double
     ): Double? {
         val pathUniqueID = 1000000 * userID + gameSessionID * 10000 + pathIDGenerator
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
             pathUniqueID,
-            DataPoints(pathPointInput.x.toDouble(), pathPointInput.y.toDouble()),
-            ("#"+Integer.toHexString(pathPointInput.paint.color).substring(2)).toInput(),
+            DataPoints(pathPointInput.x.toDouble(), pathPointInput.y.toDouble(),pathOrderGenerator),
+            ("#" + Integer.toHexString(pathPointInput.paint.color).substring(2)).toInput(),
             pathPointInput.paint.strokeWidth.toDouble().toInput(),
             pathPointInput.pathStatus
         )
         try {
-            if (pathPointInput.pathStatus == PathStatus.END)
-                Log.d("ManualCommand - ", "Send draw--" + pathUniqueID.toString())
+            Log.d("ManualDrawingSend",pathOrderGenerator.toString()+ " - ("+pathPointInput.x+","+pathPointInput.y+")")
+
             val response =
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data
@@ -276,14 +325,14 @@ class GameSessionDataSource {
                     }
                     val drawPoint = ManualDrawingPoint(
                         data.currentPathId,
+                        data.point.order,
                         data.point.x.toFloat(),
                         data.point.y.toFloat(),
                         status = data.status,
                         paint = paint
-
-
                     )
-                    if(drawPoint.x>=0 && drawPoint.y>=0)
+                    Log.d("ManualDrawingReceive",data.point.order.toString()+ " - ("+data.point.x+","+data.point.y+")")
+                    if (drawPoint.x >= 0 && drawPoint.y >= 0)
                         onDraw(drawPoint)
                 } else if (data?.commandStatus == CommandStatus.REDO && data.commandPathId != null) {
                     val serverDrawHistoryCommand =

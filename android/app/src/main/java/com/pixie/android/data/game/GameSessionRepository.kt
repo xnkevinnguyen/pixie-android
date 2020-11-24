@@ -34,6 +34,7 @@ class GameSessionRepository(
     private var pathSubscription: Job? = null
     private var manualPathSubscription: Job? = null
     private var pathIDGenerator = 0.0
+    private var pathOrderGenerator = 0.0
     private var isCanvasLocked = MutableLiveData<Boolean>()
 
 
@@ -183,15 +184,18 @@ class GameSessionRepository(
         //Only send a manual drawing if it's user's turn
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
         if (gameSession.value?.mode == GameMode.FREEFORALL) {
+            pathOrderGenerator += 1;
             CoroutineScope(Dispatchers.IO).launch {
                 dataSource.sendManualDraw(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
-                    pathIDGenerator
+                    pathIDGenerator,
+                    pathOrderGenerator
                 )
 
-            }
+
+                }
 
         }
     }
@@ -208,12 +212,14 @@ class GameSessionRepository(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
-                    pathIDGenerator
+                    pathIDGenerator,
+                    pathOrderGenerator
                 )
                 if (pathID != null) {
                     CoroutineScope(Dispatchers.Main).launch {
                         onResult(pathID)
                         pathIDGenerator += 1
+                        pathOrderGenerator = 0.0
                     }
 
                 }
@@ -256,7 +262,7 @@ class GameSessionRepository(
 //        else if (mode == GameMode.COOP || mode == GameMode.SOLO) {
         // Handle Solo-Coop drawing
         val job = CoroutineScope(Dispatchers.IO).launch {
-            dataSource.subscribeToPathChange(
+            dataSource.subscribeToVirtualPlayerDrawing(
                 gameID,
                 userRepository.getUser().userId, onPathBegin = { id, command ->
                     CoroutineScope(Dispatchers.Main).launch {

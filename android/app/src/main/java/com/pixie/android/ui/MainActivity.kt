@@ -81,11 +81,11 @@ class MainActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
         val theme = preferencesSettings.getString(Constants.THEME, "Dark")
-        if (theme == "Dark") setTheme(R.style.AppTheme_NoActionBar)
+        if (theme == "Halloween" ) setTheme(R.style.AppBlueTheme_NoActionBar)
         else if(theme == "Light") setTheme(R.style.AppLightTheme_NoActionBar)
         else if (theme == resources.getString(R.string.pink)) setTheme(R.style.AppPinkTheme_NoActionBar)
         else if(theme == "Christmas") setTheme(R.style.AppGreenTheme_NoActionBar)
-        else setTheme(R.style.AppBlueTheme_NoActionBar)
+        else setTheme(R.style.AppTheme_NoActionBar)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)

@@ -8,6 +8,21 @@ subscription OnVirtualPlayerDrawing($gameSessionID:Float!){
         points{
             x,
             y
+            order
+        }
+        PotracePoints{
+            x
+            y
+            x1
+            y1
+            x2
+            y2
+            xAxisRotation
+            largeArc
+            sweep
+
+            code
+            order
         }
         status,
         gameSessionId

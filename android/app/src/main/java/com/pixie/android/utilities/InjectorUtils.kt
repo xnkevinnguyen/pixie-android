@@ -93,7 +93,8 @@ object InjectorUtils {
         val friendListRepository = FriendListRepository.getInstance()
         val gameInviteRepository = GameInviteRepository.getInstance()
         val gameSessionRepository = GameSessionRepository.getInstance()
-        return PlayersViewModelFactory(chatRepository, friendListRepository,gameInviteRepository,gameSessionRepository)
+        val userRepository = UserRepository.getInstance()
+        return PlayersViewModelFactory(chatRepository, friendListRepository,gameInviteRepository,gameSessionRepository,userRepository)
     }
 
     fun provideAvailableGamesViewModelFactory():AvailableGamesViewModelFactory{
