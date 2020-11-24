@@ -38,7 +38,7 @@
             android:id="@+id/add_virtual_player"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?colorAccent"
+            android:background="@drawable/button_drawable"
             android:textColor="@android:color/white"
             android:text="@string/add"
             android:textSize="15dp"

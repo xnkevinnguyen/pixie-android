@@ -33,7 +33,7 @@
     <string name="register_title">Inscription</string>
     <string name="retype_pass">Entrer mot de passe à nouveau</string>
     <string name="return_login">Retour page authentification</string>
-    <string name="load_chat_history">Charger historique des discussions</string>
+    <string name="load_chat_history">Montrer historique au complet</string>
     <string name="messages">Messages</string>
     <string name="channel">Vos Canaux</string>
     <string name="add_channel">Ajouter canal</string>

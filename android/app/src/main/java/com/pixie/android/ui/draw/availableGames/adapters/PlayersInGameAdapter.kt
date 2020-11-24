@@ -61,10 +61,7 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
         val usernameParticipant = rowView.findViewById<TextView>(R.id.participant_username)
         usernameParticipant.text = participant.username
         val removeVirtualElement = rowView.findViewById<TextView>(R.id.remove_virtual_player)
-
-        if(participant.isVirtual == false){
-            removeVirtualElement.visibility = View.GONE
-        }
+        removeVirtualElement.visibility = View.GONE
 
         val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
         if (playersViewModel.getFriendList().value?.contains(participant) == true) {

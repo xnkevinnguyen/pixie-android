@@ -127,14 +127,14 @@ class PlayersFragment : Fragment() {
                         }
                     }
 
-
                     val invite = dialog.findViewById<Button>(R.id.invite)
-
                     if (playersViewModel.getGameSession().value?.id == null) {
                         invite.visibility = View.GONE
                     } else {
                         invite.visibility = View.VISIBLE
                     }
+                    if (isUser(user)) invite.visibility = View.GONE
+
                     invite.setOnClickListener {
                         invite.isEnabled = false
                         playersViewModel.sendGameInvitation(user.id) {
