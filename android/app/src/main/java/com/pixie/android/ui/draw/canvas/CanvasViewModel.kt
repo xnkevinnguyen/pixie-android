@@ -24,11 +24,11 @@ class CanvasViewModel(
         gameSessionRepository.sendManualDrawingPoint(manualPathPointInput)
 
     }
-    fun sendFinalPoint(x:Float,y:Float, pathStatus: PathStatus, paint:Paint,path: ArrayList<PathPoint>){
+    fun sendFinalPoint(x:Float, y:Float, pathStatus: PathStatus, paint:Paint, pathDataPoints: ArrayList<SinglePoint>){
         val manualPathPointInput = ManualPathPointInput(x,y,pathStatus,paint)
         //should return an id
         gameSessionRepository.sendManualDrawingFinalPoint(manualPathPointInput){
-            val command = CanvasCommand(CommandType.DRAW, paint, path)
+            val command = CanvasCommand(CommandType.DRAW, paint, pathDataPoints)
 
             canvasRepository.addCanvasCommand(it,command)
         }
@@ -40,16 +40,18 @@ class CanvasViewModel(
         val commandHistory = canvasRepository.getDrawCommandHistory().value ?: return
 //        var eraserTarget:ArrayList<CanvasCommand> = arrayListOf()
         commandHistory.forEach {
-            if(it.value.type == CommandType.DRAW  && !it.value.path.isNullOrEmpty() && !it.value.isErased){
+            val pathDataPoints = it.value.pathDataPoints
+
+            if(it.value.type == CommandType.DRAW  && !pathDataPoints.isNullOrEmpty() && !it.value.isErased){
                     var isContact = false
-                    it.value.path!!.forEach {
+                for(n in 0 until pathDataPoints.size -1){
 
                         //calculate  t = (q − p) × s / (r × s) https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
                         val r = Pair(x2-x1,y2-y1) // P+t*R
-                        val s = Pair(it.x2-it.x1, it.y2-it.y1) // Q+u*S
+                        val s = Pair(pathDataPoints[n+1].x-pathDataPoints[n].x, pathDataPoints[n+1].y-pathDataPoints[n].y) // Q+u*S
                         val productRS = r.first * s.second - r.second * s.first // r x s
                         val divS= Pair(s.first/productRS,s.second/productRS) //  s / (r x s)
-                        val subQP = Pair(it.x1-x1,it.y1-y1) // q-p
+                        val subQP = Pair(pathDataPoints[n].x-x1,pathDataPoints[n].y-y1) // q-p
                         val tResult =  subQP.first * divS.second - subQP.second*divS.first
                         val t =tResult.toDouble()
 

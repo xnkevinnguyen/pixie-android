@@ -5,7 +5,7 @@ import android.graphics.Paint
 data class CanvasCommand (
     var type: CommandType,
     val paint: Paint?=null,
-    val path:ArrayList<PathPoint>?=null,
+    val pathDataPoints:ArrayList<SinglePoint>?=null,
     val reference:CanvasCommand? = null, //Use for eraser to point to target command,
     var isErased:Boolean = false,
     val potracePoints: ArrayList<PotraceDataPoint>?=null

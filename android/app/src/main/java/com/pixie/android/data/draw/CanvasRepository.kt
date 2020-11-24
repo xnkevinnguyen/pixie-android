@@ -46,9 +46,9 @@ class CanvasRepository {
     fun appendCanvasCommand(id: Double, drawCommand: CanvasCommand) {
         val currentCommand = drawCommandHistory.value?.get(id)
 
-        if (drawCommandHistory.value != null && !drawCommand.path.isNullOrEmpty() && currentCommand != null) {
+        if (drawCommandHistory.value != null && !drawCommand.pathDataPoints.isNullOrEmpty() && currentCommand != null) {
 
-            currentCommand?.path?.addAll(drawCommand.path.toList())
+            currentCommand?.pathDataPoints?.addAll(drawCommand.pathDataPoints.toList())
             currentCommand.potracePoints?.sortBy { it.orderID }
 
             drawCommandHistory.notifyObserver()
@@ -76,8 +76,8 @@ class CanvasRepository {
 
     //add new point
     fun addNewManualDrawPoint(point: ManualDrawingPoint) {
-        val firstPathPoint = PathPoint(point.x, point.y, point.x, point.y)
-        val command = CanvasCommand(CommandType.DRAW, point.paint, arrayListOf(firstPathPoint))
+        val firstPathDataPoint = SinglePoint(point.x, point.y,point.orderID)
+        val command = CanvasCommand(CommandType.DRAW, point.paint, arrayListOf(firstPathDataPoint))
         addCanvasCommand(point.pathID, command)
         previousID = point.pathID
 
@@ -87,12 +87,14 @@ class CanvasRepository {
     fun updateCommand(point: ManualDrawingPoint) {
         val currentCommand = drawCommandHistory.value?.get(point.pathID)
 
-        if (currentCommand != null && currentCommand.path?.last() != null && point.pathID == previousID) {
-            val pathPoint = PathPoint(
-                currentCommand.path.last().x2, currentCommand.path.last().y2,
-                point.x, point.y
+        if (currentCommand != null && currentCommand.pathDataPoints?.last() != null && point.pathID == previousID) {
+            val pathDataPoint = SinglePoint(
+                point.x, point.y,point.orderID
             )
-            currentCommand.path.add(pathPoint)
+            currentCommand.pathDataPoints.add(pathDataPoint)
+            currentCommand.pathDataPoints.sortBy {
+                it.orderID
+            }
             drawCommandHistory.notifyObserver()
 
         } else {

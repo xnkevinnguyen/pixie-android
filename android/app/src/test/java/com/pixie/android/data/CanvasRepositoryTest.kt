@@ -11,8 +11,6 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
 
 
 class CanvasRepositoryTest {
@@ -91,7 +89,7 @@ class CanvasRepositoryTest {
         repository.addManualDrawPoint(pointToAdd2)
 
         val result = repository.getDrawCommandHistory()
-        val commandSize=result.value?.get(pointToAdd.pathID)?.path?.size
+        val commandSize=result.value?.get(pointToAdd.pathID)?.pathDataPoints?.size
         //CHECK
         Assert.assertEquals(result.value!!.size,1)
         Assert.assertEquals(commandSize,2)

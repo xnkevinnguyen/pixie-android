@@ -208,23 +208,10 @@ class GameSessionDataSource {
         onPathUpdate: (id: Double, command: CanvasCommand) -> Unit
     ) {
         if (data.points != null) {
-            val dataPoints = data.points.map {
+            val dataPoints = ArrayList(data.points.map {
                 SinglePoint(it.x.toFloat(), it.y.toFloat(),it.order)
-            }
-            val pathList = arrayListOf<PathPoint>()
-            val length = dataPoints.size
-            for (i in 0..length) {
-                if (i + 1 < length) {
-                    val point = PathPoint(
-                        dataPoints[i].x,
-                        dataPoints[i].y,
-                        dataPoints[i + 1].x,
-                        dataPoints[i + 1].y,
-                        dataPoints[i].orderID
-                    )
-                    pathList.add(point)
-                }
-            }
+            })
+
             var colorStroke: Int? = null
             if (!data.strokeColor.isNullOrEmpty()) {
                 colorStroke = Color.parseColor(data.strokeColor)
@@ -242,7 +229,7 @@ class GameSessionDataSource {
                 if (data.strokeWidth != null)
                     strokeWidth = data.strokeWidth.toFloat()
             }
-            val command = CanvasCommand(CommandType.DRAW, paint, pathList)
+            val command = CanvasCommand(CommandType.DRAW, paint, dataPoints)
 
             if (data.status == PathStatus.BEGIN)
                 onPathBegin(data.currentPathId, command)

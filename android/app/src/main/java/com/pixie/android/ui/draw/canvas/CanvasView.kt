@@ -10,6 +10,7 @@ import com.pixie.android.R
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
 import com.pixie.android.model.draw.PotraceCommand
+import com.pixie.android.model.draw.SinglePoint
 import com.pixie.android.type.PathStatus
 
 
@@ -25,7 +26,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val backgroundColor = Color.TRANSPARENT
     private var erase = false
 
-    private  var canvas: Canvas? = null
+    private var canvas: Canvas? = null
     private lateinit var bitmap: Bitmap
 
     private var paint = generatePaint()
@@ -35,19 +36,13 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
-    private var onDrawingMove:Boolean = false
-    private var isCanvasLocked:Boolean= false
+    private var onDrawingMove: Boolean = false
+    private var isCanvasLocked: Boolean = false
 
-    fun setIsCanvasLocked(isLocked:Boolean){
-        isCanvasLocked =isLocked
+    fun setIsCanvasLocked(isLocked: Boolean) {
+        isCanvasLocked = isLocked
     }
-    fun displayWord(word:String){
-        val wordPaint = Paint().apply {
-            color = Color.BLACK
-            textSize = 25.toFloat()
-        }
-        canvas?.drawText(String.format(resources.getString(R.string.your_word),word),90.toFloat(),30.toFloat(),wordPaint)
-    }
+
 
     fun setErase(isErase: Boolean) {
         erase = isErase
@@ -74,29 +69,36 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     fun drawFromCommandList(canvasCommandList: List<CanvasCommand>) {
-        if(canvas !=null) {
+        if (canvas != null) {
             canvas?.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
             canvasCommandList.forEach {
-                if (it.paint != null && !it.path.isNullOrEmpty()) {
+                if (it.paint != null && !it.pathDataPoints.isNullOrEmpty()) {
                     val pathToDraw = Path()
-                    pathToDraw.moveTo(it.path.first().x1, it.path.first().y1)
-                    it.path.forEach {
-                        pathToDraw.quadTo(it.x1, it.y1, it.x2, it.y2)
-
+                    pathToDraw.moveTo(it.pathDataPoints.first().x, it.pathDataPoints.first().y)
+                    val length = it.pathDataPoints.size
+//                    it.pathDataPoints.forEach {
+//                        pathToDraw.quadTo(it.x1, it.y1, it.x2, it.y2)
+//
+//                    }
+                    for (n in 0 until length-1) {
+                        pathToDraw.quadTo(
+                            it.pathDataPoints[n].x, it.pathDataPoints[n].y,
+                            it.pathDataPoints[n + 1].x, it.pathDataPoints[n + 1].y
+                        )
                     }
                     canvas?.drawPath(pathToDraw, it.paint)
                 }
             }
             invalidate()
-        }else{
-            Log.d("CanvasError","Canvas is null")
+        } else {
+            Log.d("CanvasError", "Canvas is null")
         }
     }
 
-    fun drawFromCommandListPotrace(canvasCommandList: List<CanvasCommand>){
-        if(canvas !=null) {
+    fun drawFromCommandListPotrace(canvasCommandList: List<CanvasCommand>) {
+        if (canvas != null) {
             canvas?.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
-            canvasCommandList.forEach {command->
+            canvasCommandList.forEach { command ->
                 if (command.paint != null && !command.potracePoints.isNullOrEmpty()) {
 
                     val pathToDraw = Path()
@@ -104,14 +106,20 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
                     command.potracePoints.forEach {
                         val secondaryCoordinates = it.secondaryCoordinates
-                        if(it.command.equals(PotraceCommand.M)){
-                            pathToDraw.moveTo(it.primaryCoordinates.x,it.primaryCoordinates.y)
-                        }else if(it.command.equals(PotraceCommand.C) && secondaryCoordinates !=null){
+                        if (it.command.equals(PotraceCommand.M)) {
+                            pathToDraw.moveTo(it.primaryCoordinates.x, it.primaryCoordinates.y)
+                        } else if (it.command.equals(PotraceCommand.C) && secondaryCoordinates != null) {
 
-                            pathToDraw.cubicTo(secondaryCoordinates.x1,secondaryCoordinates.y1,secondaryCoordinates.x2,
-                            secondaryCoordinates.y2,it.primaryCoordinates.x,it.primaryCoordinates.y)
-                        }else if(it.command.equals(PotraceCommand.L)){
-                            pathToDraw.lineTo(it.primaryCoordinates.x,it.primaryCoordinates.y)
+                            pathToDraw.cubicTo(
+                                secondaryCoordinates.x1,
+                                secondaryCoordinates.y1,
+                                secondaryCoordinates.x2,
+                                secondaryCoordinates.y2,
+                                it.primaryCoordinates.x,
+                                it.primaryCoordinates.y
+                            )
+                        } else if (it.command.equals(PotraceCommand.L)) {
+                            pathToDraw.lineTo(it.primaryCoordinates.x, it.primaryCoordinates.y)
                         }
 
                     }
@@ -119,8 +127,8 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 }
             }
             invalidate()
-        }else{
-            Log.d("CanvasError","Canvas is null")
+        } else {
+            Log.d("CanvasError", "Canvas is null")
         }
     }
 
@@ -142,7 +150,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if(!isCanvasLocked) {
+        if (!isCanvasLocked) {
             motionTouchEventX = event.x
             motionTouchEventY = event.y
             if (!erase) {//draw actions
@@ -160,13 +168,15 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
         return true
     }
-    private fun onEraseStart(){
+
+    private fun onEraseStart() {
 //        canvasViewModel.captureEraseAction(motionTouchEventX,motionTouchEventY,)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
     }
-    private fun onEraseMove(){
-        canvasViewModel.captureEraseAction(currentX,currentY,motionTouchEventX,motionTouchEventY)
+
+    private fun onEraseMove() {
+        canvasViewModel.captureEraseAction(currentX, currentY, motionTouchEventX, motionTouchEventY)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
     }
@@ -177,7 +187,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         path.moveTo(motionTouchEventX, motionTouchEventY)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
-        canvasViewModel.sendPoint(currentX,currentY,PathStatus.BEGIN,Paint(paint))
+        canvasViewModel.sendPoint(currentX, currentY, PathStatus.BEGIN, Paint(paint))
         onDrawingMove = true
     }
 
@@ -202,8 +212,8 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         currentY = motionTouchEventY
         canvas?.drawPath(path, paint)
         // To prevent an even after ontouch stop
-        if(onDrawingMove)
-            canvasViewModel.sendPoint(currentX,currentY,PathStatus.ONGOING,Paint(paint))
+        if (onDrawingMove)
+            canvasViewModel.sendPoint(currentX, currentY, PathStatus.ONGOING, Paint(paint))
 
         // Invalidate triggers onDraw from the view
         invalidate()
@@ -213,8 +223,20 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private fun onTouchStop() {
         onDrawingMove = false
         if (!erase && !pathData.isNullOrEmpty()) {
+
+            var pathDataPoints =
+                arrayListOf<SinglePoint>(SinglePoint(pathData.first().x1, pathData.first().y1, 0.0))
+            pathData.forEachIndexed { index, pathPoint ->
+                pathDataPoints.add(SinglePoint(pathPoint.x2, pathPoint.y2, index.toDouble()))
+            }
             // send point
-            canvasViewModel.sendFinalPoint(currentX,currentY,PathStatus.END,Paint(paint),ArrayList(pathData))
+            canvasViewModel.sendFinalPoint(
+                currentX,
+                currentY,
+                PathStatus.END,
+                Paint(paint),
+                pathDataPoints
+            )
 //            canvasViewModel.addCommandToHistory(Paint(paint), ArrayList(pathData))
         }
         pathData.clear()
