@@ -48,12 +48,13 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@android:color/holo_red_dark"
+            android:background="@color/dark_red"
             android:text="@string/leave_game"
             android:textAlignment="center"
             android:textSize="15dp"
             android:layout_alignParentBottom="true"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/start_game"
@@ -63,6 +64,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="?colorPrimary"
+            android:textColor="@android:color/white"
             android:text="@string/start_game"
             android:textAlignment="center"
             android:textSize="15dp"
@@ -78,6 +80,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="?colorPrimary"
+            android:textColor="@android:color/white"
             android:text="@string/add_players"
             android:textAlignment="center"
             android:textSize="15dp"
@@ -92,6 +95,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="?colorPrimary"
+            android:textColor="@android:color/white"
             android:text="@string/add_channel"
             android:textAlignment="center"
             android:textSize="15dp" />
