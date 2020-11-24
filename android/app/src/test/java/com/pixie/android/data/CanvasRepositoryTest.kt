@@ -66,7 +66,7 @@ class CanvasRepositoryTest {
     fun testAddManualDrawPoint_ShouldAddCommand(){
         //PREPARE
         val repository:CanvasRepository = getRepository()
-        val pointToAdd = ManualDrawingPoint(1000000.0,1f,1f,PathStatus.BEGIN)
+        val pointToAdd = ManualDrawingPoint(1000000.0,1.0,1f,1f,PathStatus.BEGIN)
         //PERFORM
 
         repository.addManualDrawPoint(pointToAdd)
@@ -81,8 +81,8 @@ class CanvasRepositoryTest {
     fun testAddManualDrawPoint_ShouldUpdateCommand(){
         //PREPARE
         val repository:CanvasRepository = getRepository()
-        val pointToAdd = ManualDrawingPoint(1000000.0,1f,1f,PathStatus.BEGIN)
-        val pointToAdd2 = ManualDrawingPoint(1000000.0,1f,1f,PathStatus.ONGOING)
+        val pointToAdd = ManualDrawingPoint(1000000.0,1.0,1f,1f,PathStatus.BEGIN)
+        val pointToAdd2 = ManualDrawingPoint(1000000.0,2.0,1f,1f,PathStatus.ONGOING)
         //PERFORM
 
         repository.addManualDrawPoint(pointToAdd)
