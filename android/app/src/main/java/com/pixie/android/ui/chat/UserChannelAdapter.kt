@@ -87,10 +87,10 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
             badge.visibility = View.GONE
             val typedValue = TypedValue()
             val theme: Theme = context.getTheme()
-            theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+            theme.resolveAttribute(R.attr.color, typedValue, true)
             @ColorInt val color = typedValue.data
             rowView.setBackgroundColor(color)
-            channelName.setTextColor(Color.WHITE)
+            //channelName.setTextColor(Color.WHITE)
         }
         val factoryChat = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)

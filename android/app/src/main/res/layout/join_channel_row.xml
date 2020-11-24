@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/join"
-        android:background="?colorAccent"
+        android:background="@drawable/button_drawable"
         android:textColor="@android:color/white"
         android:textSize="15dp"
         android:gravity="center"
