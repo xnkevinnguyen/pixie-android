@@ -110,8 +110,12 @@ class GameInformationFragment : Fragment() {
         val mediaPlayer = chatViewModel.createMediaPlayer(R.raw.end_game, requireContext())
 
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
-            val roundString =
+            var roundString =
                 resources.getString(R.string.round_turn) + " " + (it.currentRound.toInt() + 1)
+            if(it.mode == GameMode.FREEFORALL){
+                roundString = resources.getString(R.string.round_turn) + " " + (it.currentRound.toInt() + 1) + "/3"
+            }
+
             round.text = roundString
             guessLeftElement.text = it.guessesLeft?.toInt().toString()
             listPlayerAdapter.set(it.players)

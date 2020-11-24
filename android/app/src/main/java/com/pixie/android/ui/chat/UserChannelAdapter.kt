@@ -3,6 +3,7 @@ package com.pixie.android.ui.chat
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources.Theme
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.util.Log
 import android.util.TypedValue
@@ -71,6 +72,10 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val channel: ChannelData = channelList[position]
         val rowView = inflater.inflate(R.layout.user_channel_row_, parent, false)
+
+        val channelName = rowView.findViewById<TextView>(R.id.channel_name)
+        channelName.text = channel.channelName
+
         val exit = rowView.findViewById<TextView>(R.id.exit_channel)
 
         if(channel.channelID == Constants.MAIN_CHANNEL_ID){
@@ -85,6 +90,7 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
             theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
             @ColorInt val color = typedValue.data
             rowView.setBackgroundColor(color)
+            channelName.setTextColor(Color.WHITE)
         }
         val factoryChat = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)
@@ -96,10 +102,6 @@ class UserChannelAdapter(context: Context, activity: Activity) : BaseAdapter() {
                 chatViewModel.exitGame(gameID)
             }
         }
-
-
-        val channelName = rowView.findViewById<TextView>(R.id.channel_name)
-        channelName.text = channel.channelName
 
         //set nb of unread messages
         val preferencesSettings = context.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)

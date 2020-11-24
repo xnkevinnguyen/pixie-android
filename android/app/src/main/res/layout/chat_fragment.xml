@@ -12,6 +12,7 @@
         android:id="@+id/load_chat_history"
         android:text="@string/load_chat_history"
         android:background="?colorPrimary"
+        android:textColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         />

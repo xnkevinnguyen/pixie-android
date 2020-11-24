@@ -1,17 +1,17 @@
 package com.pixie.android.ui.draw.leaderboard
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import com.pixie.android.R
+import com.pixie.android.ui.draw.leaderboard.adapters.*
 import com.pixie.android.utilities.InjectorUtils
 
 class LeaderboardFragment: Fragment() {
@@ -63,187 +63,81 @@ class LeaderboardFragment: Fragment() {
 
         })
 
-        val bestFreeUser = root.findViewById<TextView>(R.id.best_free_user)
-        val bestFreeScore = root.findViewById<TextView>(R.id.best_free_score)
-        val bestFreeUser2 = root.findViewById<TextView>(R.id.best_free_user2)
-        val bestFreeScore2 = root.findViewById<TextView>(R.id.best_free_score2)
-        val bestFreeUser3 = root.findViewById<TextView>(R.id.best_free_user3)
-        val bestFreeScore3 = root.findViewById<TextView>(R.id.best_free_score3)
+        val adapter1 =
+            LeaderboardUserAdapter(
+                requireContext()
+            )
+        val bestFreeScoreList = root.findViewById<ListView>(R.id.best_free_score_list)
+        bestFreeScoreList.adapter = adapter1
+        val adapter2 =
+            LeaderboardUserAdapter2(
+                requireContext()
+            )
+        val bestSoloScoreList = root.findViewById<ListView>(R.id.best_solo_score_list)
+        bestSoloScoreList.adapter = adapter2
 
-        val cumulativeFreeUser = root.findViewById<TextView>(R.id.cumulative_free_user)
-        val cumulativeFreeScore = root.findViewById<TextView>(R.id.cumulative_free_score)
-        val cumulativeFreeUser2 = root.findViewById<TextView>(R.id.cumulative_free_user2)
-        val cumulativeFreeScore2 = root.findViewById<TextView>(R.id.cumulative_free_score2)
-        val cumulativeFreeUser3 = root.findViewById<TextView>(R.id.cumulative_free_user3)
-        val cumulativeFreeScore3 = root.findViewById<TextView>(R.id.cumulative_free_score3)
+        val adapter3 =
+            LeaderboardUserAdapter3(
+                requireContext()
+            )
+        val bestCoopScoreList = root.findViewById<ListView>(R.id.best_coop_score_list)
+        bestCoopScoreList.adapter = adapter3
 
-        val mostFreeUser = root.findViewById<TextView>(R.id.most_free_user)
-        val mostFreeScore = root.findViewById<TextView>(R.id.most_free_score)
-        val mostFreeUser2 = root.findViewById<TextView>(R.id.most_free_user2)
-        val mostFreeScore2 = root.findViewById<TextView>(R.id.most_free_score2)
-        val mostFreeUser3 = root.findViewById<TextView>(R.id.most_free_user3)
-        val mostFreeScore3 = root.findViewById<TextView>(R.id.most_free_score3)
+        val adapter4 =
+            LeaderboardUserAdapter4(
+                requireContext()
+            )
+        val freeCumulativeScoreList = root.findViewById<ListView>(R.id.best_cumulative_score_list)
+        freeCumulativeScoreList.adapter = adapter4
 
-        val bestSoloUser = root.findViewById<TextView>(R.id.best_solo_user)
-        val bestSoloScore = root.findViewById<TextView>(R.id.best_solo_score)
-        val bestSoloUser2 = root.findViewById<TextView>(R.id.best_solo_user2)
-        val bestSoloScore2 = root.findViewById<TextView>(R.id.best_solo_score2)
-        val bestSoloUser3 = root.findViewById<TextView>(R.id.best_solo_user3)
-        val bestSoloScore3 = root.findViewById<TextView>(R.id.best_solo_score3)
+        val adapter5 =
+            LeaderboardUserAdapter5(
+                requireContext()
+            )
+        val soloCumulativeScoreList = root.findViewById<ListView>(R.id.solo_cumulative_score_list)
+        soloCumulativeScoreList.adapter = adapter5
 
-        val cumulativeSoloUser = root.findViewById<TextView>(R.id.cumulative_solo_user)
-        val cumulativeSoloScore = root.findViewById<TextView>(R.id.cumulative_solo_score)
-        val cumulativeSoloUser2 = root.findViewById<TextView>(R.id.cumulative_solo_user2)
-        val cumulativeSoloScore2 = root.findViewById<TextView>(R.id.cumulative_solo_score2)
-        val cumulativeSoloUser3 = root.findViewById<TextView>(R.id.cumulative_solo_user3)
-        val cumulativeSoloScore3 = root.findViewById<TextView>(R.id.cumulative_solo_score3)
+        val adapter6 =
+            LeaderboardUserAdapter6(
+                requireContext()
+            )
+        val coopCumulativeScoreList = root.findViewById<ListView>(R.id.coop_cumulative_score_list)
+        coopCumulativeScoreList.adapter = adapter6
 
-        val bestCoopUser = root.findViewById<TextView>(R.id.best_coop_user)
-        val bestCoopScore = root.findViewById<TextView>(R.id.best_coop_score)
-        val bestCoopUser2 = root.findViewById<TextView>(R.id.best_coop_user2)
-        val bestCoopScore2 = root.findViewById<TextView>(R.id.best_coop_score2)
-        val bestCoopUser3 = root.findViewById<TextView>(R.id.best_coop_user3)
-        val bestCoopScore3 = root.findViewById<TextView>(R.id.best_coop_score3)
-
-        val cumulativeCoopUser = root.findViewById<TextView>(R.id.cumulative_coop_user)
-        val cumulativeCoopScore = root.findViewById<TextView>(R.id.cumulative_coop_score)
-        val cumulativeCoopUser2 = root.findViewById<TextView>(R.id.cumulative_coop_user2)
-        val cumulativeCoopScore2 = root.findViewById<TextView>(R.id.cumulative_coop_score2)
-        val cumulativeCoopUser3 = root.findViewById<TextView>(R.id.cumulative_coop_user3)
-        val cumulativeCoopScore3 = root.findViewById<TextView>(R.id.cumulative_coop_score3)
+        val adapter7 =
+            LeaderboardUserAdapter7(
+                requireContext()
+            )
+        val mostGameWonList = root.findViewById<ListView>(R.id.most_game_list)
+        mostGameWonList.adapter = adapter7
 
         leaderboardViewModel.getBestScore("Free").observe(viewLifecycleOwner, Observer {
-            if(it.size != 0){
-                if(it.size >= 1){
-                    bestFreeUser.text = it[0].username
-                    bestFreeScore.text = it[0].value.toString()
-                }
-
-                if(it.size >= 2){
-                    bestFreeUser2.text = it[1].username
-                    bestFreeScore2.text = it[1].value.toString()
-                }
-
-                if(it.size >= 3){
-                    bestFreeUser3.text = it[2].username
-                    bestFreeScore3.text = it[2].value.toString()
-                }
-            }
+            adapter1.set(it)
         })
 
 
         leaderboardViewModel.getBestScore("Solo").observe(viewLifecycleOwner, Observer {
-            if (it.size != 0) {
-                if (it.size >= 1) {
-                    bestSoloUser.text = it[0].username
-                    bestSoloScore.text = it[0].value.toString()
-                }
-
-                if (it.size >= 2) {
-                    bestSoloUser2.text = it[1].username
-                    bestSoloScore2.text = it[1].value.toString()
-                }
-
-                if (it.size >= 3) {
-                    bestSoloUser3.text = it[2].username
-                    bestSoloScore3.text = it[2].value.toString()
-                }
-            }
+            adapter2.set(it)
         })
 
         leaderboardViewModel.getBestScore("Coop").observe(viewLifecycleOwner, Observer {
-            if (it.size != 0) {
-                if (it.size >= 1) {
-                    bestCoopUser.text = it[0].username
-                    bestCoopScore.text = it[0].value.toString()
-                }
-
-                if (it.size >= 2) {
-                    bestCoopUser2.text = it[1].username
-                    bestCoopScore2.text = it[1].value.toString()
-                }
-
-                if (it.size >= 3) {
-                    bestCoopUser3.text = it[2].username
-                    bestCoopScore3.text = it[2].value.toString()
-                }
-            }
+            adapter3.set(it)
         })
 
         leaderboardViewModel.getBestCumulativeScore("Free").observe(viewLifecycleOwner, Observer {
-            if (it.size != 0) {
-                if (it.size >= 1) {
-                    cumulativeFreeUser.text = it[0].username
-                    cumulativeFreeScore.text = it[0].value.toString()
-                }
-
-                if (it.size >= 2) {
-                    cumulativeFreeUser2.text = it[1].username
-                    cumulativeFreeScore2.text = it[1].value.toString()
-                }
-
-                if (it.size >= 3) {
-                    cumulativeFreeUser3.text = it[2].username
-                    cumulativeFreeScore3.text = it[2].value.toString()
-                }
-            }
+            adapter4.set(it)
         })
 
         leaderboardViewModel.getBestCumulativeScore("Solo").observe(viewLifecycleOwner, Observer {
-            if (it.size != 0) {
-                if (it.size >= 1) {
-                    cumulativeSoloUser.text = it[0].username
-                    cumulativeSoloScore.text = it[0].value.toString()
-                }
-
-                if (it.size >= 2) {
-                    cumulativeSoloUser2.text = it[1].username
-                    cumulativeSoloScore2.text = it[1].value.toString()
-                }
-
-                if (it.size >= 3) {
-                    cumulativeSoloUser3.text = it[2].username
-                    cumulativeSoloScore3.text = it[2].value.toString()
-                }
-            }
+            adapter5.set(it)
         })
 
         leaderboardViewModel.getBestCumulativeScore("Coop").observe(viewLifecycleOwner, Observer {
-            if (it.size != 0) {
-                if (it.size >= 1) {
-                    cumulativeCoopUser.text = it[0].username
-                    cumulativeCoopScore.text = it[0].value.toString()
-                }
-
-                if (it.size >= 2) {
-                    cumulativeCoopUser2.text = it[1].username
-                    cumulativeCoopScore2.text = it[1].value.toString()
-                }
-
-                if (it.size >= 3) {
-                    cumulativeCoopUser3.text = it[2].username
-                    cumulativeCoopScore3.text = it[2].value.toString()
-                }
-            }
+            adapter6.set(it)
         })
 
         leaderboardViewModel.getMostGameWon().observe(viewLifecycleOwner, Observer {
-            if (it.size != 0) {
-                if (it.size >= 1) {
-                    mostFreeUser.text = it[0].username
-                    mostFreeScore.text = it[0].value?.toInt().toString()
-                }
-
-                if (it.size >= 2) {
-                    mostFreeUser2.text = it[1].username
-                    mostFreeScore2.text = it[1].value?.toInt().toString()
-                }
-
-                if (it.size >= 3) {
-                    mostFreeUser3.text = it[2].username
-                    mostFreeScore3.text = it[2].value?.toInt().toString()
-                }
-            }
+            adapter7.set(it)
         })
 
         return root
