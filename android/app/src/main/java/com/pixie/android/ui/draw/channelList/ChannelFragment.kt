@@ -18,6 +18,7 @@ import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
 import com.pixie.android.utilities.InjectorUtils
+import kotlinx.android.synthetic.main.game_history_fragment.*
 
 class ChannelFragment : Fragment() {
 
@@ -134,6 +135,7 @@ class ChannelFragment : Fragment() {
                         }
 
                 }
+                dialog.dismiss()
             }
             val listAddPlayer = dialog.findViewById<ListView>(R.id.list_add_player)
             listAddPlayer.adapter = addPlayerAdapter
@@ -150,6 +152,7 @@ class ChannelFragment : Fragment() {
             createChannelButtonElement.setOnClickListener {
                 val channelNameElement = dialog.findViewById<EditText>(R.id.create_channel_name)
                 chatViewModel.createChannel(channelNameElement.text.toString())
+                dialog.dismiss()
             }
             listJoinChannel.adapter = joinChannelAdapter
             dialog.show()
