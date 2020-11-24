@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/create"
                 android:textColor="@android:color/white"
-                android:background="?colorAccent"
+                android:background="@drawable/button_drawable"
                 android:padding="5dp"
                 android:layout_gravity="center"
                 android:gravity="center"

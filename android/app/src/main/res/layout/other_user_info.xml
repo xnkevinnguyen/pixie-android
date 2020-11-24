@@ -30,19 +30,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="25dp"
                 android:textStyle="bold"/>
-<!--            <TextView-->
-<!--                android:id="@+id/user_games_played"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="0 games played"-->
-<!--                android:textSize="15dp" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/user_games_won"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="0 games won"-->
-<!--                android:textSize="15dp" />-->
 
         </LinearLayout>
     </LinearLayout>
@@ -62,7 +49,8 @@
             android:textSize="15dp"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:background="?colorAccent"
+            android:background="@drawable/button_drawable"
+            android:padding="5dp"
             android:layout_marginRight="10dp"/>
 
         <Button
@@ -73,7 +61,8 @@
             android:textSize="15dp"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:background="?colorAccent"/>
+            android:background="@drawable/button_drawable"
+            android:padding="5dp"/>
     </LinearLayout>
 
 

@@ -12,6 +12,17 @@
     tools:context=".ui.user.AuthActivity">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/login"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/error_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,7 +84,7 @@
         android:id="@+id/login"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_btn_custom"
+        android:background="@drawable/button_drawable"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="25dp"
         android:layout_marginBottom="40dp"

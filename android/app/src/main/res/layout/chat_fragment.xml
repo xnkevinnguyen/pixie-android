@@ -11,11 +11,14 @@
     <Button
         android:id="@+id/load_chat_history"
         android:text="@string/load_chat_history"
-        android:background="?colorPrimary"
-        android:textColor="@android:color/white"
+        android:background="@drawable/button_drawable"
+        android:backgroundTint="@color/dark_grey"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        />
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="5dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

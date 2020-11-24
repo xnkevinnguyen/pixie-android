@@ -33,7 +33,7 @@
     <string name="register_title">Register</string>
     <string name="retype_pass">Re-Enter your password</string>
     <string name="return_login">Return to login page</string>
-    <string name="load_chat_history">Load Chat History</string>
+    <string name="load_chat_history">Show Full History</string>
     <string name="messages">Messages</string>
     <string name="channel">Your Channels</string>
     <string name="add_channel">Add Channel</string>
