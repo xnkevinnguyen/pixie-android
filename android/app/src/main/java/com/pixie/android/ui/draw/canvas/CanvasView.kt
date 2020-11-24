@@ -100,6 +100,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 if (command.paint != null && !command.potracePoints.isNullOrEmpty()) {
 
                     val pathToDraw = Path()
+                    pathToDraw.fillType = Path.FillType.WINDING
 
                     command.potracePoints.forEach {
                         val secondaryCoordinates = it.secondaryCoordinates
@@ -109,6 +110,8 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
                             pathToDraw.cubicTo(secondaryCoordinates.x1,secondaryCoordinates.y1,secondaryCoordinates.x2,
                             secondaryCoordinates.y2,it.primaryCoordinates.x,it.primaryCoordinates.y)
+                        }else if(it.command.equals(PotraceCommand.L)){
+                            pathToDraw.lineTo(it.primaryCoordinates.x,it.primaryCoordinates.y)
                         }
 
                     }

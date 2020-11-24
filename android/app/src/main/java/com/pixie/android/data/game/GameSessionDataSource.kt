@@ -1,8 +1,14 @@
 package com.pixie.android.data.game
 
 import android.graphics.Color
+import android.graphics.Color.argb
+import android.graphics.Color.valueOf
 import android.graphics.Paint
 import android.util.Log
+import androidx.core.graphics.alpha
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
@@ -153,6 +159,8 @@ class GameSessionDataSource {
                     command = PotraceCommand.M
                 } else if (it.code.equals(PotraceCommand.C.toString())) {
                     command = PotraceCommand.C
+                }else if (it.code.equals(PotraceCommand.L.toString())){
+                    command = PotraceCommand.L
                 }
                 val potraceDataPoint = PotraceDataPoint(
                     it.order.toDouble(), command, singlePoint, xAxisRotation = it.xAxisRotation,
@@ -170,8 +178,9 @@ class GameSessionDataSource {
                 potraceDataPoint
             })
             var colorStroke: Int? = null
-            if (!data.strokeColor.isNullOrEmpty()) {
+            if (!data.strokeColor.isNullOrEmpty() && data.opacity !=null) {
                 colorStroke = Color.parseColor(data.strokeColor)
+                colorStroke= argb((data.opacity *255).toInt(),colorStroke.red,colorStroke.green,colorStroke.blue)
             }
             if (colorStroke == null) {
                 colorStroke = Color.BLACK
@@ -180,9 +189,7 @@ class GameSessionDataSource {
 
             val paint = Paint().apply {
                 color = colorStroke
-//                style = Paint.Style.STROKE
-//                strokeJoin = Paint.Join.ROUND
-//                strokeCap = Paint.Cap.ROUND
+                style = Paint.Style.FILL
                 if (data.strokeWidth != null)
                     strokeWidth = data.strokeWidth.toFloat()
             }

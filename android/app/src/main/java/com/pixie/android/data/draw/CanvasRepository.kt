@@ -59,16 +59,14 @@ class CanvasRepository {
             drawCommandHistory.notifyObserver()
         }else if(drawCommandHistory.value != null && !drawCommand.potracePoints.isNullOrEmpty()){
             val currentCommand = drawCommandHistory.value?.get(id)
+
             if(currentCommand == null){
                 drawCommandHistory.value?.put(id, drawCommand)
             }else {
-                var insertionPoint =1
-                currentCommand.potracePoints?.forEachIndexed {index, point->
-                    if(point.orderID<drawCommand.potracePoints[0].orderID){
-                        insertionPoint = index+1
-                    }
-                }
-                currentCommand.potracePoints?.addAll(insertionPoint,drawCommand.potracePoints.toList())
+//
+                currentCommand.potracePoints?.addAll(drawCommand.potracePoints.toList())
+                currentCommand.potracePoints?.sortBy { it.orderID }
+
             }
             drawCommandHistory.notifyObserver()
 

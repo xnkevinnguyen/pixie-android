@@ -10,5 +10,6 @@ data class PotraceDataPoint(
 
 enum class PotraceCommand {
     M,
-    C
+    C,
+    L
 }
