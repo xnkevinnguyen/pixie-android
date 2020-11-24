@@ -55,6 +55,9 @@ class CanvasFragment : Fragment() {
             }else if(!filteredCommand.isNullOrEmpty()){
                 my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
 
+            }else{
+                //both lists are empty
+                my_canvas.drawFromCommandList(arrayListOf())
             }
 
         })

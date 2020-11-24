@@ -184,6 +184,7 @@ class GameSessionRepository(
         //Only send a manual drawing if it's user's turn
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
         if (gameSession.value?.mode == GameMode.FREEFORALL) {
+            pathOrderGenerator += 1;
             CoroutineScope(Dispatchers.IO).launch {
                 dataSource.sendManualDraw(
                     getGameSessionID(),
@@ -192,10 +193,7 @@ class GameSessionRepository(
                     pathIDGenerator,
                     pathOrderGenerator
                 )
-                CoroutineScope(Dispatchers.Main).launch {
-                    pathOrderGenerator += 1;
 
-                }
 
                 }
 

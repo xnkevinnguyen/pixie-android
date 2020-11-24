@@ -257,8 +257,8 @@ class GameSessionDataSource {
             pathPointInput.pathStatus
         )
         try {
-            if (pathPointInput.pathStatus == PathStatus.END)
-                Log.d("ManualCommand - ", "Send draw--" + pathUniqueID.toString())
+            Log.d("ManualDrawingSend",pathOrderGenerator.toString()+ " - ("+pathPointInput.x+","+pathPointInput.y+")")
+
             val response =
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data
@@ -330,9 +330,8 @@ class GameSessionDataSource {
                         data.point.y.toFloat(),
                         status = data.status,
                         paint = paint
-
-
                     )
+                    Log.d("ManualDrawingReceive",data.point.order.toString()+ " - ("+data.point.x+","+data.point.y+")")
                     if (drawPoint.x >= 0 && drawPoint.y >= 0)
                         onDraw(drawPoint)
                 } else if (data?.commandStatus == CommandStatus.REDO && data.commandPathId != null) {
