@@ -35,6 +35,10 @@ class UserRepository(val dataSource: UserDataSource) {
         }
     }
 
+    fun getUserSafe():LoggedInUser?{
+        return user
+    }
+
     fun getUserAsChannelParticipant(): ChannelParticipant {
         return ChannelParticipant(getUser().userId, getUser().username, true)
     }
@@ -48,14 +52,17 @@ class UserRepository(val dataSource: UserDataSource) {
     }
 
 
-    suspend fun logout() {
+    fun logout() {
         // Logout should ALWAYS be called after exit operations
         // Logout is called when application stops or on manual logout
         if (user != null) {
-            dataSource.logout(getUser().userId)
+            CoroutineScope(Dispatchers.IO).launch {
+                dataSource.logout(getUser().userId)
+
+                CoroutineScope(Dispatchers.Main).launch { user = null }
+            }
 
         }
-        user = null
 
     }
 

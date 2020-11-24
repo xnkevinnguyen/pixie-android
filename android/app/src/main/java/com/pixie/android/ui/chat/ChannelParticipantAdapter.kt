@@ -55,7 +55,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         val listOfFriends = playersViewModel.getFriendList().value
         participantList.sortByDescending { it.isOnline }
         participantList.sortByDescending { listOfFriends?.contains(it) }
-        participantList.sortByDescending { playersViewModel.getUser().userId==it.id }
+        participantList.sortByDescending { playersViewModel.getUser()?.userId==it.id }
         listOfParticipants = participantList
         filteredListOfParticipants = participantList
         notifyDataSetChanged()
@@ -126,7 +126,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
         if(playersViewModel.getFriendList().value?.contains(participant)==true){
             ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
-        }else if(playersViewModel.getUser().userId == participant.id){
+        }else if(playersViewModel.getUser()?.userId == participant.id){
             ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_BLUE))
 
         }

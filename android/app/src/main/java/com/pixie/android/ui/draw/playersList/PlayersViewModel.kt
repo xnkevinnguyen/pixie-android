@@ -29,7 +29,7 @@ class PlayersViewModel(
         }
         return arrayListOf()
     }
-    fun getUser():LoggedInUser = userRepository.getUser()
+    fun getUser():LoggedInUser? = userRepository.getUserSafe()
 
     fun getCurrentChannelParticipants(): ArrayList<ChannelParticipant> {
         val currentChannelID = chatRepository.getCurrentChannelID().value

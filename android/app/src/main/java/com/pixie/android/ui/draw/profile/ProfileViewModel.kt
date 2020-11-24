@@ -15,7 +15,8 @@ import kotlinx.coroutines.runBlocking
 
 class ProfileViewModel(private val userRepository: UserRepository, private val profileRepository: ProfileRepository): ViewModel() {
     fun logout() {
-        runBlocking {  userRepository.logout()}}
+        userRepository.logout()
+    }
 
     fun fetchAllInfo(){
         profileRepository.fetchUserInfo()
