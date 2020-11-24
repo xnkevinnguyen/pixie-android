@@ -41,37 +41,27 @@ class CanvasRepository {
         }
 
     }
+
     // used only for virtual player drawing
-    fun appendCanvasCommand(id:Double,drawCommand: CanvasCommand){
-        if (drawCommandHistory.value != null && !drawCommand.path.isNullOrEmpty()) {
+    fun appendCanvasCommand(id: Double, drawCommand: CanvasCommand) {
+        val currentCommand = drawCommandHistory.value?.get(id)
 
-            val currentCommand = drawCommandHistory.value?.get(id)
+        if (drawCommandHistory.value != null && !drawCommand.path.isNullOrEmpty() && currentCommand != null) {
 
-            var insertionPoint =1
-            currentCommand?.path?.forEachIndexed {index, point->
-                val orderID=drawCommand.path[0].orderID
-                if(orderID !=null && point.orderID!=null&& point.orderID<orderID){
-                    insertionPoint = index+1
-                }
-            }
+            currentCommand?.path?.addAll(drawCommand.path.toList())
+            currentCommand.potracePoints?.sortBy { it.orderID }
 
-            currentCommand?.path?.addAll(insertionPoint,drawCommand.path.toList())
             drawCommandHistory.notifyObserver()
-        }else if(drawCommandHistory.value != null && !drawCommand.potracePoints.isNullOrEmpty()){
-            val currentCommand = drawCommandHistory.value?.get(id)
+        } else if (drawCommandHistory.value != null && !drawCommand.potracePoints.isNullOrEmpty() && currentCommand != null) {
 
-            if(currentCommand == null){
-                drawCommandHistory.value?.put(id, drawCommand)
-            }else {
-//
-                currentCommand.potracePoints?.addAll(drawCommand.potracePoints.toList())
-                currentCommand.potracePoints?.sortBy { it.orderID }
+            currentCommand.potracePoints?.addAll(drawCommand.potracePoints.toList())
+            currentCommand.potracePoints?.sortBy { it.orderID }
 
-            }
+
             drawCommandHistory.notifyObserver()
 
-        }else if(drawCommandHistory.value.isNullOrEmpty()){
-            addCanvasCommand(id,drawCommand)
+        } else if (drawCommandHistory.value.isNullOrEmpty()) {
+            addCanvasCommand(id, drawCommand)
         }
     }
 
@@ -116,8 +106,7 @@ class CanvasRepository {
         CoroutineScope(Dispatchers.Main).launch {
             if (serverCommand.commandType == CommandType.ERASE) {
                 drawCommandHistory.value?.get(serverCommand.commandPathID)?.type = CommandType.ERASE
-            }
-            else if (serverCommand.commandType == CommandType.REDO || serverCommand.commandType == CommandType.UNDO) {
+            } else if (serverCommand.commandType == CommandType.REDO || serverCommand.commandType == CommandType.UNDO) {
                 if (drawCommandHistory.value?.get(serverCommand.commandPathID)?.type == CommandType.DRAW) {
                     drawCommandHistory.value?.get(serverCommand.commandPathID)?.type =
                         serverCommand.commandType
@@ -144,7 +133,7 @@ class CanvasRepository {
     }
 
     // Function to make sure observer is notified when a data structure is modified
-    // https://stackoverflow.com/questions/47941537/notify-observer-when-item-is-added-to-list-of-livedata
+// https://stackoverflow.com/questions/47941537/notify-observer-when-item-is-added-to-list-of-livedata
     fun <T> MutableLiveData<T>.notifyObserver() {
         this.value = this.value
     }
