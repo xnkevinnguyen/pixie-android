@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.type.GameMode
 import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
@@ -122,6 +123,10 @@ class ChannelFragment : Fragment() {
             })
             dialog.setContentView(R.layout.add_player)
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)
+            val game = chatViewModel.getGameSession()
+            if(game.value?.mode == GameMode.COOP){
+                createVirtualPlayer.isEnabled = false
+            }
             createVirtualPlayer.setOnClickListener {
                 chatViewModel.addVirtualPlayer{
                         if(it.isSuccess ==true){
