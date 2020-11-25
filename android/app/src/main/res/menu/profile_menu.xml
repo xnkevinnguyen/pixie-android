@@ -5,7 +5,9 @@
     tools:context=".MainActivity">
     <item
         android:id="@+id/action_settings"
-        android:icon="@mipmap/ic_launcher_round"
+        android:background="@drawable/circle"
+        android:foregroundGravity="center"
+        android:icon="@drawable/ic_profile_user"
         android:title="@string/action_settings"
         app:showAsAction="always">
         <menu>

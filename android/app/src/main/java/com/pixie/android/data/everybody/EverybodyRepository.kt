@@ -25,13 +25,16 @@ class EverybodyRepository(private val dataSource: EverybodyDataSource,
             users = dataSource.getAllUsers(userRepository.getUser().userId)
         }
 
-        var me: ChannelParticipant? = null
+        var me: ArrayList<ChannelParticipant?> = arrayListOf()
         for (user in users){
-            if(user.id == userRepository.getUser().userId) me = user
+            if(user.id == userRepository.getUser().userId) me.add(user)
+            if(user.isVirtual != null) {
+                if (user.isVirtual) me.add(user)
+            }
         }
 
-        if(me != null){
-            users.remove(me)
+       for (user in me){
+            users.remove(user)
         }
         userList.postValue(users)
     }

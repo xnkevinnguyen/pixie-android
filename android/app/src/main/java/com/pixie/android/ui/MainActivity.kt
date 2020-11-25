@@ -7,6 +7,8 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -45,6 +47,7 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var preferencesSettings: SharedPreferences
+    private lateinit var preferencesLogin:SharedPreferences
 
     override fun attachBaseContext(newBase: Context) {
         preferencesSettings = newBase.getSharedPreferences(
@@ -106,28 +109,22 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
+        preferencesLogin = getSharedPreferences(
+            Constants.SHARED_PREFERENCES_LOGIN,
+            Context.MODE_PRIVATE
+        )
         val avatar: ImageView = header.findViewById(R.id.imageView)
 
-        var foregroundColor: Int? = null
-//        if (!it.avatarForeground.isNullOrEmpty()) {
-//            foregroundColor = Color.parseColor(it.avatarForeground)
-//        }
-        if (foregroundColor == null) {
-            foregroundColor =
-                Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-        }
+
+        val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
         avatar.setColorFilter(
             foregroundColor
         )
 
-        var backgroundColor: Int? = null
-//        if (!it.avatarBackground.isNullOrEmpty()) {
-//            backgroundColor = Color.parseColor(it.avatarBackground)
-//        }
-        if (backgroundColor == null) {
-            backgroundColor =
-                Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-        }
+
+        val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
         avatar.backgroundTintList = ColorStateList.valueOf(
             backgroundColor
         )
@@ -184,6 +181,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
         menuInflater.inflate(R.menu.profile_menu, menu)
+        val profile = menu.findItem(R.id.action_settings).icon
+        val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
+        profile.setColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP)
+
+        val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
+        profile.setTint(backgroundColor)
+
+
         return true
     }
 

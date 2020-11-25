@@ -122,6 +122,8 @@
     <string name="round">Tours : 3</string>
     <string name="round_turn">Tour</string>
     <string name="total_round">de 3</string>
+    <string name="rounds">tours</string>
+
 
     <string name="game_result">Résultat de la Partie</string>
     <string name="goto_home">Retourner à la Page Accueil</string>

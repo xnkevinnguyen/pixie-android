@@ -129,10 +129,10 @@ class GameInformationFragment : Fragment() {
         val mediaPlayer = chatViewModel.createMediaPlayer(R.raw.end_game, requireContext())
 
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
-            var roundString =
-                resources.getString(R.string.round_turn) + " " + (it.currentRound.toInt() + 1)
+            var roundString: String =
+                (it.currentRound.toInt() + 1).toString()
             if(it.mode == GameMode.FREEFORALL){
-                roundString = resources.getString(R.string.round_turn) + " " + (it.currentRound.toInt() + 1) + "/3"
+                roundString = (it.currentRound.toInt() + 1).toString() + "/3"
             }
 
             round.text = roundString
