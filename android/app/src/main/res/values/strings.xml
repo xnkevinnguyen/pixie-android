@@ -122,6 +122,7 @@
     <string name="round">Round : 3</string>
     <string name="round_turn">Round</string>
     <string name="total_round">of 3</string>
+    <string name="rounds">rounds</string>
 
     <string name="game_result">Game Result</string>
     <string name="goto_home">Go To Home</string>

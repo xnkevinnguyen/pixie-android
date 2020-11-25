@@ -7,6 +7,8 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -177,6 +179,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
         menuInflater.inflate(R.menu.profile_menu, menu)
+        val profile = menu.findItem(R.id.action_settings).icon
+        val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
+        profile.setColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP)
+
+        val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
+        profile.setTint(backgroundColor)
+
+
         return true
     }
 
