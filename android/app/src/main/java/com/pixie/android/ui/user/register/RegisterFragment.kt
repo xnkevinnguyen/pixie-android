@@ -3,6 +3,7 @@ package com.pixie.android.ui.user.register
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -24,6 +25,7 @@ import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.register_fragment.*
+import kotlin.random.Random
 
 
 class RegisterFragment : Fragment() {
@@ -147,6 +149,11 @@ class RegisterFragment : Fragment() {
 
                     if (registerResult.success != null) {
                         // Once register succeeds, we are loggin in the user
+                        val foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+                        editor.putInt(Constants.FOREGROUND, foregroundColor)
+                        val backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+                        editor.putInt(Constants.BACKGROUND, backgroundColor)
+
 
                         val intent = Intent(view.context, MainActivity::class.java)
                         val param = Bundle();

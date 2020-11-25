@@ -18,6 +18,7 @@ import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.draw.channelList.PlayersViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
+import kotlin.random.Random
 
 class PlayersInGameAdapter(context: Context) : BaseAdapter() {
 
@@ -62,6 +63,31 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
         usernameParticipant.text = participant.username
         val removeVirtualElement = rowView.findViewById<TextView>(R.id.remove_virtual_player)
         removeVirtualElement.visibility = View.GONE
+
+        val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
+
+        var foregroundColor: Int? = null
+        if (!participant.avatarForeground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(participant.avatarForeground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+        avatarElement.setColorFilter(
+            foregroundColor
+        )
+
+        var backgroundColor: Int? = null
+        if (!participant.avatarBackground.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(participant.avatarBackground)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+        avatarElement.backgroundTintList = ColorStateList.valueOf(
+            backgroundColor
+        )
+
 
         val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
         if (playersViewModel.getFriendList().value?.contains(participant) == true) {

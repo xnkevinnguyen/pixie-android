@@ -14,7 +14,9 @@ mutation EnterGame ($enterGameInput:GameSessionInput!){
                 id
                 username
                 isOnline,
-                avatar
+                isVirtual,
+                avatarForeground,
+                avatarBackground
             }
         }
         gameInfo{
@@ -23,7 +25,9 @@ mutation EnterGame ($enterGameInput:GameSessionInput!){
                 id,
                 username,
                 isOnline,
-                avatar
+                isVirtual,
+                avatarForeground,
+                avatarBackground
             }
             mode,
             language

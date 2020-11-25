@@ -7,6 +7,8 @@ mutation EnterChannel ($enterChannelInput:EnterChannelInput!){
             username
             isOnline
             isVirtual
+            avatarForeground
+            avatarBackground
         }
     }
 }

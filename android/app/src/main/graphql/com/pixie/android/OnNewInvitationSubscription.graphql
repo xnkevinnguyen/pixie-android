@@ -7,6 +7,9 @@ subscription OnNewInvitation{
             id
             username
             isOnline
+            isVirtual
+            avatarForeground
+            avatarBackground
         }
         gameSession{
             id
@@ -23,7 +26,8 @@ subscription OnNewInvitation{
                     id
                     username
                     isOnline,
-                    avatar
+                    avatarForeground,
+                    avatarBackground
                 }
             }
             gameInfo{
@@ -33,7 +37,9 @@ subscription OnNewInvitation{
                     id,
                     username,
                     isOnline,
-                    avatar
+                    isVirtual,
+                    avatarForeground,
+                    avatarBackground
                 }
                 mode,
                 language

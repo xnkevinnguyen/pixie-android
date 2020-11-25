@@ -30,6 +30,8 @@ subscription OnGameSessionChange($gameSessionId:Float!){
                 username
                 isOnline
                 isVirtual
+                avatarForeground
+                avatarBackground
             }
             scores{
                 id

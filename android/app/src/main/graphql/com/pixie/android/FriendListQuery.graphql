@@ -4,7 +4,9 @@ query getFriendList{
         friends{
             id,
             username,
-            avatar,
+            isVirtual,
+            avatarForeground,
+            avatarBackground,
             isOnline,
             isVirtual
         }

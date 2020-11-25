@@ -4,7 +4,9 @@ package com.pixie.android.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -37,6 +39,7 @@ import com.pixie.android.utilities.OnApplicationStopService
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.runBlocking
 import java.util.*
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
@@ -104,6 +107,31 @@ class MainActivity : AppCompatActivity() {
 
         val header: View = navView.getHeaderView(0)
         val avatar: ImageView = header.findViewById(R.id.imageView)
+
+        var foregroundColor: Int? = null
+        if (!it.avatarForeground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(it.avatarForeground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor =
+                Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+        avatar.setColorFilter(
+            foregroundColor
+        )
+
+        var backgroundColor: Int? = null
+        if (!it.avatarBackground.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(it.avatarBackground)
+        }
+        if (backgroundColor == null) {
+            backgroundColor =
+                Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+        avatar.backgroundTintList = ColorStateList.valueOf(
+            backgroundColor
+        )
+
         avatar.setOnClickListener {
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
