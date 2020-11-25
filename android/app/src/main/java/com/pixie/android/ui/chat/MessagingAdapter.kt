@@ -85,6 +85,6 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
         return formatter.format(calendar.time)
     }
     private fun formatTime(text:String):String{
-        return text.substring(11,19)
+        return text
     }
 }

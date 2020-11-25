@@ -109,9 +109,9 @@ class MainActivity : AppCompatActivity() {
         val avatar: ImageView = header.findViewById(R.id.imageView)
 
         var foregroundColor: Int? = null
-        if (!it.avatarForeground.isNullOrEmpty()) {
-            foregroundColor = Color.parseColor(it.avatarForeground)
-        }
+//        if (!it.avatarForeground.isNullOrEmpty()) {
+//            foregroundColor = Color.parseColor(it.avatarForeground)
+//        }
         if (foregroundColor == null) {
             foregroundColor =
                 Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
@@ -121,9 +121,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         var backgroundColor: Int? = null
-        if (!it.avatarBackground.isNullOrEmpty()) {
-            backgroundColor = Color.parseColor(it.avatarBackground)
-        }
+//        if (!it.avatarBackground.isNullOrEmpty()) {
+//            backgroundColor = Color.parseColor(it.avatarBackground)
+//        }
         if (backgroundColor == null) {
             backgroundColor =
                 Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
