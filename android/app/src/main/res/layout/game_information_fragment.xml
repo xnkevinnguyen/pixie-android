@@ -77,7 +77,7 @@
             android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/number_guess_left"
+                android:id="@+id/number_hints_left"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@android:color/white"
@@ -86,11 +86,23 @@
                 android:layout_marginEnd="10dp" />
 
             <TextView
+                android:id="@+id/hints_left_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/guess_left"
+                android:text="@string/hints_left"
                 android:textSize="@dimen/profile_text"
                 android:layout_gravity="center"/>
+            <Button
+                android:id="@+id/request_hints"
+                android:background="?colorPrimary"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:text="@string/ask_hint"
+                android:padding="2dp"
+                android:layout_marginLeft="20dp"
+
+                />
 
         </LinearLayout>
 
@@ -118,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="350dp"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -128,31 +140,22 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
 
-            <Button
-                android:id="@+id/kick_player"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?colorPrimary"
-                android:textColor="@android:color/white"
-                android:textSize="15dp"
-                android:layout_weight="1"
-                android:text="@string/kick"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginEnd="10dp" />
 
             <Button
+                android:layout_centerInParent="true"
                 android:id="@+id/leave_game"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
                 android:background="?colorPrimary"
+                android:gravity="center"
+                android:text="@string/leave"
                 android:textColor="@android:color/white"
                 android:textSize="15dp"
-                android:layout_weight="1"
-                android:text="@string/leave"
-                android:layout_gravity="center"
-                android:gravity="center"/>
-        </LinearLayout>
+                android:paddingHorizontal="@dimen/big_size"
+            />
+        </RelativeLayout>
 
 
     </LinearLayout>

@@ -160,4 +160,6 @@
     <string name="correct_guess">Correct Answer!</string>
     <string name="incorrect_guess">Incorrect Answer!</string>
     <string name="your_word"> Your word: %1$s</string>
+    <string name="hints_left">Hints Left</string>
+    <string name="ask_hint">Ask Hint</string>
 </resources>

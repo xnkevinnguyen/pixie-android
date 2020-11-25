@@ -1,0 +1,5 @@
+mutation AskHintMutation($input:AskHintInput!){
+    askHint(input:$input){
+        hintLeft
+    }
+}

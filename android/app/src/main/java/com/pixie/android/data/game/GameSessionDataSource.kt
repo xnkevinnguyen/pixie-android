@@ -41,6 +41,11 @@ class GameSessionDataSource {
                         it.user.isVirtual!!
                     )
                 })
+                var nHintsLeft: Int? = null
+                data.gameInfo.players.forEach {
+                    if (it.id == userID)
+                        nHintsLeft = it.nHints
+                }
                 return GameSessionData(
                     data.id,
                     data.currentDrawerId,
@@ -51,7 +56,8 @@ class GameSessionDataSource {
                     data.gameHall.id,
                     players,
                     data.gameInfo.mode,
-                    data.gameState
+                    data.gameState,
+                    nHintsLeft
                 )
             }
 
@@ -92,7 +98,13 @@ class GameSessionDataSource {
 
                 val data = it.data?.onGameSessionChange
                 if (data != null && data.gameInfo.players != null) {
+                    var nHintsLeft: Int? = null
+                    data.gameInfo.players.forEach {
+                        if (it.id == userID)
+                            nHintsLeft = it.nHints
+                    }
                     val players = ArrayList(data.gameInfo.scores!!.map {
+
                         GameParticipant(
                             it.user.id,
                             it.user.username,
@@ -106,12 +118,13 @@ class GameSessionDataSource {
                         data.currentDrawerId,
                         data.currentWord,
                         data.currentRound,
-                        data.sprintTries!!,
+                        data.sprintTries,
                         data.status,
                         data.gameHall.id,
                         players,
                         data.gameInfo.mode,
-                        data.gameState
+                        data.gameState,
+                        nHintsLeft
                     )
                     onGameSessionChange(gameSession)
                 }
@@ -153,13 +166,13 @@ class GameSessionDataSource {
     ) {
         if (data.potracePoints != null) {
             val potraceDataPoints = ArrayList(data.potracePoints.map {
-                val singlePoint = SinglePoint(it.x.toFloat(), it.y.toFloat(),it.order.toDouble())
+                val singlePoint = SinglePoint(it.x.toFloat(), it.y.toFloat(), it.order.toDouble())
                 var command: PotraceCommand = PotraceCommand.M
                 if (it.code.equals(PotraceCommand.M.toString())) {
                     command = PotraceCommand.M
                 } else if (it.code.equals(PotraceCommand.C.toString())) {
                     command = PotraceCommand.C
-                }else if (it.code.equals(PotraceCommand.L.toString())){
+                } else if (it.code.equals(PotraceCommand.L.toString())) {
                     command = PotraceCommand.L
                 }
                 val potraceDataPoint = PotraceDataPoint(
@@ -178,9 +191,14 @@ class GameSessionDataSource {
                 potraceDataPoint
             })
             var colorStroke: Int? = null
-            if (!data.strokeColor.isNullOrEmpty() && data.opacity !=null) {
+            if (!data.strokeColor.isNullOrEmpty() && data.opacity != null) {
                 colorStroke = Color.parseColor(data.strokeColor)
-                colorStroke= argb((data.opacity *255).toInt(),colorStroke.red,colorStroke.green,colorStroke.blue)
+                colorStroke = argb(
+                    (data.opacity * 255).toInt(),
+                    colorStroke.red,
+                    colorStroke.green,
+                    colorStroke.blue
+                )
             }
             if (colorStroke == null) {
                 colorStroke = Color.BLACK
@@ -209,7 +227,7 @@ class GameSessionDataSource {
     ) {
         if (data.points != null) {
             val dataPoints = ArrayList(data.points.map {
-                SinglePoint(it.x.toFloat(), it.y.toFloat(),it.order)
+                SinglePoint(it.x.toFloat(), it.y.toFloat(), it.order)
             })
 
             var colorStroke: Int? = null
@@ -245,19 +263,26 @@ class GameSessionDataSource {
         userID: Double,
         pathPointInput: ManualPathPointInput,
         pathIDGenerator: Double,
-        pathOrderGenerator:Double
+        pathOrderGenerator: Double
     ): Double? {
         val pathUniqueID = 1000000 * userID + gameSessionID * 10000 + pathIDGenerator
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
             pathUniqueID,
-            DataPoints(pathPointInput.x.toDouble(), pathPointInput.y.toDouble(),pathOrderGenerator),
+            DataPoints(
+                pathPointInput.x.toDouble(),
+                pathPointInput.y.toDouble(),
+                pathOrderGenerator
+            ),
             ("#" + Integer.toHexString(pathPointInput.paint.color).substring(2)).toInput(),
             pathPointInput.paint.strokeWidth.toDouble().toInput(),
             pathPointInput.pathStatus
         )
         try {
-            Log.d("ManualDrawingSend",pathOrderGenerator.toString()+ " - ("+pathPointInput.x+","+pathPointInput.y+")")
+            Log.d(
+                "ManualDrawingSend",
+                pathOrderGenerator.toString() + " - (" + pathPointInput.x + "," + pathPointInput.y + ")"
+            )
 
             val response =
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
@@ -331,7 +356,10 @@ class GameSessionDataSource {
                         status = data.status,
                         paint = paint
                     )
-                    Log.d("ManualDrawingReceive",data.point.order.toString()+ " - ("+data.point.x+","+data.point.y+")")
+                    Log.d(
+                        "ManualDrawingReceive",
+                        data.point.order.toString() + " - (" + data.point.x + "," + data.point.y + ")"
+                    )
                     if (drawPoint.x >= 0 && drawPoint.y >= 0)
                         onDraw(drawPoint)
                 } else if (data?.commandStatus == CommandStatus.REDO && data.commandPathId != null) {
@@ -376,5 +404,21 @@ class GameSessionDataSource {
 
         }
         return false
+    }
+
+    suspend fun askHint(
+        gameSessionID: Double,
+        userID: Double
+    ): Int? {
+        val input = AskHintInput(gameSessionID)
+        try {
+            val response =
+                apolloClient(userID).mutate(AskHintMutation(input)).toDeferred().await()
+            return response.data?.askHint?.hintLeft?.toInt()
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.message.toString())
+
+        }
+        return null
     }
 }

@@ -194,7 +194,7 @@ class GameSessionRepository(
                     order
                 )
 
-                }
+            }
             pathOrderGenerator += 1;
 
 
@@ -308,6 +308,23 @@ class GameSessionRepository(
                 val response = dataSource.guessWord(word, gameID, userRepository.getUser().userId)
                 CoroutineScope(Dispatchers.Main).launch {
                     onResult(response)
+                }
+            }
+        }
+    }
+
+    fun askHint() {
+        val gameID = gameSession.value?.id
+        if (gameID != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = dataSource.askHint(gameID, userRepository.getUser().userId)
+                if (response != null && response >= 0) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val gameSessionData = gameSession.value
+                        gameSessionData?.hintsLeft = response
+                        gameSession.postValue(gameSessionData)
+
+                    }
                 }
             }
         }
