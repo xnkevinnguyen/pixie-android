@@ -184,12 +184,8 @@ class MainActivity : AppCompatActivity() {
         val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
         profile.setColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP)
 
-        val profileBackground = menu.findItem(R.id.action_settings)
         val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
-        profileBackground.iconTintList = ColorStateList.valueOf(backgroundColor)
-
-
         return true
     }
 
