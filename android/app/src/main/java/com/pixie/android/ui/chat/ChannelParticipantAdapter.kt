@@ -96,7 +96,8 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
             }
 
             //Change icon
-            avatarElement.setImageDrawable(ContextCompat.getDrawable(contextCopy, R.drawable.ic_profile_virtual))
+            avatarElement.background = ContextCompat.getDrawable(contextCopy, R.drawable.circle)
+            avatarElement.setImageResource(R.drawable.ic_profile_virtual)
 
         }else{
             removeVirtualElement.visibility = View.GONE
