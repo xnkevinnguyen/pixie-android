@@ -77,7 +77,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/round_number"
@@ -159,23 +160,10 @@
             android:layout_marginBottom="5dp">
 
             <Button
-                android:id="@+id/kick_player"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?colorPrimary"
-                android:textColor="@android:color/white"
-                android:textSize="15dp"
-                android:layout_weight="1"
-                android:text="@string/kick"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginEnd="10dp" />
-
-            <Button
                 android:id="@+id/leave_game"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?colorPrimary"
+                android:background="@drawable/button_drawable"
                 android:textColor="@android:color/white"
                 android:textSize="15dp"
                 android:layout_weight="1"

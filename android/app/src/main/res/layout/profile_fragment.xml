@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/nav_header_desc"
-                    android:paddingTop="@dimen/nav_header_vertical_spacing"
+                    android:paddingTop="3dp"
                     android:background="@drawable/circle"
                     android:foregroundGravity="center"
                     android:src="@drawable/ic_profile_user"
@@ -147,6 +147,8 @@
                 android:background="@drawable/button_drawable"
                 android:textColor="@android:color/white"
                 android:layout_gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:text="@string/logout" />
 
         </LinearLayout>
