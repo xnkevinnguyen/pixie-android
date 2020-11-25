@@ -37,8 +37,10 @@ class UserDataSource {
     }
 
 
-    suspend fun register(username:String, password: String, firstName: String, lastName: String):RegisterMutation.Data?{
-        val usernamePasswordInput = UsernamePasswordInput(username,password, firstName, lastName)
+    suspend fun register(username:String, password: String, firstName: String, lastName: String, foreground:String,
+                         background:String):RegisterMutation.Data?{
+        val usernamePasswordInput = UsernamePasswordInput(username,password, firstName, lastName, avatarForeground = foreground.toInput(),
+        avatarBackground = background.toInput())
         var response :RegisterMutation.Data? =null
         try{
             response =  apolloClient(null).mutate(RegisterMutation(usernamePasswordInput)).toDeferred().await().data
@@ -50,6 +52,15 @@ class UserDataSource {
     }
     suspend fun  sendConfig(userID: Double,language: Language,theme:String){
         val input = UserConfigInput(language.toInput(),theme.toInput())
+        try{
+            apolloClient(userID).mutate(SetConfigMutation(input)).toDeferred().await()
+        }catch(e:ApolloException){
+            Log.d("apolloException", e.message.toString())
+        }
+    }
+
+    suspend fun  sendConfigColor(userID: Double,foreground: String,background:String){
+        val input = UserConfigInput(avatarForeground = foreground.toInput(), avatarBackground = background.toInput())
         try{
             apolloClient(userID).mutate(SetConfigMutation(input)).toDeferred().await()
         }catch(e:ApolloException){

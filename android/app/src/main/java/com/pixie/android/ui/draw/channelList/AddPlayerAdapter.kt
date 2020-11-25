@@ -61,6 +61,7 @@ class AddPlayerAdapter(context: Context) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val participant: ChannelParticipant = listPlayersToAdd[position]
         val rowView = inflater.inflate(R.layout.add_player_row, parent, false)
+        
         val userName = rowView.findViewById<TextView>(R.id.username_to_add)
         userName.text = participant.username
         val factory = InjectorUtils.provideChatViewModelFactory()

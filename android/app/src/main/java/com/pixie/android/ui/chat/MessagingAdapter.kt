@@ -56,9 +56,10 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
             val rowView = inflater.inflate(R.layout.align_chat_right, parent, false)
             val txtTitle = rowView.findViewById<TextView>(R.id.text_title)
             val timePosted = rowView.findViewById<TextView>(R.id.time)
-            val time = message.timePosted
+            val time = message.timePosted.toLong()
+            val timeFormatted = getDate(time, "HH:mm:ss")
             txtTitle.text = message.text
-            timePosted.text = formatTime(time)
+            timePosted.text = timeFormatted
 
             rowView
 
@@ -67,11 +68,12 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
             val txtTitle = rowView.findViewById<TextView>(R.id.message_body)
             val userName = rowView.findViewById<TextView>(R.id.name)
             val timePosted = rowView.findViewById<TextView>(R.id.time)
-            val time = message.timePosted
+            val time = message.timePosted.toLong()
+            val timeFormatted = getDate(time, "HH:mm:ss")
 
             txtTitle.text = message.text
             userName.text = message.userName
-            timePosted.text = formatTime(time)
+            timePosted.text = timeFormatted
             rowView
         }
     }
