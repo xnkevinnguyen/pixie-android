@@ -51,7 +51,6 @@
             android:layout_marginRight="25dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_drawable"
-            android:backgroundTint="@color/dark_red"
             android:text="@string/leave_game"
             android:textAlignment="center"
             android:textSize="15dp"
