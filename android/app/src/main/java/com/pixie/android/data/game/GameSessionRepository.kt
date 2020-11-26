@@ -26,6 +26,7 @@ class GameSessionRepository(
     private val chatRepository: ChatRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
+
     // word is displayed to the user who is drawing
     private var shouldShowWord = MutableLiveData<ShowWordinGame>()
     private var channelID: Double = 0.0
@@ -268,11 +269,14 @@ class GameSessionRepository(
                 gameID,
                 userRepository.getUser().userId, onPathBegin = { id, command ->
                     CoroutineScope(Dispatchers.Main).launch {
-                        canvasRepository.addCanvasCommand(id, command)
+                        if (!isUserDrawingTurn())
+                            canvasRepository.addCanvasCommand(id, command)
                     }
                 }, onPathUpdate = { id, command ->
                     CoroutineScope(Dispatchers.Main).launch {
-                        canvasRepository.appendCanvasCommand(id, command)
+                        if (!isUserDrawingTurn())
+
+                            canvasRepository.appendCanvasCommand(id, command)
                     }
                 })
         }
