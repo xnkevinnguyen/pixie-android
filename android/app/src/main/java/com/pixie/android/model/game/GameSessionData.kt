@@ -14,6 +14,7 @@ data class GameSessionData (
     var channelID:Double,
     var players:ArrayList<GameParticipant>,
     var mode: GameMode,
-    var state:GameState?
+    var state:GameState?,
+    var hintsLeft:Int?=null
 
 )

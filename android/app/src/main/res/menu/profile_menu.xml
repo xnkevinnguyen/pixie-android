@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
+
+
     <item
         android:id="@+id/action_settings"
-        android:background="@drawable/circle"
         android:foregroundGravity="center"
-        android:icon="@drawable/ic_profile_user"
         android:title="@string/action_settings"
-        app:showAsAction="always">
+        android:iconTintMode="multiply"
+        android:iconTint="@color/red"
+        app:showAsAction="always"
+        >
+
         <menu>
             <item
                 android:id="@+id/action_dropdown1"

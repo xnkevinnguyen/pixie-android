@@ -32,6 +32,7 @@ subscription OnGameSessionChange($gameSessionId:Float!){
                 isVirtual
                 avatarForeground
                 avatarBackground
+                nHints
             }
             scores{
                 id
