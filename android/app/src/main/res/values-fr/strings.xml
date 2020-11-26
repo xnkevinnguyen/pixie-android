@@ -159,5 +159,8 @@
     <string name="correct_guess">Bonne réponse!</string>
     <string name="incorrect_guess">Mauvaise réponse!</string>
     <string name="your_word"> Ton mot: %1$s</string>
+    <string name="hints_left">Indices Restant</string>
+    <string name="ask_hint">Demander</string>
+
 
 </resources>
