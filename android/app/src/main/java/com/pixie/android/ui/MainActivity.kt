@@ -202,18 +202,30 @@ class MainActivity : AppCompatActivity() {
         // Added 3 dots in the right up corner
         menuInflater.inflate(R.menu.profile_menu, menu)
 
-     val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-      val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
 
-        val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-        val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
+        val colors = profileViewModel.getAvatarColor()
+        var foregroundColor: Int? = null
+        if (!colors.foreground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(colors.foreground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+
+        var backgroundColor: Int? = null
+        if (!colors.background.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(colors.background)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
 
         val drawable = ContextCompat.getDrawable(applicationContext,R.drawable.profile_layer) as LayerDrawable
         drawable?.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
         drawable?.setDrawableByLayerId(R.id.foreground_icon,ContextCompat.getDrawable(applicationContext,R.drawable.ic_profile_user))
         drawable?.findDrawableByLayerId(R.id.foreground_icon).setColorFilter(foregroundColor,PorterDuff.Mode.SRC_ATOP)
-        val icon = menu.findItem(R.id.action_settings).setIcon(drawable)
 
+        menu.findItem(R.id.action_settings).setIcon(drawable)
         return true
     }
 
