@@ -66,6 +66,15 @@ class ChannelFragment : Fragment() {
                     startGameBtn.visibility = View.VISIBLE
                     leaveGameBtn.visibility = View.VISIBLE
                     addPlayerBtn.visibility = View.VISIBLE
+                    val nParticipant = currentChannel.participantList?.size
+                    if (nParticipant != null && nParticipant >= 2) {
+
+                        startGameBtn.isEnabled = true
+                        startGameBtn.alpha = 1f
+                    } else {
+                        startGameBtn.isEnabled = false
+                        startGameBtn.alpha = 0.5f
+                    }
                 } else {
                     startGameBtn.visibility = View.GONE
                     leaveGameBtn.visibility = View.GONE
@@ -76,20 +85,25 @@ class ChannelFragment : Fragment() {
 
         userChannels.observe(viewLifecycleOwner, Observer { userChannelList ->
             userChannelAdapter.set(userChannelList)
+            val currentChannelID = chatViewModel.getCurrentChannelID().value
+            val currentChannel = channelViewModel.getCurrentChannelInfo(currentChannelID)
+            val nParticipant = currentChannel?.participantList?.size
+
+            if (nParticipant != null && nParticipant >= 2) {
+
+                startGameBtn.isEnabled = true
+                startGameBtn.alpha = 1f
+            } else {
+                startGameBtn.isEnabled = false
+                startGameBtn.alpha = 0.5f
+            }
         })
 
         val gameInfoFactory = InjectorUtils.provideGameInformationViewModelFactory()
-        val gameInfoViewModel = ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
+        val gameInfoViewModel =
+            ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
 
-        gameInfoViewModel.getNumberOfParticipantsInGame().observe(viewLifecycleOwner, Observer {
-            if(it>=2){
-                startGameBtn.isEnabled =true
-                startGameBtn.alpha =1f
-            }else{
-                startGameBtn.isEnabled =false
-                startGameBtn.alpha =0.5f
-            }
-        })
+
         //start game
         startGameBtn.setOnClickListener {
             val gameID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID
@@ -110,11 +124,12 @@ class ChannelFragment : Fragment() {
 
         leaveGameBtn.setOnClickListener {
             val gameID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID
-            val channelID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.channelID
+            val channelID =
+                channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.channelID
             if (channelID != null) {
                 chatViewModel.exitChannel(channelID)
             }
-            if(gameID != null){
+            if (gameID != null) {
                 chatViewModel.exitGame(gameID)
             }
         }
@@ -144,16 +159,20 @@ class ChannelFragment : Fragment() {
             val game = chatViewModel.getGameSession()
             createVirtualPlayer.isEnabled = game.value?.mode != GameMode.COOP
             createVirtualPlayer.setOnClickListener {
-                chatViewModel.addVirtualPlayer{
-                        if(it.isSuccess ==true){
-                            Toast.makeText(requireContext(),
-                                resources.getString(R.string.success),
-                                Toast.LENGTH_LONG).show()
-                        }else if( it.isSuccess==false){
-                            Toast.makeText(requireContext(),
-                                resources.getString(R.string.error),
-                                Toast.LENGTH_LONG).show()
-                        }
+                chatViewModel.addVirtualPlayer {
+                    if (it.isSuccess == true) {
+                        Toast.makeText(
+                            requireContext(),
+                            resources.getString(R.string.success),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else if (it.isSuccess == false) {
+                        Toast.makeText(
+                            requireContext(),
+                            resources.getString(R.string.error),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
 
                 }
                 dialog.dismiss()

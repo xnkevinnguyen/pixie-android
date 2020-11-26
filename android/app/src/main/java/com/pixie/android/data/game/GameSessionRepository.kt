@@ -26,7 +26,6 @@ class GameSessionRepository(
     private val chatRepository: ChatRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
-    private var numberOfParticipantsInGame = MutableLiveData<Int>().apply { postValue(0) }
     // word is displayed to the user who is drawing
     private var shouldShowWord = MutableLiveData<ShowWordinGame>()
     private var channelID: Double = 0.0
@@ -58,10 +57,6 @@ class GameSessionRepository(
         } else {
             throw error("GameSessionID is null")
         }
-    }
-
-    fun getNumberOfParticipantsInGame(): LiveData<Int>{
-        return numberOfParticipantsInGame
     }
 
     fun setGameSession(newGameSession: GameSessionData) {
@@ -115,8 +110,6 @@ class GameSessionRepository(
             dataSource.subscribeToGameSessionChange(gameID, userRepository.getUser().userId) {
                 CoroutineScope(Dispatchers.Main).launch {
 
-                    numberOfParticipantsInGame.postValue(it.players.size)
-                    numberOfParticipantsInGame.notifyObserver()
                     // Handles the case where another user starts the game
                     if (gameSession.value == null || gameSession.value?.status == GameStatus.PENDING || gameSession.value?.status == GameStatus.READY) {
                         channelID = it.channelID

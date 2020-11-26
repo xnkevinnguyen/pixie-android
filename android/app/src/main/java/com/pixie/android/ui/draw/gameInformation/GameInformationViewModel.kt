@@ -14,9 +14,6 @@ class GameInformationViewModel( private val gameSessionRepository: GameSessionRe
 
     fun getGameSession():LiveData<GameSessionData> = gameSessionRepository.getGameSession()
 
-    fun getNumberOfParticipantsInGame():LiveData<Int>{
-        return gameSessionRepository.getNumberOfParticipantsInGame()
-    }
 //    fun getPlayers():LiveData<ArrayList<GamePlayerData>> = gameSessionRepository.getPlayers()
 
     fun shouldDisplayHints():Boolean{
