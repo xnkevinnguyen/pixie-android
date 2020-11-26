@@ -98,7 +98,7 @@ class UserRepository(val dataSource: UserDataSource) {
                 authResult = AuthResult(
                     LoggedInUserView(
                         userData.username, userData.userId,
-                        response.login.user.theme, response.login.user.language
+                        response.login.user.theme?.rawValue, response.login.user.language
                     )
                 )
 

@@ -82,7 +82,13 @@ class ChannelFragment : Fragment() {
         val gameInfoViewModel = ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
 
         gameInfoViewModel.getNumberOfParticipantsInGame().observe(viewLifecycleOwner, Observer {
-            startGameBtn.isEnabled = it >= 2
+            if(it>=2){
+                startGameBtn.isEnabled =true
+                startGameBtn.alpha =1f
+            }else{
+                startGameBtn.isEnabled =false
+                startGameBtn.alpha =0.5f
+            }
         })
         //start game
         startGameBtn.setOnClickListener {

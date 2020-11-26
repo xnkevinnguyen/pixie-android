@@ -6,10 +6,7 @@ import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.*
 import com.pixie.android.model.user.AvatarColorData
-import com.pixie.android.type.Language
-import com.pixie.android.type.LoginInput
-import com.pixie.android.type.UserConfigInput
-import com.pixie.android.type.UsernamePasswordInput
+import com.pixie.android.type.*
 
 class UserDataSource {
 
@@ -52,7 +49,17 @@ class UserDataSource {
         return response
     }
     suspend fun  sendConfig(userID: Double,language: Language,theme:String){
-        val input = UserConfigInput(language.toInput(),theme.toInput())
+        var themeType:Theme=Theme.DARK
+        if(theme =="Christmas"){
+            themeType = Theme.CHRISTMAS
+        }else if(theme=="Barbie"){
+            themeType = Theme.BARBIE
+        }else if(theme =="Halloween"){
+            themeType = Theme.HALLOWEEN
+        }else if(theme =="Light"){
+            themeType = Theme.LIGHT
+        }
+        val input = UserConfigInput(language.toInput(),themeType.toInput())
         try{
             apolloClient(userID).mutate(SetConfigMutation(input)).toDeferred().await()
         }catch(e:ApolloException){
