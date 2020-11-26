@@ -48,8 +48,4 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
     private fun isPasswordValid(password: String): Boolean {
         return password.length >= 6
     }
-
-    fun sendConfigColor(foreground: String, background:String){
-        userRepository.sendConfigColor(foreground,background)
-    }
 }

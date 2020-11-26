@@ -167,13 +167,6 @@ class UserRepository(val dataSource: UserDataSource) {
         }
     }
 
-    fun sendConfigColor(foreground:String, background: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            dataSource.sendConfigColor(getUser().userId, foreground, background)
-        }
-    }
-
-
     fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser
     }

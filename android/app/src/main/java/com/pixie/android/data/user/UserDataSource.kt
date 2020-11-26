@@ -60,15 +60,6 @@ class UserDataSource {
         }
     }
 
-    suspend fun  sendConfigColor(userID: Double,foreground: String,background:String){
-        val input = UserConfigInput(avatarForeground = foreground.toInput(), avatarBackground = background.toInput())
-        try{
-            apolloClient(userID).mutate(SetConfigMutation(input)).toDeferred().await()
-        }catch(e:ApolloException){
-            Log.d("apolloException", e.message.toString())
-        }
-    }
-
     suspend fun getAvatarColor(userID: Double): AvatarColorData{
         try{
             val response = apolloClient(userID).query(GetAvatarColorsQuery()).toDeferred().await().data
