@@ -74,7 +74,10 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
         val chatViewModel = ViewModelProvider(ViewModelStore(), chatFactory).get(ChatViewModel::class.java)
         if(chatViewModel.isUserInAGame()){
             viewHolder.joinBtn.isEnabled = false
-            viewHolder.joinBtn.isClickable = false
+            viewHolder.joinBtn.alpha = 0.5f
+        }else{
+            viewHolder.joinBtn.isEnabled = true
+            viewHolder.joinBtn.alpha = 1.0f
         }
         viewHolder.joinBtn.setOnClickListener {
             val gameData = gameViewModel.joinGame(game.gameId)
