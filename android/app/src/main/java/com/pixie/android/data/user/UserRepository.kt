@@ -56,10 +56,11 @@ class UserRepository(val dataSource: UserDataSource) {
     }
 
     fun getAvatarColor(): AvatarColorData{
+        fetchAvatarColor()
         return avatarColor
     }
 
-    fun fetchAvatarColor(){
+    private fun fetchAvatarColor(){
         var colors: AvatarColorData
         runBlocking {
             colors = dataSource.getAvatarColor(getUser().userId)

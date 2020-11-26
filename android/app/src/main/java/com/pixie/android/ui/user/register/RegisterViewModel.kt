@@ -12,8 +12,6 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
 
     fun getRegisterFormState() = userRepository.getLoginForm()
 
-    fun fetchAvatarColor() = userRepository.fetchAvatarColor()
-
     fun userPreviousLogin(userID:Double, username: String){
         userRepository.setLoggedInUser(LoggedInUser(userID,username))
     }

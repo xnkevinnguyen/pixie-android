@@ -157,8 +157,6 @@ class RegisterFragment : Fragment() {
 
                     if (registerResult.success != null) {
                         // Once register succeeds, we are loggin in the user
-                        registerViewModel.fetchAvatarColor()
-
                         val intent = Intent(view.context, MainActivity::class.java)
                         val param = Bundle();
                         param.putInt("isNewUser", 1); //Your id
