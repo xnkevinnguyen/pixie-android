@@ -5,6 +5,7 @@
     android:layout_width="275dp"
     android:layout_height="match_parent"
     android:background="?colorSecondary"
+    android:isScrollContainer="false"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +42,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="?colorSecondary"
+        >
 
         <Button
             android:id="@+id/leave_game"
@@ -51,7 +54,7 @@
             android:layout_marginRight="25dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_drawable"
-            android:backgroundTint="@color/dark_red"
+            android:backgroundTint="#fa4554"
             android:text="@string/leave_game"
             android:textAlignment="center"
             android:textSize="15dp"

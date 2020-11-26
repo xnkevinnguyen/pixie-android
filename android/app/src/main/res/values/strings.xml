@@ -163,4 +163,5 @@
     <string name="your_word"> Your word: %1$s</string>
     <string name="hints_left">Hints Left</string>
     <string name="ask_hint">Ask Hint</string>
+    <string name="number_player">Not enough players</string>
 </resources>

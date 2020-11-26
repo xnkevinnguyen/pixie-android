@@ -1,6 +1,7 @@
 package com.pixie.android.data.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasRepository
@@ -109,6 +110,7 @@ class GameSessionRepository(
         val job = CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToGameSessionChange(gameID, userRepository.getUser().userId) {
                 CoroutineScope(Dispatchers.Main).launch {
+
                     // Handles the case where another user starts the game
                     if (gameSession.value == null || gameSession.value?.status == GameStatus.PENDING || gameSession.value?.status == GameStatus.READY) {
                         channelID = it.channelID
@@ -267,11 +269,14 @@ class GameSessionRepository(
                 gameID,
                 userRepository.getUser().userId, onPathBegin = { id, command ->
                     CoroutineScope(Dispatchers.Main).launch {
-                        canvasRepository.addCanvasCommand(id, command)
+                        if (!isUserDrawingTurn())
+                            canvasRepository.addCanvasCommand(id, command)
                     }
                 }, onPathUpdate = { id, command ->
                     CoroutineScope(Dispatchers.Main).launch {
-                        canvasRepository.appendCanvasCommand(id, command)
+                        if (!isUserDrawingTurn())
+
+                            canvasRepository.appendCanvasCommand(id, command)
                     }
                 })
         }
@@ -370,5 +375,9 @@ class GameSessionRepository(
                 instance = it
             }
         }
+    }
+
+    fun <T> MutableLiveData<T>.notifyObserver() {
+        this.value = this.value
     }
 }

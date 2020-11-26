@@ -98,7 +98,7 @@ class UserRepository(val dataSource: UserDataSource) {
                 authResult = AuthResult(
                     LoggedInUserView(
                         userData.username, userData.userId,
-                        response.login.user.theme, response.login.user.language
+                        response.login.user.theme?.rawValue, response.login.user.language
                     )
                 )
 
@@ -166,13 +166,6 @@ class UserRepository(val dataSource: UserDataSource) {
             dataSource.sendConfig(getUser().userId, language, theme)
         }
     }
-
-    fun sendConfigColor(foreground:String, background: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            dataSource.sendConfigColor(getUser().userId, foreground, background)
-        }
-    }
-
 
     fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser

@@ -42,6 +42,7 @@ class GameRepository(private val dataSource: GameDataSource,
                 chatRepository.addUserChannelMessageSubscription(it)
                 chatRepository.addUserChannelParticipantSubscription(it)
                 chatRepository.addUserChannels(it)
+                chatRepository.getChatHistory(it.channelID)
             }
 
 
@@ -101,6 +102,8 @@ class GameRepository(private val dataSource: GameDataSource,
 
                 chatRepository.addUserChannels(it)
                 chatRepository.enterChannel(it.channelID)
+                chatRepository.getChatHistory(it.channelID)
+
             }
         }
 

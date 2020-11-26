@@ -161,6 +161,6 @@
     <string name="your_word"> Ton mot: %1$s</string>
     <string name="hints_left">Indices Restant</string>
     <string name="ask_hint">Demander</string>
-
+    <string name="number_player">Pas assez de joueurs</string>
 
 </resources>

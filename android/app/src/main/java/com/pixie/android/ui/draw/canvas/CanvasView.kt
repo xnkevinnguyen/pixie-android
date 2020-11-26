@@ -80,10 +80,17 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 //                        pathToDraw.quadTo(it.x1, it.y1, it.x2, it.y2)
 //
 //                    }
-                    for (n in 0 until length-1) {
+                    if (length > 1) {
+                        for (n in 0 until length - 1) {
+                            pathToDraw.quadTo(
+                                it.pathDataPoints[n].x, it.pathDataPoints[n].y,
+                                it.pathDataPoints[n + 1].x, it.pathDataPoints[n + 1].y
+                            )
+                        }
+                    } else {
                         pathToDraw.quadTo(
-                            it.pathDataPoints[n].x, it.pathDataPoints[n].y,
-                            it.pathDataPoints[n + 1].x, it.pathDataPoints[n + 1].y
+                            it.pathDataPoints[0].x, it.pathDataPoints[0].y,
+                            it.pathDataPoints[0].x, it.pathDataPoints[0].y
                         )
                     }
                     canvas?.drawPath(pathToDraw, it.paint)
@@ -185,9 +192,18 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         pathData.clear()
         path.reset()
         path.moveTo(motionTouchEventX, motionTouchEventY)
+
         currentX = motionTouchEventX
         currentY = motionTouchEventY
         canvasViewModel.sendPoint(currentX, currentY, PathStatus.BEGIN, Paint(paint))
+        pathData.add(
+            PathPoint(
+                currentX,
+                currentY,
+                motionTouchEventX,
+                motionTouchEventY
+            )
+        )
         onDrawingMove = true
     }
 
