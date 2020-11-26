@@ -10,6 +10,7 @@ import com.pixie.android.model.history.ConnectionHistory
 import com.pixie.android.model.history.GameHistory
 import com.pixie.android.model.profile.UserInfo
 import com.pixie.android.model.profile.UserStatistics
+import com.pixie.android.model.user.AvatarColorData
 import com.pixie.android.model.user.LoggedInUser
 import kotlinx.coroutines.runBlocking
 
@@ -33,4 +34,6 @@ class ProfileViewModel(private val userRepository: UserRepository, private val p
     fun getGameList():LiveData<ArrayList<GameHistory>> = profileRepository.getGameList()
 
     fun getUsername(): String = userRepository.getUser().username
+    
+    fun getAvatarColor():AvatarColorData = userRepository.getAvatarColor()
 }

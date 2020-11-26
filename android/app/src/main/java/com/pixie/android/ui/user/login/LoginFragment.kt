@@ -113,6 +113,7 @@ class LoginFragment : Fragment() {
                     loading.visibility = View.INVISIBLE
                     if (it.success != null && activity != null) {
 
+                        loginViewModel.fetchAvatarColor()
                         if(it.success.language!=null){
                             if(it.success.language.equals(Language.ENGLISH)){
                                 editorSetting.putString(Constants.LANGUAGE, LANGUAGE_ENGLISH)

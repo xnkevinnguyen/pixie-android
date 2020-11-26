@@ -1,12 +1,12 @@
 package com.pixie.android.data.user
 
+import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.user.LoggedInUser
-import com.pixie.android.model.user.LoggedInUserView
-import com.pixie.android.model.user.LoginFormState
-import com.pixie.android.model.user.AuthResult
+import com.pixie.android.model.user.*
 import com.pixie.android.type.Language
 import com.pixie.android.utilities.Constants
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.random.Random
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -24,6 +26,8 @@ class UserRepository(val dataSource: UserDataSource) {
 
     private val loginForm = MutableLiveData<LoginFormState>()
     private var user: LoggedInUser? = null
+
+    private var avatarColor: AvatarColorData = AvatarColorData(null, null)
 
 
     fun getUser(): LoggedInUser {
@@ -49,6 +53,18 @@ class UserRepository(val dataSource: UserDataSource) {
 
     fun setLoginForm(loginFormState: LoginFormState) {
         loginForm.value = loginFormState
+    }
+
+    fun getAvatarColor(): AvatarColorData{
+        return avatarColor
+    }
+
+    fun fetchAvatarColor(){
+        var colors: AvatarColorData
+        runBlocking {
+            colors = dataSource.getAvatarColor(getUser().userId)
+        }
+        avatarColor=colors
     }
 
 
