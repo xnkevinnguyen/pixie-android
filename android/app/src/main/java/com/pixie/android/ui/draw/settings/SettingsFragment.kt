@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -18,7 +17,6 @@ import com.pixie.android.type.Language
 import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
-import kotlin.properties.Delegates
 
 class SettingsFragment : DialogFragment() {
 
@@ -132,29 +130,24 @@ class SettingsFragment : DialogFragment() {
     }
 
     private fun alwaysInEnglish(value: String): String {
-        val inputValue = if (value == requireContext().resources.getString(R.string.dark)) "Dark"
+        return if (value == requireContext().resources.getString(R.string.dark)) "Dark"
         else if (value == requireContext().resources.getString(R.string.light)) "Light"
         else if (value == requireContext().resources.getString(R.string.pink)) "Barbie"
         else if (value == requireContext().resources.getString(R.string.christmas)) "Christmas"
         else if (value == requireContext().resources.getString(R.string.halloween)) "Halloween"
         else if (value == requireContext().resources.getString(R.string.eng)) "English"
         else "French"
-        return inputValue
     }
 
     private fun alwaysInFrench(value: String): String {
-        val inputValue = if (value == requireContext().resources.getString(R.string.dark)) "Sombre"
+        return if (value == requireContext().resources.getString(R.string.dark)) "Sombre"
         else if (value == requireContext().resources.getString(R.string.light)) "Clair"
-        else if (value == requireContext().resources.getString(R.string.pink)) "Barbie"
         else if (value == requireContext().resources.getString(R.string.christmas)) "Noel"
-        else if (value == requireContext().resources.getString(R.string.halloween)) "Halloween"
-        else if (value == requireContext().resources.getString(R.string.eng)) "Anglais"
         else if (value == "Dark") "Sombre"
         else if(value =="Light") "Clair"
-        else if(value=="Barbie")"Barbie"
         else if(value=="Christmas") "Noel"
+        else if (value == requireContext().resources.getString(R.string.eng)) "Anglais"
         else "Français"
-        return inputValue
     }
 
     private fun applyThemeSettings(themeValue: String) {

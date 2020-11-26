@@ -142,9 +142,7 @@ class RegisterFragment : Fragment() {
                 val lastName = surname.text.toString()
 
                 val foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-                editor.putInt(Constants.FOREGROUND, foregroundColor)
                 val backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-                editor.putInt(Constants.BACKGROUND, backgroundColor)
                 val foregroundToString = ("#" + Integer.toHexString(foregroundColor).substring(2))
                 val backgroundToString = ("#" + Integer.toHexString(backgroundColor).substring(2))
 
@@ -159,7 +157,6 @@ class RegisterFragment : Fragment() {
 
                     if (registerResult.success != null) {
                         // Once register succeeds, we are loggin in the user
-
                         val intent = Intent(view.context, MainActivity::class.java)
                         val param = Bundle();
                         param.putInt("isNewUser", 1); //Your id

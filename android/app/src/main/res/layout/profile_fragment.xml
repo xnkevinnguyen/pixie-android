@@ -147,6 +147,8 @@
                 android:background="@drawable/button_drawable"
                 android:textColor="@android:color/white"
                 android:layout_gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:text="@string/logout" />
 
         </LinearLayout>

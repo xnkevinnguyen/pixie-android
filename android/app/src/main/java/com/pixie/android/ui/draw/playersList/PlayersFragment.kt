@@ -2,6 +2,8 @@ package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +22,7 @@ import com.pixie.android.ui.chat.ChannelParticipantAdapter
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
+import kotlin.random.Random
 
 
 class PlayersFragment : Fragment() {
@@ -155,6 +158,12 @@ class PlayersFragment : Fragment() {
                         }
                     }
 
+                    val onlineIconElement = dialog.findViewById<ImageView>(R.id.online_badge)
+                    val avatarElement = dialog.findViewById<ImageView>(R.id.avatar_participant)
+                    val ringElement = dialog.findViewById<ImageView>(R.id.avatar_ring)
+                    setColor(onlineIconElement, avatarElement, ringElement, user)
+
+
                     dialog.show()
 
                 }
@@ -190,6 +199,47 @@ class PlayersFragment : Fragment() {
             return true
         }
         return false
+    }
+
+    fun setColor(onlineIconElement:ImageView, avatarElement:ImageView, ringElement:ImageView,
+                 participant:ChannelParticipant){
+
+        if (participant.isOnline == false) {
+            onlineIconElement.setColorFilter(Color.GRAY)
+        }
+
+        var foregroundColor: Int? = null
+        if (!participant.avatarForeground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(participant.avatarForeground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+        avatarElement.setColorFilter(
+            foregroundColor
+        )
+
+        var backgroundColor: Int? = null
+        if (!participant.avatarBackground.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(participant.avatarBackground)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+        avatarElement.backgroundTintList = ColorStateList.valueOf(
+            backgroundColor
+        )
+
+        if(playersViewModel.getFriendList().value?.contains(participant)==true){
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
+        }else if(playersViewModel.getUser()?.userId == participant.id){
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_BLUE))
+
+        }
+        else{
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
+
+        }
     }
 
 }

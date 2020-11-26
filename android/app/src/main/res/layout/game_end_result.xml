@@ -78,14 +78,13 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/profile_titles" />
 
-
-
         <Button
             android:id="@+id/got_to_home"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/goto_home"
-            android:background="?colorSecondary"
+            android:background="@drawable/button_drawable"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/profile_titles"
             android:padding="10dp"
             android:layout_gravity="center"

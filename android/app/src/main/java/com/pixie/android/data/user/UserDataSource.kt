@@ -5,6 +5,7 @@ import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.*
+import com.pixie.android.model.user.AvatarColorData
 import com.pixie.android.type.Language
 import com.pixie.android.type.LoginInput
 import com.pixie.android.type.UserConfigInput
@@ -66,6 +67,19 @@ class UserDataSource {
         }catch(e:ApolloException){
             Log.d("apolloException", e.message.toString())
         }
+    }
+
+    suspend fun getAvatarColor(userID: Double): AvatarColorData{
+        try{
+            val response = apolloClient(userID).query(GetAvatarColorsQuery()).toDeferred().await().data
+            val colorQueryData = response?.me
+            if (colorQueryData != null) {
+                return AvatarColorData(colorQueryData.avatarForeground, colorQueryData.avatarBackground)
+            }
+        }catch(e:ApolloException){
+            Log.d("apolloException", e.message.toString())
+        }
+        return AvatarColorData(null, null)
     }
 
     // Singleton

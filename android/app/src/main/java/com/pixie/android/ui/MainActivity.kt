@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var preferencesSettings: SharedPreferences
     private lateinit var preferencesLogin:SharedPreferences
+    private lateinit var profileViewModel:ProfileViewModel
 
     override fun attachBaseContext(newBase: Context) {
         preferencesSettings = newBase.getSharedPreferences(
@@ -97,6 +98,9 @@ class MainActivity : AppCompatActivity() {
         else if(theme == "Christmas") setTheme(R.style.AppGreenTheme_NoActionBar)
         else setTheme(R.style.AppTheme_NoActionBar)
 
+        val profileFactory = InjectorUtils.provideProfileViewModelFactory()
+        profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -117,20 +121,32 @@ class MainActivity : AppCompatActivity() {
             Constants.SHARED_PREFERENCES_LOGIN,
             Context.MODE_PRIVATE
         )
+
         val avatar: ImageView = header.findViewById(R.id.imageView)
 
+        val colors = profileViewModel.getAvatarColor()
+        var foregroundColorInt: Int? = null
+        if (!colors.foreground.isNullOrEmpty()) {
+            foregroundColorInt = Color.parseColor(colors.foreground)
+        }
+        if (foregroundColorInt == null) {
+            foregroundColorInt = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
 
-        val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-        val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
         avatar.setColorFilter(
-            foregroundColor
+            foregroundColorInt
         )
 
+        var backgroundColorInt: Int? = null
+        if (!colors.background.isNullOrEmpty()) {
+            backgroundColorInt = Color.parseColor(colors.background)
+        }
+        if (backgroundColorInt == null) {
+            backgroundColorInt = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
 
-        val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-        val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
         avatar.backgroundTintList = ColorStateList.valueOf(
-            backgroundColor
+            backgroundColorInt
         )
 
         avatar.setOnClickListener {
@@ -185,24 +201,35 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
         menuInflater.inflate(R.menu.profile_menu, menu)
-     val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-      val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
 
-        val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-        val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
+
+        val colors = profileViewModel.getAvatarColor()
+        var foregroundColor: Int? = null
+        if (!colors.foreground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(colors.foreground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+
+        var backgroundColor: Int? = null
+        if (!colors.background.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(colors.background)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
 
         val drawable = ContextCompat.getDrawable(applicationContext,R.drawable.profile_layer) as LayerDrawable
         drawable?.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
         drawable?.setDrawableByLayerId(R.id.foreground_icon,ContextCompat.getDrawable(applicationContext,R.drawable.ic_profile_user))
         drawable?.findDrawableByLayerId(R.id.foreground_icon).setColorFilter(foregroundColor,PorterDuff.Mode.SRC_ATOP)
-        val icon = menu.findItem(R.id.action_settings).setIcon(drawable)
 
+        menu.findItem(R.id.action_settings).setIcon(drawable)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val profileFactory = InjectorUtils.provideProfileViewModelFactory()
-        val profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
 
         val factory = InjectorUtils.provideGameInformationViewModelFactory()
         val gameInfoViewModel =

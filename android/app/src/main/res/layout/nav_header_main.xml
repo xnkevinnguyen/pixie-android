@@ -19,6 +19,7 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:contentDescription="@string/nav_header_desc"
+
         android:background="@drawable/circle"
         android:foregroundGravity="center"
         android:src="@drawable/ic_profile_user"

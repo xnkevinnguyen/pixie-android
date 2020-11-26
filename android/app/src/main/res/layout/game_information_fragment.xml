@@ -77,7 +77,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/round_number"
@@ -176,9 +177,9 @@
                 android:id="@+id/leave_game"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_drawable"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="?colorPrimary"
                 android:gravity="center"
                 android:text="@string/leave"
                 android:textColor="@android:color/white"
