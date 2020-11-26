@@ -1,25 +1,28 @@
 package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
-import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.chat.UserChannelAdapter
+import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.utilities.InjectorUtils
-import kotlinx.android.synthetic.main.game_history_fragment.*
+
 
 class ChannelFragment : Fragment() {
 
@@ -73,6 +76,24 @@ class ChannelFragment : Fragment() {
             userChannelAdapter.set(userChannelList)
         })
 
+        val gameInfoFactory = InjectorUtils.provideGameInformationViewModelFactory()
+        val gameInfoViewModel = ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
+        gameInfoViewModel.getNumberOfParticipantsInGame().observe(viewLifecycleOwner, Observer {
+            if(it < 2){
+                startGameBtn.isEnabled = false
+                startGameBtn.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(requireContext(), R.color.dark_dark_grey))
+            }else {
+                startGameBtn.isEnabled = true
+                val typedValue = TypedValue()
+                val theme = requireContext().theme
+                theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+                @ColorInt val color = typedValue.data
+                startGameBtn.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(requireContext(), color)
+                )
+            }
+        })
         //start game
         startGameBtn.setOnClickListener {
             val gameID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID
@@ -89,6 +110,7 @@ class ChannelFragment : Fragment() {
             }
 
         }
+
 
         leaveGameBtn.setOnClickListener {
             val gameID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID
@@ -126,6 +148,17 @@ class ChannelFragment : Fragment() {
             val game = chatViewModel.getGameSession()
             if(game.value?.mode == GameMode.COOP){
                 createVirtualPlayer.isEnabled = false
+                createVirtualPlayer.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(requireContext(), R.color.dark_dark_grey))
+            }else {
+                createVirtualPlayer.isEnabled = true
+                val typedValue = TypedValue()
+                val theme = requireContext().theme
+                theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+                @ColorInt val color = typedValue.data
+                createVirtualPlayer.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(requireContext(), color)
+                )
             }
             createVirtualPlayer.setOnClickListener {
                 chatViewModel.addVirtualPlayer{

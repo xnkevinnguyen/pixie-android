@@ -1,6 +1,7 @@
 package com.pixie.android.data.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasRepository
@@ -25,7 +26,7 @@ class GameSessionRepository(
     private val chatRepository: ChatRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
-
+    private var numberOfParticipantsInGame = MutableLiveData<Int>().apply { postValue(0) }
     // word is displayed to the user who is drawing
     private var shouldShowWord = MutableLiveData<ShowWordinGame>()
     private var channelID: Double = 0.0
@@ -57,6 +58,10 @@ class GameSessionRepository(
         } else {
             throw error("GameSessionID is null")
         }
+    }
+
+    fun getNumberOfParticipantsInGame(): LiveData<Int>{
+        return numberOfParticipantsInGame
     }
 
     fun setGameSession(newGameSession: GameSessionData) {
@@ -109,6 +114,9 @@ class GameSessionRepository(
         val job = CoroutineScope(Dispatchers.IO).launch {
             dataSource.subscribeToGameSessionChange(gameID, userRepository.getUser().userId) {
                 CoroutineScope(Dispatchers.Main).launch {
+
+                    numberOfParticipantsInGame.postValue(it.players.size)
+                    numberOfParticipantsInGame.notifyObserver()
                     // Handles the case where another user starts the game
                     if (gameSession.value == null || gameSession.value?.status == GameStatus.PENDING || gameSession.value?.status == GameStatus.READY) {
                         channelID = it.channelID
@@ -370,5 +378,9 @@ class GameSessionRepository(
                 instance = it
             }
         }
+    }
+
+    fun <T> MutableLiveData<T>.notifyObserver() {
+        this.value = this.value
     }
 }
