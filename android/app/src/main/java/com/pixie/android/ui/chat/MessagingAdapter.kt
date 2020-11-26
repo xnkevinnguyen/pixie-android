@@ -86,4 +86,7 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
         calendar.timeInMillis = milliSeconds
         return formatter.format(calendar.time)
     }
+    private fun formatTime(text:String):String{
+        return text
+    }
 }

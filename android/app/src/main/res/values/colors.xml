@@ -8,6 +8,10 @@
     <color name="green">#4FBB5A</color>
     <color name="light_green">#6eeb83</color>
     <color name="yellow">@android:color/holo_orange_light</color>
+    <color name="dark_red">#a40000</color>
+    <color name="history">#415a775d</color>
+    <color name="blue">@android:color/holo_blue_light</color>
+    <color name="dark_dark_grey">#777676</color>
 
 
 </resources>

@@ -24,7 +24,7 @@ class GameDataSource() {
             val data = response.data?.createGame
             if (data != null && data.gameInfo.players!=null) {
                 var gameParticipant = data.gameHall.participants?.map {
-                    ChannelParticipant(it.id, it.username, it.isOnline)
+                    ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual,it.avatarForeground, it.avatarBackground)
                 }
                 if (gameParticipant == null) {
                     gameParticipant = arrayListOf()
@@ -72,7 +72,7 @@ class GameDataSource() {
             if (availableGamesQueryData != null) {
                 val availableGamesData = ArrayList(availableGamesQueryData.map {
 
-                    var playersList = it.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
+                    var playersList = it.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual, it.avatarForeground, it.avatarBackground) }
                     if (playersList == null) {
                         playersList = arrayListOf()
                     }
@@ -101,7 +101,7 @@ class GameDataSource() {
             if (availableGamesQueryData != null) {
                 val availableGamesData = ArrayList(availableGamesQueryData.map {
 
-                    var playersList = it.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
+                    var playersList = it.gameInfo.players?.map { ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual, it.avatarForeground, it.avatarBackground) }
                     if (playersList == null) {
                         playersList = arrayListOf()
                     }
@@ -137,7 +137,7 @@ class GameDataSource() {
                     val availableGamesData = ArrayList(data.map {
 
                         var gamePlayers = it.gameInfo.players?.map {
-                            ChannelParticipant(it.id, it.username, it.isOnline)
+                            ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual, it.avatarForeground, it.avatarBackground)
                         }
                         if (gamePlayers == null) {
                             gamePlayers = arrayListOf()
@@ -164,7 +164,7 @@ class GameDataSource() {
             if (data != null && data.gameInfo.players !=null) {
 
                 var gameParticipant = data.gameHall.participants?.map {
-                    ChannelParticipant(it.id, it.username, it.isOnline)
+                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground,it.avatarBackground)
                 }
                 if (gameParticipant == null) {
                     gameParticipant = arrayListOf()

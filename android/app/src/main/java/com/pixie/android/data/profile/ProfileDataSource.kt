@@ -26,7 +26,7 @@ class ProfileDataSource {
             val userQueryData = response?.me
             if (userQueryData != null) {
                 val userInfo = UserInfo(username = userQueryData.username, firstName = userQueryData.firstName, lastName = userQueryData.lastName,
-                avatar = userQueryData.avatar, createdAt = userQueryData.createdAt)
+                avatarForeground = userQueryData.avatarForeground, avatarBackground = userQueryData.avatarBackground, createdAt = userQueryData.createdAt)
                 val userStatistics = UserStatistics(nbGames = userQueryData.nGames, percentWin = userQueryData.winPercent, averageGameTime = userQueryData.playTimeAverage,
                 totalGameTime = userQueryData.totalGameTime, bestFreeScore = userQueryData.bestFreeForAllScore, bestSoloScore = userQueryData.bestSprintSoloScore,
                 bestCoopScore = userQueryData.bestSprintCoopScore)

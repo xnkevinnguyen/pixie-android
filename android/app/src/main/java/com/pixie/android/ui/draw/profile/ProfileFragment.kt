@@ -3,6 +3,8 @@ package com.pixie.android.ui.draw.profile
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -26,6 +28,7 @@ import com.pixie.android.ui.user.AuthActivity
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 import java.util.*
+import kotlin.random.Random
 
 class ProfileFragment: Fragment() {
 
@@ -62,6 +65,31 @@ class ProfileFragment: Fragment() {
         val avatar : ImageView = root.findViewById(R.id.avatar)
         val lp = LinearLayout.LayoutParams(200, 200)
         avatar.layoutParams =lp
+        profileViewModel.getUserInfo().observe(viewLifecycleOwner, Observer {
+            var foregroundColor: Int? = null
+            if (!it.avatarForeground.isNullOrEmpty()) {
+                foregroundColor = Color.parseColor(it.avatarForeground)
+            }
+            if (foregroundColor == null) {
+                foregroundColor =
+                    Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+            }
+            avatar.setColorFilter(
+                foregroundColor
+            )
+
+            var backgroundColor: Int? = null
+            if (!it.avatarBackground.isNullOrEmpty()) {
+                backgroundColor = Color.parseColor(it.avatarBackground)
+            }
+            if (backgroundColor == null) {
+                backgroundColor =
+                    Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+            }
+            avatar.backgroundTintList = ColorStateList.valueOf(
+                backgroundColor
+            )
+        })
 
         val showHistory = root.findViewById<Button>(R.id.btn_show_hist)
         showHistory.setOnClickListener {

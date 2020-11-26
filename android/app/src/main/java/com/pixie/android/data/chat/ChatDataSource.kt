@@ -29,7 +29,7 @@ class ChatDataSource() {
             if (channelQueryData != null) {
                 val channelData = ArrayList(channelQueryData.map {
                     var participantList =
-                        it.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline) }
+                        it.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground) }
                     if (participantList == null) {
                         participantList = arrayListOf()
                     }
@@ -54,7 +54,9 @@ class ChatDataSource() {
             val channelQueryData = response?.channel
             if (channelQueryData?.messages != null) {
                 onReceiveChannel(ArrayList(channelQueryData.messages.map {
-                    MessageData(it.content, userId == it.sender.id, it.sender.username, it.postedAt)
+                    MessageData(it.content, userId == it.sender.id, it.sender.username,
+                        it.postedAt as String
+                    )
                 }))
             }
         } catch (e: ApolloException) {
@@ -111,7 +113,7 @@ class ChatDataSource() {
             if (data != null) {
 
                 var channelParticipant = data.participants?.map {
-                    ChannelParticipant(it.id, it.username, it.isOnline)
+                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                 }
                 if (channelParticipant == null) {
                     channelParticipant = arrayListOf()
@@ -143,7 +145,7 @@ class ChatDataSource() {
             if (data != null) {
 
                 var channelParticipant = data.participants?.map {
-                    ChannelParticipant(it.id, it.username, it.isOnline)
+                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                 }
                 if (channelParticipant == null) {
                     channelParticipant = arrayListOf()
@@ -195,7 +197,9 @@ class ChatDataSource() {
 
                 if (messageContent != null && messageSenderUsername != null && messageTimePosted != null) {
                     val messageData =
-                        MessageData(messageContent, null, messageSenderUsername, messageTimePosted)
+                        MessageData(messageContent, null, messageSenderUsername,
+                            messageTimePosted as String
+                        )
                     onReceiveMessage(messageData)
                 }
             }
@@ -218,7 +222,7 @@ class ChatDataSource() {
                         subscriptionData.id,
                         subscriptionData.name,
                         subscriptionData.participants.map {
-                            ChannelParticipant(it.id, it.username, it.isOnline)
+                            ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                         }, nParticipant = null
                     )
                     onChannelAdded(channelData)
@@ -238,7 +242,7 @@ class ChatDataSource() {
                         subscriptionData.id,
                         subscriptionData.name,
                         subscriptionData.participants.map {
-                            ChannelParticipant(it.id, it.username, it.isOnline)
+                            ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                         }, nParticipant = null
                     )
                     onChannelRemoved(channelData)
@@ -266,7 +270,7 @@ class ChatDataSource() {
                 if (data != null) {
 
                     var channelParticipant = data.participants?.map {
-                        ChannelParticipant(it.id, it.username, it.isOnline)
+                        ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                     }
                     if (channelParticipant == null) {
                         channelParticipant = arrayListOf()

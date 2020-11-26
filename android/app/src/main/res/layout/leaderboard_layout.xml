@@ -58,205 +58,66 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="3"
-                android:layout_marginStart="50px">
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_marginBottom="25dp">
+                    android:layout_marginEnd="30dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/best_score"
-                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:background="?colorSecondary"
                         android:textSize="30dp"
-                        android:layout_marginBottom="35dp"/>
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
 
-                    <LinearLayout
+                    <ListView
+                        android:id="@+id/best_free_score_list"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_free_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_free_score"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_free_user2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_free_score2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_free_user3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_free_score3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
+                        android:layout_height="430dp"
+                        android:background="?color"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_marginBottom="25dp">
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginEnd="30dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/cumulative_score"
-                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:background="?colorSecondary"
                         android:textSize="30dp"
-                        android:layout_marginBottom="35dp"/>
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
 
-                    <LinearLayout
+                    <ListView
+                        android:id="@+id/best_cumulative_score_list"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_free_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_free_score"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/cumulative_free_user2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_free_score2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/cumulative_free_user3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_free_score3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
+                        android:layout_height="430dp"
+                        android:background="?color"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
@@ -264,93 +125,22 @@
                     android:layout_marginBottom="25dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/most_games_won"
-                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:background="?colorSecondary"
                         android:textSize="30dp"
-                        android:layout_marginBottom="35dp"/>
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
 
-                    <LinearLayout
+                    <ListView
+                        android:id="@+id/most_game_list"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/most_free_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/most_free_score"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/most_free_user2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/most_free_score2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/most_free_user3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/most_free_score3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
+                        android:layout_height="430dp"
+                        android:background="?color"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -378,202 +168,61 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="2"
-                android:layout_marginStart="50px">
+                android:layout_marginStart="200dp"
+                android:layout_marginEnd="200dp"
+                android:layout_gravity="center">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_marginBottom="25dp">
+                    android:layout_marginEnd="100dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/best_score"
-                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:background="?colorSecondary"
                         android:textSize="30dp"
-                        android:layout_marginBottom="35dp"/>
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
 
-                    <LinearLayout
+                    <ListView
+                        android:id="@+id/best_solo_score_list"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_solo_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_solo_score"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_solo_user2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_solo_score2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_solo_user3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_solo_score3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
+                        android:layout_height="430dp"
+                        android:background="?color"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_marginBottom="25dp">
+                    android:gravity="center">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/cumulative_score"
-                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:background="?colorSecondary"
                         android:textSize="30dp"
-                        android:layout_marginBottom="35dp" />
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp" />
 
-                    <LinearLayout
+                    <ListView
+                        android:id="@+id/solo_cumulative_score_list"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/cumulative_solo_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_solo_score"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/cumulative_solo_user2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_solo_score2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/cumulative_solo_user3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_solo_score3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
+                        android:layout_height="430dp"
+                        android:background="?color"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -600,202 +249,61 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="2"
-                android:layout_marginStart="50px">
+                android:layout_marginStart="200dp"
+                android:layout_marginEnd="200dp"
+                android:layout_gravity="center">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_marginBottom="25dp">
+                    android:layout_marginEnd="100dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/best_score"
-                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:background="?colorSecondary"
                         android:textSize="30dp"
-                        android:layout_marginBottom="35dp"/>
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
 
-                    <LinearLayout
+                    <ListView
+                        android:id="@+id/best_coop_score_list"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_coop_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_coop_score"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_coop_user2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_coop_score2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/best_coop_user3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/best_coop_score3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
+                        android:layout_height="430dp"
+                        android:background="?color"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_marginBottom="25dp">
+                    android:gravity="center">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/cumulative_score"
-                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:background="?colorSecondary"
                         android:textSize="30dp"
-                        android:layout_marginBottom="35dp"/>
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
 
-                    <LinearLayout
+                    <ListView
+                        android:id="@+id/coop_cumulative_score_list"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/cumulative_coop_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_coop_score"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/cumulative_coop_user2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_coop_score2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="30dp">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/ic_launcher_round"
-                            android:layout_marginEnd="10dp"/>
-                        <TextView
-                            android:id="@+id/cumulative_coop_user3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp"
-                            android:layout_marginEnd="35dp"/>
-
-                        <TextView
-                            android:id="@+id/cumulative_coop_score3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="25dp" />
-                    </LinearLayout>
+                        android:layout_height="430dp"
+                        android:background="?color"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -8,8 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
+import com.pixie.android.ui.draw.channelList.PlayersViewModel
+import com.pixie.android.utilities.Constants
+import com.pixie.android.utilities.InjectorUtils
 import kotlin.random.Random
 
 
@@ -20,6 +26,10 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
 
     private var listOfParticipants = ArrayList<ChannelParticipant>()
     var filteredListOfParticipants = ArrayList<ChannelParticipant>()
+
+    private val contextCopy = context
+    val factory = InjectorUtils.providePlayersViewModelFactory()
+    private val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
 
     fun add(channelParticipant: ChannelParticipant) {
         if (channelParticipant.isOnline == true) {
@@ -33,14 +43,17 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         filteredListOfParticipants.clear()
     }
 
-    fun reset() {
+    private fun reset() {
         clear()
         listOfParticipants.clear()
     }
 
     fun set(participantList: ArrayList<ChannelParticipant>) {
         reset()
+        val listOfFriends = playersViewModel.getFriendList().value
         participantList.sortByDescending { it.isOnline }
+        participantList.sortByDescending { listOfFriends?.contains(it) }
+        participantList.sortByDescending { playersViewModel.getUser()?.userId==it.id }
         listOfParticipants = participantList
         filteredListOfParticipants = participantList
         notifyDataSetChanged()
@@ -63,30 +76,72 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         val participant: ChannelParticipant = filteredListOfParticipants[position]
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val participantUserName = rowView.findViewById<TextView>(R.id.participant_username)
+        val removeVirtualElement = rowView.findViewById<TextView>(R.id.remove_virtual_player)
+        val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
+
+        if(participant.isVirtual ==true){
+            removeVirtualElement.visibility = View.VISIBLE
+            removeVirtualElement.setOnClickListener {
+                playersViewModel.removeVirtualPlayer(participant.id){
+                    if(it.isSuccess){
+                        Toast.makeText(rowView.context,
+                            rowView.context.resources.getString(R.string.success),
+                            Toast.LENGTH_LONG).show()
+                    }else if(!it.isSuccess){
+                        Toast.makeText(rowView.context,
+                            rowView.context.resources.getString(R.string.error),
+                            Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            //Change icon
+            avatarElement.background = ContextCompat.getDrawable(contextCopy, R.drawable.circle)
+            avatarElement.setImageResource(R.drawable.ic_profile_virtual)
+
+        }else{
+            removeVirtualElement.visibility = View.GONE
+        }
         participantUserName.text = participant.username
 
         val onlineIconElement = rowView.findViewById<ImageView>(R.id.online_badge)
         if (participant.isOnline == false) {
             onlineIconElement.setColorFilter(Color.GRAY)
         }
-        val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
 
-
+        var foregroundColor: Int? = null
+        if (!participant.avatarForeground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(participant.avatarForeground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
         avatarElement.setColorFilter(
-            Color.argb(
-                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
-                    256
-                )
-            )
+            foregroundColor
         )
 
+        var backgroundColor: Int? = null
+        if (!participant.avatarBackground.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(participant.avatarBackground)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
         avatarElement.backgroundTintList = ColorStateList.valueOf(
-            Color.argb(
-                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
-                    256
-                )
-            )
+            backgroundColor
         )
+
+        val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
+        if(playersViewModel.getFriendList().value?.contains(participant)==true){
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
+        }else if(playersViewModel.getUser()?.userId == participant.id){
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_BLUE))
+
+        }
+        else{
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
+
+        }
         return rowView
 
     }

@@ -1,51 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
     android:background="?colorSecondary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_margin="10dp">
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/avatar_ring"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:backgroundTint="@color/yellow"
+                android:background="@drawable/avatar_ring" />
+
+            <ImageView
+                android:id="@+id/avatar_participant"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/circle"
+                android:foregroundGravity="center"
+                android:src="@drawable/ic_profile_user"
+                android:tint="@color/green"
+                android:backgroundTint="@color/dark_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseAppTint" />
+        </RelativeLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher_round"
-            android:layout_margin="10dp"/>
+            android:id="@+id/online_badge"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/circle"
+            android:tint="@color/light_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="UseAppTint"
+            tools:layout_editor_absoluteX="6dp"
+            tools:layout_editor_absoluteY="10dp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="5dp">
-
-            <TextView
-                android:id="@+id/user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25dp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/user_games_played"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 games played"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/user_games_won"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 games won"
-                android:textSize="15dp" />
-
-        </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,7 +81,8 @@
             android:textSize="15dp"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:background="?colorAccent"
+            android:background="@drawable/button_drawable"
+            android:padding="5dp"
             android:layout_marginRight="10dp"/>
 
         <Button
@@ -73,7 +93,8 @@
             android:textSize="15dp"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:background="?colorAccent"/>
+            android:background="@drawable/button_drawable"
+            android:padding="5dp"/>
     </LinearLayout>
 
 

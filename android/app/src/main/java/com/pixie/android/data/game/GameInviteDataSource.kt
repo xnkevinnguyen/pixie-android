@@ -4,10 +4,7 @@ import android.util.Log
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.coroutines.toFlow
 import com.apollographql.apollo.exception.ApolloException
-import com.pixie.android.AddVirtualPlayerMutation
-import com.pixie.android.OnNewInvitationSubscription
-import com.pixie.android.SendInvitationMutation
-import com.pixie.android.apolloClient
+import com.pixie.android.*
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.chat.ChannelParticipant
@@ -15,6 +12,7 @@ import com.pixie.android.model.game.GameInvitation
 import com.pixie.android.type.AddVirtualPlayerInput
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.InvitationInput
+import com.pixie.android.type.RemoveVirtualPlayerInput
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
@@ -27,7 +25,18 @@ class GameInviteDataSource {
             val response =
                 apolloClient(userID).mutate(AddVirtualPlayerMutation(input)).toDeferred().await()
             return response.data?.addVirtualPlayer != null
-            Log.d("AddVirtualPlayerMutation", response.toString())
+        } catch (e: ApolloException) {
+            Log.d("ApolloException", e.toString())
+
+        }
+        return false
+    }
+    suspend fun removeVirtualPlayer(gameID: Double,playerID:Double, userID: Double): Boolean {
+        val input = RemoveVirtualPlayerInput(gameID,playerID)
+        try {
+            val response =
+                apolloClient(userID).mutate(RemoveVirtualPlayerMutation(input)).toDeferred().await()
+            return response.data?.removeVirtualPlayer!= null
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.toString())
 
@@ -67,7 +76,8 @@ class GameInviteDataSource {
             .collect {
                 val data = it.data?.onNewInvitation
                 if(data !=null){
-                    val sender = ChannelParticipant(data.sender.id,data.sender.username,data.sender.isOnline)
+                    val sender = ChannelParticipant(data.sender.id,data.sender.username,data.sender.isOnline, data.sender.isVirtual,
+                    data.sender.avatarForeground, data.sender.avatarBackground)
                     onNewInvitation(GameInvitation(sender,data.gameSession.id,data.gameSession.gameHall.id,data.gameSession.gameInfo.mode
                     ,data.gameSession.gameInfo.difficulty,data.gameSession.gameInfo.language))
                 }else{

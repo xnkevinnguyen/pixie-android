@@ -7,7 +7,9 @@ query getAvailableGamesWithoutCriteria{
                 id,
                 username,
                 isOnline,
-                avatar
+                isVirtual,
+                avatarForeground,
+                avatarBackground
             }
             mode,
             language

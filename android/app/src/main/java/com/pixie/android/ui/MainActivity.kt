@@ -4,8 +4,15 @@ package com.pixie.android.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +20,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -36,11 +45,14 @@ import com.pixie.android.utilities.OnApplicationStopService
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.runBlocking
 import java.util.*
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var preferencesSettings: SharedPreferences
+    private lateinit var preferencesLogin:SharedPreferences
+    private lateinit var profileViewModel:ProfileViewModel
 
     override fun attachBaseContext(newBase: Context) {
         preferencesSettings = newBase.getSharedPreferences(
@@ -52,6 +64,8 @@ class MainActivity : AppCompatActivity() {
         val langValue = "French"
         languageAc = if(lang == langValue) "fr"
         else "en"
+        Log.d("MainActivity","Load language")
+
         super.attachBaseContext(MyContextWrapper(newBase).wrap(newBase, languageAc))
     }
 
@@ -68,6 +82,7 @@ class MainActivity : AppCompatActivity() {
 
         val locale = Locale(languageAc)
         overrideConfiguration.setLocale(locale)
+        Log.d("MainActivity","Load language")
         super.applyOverrideConfiguration(overrideConfiguration)
     }
 
@@ -77,11 +92,14 @@ class MainActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
         val theme = preferencesSettings.getString(Constants.THEME, "Dark")
-        if (theme == "Dark") setTheme(R.style.AppTheme_NoActionBar)
+        if (theme == "Halloween" ) setTheme(R.style.AppBlueTheme_NoActionBar)
         else if(theme == "Light") setTheme(R.style.AppLightTheme_NoActionBar)
-        else if (theme == "Pink-Brown") setTheme(R.style.AppPinkTheme_NoActionBar)
-        else if(theme == "Green-Grey") setTheme(R.style.AppGreenTheme_NoActionBar)
-        else setTheme(R.style.AppBlueTheme_NoActionBar)
+        else if (theme == resources.getString(R.string.pink)) setTheme(R.style.AppPinkTheme_NoActionBar)
+        else if(theme == "Christmas") setTheme(R.style.AppGreenTheme_NoActionBar)
+        else setTheme(R.style.AppTheme_NoActionBar)
+
+        val profileFactory = InjectorUtils.provideProfileViewModelFactory()
+        profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -93,13 +111,44 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_game_selection, R.id.nav_leaderboard), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_game_selection, R.id.nav_profile, R.id.nav_leaderboard), drawerLayout)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
+        preferencesLogin = getSharedPreferences(
+            Constants.SHARED_PREFERENCES_LOGIN,
+            Context.MODE_PRIVATE
+        )
+
         val avatar: ImageView = header.findViewById(R.id.imageView)
+
+        val colors = profileViewModel.getAvatarColor()
+        var foregroundColorInt: Int? = null
+        if (!colors.foreground.isNullOrEmpty()) {
+            foregroundColorInt = Color.parseColor(colors.foreground)
+        }
+        if (foregroundColorInt == null) {
+            foregroundColorInt = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+
+        avatar.setColorFilter(
+            foregroundColorInt
+        )
+
+        var backgroundColorInt: Int? = null
+        if (!colors.background.isNullOrEmpty()) {
+            backgroundColorInt = Color.parseColor(colors.background)
+        }
+        if (backgroundColorInt == null) {
+            backgroundColorInt = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+
+        avatar.backgroundTintList = ColorStateList.valueOf(
+            backgroundColorInt
+        )
+
         avatar.setOnClickListener {
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
@@ -152,12 +201,35 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
         menuInflater.inflate(R.menu.profile_menu, menu)
+
+
+        val colors = profileViewModel.getAvatarColor()
+        var foregroundColor: Int? = null
+        if (!colors.foreground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(colors.foreground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+
+        var backgroundColor: Int? = null
+        if (!colors.background.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(colors.background)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+
+        val drawable = ContextCompat.getDrawable(applicationContext,R.drawable.profile_layer) as LayerDrawable
+        drawable?.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
+        drawable?.setDrawableByLayerId(R.id.foreground_icon,ContextCompat.getDrawable(applicationContext,R.drawable.ic_profile_user))
+        drawable?.findDrawableByLayerId(R.id.foreground_icon).setColorFilter(foregroundColor,PorterDuff.Mode.SRC_ATOP)
+
+        menu.findItem(R.id.action_settings).setIcon(drawable)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val profileFactory = InjectorUtils.provideProfileViewModelFactory()
-        val profileViewModel = ViewModelProvider(this, profileFactory).get(ProfileViewModel::class.java)
 
         val factory = InjectorUtils.provideGameInformationViewModelFactory()
         val gameInfoViewModel =

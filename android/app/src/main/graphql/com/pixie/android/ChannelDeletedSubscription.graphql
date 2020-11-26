@@ -6,6 +6,9 @@ subscription onChannelDeleted{
             id
             username
             isOnline
+            isVirtual
+            avatarForeground
+            avatarBackground
         }
     }
 }

@@ -7,6 +7,7 @@ subscription onManualPlayerDrawing($gameSessionId:Float!){
         point{
             x
             y
+            order
         }
         status
         commandPathId

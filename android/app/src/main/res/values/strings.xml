@@ -33,7 +33,7 @@
     <string name="register_title">Register</string>
     <string name="retype_pass">Re-Enter your password</string>
     <string name="return_login">Return to login page</string>
-    <string name="load_chat_history">Load Chat History</string>
+    <string name="load_chat_history">Show Full History</string>
     <string name="messages">Messages</string>
     <string name="channel">Your Channels</string>
     <string name="add_channel">Add Channel</string>
@@ -41,14 +41,15 @@
     <string name="dropdown_1">Profile</string>
     <string name="dropdown_2">Logout</string>
     <string name="search_player">Search player</string>
-    <string name="follow">Follow</string>
-    <string name="unfollow">Unfollow</string>
+    <string name="follow">Add Friend</string>
+    <string name="unfollow">Remove Friend</string>
     <string name="invite">Invite</string>
 
     <string name="user_info">User Informations</string>
     <string name="name">Last name: </string>
     <string name="surname">First name: </string>
     <string name="user_username">Username: </string>
+    <string name="show_list_friend">Show Friend List</string>
     <string name="game_play_info">User Game Play Informations</string>
     <string name="number_games">Number of games played: </string>
     <string name="percentage_victory">Percentage of victory: </string>
@@ -73,12 +74,13 @@
 
     <string name="theme">Theme</string>
     <string name="language">Language</string>
+    <string name="language_2">Language:</string>
     <string name="notif_sound">Notification sound</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
-    <string name="pink">Pink-Brown</string>
-    <string name="green">Green-Grey</string>
-    <string name="blue">Blue</string>
+    <string name="pink">Barbie</string>
+    <string name="christmas">Christmas</string>
+    <string name="halloween">Halloween</string>
     <string name="eng">English</string>
     <string name="fr">French</string>
     <string name="setting">Settings</string>
@@ -112,6 +114,7 @@
     <string name="not_available">Not Available</string>
 
     <string name="start_game">Start Game</string>
+    <string name="leave_game">Leave Game</string>
     <string name="add_players">Add Players</string>
     <string name="add_virtual">Add Virtual Player</string>
     <string name="create_game">Create New Game</string>
@@ -119,6 +122,7 @@
     <string name="round">Round : 3</string>
     <string name="round_turn">Round</string>
     <string name="total_round">of 3</string>
+    <string name="rounds">rounds</string>
 
     <string name="game_result">Game Result</string>
     <string name="goto_home">Go To Home</string>
@@ -156,4 +160,8 @@
     <string name="game_invitation_title">%1$s has invited you</string>
     <string name="correct_guess">Correct Answer!</string>
     <string name="incorrect_guess">Incorrect Answer!</string>
+    <string name="your_word"> Your word: %1$s</string>
+    <string name="hints_left">Hints Left</string>
+    <string name="ask_hint">Ask Hint</string>
+    <string name="number_player">Not enough players</string>
 </resources>

@@ -1,17 +1,21 @@
 package com.pixie.android.data.user
 
+import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
-import com.pixie.android.model.user.LoggedInUser
-import com.pixie.android.model.user.LoggedInUserView
-import com.pixie.android.model.user.LoginFormState
-import com.pixie.android.model.user.AuthResult
+import com.pixie.android.model.user.*
+import com.pixie.android.type.Language
 import com.pixie.android.utilities.Constants
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.random.Random
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -23,18 +27,24 @@ class UserRepository(val dataSource: UserDataSource) {
     private val loginForm = MutableLiveData<LoginFormState>()
     private var user: LoggedInUser? = null
 
+    private var avatarColor: AvatarColorData = AvatarColorData(null, null)
 
-    fun getUser():LoggedInUser{
+
+    fun getUser(): LoggedInUser {
         val userCopy = user
-        if(userCopy !=null) {
+        if (userCopy != null) {
             return userCopy
-        }
-        else{
+        } else {
             throw error("User in UserRepository is null")
         }
     }
-    fun getUserAsChannelParticipant():ChannelParticipant{
-        return ChannelParticipant(getUser().userId,getUser().username,true)
+
+    fun getUserSafe():LoggedInUser?{
+        return user
+    }
+
+    fun getUserAsChannelParticipant(): ChannelParticipant {
+        return ChannelParticipant(getUser().userId, getUser().username, true)
     }
 
     fun getLoginForm(): LiveData<LoginFormState> {
@@ -45,15 +55,31 @@ class UserRepository(val dataSource: UserDataSource) {
         loginForm.value = loginFormState
     }
 
+    fun getAvatarColor(): AvatarColorData{
+        fetchAvatarColor()
+        return avatarColor
+    }
 
-    suspend fun logout() {
+    private fun fetchAvatarColor(){
+        var colors: AvatarColorData
+        runBlocking {
+            colors = dataSource.getAvatarColor(getUser().userId)
+        }
+        avatarColor=colors
+    }
+
+
+    fun logout() {
         // Logout should ALWAYS be called after exit operations
         // Logout is called when application stops or on manual logout
-        if(user!=null){
-            dataSource.logout(getUser().userId)
+        if (user != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                dataSource.logout(getUser().userId)
+
+                CoroutineScope(Dispatchers.Main).launch { user = null }
+            }
 
         }
-        user = null
 
     }
 
@@ -69,7 +95,12 @@ class UserRepository(val dataSource: UserDataSource) {
                 )
 
                 setLoggedInUser(userData)
-                authResult = AuthResult(success = LoggedInUserView(username = userData.username, userID = userData.userId))
+                authResult = AuthResult(
+                    LoggedInUserView(
+                        userData.username, userData.userId,
+                        response.login.user.theme?.rawValue, response.login.user.language
+                    )
+                )
 
             } else if (!response?.login?.error.isNullOrBlank()) {
                 authResult = AuthResult(error = response?.login?.error)
@@ -94,10 +125,12 @@ class UserRepository(val dataSource: UserDataSource) {
         password: String,
         firstName: String,
         lastName: String,
+        foreground:String,
+        background:String,
         onLoginResult: (authResult: AuthResult) -> Unit
     ) {
         CoroutineScope(IO).launch {
-            val response = dataSource.register(username, password, firstName, lastName)
+            val response = dataSource.register(username, password, firstName, lastName, foreground, background)
             lateinit var authResult: AuthResult
 
             if (response?.register?.user?.id != null) {// user needs to exist
@@ -106,7 +139,12 @@ class UserRepository(val dataSource: UserDataSource) {
                     response.register.user.username
                 )
                 setLoggedInUser(userData)
-                authResult = AuthResult(success = LoggedInUserView(username = userData.username, userID = userData.userId))
+                authResult = AuthResult(
+                    success = LoggedInUserView(
+                        username = userData.username,
+                        userID = userData.userId
+                    )
+                )
             } else if (!response?.register?.error.isNullOrEmpty()) {
                 authResult = AuthResult(error = response?.register?.error)
 
@@ -123,6 +161,11 @@ class UserRepository(val dataSource: UserDataSource) {
         }
     }
 
+    fun sendConfig(language: Language, theme: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.sendConfig(getUser().userId, language, theme)
+        }
+    }
 
     fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser

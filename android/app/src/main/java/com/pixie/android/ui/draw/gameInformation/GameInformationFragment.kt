@@ -1,12 +1,13 @@
 package com.pixie.android.ui.draw.gameInformation
 
-import android.app.ActionBar
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
@@ -24,6 +25,9 @@ import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
+import nl.dionsegijn.konfetti.KonfettiView
+import nl.dionsegijn.konfetti.models.Shape
+import nl.dionsegijn.konfetti.models.Size
 
 
 class GameInformationFragment : Fragment() {
@@ -46,7 +50,9 @@ class GameInformationFragment : Fragment() {
         val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
 
         val timerElement = root.findViewById<TextView>(R.id.time_left)
-        val guessLeftElement = root.findViewById<TextView>(R.id.number_guess_left)
+        val hintsLeftElement = root.findViewById<TextView>(R.id.number_hints_left)
+        val hintsLeftTextElement = root.findViewById<TextView>(R.id.hints_left_text)
+        val askHintButtonElement = root.findViewById<TextView>(R.id.request_hints)
         val mode = root.findViewById<TextView>(R.id.mode_of_game)
         val round = root.findViewById<TextView>(R.id.round_number)
         val listPlayer = root.findViewById<ListView>(R.id.players_in_game)
@@ -69,10 +75,28 @@ class GameInformationFragment : Fragment() {
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)
             navController.navigate(R.id.nav_home)
         }
-
-        guessLeftElement.text =
-            gameInfoViewModel.getGameSession().value?.guessesLeft?.toInt().toString()
-
+        if(gameInfoViewModel.shouldDisplayHints()){
+            hintsLeftElement.visibility = View.VISIBLE
+            hintsLeftTextElement.visibility = View.VISIBLE
+            askHintButtonElement.visibility = View.VISIBLE
+            val hintsLeft = gameInfoViewModel.getGameSession().value?.hintsLeft
+            hintsLeftElement.text =
+                hintsLeft?.toString()
+            if(hintsLeft !=null &&hintsLeft>0){
+                askHintButtonElement.isEnabled = true
+                askHintButtonElement.alpha = 1f
+            }else{
+                askHintButtonElement.isEnabled=false
+                askHintButtonElement.alpha=0.5f
+            }
+        }else{
+            hintsLeftElement.visibility = View.GONE
+            askHintButtonElement.visibility = View.GONE
+            hintsLeftTextElement.visibility = View.GONE
+        }
+        askHintButtonElement.setOnClickListener {
+            gameInfoViewModel.askHint()
+        }
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -100,11 +124,19 @@ class GameInformationFragment : Fragment() {
             timerElement.text = it.toString()
         })
 
+        val preferencesSettings = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val soundOn:Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
+        val mediaPlayer = chatViewModel.createMediaPlayer(R.raw.end_game, requireContext())
+
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
-            val roundString =
-                resources.getString(R.string.round_turn) + " " + (it.currentRound.toInt() + 1)
+            var roundString: String =
+                (it.currentRound.toInt() + 1).toString()
+            if(it.mode == GameMode.FREEFORALL){
+                roundString = (it.currentRound.toInt() + 1).toString() + "/3"
+            }
+
             round.text = roundString
-            guessLeftElement.text = it.guessesLeft?.toInt().toString()
+            hintsLeftElement.text = it.hintsLeft?.toString()
             listPlayerAdapter.set(it.players)
             listPlayerAdapter.setDrawer(it.currentDrawerId)
             if (it.status.equals(GameStatus.ENDED)) {
@@ -150,7 +182,42 @@ class GameInformationFragment : Fragment() {
                     dialog.dismiss()
                 }
 
+                val viewKonfetti = dialog.findViewById<KonfettiView>(R.id.viewKonfetti)
+                viewKonfetti.build()
+                    .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                    .setDirection(0.0, 359.0)
+                    .setSpeed(1f, 5f)
+                    .setFadeOutEnabled(true)
+                    .setTimeToLive(2000L)
+                    .addShapes(Shape.Square, Shape.Circle)
+                    .addSizes(Size(12))
+                    .setPosition(-50f, 850 + 50f, -50f, -50f)
+                    .streamFor(300, 5000L)
+
                 dialog.show()
+
+                if(soundOn)chatViewModel.startMediaPlayer(mediaPlayer)
+                else chatViewModel.releaseMediaPlayer(mediaPlayer)
+
+                if(gameInfoViewModel.shouldDisplayHints()){
+                    hintsLeftElement.visibility = View.VISIBLE
+                    askHintButtonElement.visibility = View.VISIBLE
+                    hintsLeftTextElement.visibility = View.VISIBLE
+                    val hintsLeft =it.hintsLeft
+                    hintsLeftElement.text =
+                        hintsLeft?.toString()
+                    if(hintsLeft !=null &&hintsLeft>0){
+                        askHintButtonElement.isEnabled = true
+                        askHintButtonElement.alpha = 1f
+                    }else{
+                        askHintButtonElement.isEnabled=false
+                        askHintButtonElement.alpha=0.5f
+                    }
+                }else{
+                    hintsLeftElement.visibility = View.GONE
+                    askHintButtonElement.visibility = View.GONE
+                    hintsLeftTextElement.visibility = View.GONE
+                }
             }
         })
 

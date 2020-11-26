@@ -12,6 +12,7 @@
         android:text="@string/players"
         android:textAlignment="center"
         android:textSize="25dp"
+        android:textStyle="bold"
         android:background="?colorSecondary"/>
 
     <EditText

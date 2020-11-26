@@ -16,6 +16,9 @@ class GameInformationViewModel( private val gameSessionRepository: GameSessionRe
 
 //    fun getPlayers():LiveData<ArrayList<GamePlayerData>> = gameSessionRepository.getPlayers()
 
+    fun shouldDisplayHints():Boolean{
+        return !gameSessionRepository.isUserDrawingTurn()
+    }
     fun leaveGame(){
         gameSessionRepository.leaveGame()
     }
@@ -31,6 +34,10 @@ class GameInformationViewModel( private val gameSessionRepository: GameSessionRe
                 gameRepository.exitGame(gameID)
             }
         }
+    }
+
+    fun askHint(){
+        gameSessionRepository.askHint()
     }
 
 }

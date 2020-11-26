@@ -11,8 +11,6 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
 
 
 class CanvasRepositoryTest {
@@ -68,7 +66,7 @@ class CanvasRepositoryTest {
     fun testAddManualDrawPoint_ShouldAddCommand(){
         //PREPARE
         val repository:CanvasRepository = getRepository()
-        val pointToAdd = ManualDrawingPoint(1000000.0,1f,1f,PathStatus.BEGIN)
+        val pointToAdd = ManualDrawingPoint(1000000.0,1.0,1f,1f,PathStatus.BEGIN)
         //PERFORM
 
         repository.addManualDrawPoint(pointToAdd)
@@ -83,15 +81,15 @@ class CanvasRepositoryTest {
     fun testAddManualDrawPoint_ShouldUpdateCommand(){
         //PREPARE
         val repository:CanvasRepository = getRepository()
-        val pointToAdd = ManualDrawingPoint(1000000.0,1f,1f,PathStatus.BEGIN)
-        val pointToAdd2 = ManualDrawingPoint(1000000.0,1f,1f,PathStatus.ONGOING)
+        val pointToAdd = ManualDrawingPoint(1000000.0,1.0,1f,1f,PathStatus.BEGIN)
+        val pointToAdd2 = ManualDrawingPoint(1000000.0,2.0,1f,1f,PathStatus.ONGOING)
         //PERFORM
 
         repository.addManualDrawPoint(pointToAdd)
         repository.addManualDrawPoint(pointToAdd2)
 
         val result = repository.getDrawCommandHistory()
-        val commandSize=result.value?.get(pointToAdd.pathID)?.path?.size
+        val commandSize=result.value?.get(pointToAdd.pathID)?.pathDataPoints?.size
         //CHECK
         Assert.assertEquals(result.value!!.size,1)
         Assert.assertEquals(commandSize,2)

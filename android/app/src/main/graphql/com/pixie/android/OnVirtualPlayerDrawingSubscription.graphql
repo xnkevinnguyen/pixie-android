@@ -1,0 +1,30 @@
+subscription OnVirtualPlayerDrawing($gameSessionID:Float!){
+    onVirtualPlayerDrawing(gameSessionId:$gameSessionID){
+        currentPathId,
+        strokeColor,
+        strokeWidth,
+        opacity,
+        isPotrace,
+        points{
+            x,
+            y
+            order
+        }
+        PotracePoints{
+            x
+            y
+            x1
+            y1
+            x2
+            y2
+            xAxisRotation
+            largeArc
+            sweep
+
+            code
+            order
+        }
+        status,
+        gameSessionId
+    }
+}

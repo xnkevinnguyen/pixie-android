@@ -6,6 +6,9 @@ query getUserChannels{
             id
             username
             isOnline
+            isVirtual
+            avatarForeground
+            avatarBackground
         }
     }
 }

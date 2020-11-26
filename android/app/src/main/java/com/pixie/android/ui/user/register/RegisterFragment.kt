@@ -3,6 +3,7 @@ package com.pixie.android.ui.user.register
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -24,6 +25,7 @@ import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.register_fragment.*
+import kotlin.random.Random
 
 
 class RegisterFragment : Fragment() {
@@ -138,16 +140,23 @@ class RegisterFragment : Fragment() {
                 val passwordInput = password.text.toString()
                 val firstName = name.text.toString()
                 val lastName = surname.text.toString()
+
+                val foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+                val backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+                val foregroundToString = ("#" + Integer.toHexString(foregroundColor).substring(2))
+                val backgroundToString = ("#" + Integer.toHexString(backgroundColor).substring(2))
+
                 registerViewModel.register(
                     username.text.toString(),
                     password.text.toString(),
                     name.text.toString(),
-                    surname.text.toString()
+                    surname.text.toString(),
+                    foregroundToString,
+                    backgroundToString
                 ) { registerResult ->
 
                     if (registerResult.success != null) {
                         // Once register succeeds, we are loggin in the user
-
                         val intent = Intent(view.context, MainActivity::class.java)
                         val param = Bundle();
                         param.putInt("isNewUser", 1); //Your id

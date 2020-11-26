@@ -47,19 +47,37 @@ class CanvasFragment : Fragment() {
         viewModel.getDrawCommandHistory().observe(viewLifecycleOwner, Observer {
             // should only draw DRAW commands and remove ERASE commands
             val filteredCommand = it.filter { it.value.type == CommandType.DRAW }
-            my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
+
+            val filteredPotraceComand = it.filter{it.value.type.equals(CommandType.DRAW_POTRACE)}
+            if(!filteredPotraceComand.isNullOrEmpty()){
+                my_canvas.drawFromCommandListPotrace(ArrayList(filteredPotraceComand.values))
+
+            }else if(!filteredCommand.isNullOrEmpty()){
+                my_canvas.drawFromCommandList(ArrayList(filteredCommand.values))
+
+            }else{
+                //both lists are empty
+                my_canvas.drawFromCommandList(arrayListOf())
+            }
 
         })
 
         viewModel.getShouldShowWord().observe(viewLifecycleOwner,Observer{
-            if(it.shouldShowWordBig){
+            if(it.shouldShowWordBig && it.word !=null){
                 display_word.visibility = View.VISIBLE
                 if(it.type == ShowWordinGameType.IS_DRAWER)
                     display_word_top.text = String.format(resources.getString(R.string.display_word_top),it.word)
                 else if (it.type == ShowWordinGameType.OTHER_DRAWER)
                     display_word_top.text = String.format(resources.getString(R.string.next_drawer),it.word)
+            }else if(!it.shouldShowWordBig && it.word!=null){
+                display_word.visibility = View.GONE
+                    display_word_canvas.visibility=View.VISIBLE
+                display_word_canvas.bringToFront()
+                    display_word_canvas.text=String.format(resources.getString(R.string.your_word),it.word)
             }else{
                 display_word.visibility = View.GONE
+                display_word_canvas.visibility=View.GONE
+
             }
         })
         viewModel.getIsCanvasLocked().observe(viewLifecycleOwner,Observer{

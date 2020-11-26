@@ -1,14 +1,12 @@
 package com.pixie.android.data.user
 
 import android.util.Log
+import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
-import com.pixie.android.LoginMutation
-import com.pixie.android.LogoutMutation
-import com.pixie.android.RegisterMutation
-import com.pixie.android.apolloClient
-import com.pixie.android.type.LoginInput
-import com.pixie.android.type.UsernamePasswordInput
+import com.pixie.android.*
+import com.pixie.android.model.user.AvatarColorData
+import com.pixie.android.type.*
 
 class UserDataSource {
 
@@ -37,8 +35,10 @@ class UserDataSource {
     }
 
 
-    suspend fun register(username:String, password: String, firstName: String, lastName: String):RegisterMutation.Data?{
-        val usernamePasswordInput = UsernamePasswordInput(username,password, firstName, lastName)
+    suspend fun register(username:String, password: String, firstName: String, lastName: String, foreground:String,
+                         background:String):RegisterMutation.Data?{
+        val usernamePasswordInput = UsernamePasswordInput(username,password, firstName, lastName, avatarForeground = foreground.toInput(),
+        avatarBackground = background.toInput())
         var response :RegisterMutation.Data? =null
         try{
             response =  apolloClient(null).mutate(RegisterMutation(usernamePasswordInput)).toDeferred().await().data
@@ -47,6 +47,37 @@ class UserDataSource {
             Log.d("apolloException", e.message.toString())
         }
         return response
+    }
+    suspend fun  sendConfig(userID: Double,language: Language,theme:String){
+        var themeType:Theme=Theme.DARK
+        if(theme =="Christmas"){
+            themeType = Theme.CHRISTMAS
+        }else if(theme=="Barbie"){
+            themeType = Theme.BARBIE
+        }else if(theme =="Halloween"){
+            themeType = Theme.HALLOWEEN
+        }else if(theme =="Light"){
+            themeType = Theme.LIGHT
+        }
+        val input = UserConfigInput(language.toInput(),themeType.toInput())
+        try{
+            apolloClient(userID).mutate(SetConfigMutation(input)).toDeferred().await()
+        }catch(e:ApolloException){
+            Log.d("apolloException", e.message.toString())
+        }
+    }
+
+    suspend fun getAvatarColor(userID: Double): AvatarColorData{
+        try{
+            val response = apolloClient(userID).query(GetAvatarColorsQuery()).toDeferred().await().data
+            val colorQueryData = response?.me
+            if (colorQueryData != null) {
+                return AvatarColorData(colorQueryData.avatarForeground, colorQueryData.avatarBackground)
+            }
+        }catch(e:ApolloException){
+            Log.d("apolloException", e.message.toString())
+        }
+        return AvatarColorData(null, null)
     }
 
     // Singleton

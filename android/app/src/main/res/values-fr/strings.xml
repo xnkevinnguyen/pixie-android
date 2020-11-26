@@ -33,22 +33,23 @@
     <string name="register_title">Inscription</string>
     <string name="retype_pass">Entrer mot de passe à nouveau</string>
     <string name="return_login">Retour page authentification</string>
-    <string name="load_chat_history">Charger historique des discussions</string>
+    <string name="load_chat_history">Montrer historique au complet</string>
     <string name="messages">Messages</string>
-    <string name="channel">Vos Cannaux</string>
+    <string name="channel">Vos Canaux</string>
     <string name="add_channel">Ajouter canal</string>
     <string name="players">Joueur</string>
     <string name="dropdown_1">Profile</string>
     <string name="dropdown_2">Déconnexion</string>
     <string name="search_player">Rechercher joueur</string>
-    <string name="follow">Suivre</string>
-    <string name="unfollow">Ne plus suivre</string>
+    <string name="follow">Ajouter Ami</string>
+    <string name="unfollow">Enlever Ami</string>
     <string name="invite">Inviter</string>
 
     <string name="user_info">Informations Usager</string>
     <string name="name">Nom: </string>
     <string name="surname">Prénom: </string>
     <string name="user_username">Nom utilisateur: </string>
+    <string name="show_list_friend">Montrer Liste Amis</string>
     <string name="game_play_info">Informations de jeu de usager</string>
     <string name="number_games">Nombre de parties jouées: </string>
     <string name="percentage_victory">Pourcentage de victoire: </string>
@@ -73,12 +74,13 @@
 
     <string name="theme">Thème</string>
     <string name="language">Langage</string>
+    <string name="language_2">Langage:</string>
     <string name="notif_sound">Son de notification</string>
     <string name="dark">Sombre</string>
     <string name="light">Clair</string>
-    <string name="pink">Rose-Brun</string>
-    <string name="green">Vert-Gris</string>
-    <string name="blue">Bleu</string>
+    <string name="pink">Barbie</string>
+    <string name="christmas">Noel</string>
+    <string name="halloween">Halloween</string>
     <string name="eng">Anglais</string>
     <string name="fr">Français</string>
     <string name="setting">Réglage</string>
@@ -112,6 +114,7 @@
     <string name="not_available">Indisponible</string>
 
     <string name="start_game">Débuter Partie</string>
+    <string name="leave_game">Quitter la Partie</string>
     <string name="add_players">Ajouter un joueur</string>
     <string name="add_virtual">Ajouter Joueur Virtuel</string>
     <string name="create_game">Créer une Nouvelle Partie</string>
@@ -119,6 +122,8 @@
     <string name="round">Tours : 3</string>
     <string name="round_turn">Tour</string>
     <string name="total_round">de 3</string>
+    <string name="rounds">tours</string>
+
 
     <string name="game_result">Résultat de la Partie</string>
     <string name="goto_home">Retourner à la Page Accueil</string>
@@ -153,5 +158,9 @@
     <string name="game_invitation_title">%1$s vous a invité</string>
     <string name="correct_guess">Bonne réponse!</string>
     <string name="incorrect_guess">Mauvaise réponse!</string>
+    <string name="your_word"> Ton mot: %1$s</string>
+    <string name="hints_left">Indices Restant</string>
+    <string name="ask_hint">Demander</string>
+    <string name="number_player">Pas assez de joueurs</string>
 
 </resources>

@@ -17,6 +17,7 @@ class AvailableGamesViewModel(private val gameRepository: GameRepository,private
         val game= gameRepository.createGame(mode, difficulty, language)
         if(game!=null) {
             gameSessionRepository.subscribeToGameSessionChange(game.id)
+            gameSessionRepository.subscribeToPathChange(game.id,game.mode)
             gameSessionRepository.setGameSession(game)
         }
         return game

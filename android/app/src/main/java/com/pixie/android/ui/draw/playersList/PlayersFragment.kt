@@ -2,6 +2,8 @@ package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +22,7 @@ import com.pixie.android.ui.chat.ChannelParticipantAdapter
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
+import kotlin.random.Random
 
 
 class PlayersFragment : Fragment() {
@@ -48,58 +51,124 @@ class PlayersFragment : Fragment() {
             val participantList = playersViewModel.getCurrentChannelParticipants(id)
             participantAdapter.set(participantList)
         })
+        playersViewModel.fetchFriendList()
 
         val userChannels= playersViewModel.getUserChannels()
         userChannels.observe(viewLifecycleOwner, Observer {
             val participantList = playersViewModel.getCurrentChannelParticipants()
             participantAdapter.set(participantList)
         })
+        // update list on new friend as well
+        playersViewModel.getFriendList().observe(viewLifecycleOwner, Observer {
+            val participantList = playersViewModel.getCurrentChannelParticipants()
+            participantAdapter.set(participantList)
+        })
+
 
         participantListElement.onItemClickListener =
-            AdapterView.OnItemClickListener { adapterView, childView, position, id ->
+            AdapterView.OnItemClickListener { _, _, position, _ ->
                 val user: ChannelParticipant =
                     participantListElement.getItemAtPosition(position) as ChannelParticipant
-                val dialog = Dialog(requireContext())
-                dialog.setContentView(R.layout.other_user_info)
-                dialog.findViewById<TextView>(R.id.user_name).text = user.username
-                val follow = dialog.findViewById<Button>(R.id.follow)
-                if(isUser(user)) follow.visibility = View.GONE
-                if (!playersViewModel.isUserInFollowList(user)) follow.text = resources.getString(R.string.follow)
-                else follow.text = resources.getString(R.string.unfollow)
-                follow.setOnClickListener {
-                    if (!playersViewModel.isUserInFollowList(user)) {
-                        playersViewModel.addUserFollowList(user)
-                        follow.text = resources.getString(R.string.unfollow)
+                if (!user.isVirtual!!) {
+                    val dialog = Dialog(requireContext())
+                    dialog.setContentView(R.layout.other_user_info)
+                    dialog.findViewById<TextView>(R.id.user_name).text = user.username
+                    val follow = dialog.findViewById<Button>(R.id.follow)
+                    if (isUser(user)) follow.visibility = View.GONE
+
+                    val friendList = playersViewModel.getFriendList().value
+                    if (friendList != null) {
+                        if (friendList.contains(user)) follow.text =
+                            resources.getString(R.string.unfollow)
+                        else follow.text = resources.getString(R.string.follow)
                     } else {
-                        playersViewModel.removeUserFollowList(user)
                         follow.text = resources.getString(R.string.follow)
                     }
-                }
-                val invite = dialog.findViewById<Button>(R.id.invite)
 
-                if(playersViewModel.getGameSession().value?.id ==null){
-                 invite.visibility = View.GONE
-                }else{
-                    invite.visibility = View.VISIBLE
-                }
-                invite.setOnClickListener{
-                    invite.isEnabled= false
-                    playersViewModel.sendGameInvitation(user.id){
-                        if(it.isSuccess ==true){
-                            Toast.makeText(context,
-                                "Success",
-                                Toast.LENGTH_LONG).show()
-                        }else if(!it.isSuccess){
-                            Toast.makeText(context,
-                                it.error,
-                                Toast.LENGTH_LONG).show()
+                    follow.setOnClickListener {
+                        if (friendList != null) {
+                            if (!friendList.contains(user)) {
+                                playersViewModel.addFriend(user) {
+                                    if (it.isSuccess) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            requireContext().resources.getString(R.string.success),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        follow.text = resources.getString(R.string.unfollow)
+                                    } else if (!it.isSuccess) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            requireContext().resources.getString(R.string.error),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        follow.text = resources.getString(R.string.follow)
+
+                                    }
+                                }
+                            } else {
+                                playersViewModel.removeFriend(user.id) {
+                                    if (it.isSuccess) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            requireContext().resources.getString(R.string.success),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        follow.text = resources.getString(R.string.follow)
+                                    } else if (!it.isSuccess) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            requireContext().resources.getString(R.string.error),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        follow.text = resources.getString(R.string.unfollow)
+                                    }
+                                }
+                            }
+                            val participantList = playersViewModel.getCurrentChannelParticipants()
+                            participantAdapter.set(participantList)
                         }
-                        invite.isEnabled=true
                     }
-                }
 
-                dialog.show()
+                    val invite = dialog.findViewById<Button>(R.id.invite)
+                    if (playersViewModel.getGameSession().value?.id == null) {
+                        invite.visibility = View.GONE
+                    } else {
+                        invite.visibility = View.VISIBLE
+                    }
+                    if (isUser(user)) invite.visibility = View.GONE
+
+                    invite.setOnClickListener {
+                        invite.isEnabled = false
+                        playersViewModel.sendGameInvitation(user.id) {
+                            if (it.isSuccess) {
+                                Toast.makeText(
+                                    context,
+                                    resources.getString(R.string.success),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            } else if (!it.isSuccess) {
+                                Toast.makeText(
+                                    context,
+                                    resources.getString(R.string.error),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                            invite.isEnabled = true
+                        }
+                    }
+
+                    val onlineIconElement = dialog.findViewById<ImageView>(R.id.online_badge)
+                    val avatarElement = dialog.findViewById<ImageView>(R.id.avatar_participant)
+                    val ringElement = dialog.findViewById<ImageView>(R.id.avatar_ring)
+                    setColor(onlineIconElement, avatarElement, ringElement, user)
+
+
+                    dialog.show()
+
+                }
             }
+
 
         search.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(
@@ -130,6 +199,47 @@ class PlayersFragment : Fragment() {
             return true
         }
         return false
+    }
+
+    fun setColor(onlineIconElement:ImageView, avatarElement:ImageView, ringElement:ImageView,
+                 participant:ChannelParticipant){
+
+        if (participant.isOnline == false) {
+            onlineIconElement.setColorFilter(Color.GRAY)
+        }
+
+        var foregroundColor: Int? = null
+        if (!participant.avatarForeground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(participant.avatarForeground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+        avatarElement.setColorFilter(
+            foregroundColor
+        )
+
+        var backgroundColor: Int? = null
+        if (!participant.avatarBackground.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(participant.avatarBackground)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
+        avatarElement.backgroundTintList = ColorStateList.valueOf(
+            backgroundColor
+        )
+
+        if(playersViewModel.getFriendList().value?.contains(participant)==true){
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
+        }else if(playersViewModel.getUser()?.userId == participant.id){
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_BLUE))
+
+        }
+        else{
+            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
+
+        }
     }
 
 }

@@ -6,6 +6,9 @@ subscription onChannelAdded{
             id
             username
             isOnline
+            isVirtual
+            avatarForeground
+            avatarBackground
         }
     }
 }
