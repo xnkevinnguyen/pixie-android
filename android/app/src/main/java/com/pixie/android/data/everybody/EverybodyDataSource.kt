@@ -22,7 +22,7 @@ class EverybodyDataSource {
 
                 val userList = ArrayList(everyUserQueryData.map {
 
-                    ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual)
+                    ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual, it.avatarForeground, it.avatarBackground)
                 })
                 //onReceiveMessage(friendList)
                 return userList

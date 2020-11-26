@@ -8,6 +8,8 @@ class Constants {
         const val PLACEHOLDER_REGISTRATION_ERROR = "Error registering"
         const val USER_ID = "UserID"
         const val USERNAME = "Username"
+        const val FOREGROUND = "Foreground"
+        const val BACKGROUND= "Background"
         const val SHARED_PREFERENCES_SETTING = "Setting"
         const val THEME = "Theme"
         const val LANGUAGE = "Language"

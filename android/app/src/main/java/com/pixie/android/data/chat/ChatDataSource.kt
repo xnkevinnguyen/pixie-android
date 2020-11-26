@@ -29,7 +29,7 @@ class ChatDataSource() {
             if (channelQueryData != null) {
                 val channelData = ArrayList(channelQueryData.map {
                     var participantList =
-                        it.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual) }
+                        it.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground) }
                     if (participantList == null) {
                         participantList = arrayListOf()
                     }
@@ -113,7 +113,7 @@ class ChatDataSource() {
             if (data != null) {
 
                 var channelParticipant = data.participants?.map {
-                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual)
+                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                 }
                 if (channelParticipant == null) {
                     channelParticipant = arrayListOf()
@@ -145,7 +145,7 @@ class ChatDataSource() {
             if (data != null) {
 
                 var channelParticipant = data.participants?.map {
-                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual)
+                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                 }
                 if (channelParticipant == null) {
                     channelParticipant = arrayListOf()
@@ -222,7 +222,7 @@ class ChatDataSource() {
                         subscriptionData.id,
                         subscriptionData.name,
                         subscriptionData.participants.map {
-                            ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual)
+                            ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                         }, nParticipant = null
                     )
                     onChannelAdded(channelData)
@@ -242,7 +242,7 @@ class ChatDataSource() {
                         subscriptionData.id,
                         subscriptionData.name,
                         subscriptionData.participants.map {
-                            ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual)
+                            ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                         }, nParticipant = null
                     )
                     onChannelRemoved(channelData)
@@ -270,7 +270,7 @@ class ChatDataSource() {
                 if (data != null) {
 
                     var channelParticipant = data.participants?.map {
-                        ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual)
+                        ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
                     }
                     if (channelParticipant == null) {
                         channelParticipant = arrayListOf()

@@ -122,6 +122,7 @@
     <string name="round">Round : 3</string>
     <string name="round_turn">Round</string>
     <string name="total_round">of 3</string>
+    <string name="rounds">rounds</string>
 
     <string name="game_result">Game Result</string>
     <string name="goto_home">Go To Home</string>
@@ -160,4 +161,6 @@
     <string name="correct_guess">Correct Answer!</string>
     <string name="incorrect_guess">Incorrect Answer!</string>
     <string name="your_word"> Your word: %1$s</string>
+    <string name="hints_left">Hints Left</string>
+    <string name="ask_hint">Ask Hint</string>
 </resources>

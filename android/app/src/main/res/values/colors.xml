@@ -10,6 +10,7 @@
     <color name="yellow">@android:color/holo_orange_light</color>
     <color name="dark_red">#a40000</color>
     <color name="history">#415a775d</color>
+    <color name="blue">@android:color/holo_blue_light</color>
 
 
 </resources>

@@ -7,7 +7,9 @@ subscription onAvailableGameSessionsChange($mode:GameMode!, $difficulty:GameDiff
                 id,
                 username,
                 isOnline,
-                avatar
+                isVirtual,
+                avatarForeground,
+                avatarBackground
             }
             mode,
             language

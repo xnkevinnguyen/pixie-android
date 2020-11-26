@@ -61,6 +61,7 @@ class AddPlayerAdapter(context: Context) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val participant: ChannelParticipant = listPlayersToAdd[position]
         val rowView = inflater.inflate(R.layout.add_player_row, parent, false)
+        
         val userName = rowView.findViewById<TextView>(R.id.username_to_add)
         userName.text = participant.username
         val factory = InjectorUtils.provideChatViewModelFactory()
@@ -88,21 +89,26 @@ class AddPlayerAdapter(context: Context) : BaseAdapter() {
         }
         val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
 
-
+        var foregroundColor: Int? = null
+        if (!participant.avatarForeground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(participant.avatarForeground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
         avatarElement.setColorFilter(
-            Color.argb(
-                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
-                    256
-                )
-            )
+            foregroundColor
         )
 
+        var backgroundColor: Int? = null
+        if (!participant.avatarBackground.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(participant.avatarBackground)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
         avatarElement.backgroundTintList = ColorStateList.valueOf(
-            Color.argb(
-                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
-                    256
-                )
-            )
+            backgroundColor
         )
 
         val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)

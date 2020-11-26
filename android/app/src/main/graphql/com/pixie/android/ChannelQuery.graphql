@@ -6,6 +6,9 @@ query getChannel($channelId:Float!){
             id
             username
             isOnline
+            isVirtual,
+            avatarForeground
+            avatarBackground
         }
         messages{
             id

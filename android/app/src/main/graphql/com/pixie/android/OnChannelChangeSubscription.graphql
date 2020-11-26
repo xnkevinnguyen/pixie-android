@@ -7,6 +7,8 @@ subscription onChannelChange($channelId:Float!){
             username
             isOnline
             isVirtual
+            avatarForeground
+            avatarBackground
         }
     }
 }

@@ -4,13 +4,11 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
@@ -18,7 +16,6 @@ import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.draw.channelList.PlayersViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
-import kotlin.coroutines.coroutineContext
 import kotlin.random.Random
 
 
@@ -30,6 +27,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     private var listOfParticipants = ArrayList<ChannelParticipant>()
     var filteredListOfParticipants = ArrayList<ChannelParticipant>()
 
+    private val contextCopy = context
     val factory = InjectorUtils.providePlayersViewModelFactory()
     private val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
 
@@ -45,7 +43,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         filteredListOfParticipants.clear()
     }
 
-    fun reset() {
+    private fun reset() {
         clear()
         listOfParticipants.clear()
     }
@@ -79,12 +77,13 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val participantUserName = rowView.findViewById<TextView>(R.id.participant_username)
         val removeVirtualElement = rowView.findViewById<TextView>(R.id.remove_virtual_player)
+        val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
 
         if(participant.isVirtual ==true){
             removeVirtualElement.visibility = View.VISIBLE
             removeVirtualElement.setOnClickListener {
                 playersViewModel.removeVirtualPlayer(participant.id){
-                    if(it.isSuccess ==true){
+                    if(it.isSuccess){
                         Toast.makeText(rowView.context,
                             rowView.context.resources.getString(R.string.success),
                             Toast.LENGTH_LONG).show()
@@ -95,6 +94,11 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
                     }
                 }
             }
+
+            //Change icon
+            avatarElement.background = ContextCompat.getDrawable(contextCopy, R.drawable.circle)
+            avatarElement.setImageResource(R.drawable.ic_profile_virtual)
+
         }else{
             removeVirtualElement.visibility = View.GONE
         }
@@ -104,23 +108,27 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         if (participant.isOnline == false) {
             onlineIconElement.setColorFilter(Color.GRAY)
         }
-        val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
 
-
+        var foregroundColor: Int? = null
+        if (!participant.avatarForeground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(participant.avatarForeground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
         avatarElement.setColorFilter(
-            Color.argb(
-                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
-                    256
-                )
-            )
+            foregroundColor
         )
 
+        var backgroundColor: Int? = null
+        if (!participant.avatarBackground.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(participant.avatarBackground)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
         avatarElement.backgroundTintList = ColorStateList.valueOf(
-            Color.argb(
-                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
-                    256
-                )
-            )
+            backgroundColor
         )
 
         val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)

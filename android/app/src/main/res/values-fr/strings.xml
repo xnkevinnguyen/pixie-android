@@ -122,6 +122,8 @@
     <string name="round">Tours : 3</string>
     <string name="round_turn">Tour</string>
     <string name="total_round">de 3</string>
+    <string name="rounds">tours</string>
+
 
     <string name="game_result">Résultat de la Partie</string>
     <string name="goto_home">Retourner à la Page Accueil</string>
@@ -157,5 +159,8 @@
     <string name="correct_guess">Bonne réponse!</string>
     <string name="incorrect_guess">Mauvaise réponse!</string>
     <string name="your_word"> Ton mot: %1$s</string>
+    <string name="hints_left">Indices Restant</string>
+    <string name="ask_hint">Demander</string>
+
 
 </resources>

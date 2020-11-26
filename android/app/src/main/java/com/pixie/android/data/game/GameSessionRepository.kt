@@ -184,18 +184,19 @@ class GameSessionRepository(
         //Only send a manual drawing if it's user's turn
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
         if (gameSession.value?.mode == GameMode.FREEFORALL) {
-            pathOrderGenerator += 1;
+            val order = pathOrderGenerator
             CoroutineScope(Dispatchers.IO).launch {
                 dataSource.sendManualDraw(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
                     pathIDGenerator,
-                    pathOrderGenerator
+                    order
                 )
 
+            }
+            pathOrderGenerator += 1;
 
-                }
 
         }
     }
@@ -307,6 +308,23 @@ class GameSessionRepository(
                 val response = dataSource.guessWord(word, gameID, userRepository.getUser().userId)
                 CoroutineScope(Dispatchers.Main).launch {
                     onResult(response)
+                }
+            }
+        }
+    }
+
+    fun askHint() {
+        val gameID = gameSession.value?.id
+        if (gameID != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = dataSource.askHint(gameID, userRepository.getUser().userId)
+                if (response != null && response >= 0) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val gameSessionData = gameSession.value
+                        gameSessionData?.hintsLeft = response
+                        gameSession.postValue(gameSessionData)
+
+                    }
                 }
             }
         }

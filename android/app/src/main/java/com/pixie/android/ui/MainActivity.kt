@@ -4,7 +4,13 @@ package com.pixie.android.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,6 +20,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -37,11 +45,13 @@ import com.pixie.android.utilities.OnApplicationStopService
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.runBlocking
 import java.util.*
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var preferencesSettings: SharedPreferences
+    private lateinit var preferencesLogin:SharedPreferences
 
     override fun attachBaseContext(newBase: Context) {
         preferencesSettings = newBase.getSharedPreferences(
@@ -103,7 +113,26 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
+        preferencesLogin = getSharedPreferences(
+            Constants.SHARED_PREFERENCES_LOGIN,
+            Context.MODE_PRIVATE
+        )
         val avatar: ImageView = header.findViewById(R.id.imageView)
+
+
+        val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
+        avatar.setColorFilter(
+            foregroundColor
+        )
+
+
+        val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
+        avatar.backgroundTintList = ColorStateList.valueOf(
+            backgroundColor
+        )
+
         avatar.setOnClickListener {
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START, false)
@@ -156,6 +185,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
         menuInflater.inflate(R.menu.profile_menu, menu)
+     val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+      val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
+
+        val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
+
+        val drawable = ContextCompat.getDrawable(applicationContext,R.drawable.profile_layer) as LayerDrawable
+        drawable?.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
+        drawable?.setDrawableByLayerId(R.id.foreground_icon,ContextCompat.getDrawable(applicationContext,R.drawable.ic_profile_user))
+        drawable?.findDrawableByLayerId(R.id.foreground_icon).setColorFilter(foregroundColor,PorterDuff.Mode.SRC_ATOP)
+        val icon = menu.findItem(R.id.action_settings).setIcon(drawable)
+
         return true
     }
 

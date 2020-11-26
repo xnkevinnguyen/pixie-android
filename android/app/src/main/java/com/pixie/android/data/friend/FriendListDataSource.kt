@@ -23,7 +23,7 @@ class FriendListDataSource {
 
                 val friendList = ArrayList(friendListQueryData.map {
 
-                    ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual)
+                    ChannelParticipant(it.id, it.username, it.isOnline, it.isVirtual, it.avatarForeground, it.avatarBackground)
                 })
                 //onReceiveMessage(friendList)
                 return friendList

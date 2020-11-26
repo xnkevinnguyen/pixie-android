@@ -108,10 +108,12 @@ class UserRepository(val dataSource: UserDataSource) {
         password: String,
         firstName: String,
         lastName: String,
+        foreground:String,
+        background:String,
         onLoginResult: (authResult: AuthResult) -> Unit
     ) {
         CoroutineScope(IO).launch {
-            val response = dataSource.register(username, password, firstName, lastName)
+            val response = dataSource.register(username, password, firstName, lastName, foreground, background)
             lateinit var authResult: AuthResult
 
             if (response?.register?.user?.id != null) {// user needs to exist
@@ -145,6 +147,12 @@ class UserRepository(val dataSource: UserDataSource) {
     fun sendConfig(language: Language, theme: String) {
         CoroutineScope(Dispatchers.IO).launch {
             dataSource.sendConfig(getUser().userId, language, theme)
+        }
+    }
+
+    fun sendConfigColor(foreground:String, background: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataSource.sendConfigColor(getUser().userId, foreground, background)
         }
     }
 
