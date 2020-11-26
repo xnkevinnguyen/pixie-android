@@ -88,7 +88,10 @@ class AvailableGamesFragment : Fragment() {
 
         if(chatViewModel.isUserInAGame()){
             createBtn.isEnabled = false
-            createBtn.isClickable = false
+            createBtn.alpha = 0.5f
+        }else {
+            createBtn.isEnabled = true
+            createBtn.alpha = 1.0f
         }
         createBtn.setOnClickListener {
             // Forcing value in preferences to always be in English and not change because of the language change

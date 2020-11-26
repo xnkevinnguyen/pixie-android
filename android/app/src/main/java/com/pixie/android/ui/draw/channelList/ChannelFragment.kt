@@ -157,7 +157,14 @@ class ChannelFragment : Fragment() {
             dialog.setContentView(R.layout.add_player)
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)
             val game = chatViewModel.getGameSession()
-            createVirtualPlayer.isEnabled = game.value?.mode != GameMode.COOP
+            if(game.value?.mode == GameMode.COOP) {
+                createVirtualPlayer.isEnabled = false
+                createVirtualPlayer.alpha = 0.5f
+            }
+            else {
+                createVirtualPlayer.isEnabled = true
+                createVirtualPlayer.alpha = 1.0f
+            }
             createVirtualPlayer.setOnClickListener {
                 chatViewModel.addVirtualPlayer {
                     if (it.isSuccess == true) {

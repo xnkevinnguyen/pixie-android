@@ -141,7 +141,7 @@ class PlayersFragment : Fragment() {
                     invite.setOnClickListener {
                         invite.isEnabled = false
                         playersViewModel.sendGameInvitation(user.id) {
-                            if (it.isSuccess == true) {
+                            if (it.isSuccess) {
                                 Toast.makeText(
                                     context,
                                     resources.getString(R.string.success),
