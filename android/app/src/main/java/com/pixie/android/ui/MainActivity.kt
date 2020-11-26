@@ -9,6 +9,8 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -18,6 +20,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -181,15 +185,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Added 3 dots in the right up corner
         menuInflater.inflate(R.menu.profile_menu, menu)
-        val profile = menu.findItem(R.id.action_settings).icon
-        val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-        val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
-        profile.setColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP)
+     val randomForegroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+      val foregroundColor = preferencesLogin.getInt(Constants.FOREGROUND, randomForegroundColor)
 
         val randomBackgroundColor =  Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         val backgroundColor = preferencesLogin.getInt(Constants.BACKGROUND, randomBackgroundColor)
-        profile.setTint(backgroundColor)
 
+        val drawable = ContextCompat.getDrawable(applicationContext,R.drawable.profile_layer) as LayerDrawable
+        drawable?.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
+        drawable?.setDrawableByLayerId(R.id.foreground_icon,ContextCompat.getDrawable(applicationContext,R.drawable.ic_profile_user))
+        drawable?.findDrawableByLayerId(R.id.foreground_icon).setColorFilter(foregroundColor,PorterDuff.Mode.SRC_ATOP)
+        val icon = menu.findItem(R.id.action_settings).setIcon(drawable)
 
         return true
     }
