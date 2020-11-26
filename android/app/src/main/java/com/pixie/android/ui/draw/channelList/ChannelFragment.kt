@@ -2,6 +2,8 @@ package com.pixie.android.ui.draw.channelList
 
 import android.app.Dialog
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -78,21 +80,9 @@ class ChannelFragment : Fragment() {
 
         val gameInfoFactory = InjectorUtils.provideGameInformationViewModelFactory()
         val gameInfoViewModel = ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
+
         gameInfoViewModel.getNumberOfParticipantsInGame().observe(viewLifecycleOwner, Observer {
-            if(it < 2){
-                startGameBtn.isEnabled = false
-                startGameBtn.backgroundTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.dark_dark_grey))
-            }else {
-                startGameBtn.isEnabled = true
-                val typedValue = TypedValue()
-                val theme = requireContext().theme
-                theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-                @ColorInt val color = typedValue.data
-                startGameBtn.backgroundTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), color)
-                )
-            }
+            startGameBtn.isEnabled = it >= 2
         })
         //start game
         startGameBtn.setOnClickListener {
@@ -146,20 +136,7 @@ class ChannelFragment : Fragment() {
             dialog.setContentView(R.layout.add_player)
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)
             val game = chatViewModel.getGameSession()
-            if(game.value?.mode == GameMode.COOP){
-                createVirtualPlayer.isEnabled = false
-                createVirtualPlayer.backgroundTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.dark_dark_grey))
-            }else {
-                createVirtualPlayer.isEnabled = true
-                val typedValue = TypedValue()
-                val theme = requireContext().theme
-                theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-                @ColorInt val color = typedValue.data
-                createVirtualPlayer.backgroundTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), color)
-                )
-            }
+            createVirtualPlayer.isEnabled = game.value?.mode != GameMode.COOP
             createVirtualPlayer.setOnClickListener {
                 chatViewModel.addVirtualPlayer{
                         if(it.isSuccess ==true){
