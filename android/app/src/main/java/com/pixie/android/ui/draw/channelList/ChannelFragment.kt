@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -156,7 +157,9 @@ class ChannelFragment : Fragment() {
             listUsers.observe(viewLifecycleOwner, Observer {
                 for (user in it){
                     if(user.isOnline != null) {
-                        if (user.isOnline) filteredListOfOnlineUser.add(user)
+                        if (user.isOnline && !filteredListOfOnlineUser.contains(user)){
+                            filteredListOfOnlineUser.add(user)
+                        }
                     }
                 }
                 addPlayerAdapter.set(filteredListOfOnlineUser)
