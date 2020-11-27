@@ -130,7 +130,6 @@ class ChatViewModel(
         gameInviteRepository.confirmInvitationBeenShown()
     }
     fun acceptInvitation(gameID: Double){
-        val game= gameRepository.joinGame(gameID)
 
         // remove user from old game if they accept invitation
         if(isUserInAGame()){
@@ -140,6 +139,8 @@ class ChatViewModel(
                 gameInfo.gameID?.let { exitGame(it) }
             }
         }
+        val game= gameRepository.joinGame(gameID)
+
         if(game!=null) {
             gameSessionRepository.subscribeToGameSessionChange(game.id)
             gameSessionRepository.setGameSession(game)
