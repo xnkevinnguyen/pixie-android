@@ -26,7 +26,7 @@
     <string name="register"><u>Register</u></string>
     <string name="failed_login">Username or password is incorrect</string>
     <string name="failed_registration">Registration Failed</string>
-    <string name="login_user_hint">UserName</string>
+    <string name="login_user_hint">Username</string>
     <string name="login_pass_hint">Enter password</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
