@@ -87,7 +87,7 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
                 )
             }
             val navController = viewActivity.findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_home)
+            navController.navigate(R.id.nav_chat)
         }
     }
 
