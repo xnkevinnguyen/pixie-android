@@ -43,12 +43,9 @@ class GameGuessFragment : Fragment() {
 
         val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
 
-
-
         val factory = InjectorUtils.provideGameChatViewModelFactory()
 
         val gameChatViewModel = ViewModelProvider(this, factory).get(GameChatViewModel::class.java)
-
 
         val typedValue = TypedValue()
         val theme = requireContext().theme
@@ -65,20 +62,25 @@ class GameGuessFragment : Fragment() {
 
         sendMessage.setOnClickListener {
             val message = editText.text.toString()
-
-            gameChatViewModel.sendGuess(message){
-                if(it ==true){
-                    Toast.makeText(requireContext(),
-                    resources.getString(R.string.correct_guess),
-                    Toast.LENGTH_LONG).show()
-                    if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
-                    else chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
-                }else if( it==false){
-                    Toast.makeText(requireContext(),
-                        resources.getString(R.string.incorrect_guess),
-                        Toast.LENGTH_LONG).show()
-                    if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
-                    else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
+            if (message.isNotBlank()) {
+                gameChatViewModel.sendGuess(message) {
+                    if (it == true) {
+                        Toast.makeText(
+                            requireContext(),
+                            resources.getString(R.string.correct_guess),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        if (soundOn) chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
+                        else chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
+                    } else if (it == false) {
+                        Toast.makeText(
+                            requireContext(),
+                            resources.getString(R.string.incorrect_guess),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        if (soundOn) chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
+                        else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
+                    }
                 }
             }
             editText.text.clear()
@@ -97,10 +99,14 @@ class GameGuessFragment : Fragment() {
                                 Toast.makeText(requireContext(),
                                     resources.getString(R.string.correct_guess),
                                     Toast.LENGTH_LONG).show()
+                                if (soundOn) chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
+                                else chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
                             }else if( it==false){
                                 Toast.makeText(requireContext(),
                                     resources.getString(R.string.incorrect_guess),
                                     Toast.LENGTH_LONG).show()
+                                if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
+                                else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
                             }
                         }
                         editText.text.clear() //clear text line
@@ -117,7 +123,21 @@ class GameGuessFragment : Fragment() {
                 val message = editText.text.toString()
 
                 if (message.isNotBlank()) {
-                    gameChatViewModel.sendMessageToGameChannel(message)
+                    gameChatViewModel.sendGuess(message){
+                        if(it ==true){
+                            Toast.makeText(requireContext(),
+                                resources.getString(R.string.correct_guess),
+                                Toast.LENGTH_LONG).show()
+                            if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
+                            else chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
+                        }else if( it==false){
+                            Toast.makeText(requireContext(),
+                                resources.getString(R.string.incorrect_guess),
+                                Toast.LENGTH_LONG).show()
+                            if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
+                            else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
+                        }
+                    }
                     editText.text.clear()
                 }
                 true
@@ -125,7 +145,6 @@ class GameGuessFragment : Fragment() {
                 false
             }
         }
-
 
         return root
     }
