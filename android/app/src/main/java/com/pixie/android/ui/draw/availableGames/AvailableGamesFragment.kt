@@ -112,7 +112,7 @@ class AvailableGamesFragment : Fragment() {
             }
 
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_home)
+            navController.navigate(R.id.nav_chat)
         }
         return root
     }

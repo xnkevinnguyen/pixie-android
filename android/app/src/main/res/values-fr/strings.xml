@@ -10,6 +10,7 @@
     <string name="username">Nom utilisateur</string>
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Accueil</string>
+    <string name="chat_title">Chat</string>
     <string name="game_select">Sélection de Jeu</string>
     <string name="available_games">Jeux disponibles</string>
     <string name="drawing">Dessin</string>

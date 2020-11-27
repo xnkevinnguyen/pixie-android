@@ -10,6 +10,7 @@
     <string name="username">Username</string>
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Home</string>
+    <string name="chat_title">Chat</string>
     <string name="game_select">Game Selection</string>
     <string name="available_games">Available Games</string>
     <string name="drawing">Drawing</string>

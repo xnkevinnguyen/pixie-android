@@ -73,7 +73,7 @@ class GameInformationFragment : Fragment() {
             }
 
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_home)
+            navController.navigate(R.id.nav_game_selection)
         }
         if(gameInfoViewModel.shouldDisplayHints()){
             hintsLeftElement.visibility = View.VISIBLE
@@ -110,7 +110,7 @@ class GameInformationFragment : Fragment() {
                     }
 
                     val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-                    navController.navigate(R.id.nav_home)
+                    navController.navigate(R.id.nav_game_selection)
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
@@ -178,7 +178,7 @@ class GameInformationFragment : Fragment() {
                 goToHome.setOnClickListener {
                     val navController =
                         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    navController.navigate(R.id.nav_home)
+                    navController.navigate(R.id.nav_game_selection)
                     dialog.dismiss()
                 }
 
