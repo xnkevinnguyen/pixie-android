@@ -160,7 +160,7 @@ class GameInformationFragment : Fragment() {
                 for(player in it.players) {
                     if(player.id.toString() == preferencesUser.getString(Constants.USER_ID, null)) {
                         val scoreString =
-                            resources.getString(R.string.total_score) + ": " + player.score.toString()
+                            resources.getString(R.string.total_score) + ": " + player.score?.toInt().toString()
                         score.text = scoreString
                     }
                 }
