@@ -5,4 +5,5 @@
     <color name="colorLightTertiary">#96ACC5</color>
     <color name="colorLightFourth">#BAC5D4</color>
     <color name="colorLightFifth">#EFEFED</color>
+    <color name="appBarLight">#6eeb83</color>
 </resources>

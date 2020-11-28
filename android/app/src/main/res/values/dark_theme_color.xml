@@ -5,4 +5,5 @@
     <color name="colorTertiary">#415A77</color>
     <color name="colorFourth">#778DA9</color>
     <color name="colorFifth">#E0E1DD</color>
+    <color name="app_bar">#FF0000</color>
 </resources>
