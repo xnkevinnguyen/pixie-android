@@ -9,31 +9,27 @@
     android:focusableInTouchMode="true"
     android:orientation="horizontal"
     >
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:textSize="@dimen/regular_size"
+            android:hint="@string/chat_guess_hint"
+            android:textColorHint="?colorSecondary"
+            android:inputType="text"
+            android:paddingHorizontal="10dp"
+            android:layout_gravity="center"
 
+            />
 
-
-
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:ems="10"
-                android:textSize="@dimen/regular_size"
-                android:hint="@string/chat_guess_hint"
-                android:textColorHint="?colorSecondary"
-                android:inputType="text"
-                android:paddingHorizontal="10dp"
-                android:layout_gravity="center"
-
-                />
-
-            <ImageButton
-                android:id="@+id/send_message"
-                android:layout_width="50px"
-                android:layout_height="50px"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/ic_send_black"
-                android:scaleType="fitCenter" />
+        <ImageButton
+            android:id="@+id/send_message"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/ic_send_black"
+            android:scaleType="fitCenter" />
 </LinearLayout>

@@ -164,7 +164,7 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/button_drawable"
             android:text="@string/register_title"
-            android:textColor="@android:color/white" />
+            android:textColor="?colorControlHighlight" />
 
         <ImageView
             android:id="@+id/return_login"

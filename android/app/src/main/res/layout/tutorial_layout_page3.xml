@@ -13,7 +13,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:textSize="30dp"
-        android:textColor="@android:color/white"
+        android:textColor="?colorControlHighlight"
         android:text="@string/view_profile"
         android:minLines="2"
         android:gravity="center"/>
@@ -32,7 +32,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginEnd="80dp"
         android:textSize="25dp"
-        android:textColor="@android:color/white"
+        android:textColor="?colorControlHighlight"
         android:text="@string/view_profile_expl"
         android:minLines="2"
         android:gravity="center"/>
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="@string/next"
         android:background="@drawable/button_drawable"
-        android:textColor="@android:color/white"
+        android:textColor="?colorControlHighlight"
         android:textSize="@dimen/profile_titles"
         android:padding="10dp"
         android:layout_gravity="center"

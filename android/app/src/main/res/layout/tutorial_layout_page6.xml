@@ -13,7 +13,7 @@
         android:layout_marginTop="35dp"
         android:layout_marginBottom="35dp"
         android:textSize="30dp"
-        android:textColor="@android:color/white"
+        android:textColor="?colorControlHighlight"
         android:text="@string/play_game"
         android:gravity="center"/>
 
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:textSize="25dp"
-        android:textColor="@android:color/white"
+        android:textColor="?colorControlHighlight"
         android:text="@string/play_game_expl"
         android:gravity="center"/>
 
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:text="@string/finish"
         android:background="@drawable/button_drawable"
-        android:textColor="@android:color/white"
+        android:textColor="?colorControlHighlight"
         android:textSize="@dimen/profile_titles"
         android:padding="10dp"
         android:layout_gravity="center"

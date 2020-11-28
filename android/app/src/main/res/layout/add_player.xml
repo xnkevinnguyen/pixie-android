@@ -12,7 +12,6 @@
         android:text="@string/add_virtual"
         android:textStyle="bold"
         android:textSize="@dimen/profile_text"
-        android:textColor="@android:color/black"
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"/>
@@ -31,7 +30,6 @@
             android:hint="@string/channel_name"
             android:text="@string/add_virtual"
             android:textSize="@dimen/profile_text"
-            android:textColor="@android:color/black"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"/>
         <Button
@@ -39,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_drawable"
-            android:textColor="@android:color/white"
+            android:textColor="?colorControlHighlight"
             android:text="@string/add"
             android:textSize="15dp"
             android:layout_marginEnd="50dp"
@@ -53,7 +51,6 @@
         android:text="@string/add_players"
         android:textStyle="bold"
         android:textSize="@dimen/profile_text"
-        android:textColor="@android:color/black"
         android:gravity="center"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="20dp"/>
@@ -62,8 +59,4 @@
         android:id="@+id/list_add_player"
         android:layout_width="match_parent"
         android:layout_height="350dp"/>
-
-
-
-
 </LinearLayout>

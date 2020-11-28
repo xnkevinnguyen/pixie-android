@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/create"
-                android:textColor="@android:color/white"
+                android:textColor="?colorControlHighlight"
                 android:background="@drawable/button_drawable"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
