@@ -24,7 +24,7 @@
                 android:paddingVertical="4dp"
                 android:scrollHorizontally="false"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?colorControlHighlight"
+                android:textColor="?colorSecondaryVariant"
                 android:gravity="center_vertical"
                 android:textSize="15sp"
                 android:layout_margin="5dp"/>

@@ -14,7 +14,8 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
-        <item name="colorControlHighlight">@color/white</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
@@ -32,7 +33,8 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
-        <item name="colorControlHighlight">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/colorPaint</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyleLight</item>
     </style>
 
@@ -50,7 +52,8 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
-        <item name="colorControlHighlight">@color/white</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
@@ -68,7 +71,8 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
-        <item name="colorControlHighlight">@color/white</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
@@ -86,7 +90,8 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
-        <item name="colorControlHighlight">@color/white</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 

@@ -80,7 +80,7 @@
             android:text="@string/follow"
             android:textSize="15dp"
             android:textAlignment="center"
-            android:textColor="?colorControlHighlight"
+            android:textColor="?colorSecondaryVariant"
             android:background="@drawable/button_drawable"
             android:padding="5dp"
             android:layout_marginRight="10dp"/>
@@ -92,7 +92,7 @@
             android:text="@string/invite"
             android:textSize="15dp"
             android:textAlignment="center"
-            android:textColor="?colorControlHighlight"
+            android:textColor="?colorSecondaryVariant"
             android:background="@drawable/button_drawable"
             android:padding="5dp"/>
     </LinearLayout>

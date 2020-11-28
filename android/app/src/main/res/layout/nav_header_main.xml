@@ -35,6 +35,6 @@
         android:text="@string/username"
         android:textSize="20dp"
         android:layout_marginStart="20dp"
-        android:textColor="?colorControlHighlight"/>
+        android:textColor="?colorSecondaryVariant"/>
 
 </LinearLayout>

@@ -13,7 +13,7 @@
         android:layout_marginTop="35dp"
         android:layout_marginBottom="25dp"
         android:textSize="30dp"
-        android:textColor="?colorControlHighlight"
+        android:textColor="?colorSecondaryVariant"
         android:text="@string/chat"
         android:gravity="center"/>
 
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="@string/next"
         android:background="@drawable/button_drawable"
-        android:textColor="?colorControlHighlight"
+        android:textColor="?colorSecondaryVariant"
         android:textSize="@dimen/profile_titles"
         android:padding="10dp"
         android:layout_gravity="center"

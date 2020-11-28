@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="@string/game_result"
             android:textSize="40dp"
-            android:textColor="?colorControlHighlight"
+            android:textColor="?colorSecondaryVariant"
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginTop="30dp"
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/profile_titles"
             android:gravity="center"
-            android:textColor="?colorControlHighlight"
+            android:textColor="?colorSecondaryVariant"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="15dp"/>
 
@@ -75,7 +75,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginStart="20dp"
             android:gravity="center"
-            android:textColor="?colorControlHighlight"
+            android:textColor="?colorSecondaryVariant"
             android:textSize="@dimen/profile_titles" />
 
         <Button
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:text="@string/goto_home"
             android:background="@drawable/button_drawable"
-            android:textColor="?colorControlHighlight"
+            android:textColor="?colorSecondaryVariant"
             android:textSize="@dimen/profile_titles"
             android:padding="10dp"
             android:layout_gravity="center"
