@@ -14,6 +14,7 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/white</item>
     </style>
 
     <style name="AppLightTheme" parent="Theme.AppCompat.Light">
@@ -30,6 +31,7 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/colorPaint</item>
     </style>
 
     <style name="AppGreenTheme" parent="Theme.AppCompat.Light">
@@ -46,6 +48,7 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/white</item>
     </style>
 
     <style name="AppPinkTheme" parent="Theme.AppCompat.Light">
@@ -62,6 +65,7 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/colorPaint</item>
     </style>
 
     <style name="AppBlueTheme" parent="Theme.AppCompat.Light">
@@ -78,6 +82,7 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/white</item>
     </style>
 
     <!--Needed for navigation to work -->
