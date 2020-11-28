@@ -12,7 +12,7 @@
         <item name="android:spinnerStyle">@style/OverflowMenu</item>
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
-        <item name="actionBarPopupTheme">@style/SubmenuHeaderStyle</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
         <item name="colorControlHighlight">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
@@ -68,8 +68,8 @@
         <item name="android:itemBackground">@drawable/menu_popup_selector</item>
         <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
         <item name="android:textColor">@color/colorPaint</item>
-        <item name="colorControlHighlight">@color/colorPaint</item>
-        <item name="drawerArrowStyle">@style/DrawerArrowStyleLight</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="AppBlueTheme" parent="Theme.AppCompat.Light">
@@ -128,11 +128,6 @@
 
     <style name="mySpinnerItemStyle" parent="Widget.AppCompat.DropDownItem.Spinner">
         <item name="android:popupBackground">?color</item>
-    </style>
-
-    <style name="SubmenuHeaderStyle" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:colorBackground">@color/colorFourth</item>
-        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="SubmenuLightHeaderStyle" parent="ThemeOverlay.AppCompat.Light">
