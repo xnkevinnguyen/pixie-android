@@ -1,6 +1,8 @@
 query getBestScore($input: LeaderBoardInput!){
     leaderboardBestScore(input:$input){
         username,
-        value
+        value,
+        avatarForeground,
+        avatarBackground
     }
 }
