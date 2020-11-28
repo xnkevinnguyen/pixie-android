@@ -65,7 +65,7 @@ class LeaderboardUserAdapter7(context: Context) : BaseAdapter() {
         participantUserName.text = participant.username
 
         val participantValue = rowView.findViewById<TextView>(R.id.participant_value)
-        participantValue.text = participant.value.toString()
+        participantValue.text = participant.value?.toInt().toString()
 
         val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
         avatarElement.setColorFilter(

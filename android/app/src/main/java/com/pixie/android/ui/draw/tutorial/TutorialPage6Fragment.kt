@@ -23,7 +23,7 @@ class TutorialPage6Fragment: Fragment() {
 
         finish.setOnClickListener {
             val navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_home)
+            navController.navigate(R.id.nav_game_selection)
         }
         return root
     }

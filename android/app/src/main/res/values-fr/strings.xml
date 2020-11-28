@@ -10,6 +10,7 @@
     <string name="username">Nom utilisateur</string>
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Accueil</string>
+    <string name="chat_title">Chat</string>
     <string name="game_select">Sélection de Jeu</string>
     <string name="available_games">Jeux disponibles</string>
     <string name="drawing">Dessin</string>
@@ -159,8 +160,9 @@
     <string name="correct_guess">Bonne réponse!</string>
     <string name="incorrect_guess">Mauvaise réponse!</string>
     <string name="your_word"> Ton mot: %1$s</string>
-    <string name="hints_left">Indices Restant</string>
+    <string name="hints_left">Restant</string>
     <string name="ask_hint">Demander</string>
     <string name="number_player">Pas assez de joueurs</string>
+    <string name="seconds">secondes</string>
 
 </resources>

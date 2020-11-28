@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,9 +51,7 @@ class GameInformationFragment : Fragment() {
         val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
 
         val timerElement = root.findViewById<TextView>(R.id.time_left)
-        val hintsLeftElement = root.findViewById<TextView>(R.id.number_hints_left)
-        val hintsLeftTextElement = root.findViewById<TextView>(R.id.hints_left_text)
-        val askHintButtonElement = root.findViewById<TextView>(R.id.request_hints)
+        val askHintButtonElement = root.findViewById<Button>(R.id.request_hints)
         val mode = root.findViewById<TextView>(R.id.mode_of_game)
         val round = root.findViewById<TextView>(R.id.round_number)
         val listPlayer = root.findViewById<ListView>(R.id.players_in_game)
@@ -73,15 +72,13 @@ class GameInformationFragment : Fragment() {
             }
 
             val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_home)
+            navController.navigate(R.id.nav_game_selection)
         }
         if(gameInfoViewModel.shouldDisplayHints()){
-            hintsLeftElement.visibility = View.VISIBLE
-            hintsLeftTextElement.visibility = View.VISIBLE
             askHintButtonElement.visibility = View.VISIBLE
             val hintsLeft = gameInfoViewModel.getGameSession().value?.hintsLeft
-            hintsLeftElement.text =
-                hintsLeft?.toString()
+            val hintsLeftElement = resources.getString(R.string.ask_hint) + "  |  " + hintsLeft?.toString() + " " + resources.getString(R.string.hints_left)
+            askHintButtonElement.text = hintsLeftElement
             if(hintsLeft !=null &&hintsLeft>0){
                 askHintButtonElement.isEnabled = true
                 askHintButtonElement.alpha = 1f
@@ -90,9 +87,7 @@ class GameInformationFragment : Fragment() {
                 askHintButtonElement.alpha=0.5f
             }
         }else{
-            hintsLeftElement.visibility = View.GONE
             askHintButtonElement.visibility = View.GONE
-            hintsLeftTextElement.visibility = View.GONE
         }
         askHintButtonElement.setOnClickListener {
             gameInfoViewModel.askHint()
@@ -110,7 +105,7 @@ class GameInformationFragment : Fragment() {
                     }
 
                     val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-                    navController.navigate(R.id.nav_home)
+                    navController.navigate(R.id.nav_game_selection)
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
@@ -136,7 +131,8 @@ class GameInformationFragment : Fragment() {
             }
 
             round.text = roundString
-            hintsLeftElement.text = it.hintsLeft?.toString()
+            val hintsLeftElement = resources.getString(R.string.ask_hint) + "  |  " + it.hintsLeft?.toString() + " " + resources.getString(R.string.hints_left)
+            askHintButtonElement.text = hintsLeftElement
             listPlayerAdapter.set(it.players)
             listPlayerAdapter.setDrawer(it.currentDrawerId)
             if (it.status.equals(GameStatus.ENDED)) {
@@ -164,7 +160,7 @@ class GameInformationFragment : Fragment() {
                 for(player in it.players) {
                     if(player.id.toString() == preferencesUser.getString(Constants.USER_ID, null)) {
                         val scoreString =
-                            resources.getString(R.string.total_score) + ": " + player.score.toString()
+                            resources.getString(R.string.total_score) + ": " + player.score?.toInt().toString()
                         score.text = scoreString
                     }
                 }
@@ -178,7 +174,7 @@ class GameInformationFragment : Fragment() {
                 goToHome.setOnClickListener {
                     val navController =
                         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    navController.navigate(R.id.nav_home)
+                    navController.navigate(R.id.nav_game_selection)
                     dialog.dismiss()
                 }
 
@@ -200,12 +196,10 @@ class GameInformationFragment : Fragment() {
                 else chatViewModel.releaseMediaPlayer(mediaPlayer)
 
                 if(gameInfoViewModel.shouldDisplayHints()){
-                    hintsLeftElement.visibility = View.VISIBLE
                     askHintButtonElement.visibility = View.VISIBLE
-                    hintsLeftTextElement.visibility = View.VISIBLE
                     val hintsLeft =it.hintsLeft
-                    hintsLeftElement.text =
-                        hintsLeft?.toString()
+                    val hintsLeftElement = resources.getString(R.string.ask_hint) + "  |  " + hintsLeft?.toString() + " " + resources.getString(R.string.hints_left)
+                    askHintButtonElement.text = hintsLeftElement
                     if(hintsLeft !=null &&hintsLeft>0){
                         askHintButtonElement.isEnabled = true
                         askHintButtonElement.alpha = 1f
@@ -214,9 +208,7 @@ class GameInformationFragment : Fragment() {
                         askHintButtonElement.alpha=0.5f
                     }
                 }else{
-                    hintsLeftElement.visibility = View.GONE
                     askHintButtonElement.visibility = View.GONE
-                    hintsLeftTextElement.visibility = View.GONE
                 }
             }
         })

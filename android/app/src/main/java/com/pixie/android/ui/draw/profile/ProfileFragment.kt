@@ -156,10 +156,10 @@ class ProfileFragment: Fragment() {
         val bestScore: TextView = requireActivity().findViewById(R.id.best_score)
         profileViewModel.getUserStats().observe(viewLifecycleOwner, Observer {
             nbGames.text = it.nbGames.toString()
-            percent.text = it.percentWin.toString()
-            averageGame.text = it.averageGameTime.toString()
-            totalGame.text = it.totalGameTime.toString()
-            bestScore.text = it.bestFreeScore.toString()
+            percent.text = it.percentWin?.toInt().toString()
+            averageGame.text = it.averageGameTime?.toInt().toString()
+            totalGame.text = it.totalGameTime?.toInt().toString()
+            bestScore.text = it.bestFreeScore?.toInt().toString()
         })
     }
 
@@ -188,7 +188,7 @@ class ProfileFragment: Fragment() {
                     winnerString = "Unavailable"
                 }
                 winner.text = winnerString
-                winnerScore.text = it[it.size - 1].score.toString()
+                winnerScore.text = it[it.size - 1].score?.toInt().toString()
                 difficulty.text = it[it.size - 1].difficulty
                 mode.text = it[it.size - 1].gameMode
             }
@@ -198,7 +198,7 @@ class ProfileFragment: Fragment() {
     private fun findUserPoints(listOfScores: List<ScoreData>): String{
         for (score in listOfScores){
             if(score.username == profileViewModel.getUsername()){
-                return score.value.toString()
+                return score.value?.toInt().toString()
             }
         }
         return "0"
