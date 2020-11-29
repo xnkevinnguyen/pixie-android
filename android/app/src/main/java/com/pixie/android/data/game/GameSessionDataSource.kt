@@ -46,12 +46,18 @@ class GameSessionDataSource {
                     if (it.id == userID)
                         nHintsLeft = it.nHints
                 }
+                var guessesLeft: Int? = null
+
+                data.gameInfo.scores?.forEach {
+                    if(it.user.id == userID)
+                        guessesLeft = it.tries.toInt()
+                }
                 return GameSessionData(
                     data.id,
                     data.currentDrawerId,
                     data.currentWord,
                     data.currentRound,
-                    data.sprintTries,
+                    guessesLeft,
                     data.status,
                     data.gameHall.id,
                     players,
@@ -103,6 +109,12 @@ class GameSessionDataSource {
                         if (it.id == userID)
                             nHintsLeft = it.nHints
                     }
+                    var guessesLeft: Int? = null
+
+                    data.gameInfo.scores?.forEach {
+                        if(it.user.id == userID)
+                            guessesLeft = it.tries.toInt()
+                    }
                     val players = ArrayList(data.gameInfo.scores!!.map {
 
                         GameParticipant(
@@ -118,7 +130,7 @@ class GameSessionDataSource {
                         data.currentDrawerId,
                         data.currentWord,
                         data.currentRound,
-                        data.sprintTries,
+                        guessesLeft,
                         data.status,
                         data.gameHall.id,
                         players,

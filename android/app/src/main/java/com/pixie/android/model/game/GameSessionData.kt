@@ -9,7 +9,7 @@ data class GameSessionData (
     var currentDrawerId:Double?,
     var currentWord:String,
     var currentRound:Double,
-    var guessesLeft:Double?=3.0,
+    var guessesLeft:Int?=3,
     var status: GameStatus,
     var channelID:Double,
     var players:ArrayList<GameParticipant>,

@@ -42,6 +42,7 @@ subscription OnGameSessionChange($gameSessionId:Float!){
                     isVirtual
                     isOnline
                 }
+                tries
                 value
 
             }
