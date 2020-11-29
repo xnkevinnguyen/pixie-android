@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelData
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
@@ -150,9 +152,17 @@ class ChannelFragment : Fragment() {
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
 
+            val filteredListOfOnlineUser = arrayListOf<ChannelParticipant>()
             val listUsers = channelViewModel.getAllUsers()
-            listUsers.observe(viewLifecycleOwner, Observer { listUserFollow ->
-                addPlayerAdapter.set(listUserFollow)
+            listUsers.observe(viewLifecycleOwner, Observer {
+                for (user in it){
+                    if(user.isOnline != null) {
+                        if (user.isOnline && !filteredListOfOnlineUser.contains(user)){
+                            filteredListOfOnlineUser.add(user)
+                        }
+                    }
+                }
+                addPlayerAdapter.set(filteredListOfOnlineUser)
             })
             dialog.setContentView(R.layout.add_player)
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)

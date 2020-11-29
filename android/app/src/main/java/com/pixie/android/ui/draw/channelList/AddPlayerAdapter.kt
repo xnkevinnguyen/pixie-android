@@ -35,7 +35,7 @@ class AddPlayerAdapter(context: Context) : BaseAdapter() {
 
     fun set(newParticipantList:ArrayList<ChannelParticipant>){
         val listOfFriends = playersViewModel.getFriendList()
-        newParticipantList.sortByDescending { it.isOnline }
+        //newParticipantList.sortByDescending { it.isOnline }
         newParticipantList.sortByDescending { listOfFriends.value?.contains(it) }
         listPlayersToAdd = ArrayList(newParticipantList)
         //listPlayersToAdd= ArrayList(newParticipantList)

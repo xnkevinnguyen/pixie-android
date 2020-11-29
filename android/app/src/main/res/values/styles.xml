@@ -74,6 +74,7 @@
         <item name="colorControlHighlight">@color/grey</item>
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
     </style>
 
     <style name="AppBlueTheme" parent="Theme.AppCompat.Light">
