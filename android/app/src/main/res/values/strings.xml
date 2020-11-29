@@ -109,7 +109,7 @@
     <string name="new_game">New Game</string>
     <string name="guess">Guess</string>
     <string name="message">Message</string>
-    <string name="guess_left">Guess left</string>
+    <string name="guess_left"> %1$s guess left...</string>
     <string name="kick">Kick player</string>
     <string name="leave">Leave game</string>
     <string name="not_available">Not Available</string>

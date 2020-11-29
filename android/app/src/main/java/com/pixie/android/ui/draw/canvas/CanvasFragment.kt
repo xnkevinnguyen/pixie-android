@@ -111,8 +111,7 @@ class CanvasFragment : Fragment() {
         canvasViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
             if (it.status.equals(GameStatus.ENDED)) {
 
-                chatViewModel.exitChannel(it.channelID)
-//                gameInfoViewModel.leaveGame()
+
                 display_end_game.visibility = View.VISIBLE
 
 
@@ -141,25 +140,30 @@ class CanvasFragment : Fragment() {
                         )
                     )
                 val rounds = display_end_game.findViewById<TextView>(R.id.number_round)
-                val roundsString = resources.getString(R.string.round_turn) + ": " + (it.currentRound.toInt() + 1).toString()
+                val roundsString =
+                    resources.getString(R.string.round_turn) + ": " + (it.currentRound.toInt() + 1).toString()
                 rounds.text = roundsString
 
 
                 val score = display_end_game.findViewById<TextView>(R.id.total_score)
                 for (player in it.players) {
                     if (player.id == canvasViewModel.getUserID()
-                    )
-                     {
+                    ) {
                         val scoreString =
                             resources.getString(R.string.total_score) + ": " + player.score.toString()
                         score.text = scoreString
                     }
                 }
                 val goToHome = display_end_game.findViewById<Button>(R.id.got_to_home)
+                val gameData = it
                 goToHome.setOnClickListener {
+                    chatViewModel.exitChannel(gameData.channelID)
+                    canvasViewModel.leaveGame()
                     val navController =
                         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                     navController.navigate(R.id.nav_game_selection)
+
+
                 }
 
                 var isUserAWinner = false
@@ -185,8 +189,7 @@ class CanvasFragment : Fragment() {
                 if(soundOn)chatViewModel.startMediaPlayer(mediaPlayer)
                 else chatViewModel.releaseMediaPlayer(mediaPlayer)
 
-
-            }else{
+            } else {
                 display_end_game.visibility = View.GONE
             }
         })
