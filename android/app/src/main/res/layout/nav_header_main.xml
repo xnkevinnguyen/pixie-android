@@ -11,15 +11,13 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:contentDescription="@string/nav_header_desc"
-
         android:background="@drawable/circle"
         android:foregroundGravity="center"
         android:src="@drawable/ic_profile_user"
@@ -35,9 +33,8 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/username"
-        android:textColor="@android:color/white"
         android:textSize="20dp"
         android:layout_marginStart="20dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textColor="?colorSecondaryVariant"/>
 
 </LinearLayout>

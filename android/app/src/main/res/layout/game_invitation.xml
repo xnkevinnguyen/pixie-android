@@ -14,7 +14,7 @@
         android:layout_marginBottom="15dp"
         android:gravity="center"
         android:paddingVertical="25dp"
-        android:textColor="@android:color/white"
+        android:textColor="?colorSecondaryVariant"
         android:textSize="@dimen/profile_titles"
         android:textStyle="bold" />
 
@@ -65,15 +65,13 @@
                 android:padding="@dimen/regular_size"
                 android:text="@string/language_2"
                 android:textSize="@dimen/regular_size"
-                android:textColor="@android:color/white"
+                android:textColor="?colorSecondaryVariant"
                 />
 
             <ImageView
                 android:id="@+id/language_icon"
                 android:layout_width="50dp"
-
                 android:layout_height="25dp"
-
                 android:layout_gravity="center"
                 android:gravity="center" />
         </LinearLayout>
@@ -92,19 +90,15 @@
                 android:padding="@dimen/regular_size"
                 android:text="@string/difficulty"
                 android:textSize="@dimen/regular_size"
-                android:textColor="@android:color/white"
+                android:textColor="?colorSecondaryVariant"
                 />
 
             <ImageView
                 android:id="@+id/difficulty_icon"
-
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:gravity="center"
-
-
-                />
+                android:gravity="center"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -124,10 +118,11 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="20dp"
-            android:background="?colorSecondary"
+            android:background="@drawable/button_drawable"
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/decline"
+            android:textColor="?colorSecondaryVariant"
             android:textSize="@dimen/regular_size" />
 
         <Button
@@ -138,7 +133,8 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="20dp"
-            android:background="?colorSecondary"
+            android:background="@drawable/button_drawable"
+            android:textColor="?colorSecondaryVariant"
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/accept"

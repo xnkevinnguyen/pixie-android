@@ -108,7 +108,7 @@
         <Button
             android:id="@+id/request_hints"
             android:background="@drawable/button_drawable"
-            android:textColor="@android:color/white"
+            android:textColor="?colorSecondaryVariant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ask_hint"
@@ -165,7 +165,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/leave"
-                android:textColor="@android:color/white"
+                android:textColor="?colorSecondaryVariant"
                 android:textSize="15dp"
                 android:paddingHorizontal="@dimen/big_size"
             />
