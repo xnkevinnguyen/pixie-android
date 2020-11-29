@@ -195,11 +195,17 @@ class ChatDataSource() {
                 val messageTimePosted = it.data?.onNewMessage?.postedAt
 
 
+
+
                 if (messageContent != null && messageSenderUsername != null && messageTimePosted != null) {
                     val messageData =
                         MessageData(messageContent, null, messageSenderUsername,
                             messageTimePosted as String
                         )
+                    val hintAsker = it.data?.onNewMessage?.hintAsker
+                    if(hintAsker !=null && hintAsker.id != userID){
+                        messageData.shouldBeHidden = true
+                    }
                     onReceiveMessage(messageData)
                 }
             }

@@ -174,11 +174,10 @@ class ChatRepository(
                             )
                         } else {
                             channelMessages.value?.get(channelData.channelID)?.messageList?.add(it)
+
                         }
-                        //Only update UI if the change is on selected channel
-                        if (currentChannelID.value == channelData.channelID) {
-                            channelMessages.notifyObserver()
-                        } else {
+                        channelMessages.notifyObserver()
+                        if(currentChannelID.value != channelData.channelID) {
                             //handle unread messages
                             val nUnread =
                                 userChannels.value?.get(channelData.channelID)?.unreadMessages
