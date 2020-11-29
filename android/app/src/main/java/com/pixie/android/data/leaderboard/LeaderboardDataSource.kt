@@ -24,7 +24,7 @@ class LeaderboardDataSource {
             if (bestScoreQueryData != null) {
                 val bestScoreData = ArrayList(bestScoreQueryData.map {
 
-                    LeaderboardData(it.username, it.value)
+                    LeaderboardData(it.username, it.value, it.avatarForeground, it.avatarBackground)
                 })
                 onReceiveMessage(bestScoreData)
             }
@@ -48,7 +48,7 @@ class LeaderboardDataSource {
             if (bestCumulativeScoreQueryData != null) {
                 val bestCumulativeScoreData = ArrayList(bestCumulativeScoreQueryData.map {
 
-                    LeaderboardData(it.username, it.value)
+                    LeaderboardData(it.username, it.value, it.avatarForeground, it.avatarBackground)
                 })
                 onReceiveMessage(bestCumulativeScoreData)
             }
@@ -70,7 +70,7 @@ class LeaderboardDataSource {
             if (mostGameWonQueryData != null) {
                 val mostGameWonData = ArrayList(mostGameWonQueryData.map {
 
-                    LeaderboardData(it.username, it.value)
+                    LeaderboardData(it.username, it.value, it.avatarForeground, it.avatarBackground)
                 })
                 onReceiveMessage(mostGameWonData)
             }

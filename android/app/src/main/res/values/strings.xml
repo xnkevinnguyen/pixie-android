@@ -54,8 +54,8 @@
     <string name="game_play_info">User Game Play Informations</string>
     <string name="number_games">Number of games played: </string>
     <string name="percentage_victory">Percentage of victory: </string>
-    <string name="average_game">Average game time: </string>
-    <string name="total_game">Total play time: </string>
+    <string name="average_game">Average game time (sec): </string>
+    <string name="total_game">Total play time (sec): </string>
     <string name="best_score">Best score: </string>
     <string name="history_con_disc">Connections and Disconnections History</string>
     <string name="last_conn">Last connection: </string>
