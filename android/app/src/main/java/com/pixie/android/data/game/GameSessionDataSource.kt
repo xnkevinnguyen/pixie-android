@@ -113,6 +113,16 @@ class GameSessionDataSource {
                             it.user.isVirtual!!
                         )
                     })
+
+                    val winners = ArrayList(data.gameInfo.winners!!.map {
+
+                        GameParticipant(
+                            it.id,
+                            it.username,
+                            it.isOnline,
+                            isVirtual = it.isVirtual!!
+                        )
+                    })
                     val gameSession = GameSessionData(
                         data.id,
                         data.currentDrawerId,
@@ -124,7 +134,8 @@ class GameSessionDataSource {
                         players,
                         data.gameInfo.mode,
                         data.gameState,
-                        nHintsLeft
+                        nHintsLeft,
+                        winners
                     )
                     onGameSessionChange(gameSession)
                 }
