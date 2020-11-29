@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
+import com.pixie.android.type.GameMode
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
@@ -60,13 +61,17 @@ class GameChatFragment : Fragment() {
 
 
         val channelMessages = gameChatViewModel.getChannelMessageList()
+        val gameMode = gameChatViewModel.getGameSession().value?.mode
         channelMessages.observe(viewLifecycleOwner, Observer {channelMessagesMap->
+
             if (!channelMessagesMap.isNullOrEmpty()){
                 val messageObject = channelMessagesMap[gameChatViewModel.getGameChannelID()]
 
                 // Repopulating the adapter
                 if(messageObject !=null) {
-                    messageAdapter.set(messageObject.messageList)
+                    messageAdapter.set(ArrayList(messageObject.messageList.filter {
+                        !(it.shouldBeHidden && gameMode ==GameMode.FREEFORALL)
+                    }))
 
                 }
 

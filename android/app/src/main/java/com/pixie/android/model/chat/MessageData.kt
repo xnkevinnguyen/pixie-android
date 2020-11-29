@@ -8,5 +8,6 @@ data class MessageData (
     val text: String,
     var belongsToCurrentUser: Boolean?,
     val userName: String = "",
-    val timePosted: String = ""
+    val timePosted: String = "",
+    var shouldBeHidden:Boolean = false
 )

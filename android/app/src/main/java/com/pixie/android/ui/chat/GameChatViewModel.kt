@@ -11,14 +11,10 @@ enum class MESSAGE_TYPE{
 }
 class GameChatViewModel(private val chatRepository: ChatRepository, private val gameSessionRepository: GameSessionRepository): ViewModel() {
 
-    private var messageType:MESSAGE_TYPE = MESSAGE_TYPE.MESSAGE
-    fun getMessageType():MESSAGE_TYPE{
-        return messageType
-    }
-    fun setMessageType(type:MESSAGE_TYPE){
-        messageType = type
-    }
+
     fun getGameChannelID() = gameSessionRepository.getGameChannelID()
+
+    fun getGameSession()= gameSessionRepository.getGameSession()
     // non optimal since this will refresh a change on any channels
     fun getChannelMessageList() = chatRepository.getChannelMessages()
 
