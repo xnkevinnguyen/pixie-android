@@ -3,6 +3,7 @@ package com.pixie.android.ui.chat
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Layout
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -12,9 +13,11 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
+import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
@@ -39,7 +42,6 @@ class GameGuessFragment : Fragment() {
         editorGame.putString(Constants.GAME_CHAT_VALUE, "message")
         editorGame.apply()
 
-        val editText = root.findViewById<EditText>(R.id.editText)
 
         val sendMessage = root.findViewById<ImageButton>(R.id.send_message)
 
@@ -59,9 +61,18 @@ class GameGuessFragment : Fragment() {
         val soundOn:Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
         val mediaPlayerCorrectAnswer = chatViewModel.createMediaPlayer(R.raw.correct, requireContext())
         val mediaPlayerIncorrectAnswer = chatViewModel.createMediaPlayer(R.raw.incorrect, requireContext())
+        val gameInfoFactory = InjectorUtils.provideGameInformationViewModelFactory()
 
+        val gameInfoViewModel =
+            ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
+        val guessEditText = root.findViewById<EditText>(R.id.edit_guess)
+        val guessArea = root.findViewById<View>(R.id.guess_area)
+
+        val guessesLeft = gameInfoViewModel.getGameSession().value?.guessesLeft?.toInt()
+
+        guessEditText.hint = String.format(resources.getString(R.string.guess_left),guessesLeft)
         sendMessage.setOnClickListener {
-            val message = editText.text.toString()
+            val message = guessEditText.text.toString()
             if (message.isNotBlank()) {
                 gameChatViewModel.sendGuess(message) {
                     if (it == true) {
@@ -83,16 +94,27 @@ class GameGuessFragment : Fragment() {
                     }
                 }
             }
-            editText.text.clear()
+            guessEditText.text.clear()
 
         }
+        gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
+            if(it.guessesLeft !=null){
+                guessEditText.hint = String.format(resources.getString(R.string.guess_left),it.guessesLeft?.toInt())
+
+            }
+            if(gameInfoViewModel.shouldDisplayHints(it.currentDrawerId,it.mode)){
+                guessArea.visibility = View.VISIBLE
+            }else{
+                guessArea.visibility = View.INVISIBLE
+            }
+        })
 
         // Enter button on real keyboard if attached to android
-        editText.setOnKeyListener(object : View.OnKeyListener {
+        guessEditText.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
                 if (event.action == KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_ENTER) {
-                    val message = editText.text.toString()
+                    val message = guessEditText.text.toString()
                     if (message.isNotBlank()) {
                         gameChatViewModel.sendGuess(message){
                             if(it ==true){
@@ -109,7 +131,7 @@ class GameGuessFragment : Fragment() {
                                 else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
                             }
                         }
-                        editText.text.clear() //clear text line
+                        guessEditText.text.clear() //clear text line
                     }
                     return true
                 }
@@ -118,9 +140,9 @@ class GameGuessFragment : Fragment() {
         })
 
         // Enter button on soft keyboard
-        editText.setOnEditorActionListener { _, actionId, _ ->
+        guessEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val message = editText.text.toString()
+                val message = guessEditText.text.toString()
 
                 if (message.isNotBlank()) {
                     gameChatViewModel.sendGuess(message){
@@ -138,7 +160,7 @@ class GameGuessFragment : Fragment() {
                             else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
                         }
                     }
-                    editText.text.clear()
+                    guessEditText.text.clear()
                 }
                 true
             } else {

@@ -8,15 +8,15 @@
     android:clipToPadding="false"
     android:focusableInTouchMode="true"
     android:orientation="horizontal"
+    android:id="@+id/guess_area"
     >
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/edit_guess"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:ems="10"
             android:textSize="@dimen/regular_size"
-            android:hint="@string/chat_guess_hint"
             android:textColorHint="?colorSecondary"
             android:inputType="text"
             android:paddingHorizontal="10dp"

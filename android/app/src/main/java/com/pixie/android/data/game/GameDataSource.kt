@@ -29,12 +29,13 @@ class GameDataSource() {
                 if (gameParticipant == null) {
                     gameParticipant = arrayListOf()
                 }
+
                 val separated: List<String> = data.gameHall.name.split("-")
 
                 val gameChannelData = ChannelData(channelID = data.gameHall.id, channelName = separated[0], participantList = gameParticipant, nParticipant = null, gameID = data.id)
 
                 var playersList = ArrayList(data.gameInfo.players.map { GameParticipant(it.id, it.username, it.isOnline) })
-                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.sprintTries!!,data.status,
+                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.sprintTries!!.toInt(),data.status,
                 data.gameHall.id,playersList,data.gameInfo.mode,data.gameState)
                 onSuccess(gameChannelData)
                 return gameData
@@ -174,7 +175,7 @@ class GameDataSource() {
                 val gameChannelData = ChannelData(channelID = data.gameHall.id, channelName = separated[0], participantList = gameParticipant, nParticipant = null, gameID = data.id)
                 var playersList = ArrayList(data.gameInfo.players.map { GameParticipant(it.id, it.username, it.isOnline) })
 
-                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,3.0-data.sprintTries!!,data.status,
+                val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.sprintTries!!.toInt(),data.status,
                     data.gameHall.id,playersList,data.gameInfo.mode,data.gameState)
                 onSuccess(gameChannelData)
                 return gameData

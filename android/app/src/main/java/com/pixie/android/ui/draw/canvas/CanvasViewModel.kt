@@ -42,6 +42,9 @@ class CanvasViewModel(
         }
 
     }
+    fun leaveGame(){
+        gameSessionRepository.leaveGame()
+    }
 
     fun captureEraseAction(x1:Float, y1:Float, x2:Float,y2:Float) {
         //check if coordinates are inside border of previous commands
