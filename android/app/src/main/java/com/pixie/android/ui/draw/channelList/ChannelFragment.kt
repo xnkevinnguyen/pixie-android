@@ -208,8 +208,12 @@ class ChannelFragment : Fragment() {
             val createChannelButtonElement = dialog.findViewById<Button>(R.id.create_channel)
             createChannelButtonElement.setOnClickListener {
                 val channelNameElement = dialog.findViewById<EditText>(R.id.create_channel_name)
-                chatViewModel.createChannel(channelNameElement.text.toString())
-                dialog.dismiss()
+                val channelName = channelNameElement.text.toString()
+
+                if (channelName.isNotBlank()) {
+                    chatViewModel.createChannel(channelName)
+                    dialog.dismiss()
+                }
             }
             listJoinChannel.adapter = joinChannelAdapter
             dialog.show()
