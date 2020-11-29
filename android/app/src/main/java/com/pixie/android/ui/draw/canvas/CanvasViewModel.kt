@@ -2,20 +2,28 @@ package com.pixie.android.ui.draw.canvas
 
 import android.graphics.Paint
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.pixie.android.data.draw.CanvasRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.game.GameSessionRepository
+import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.draw.*
+import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.PathStatus
 
 class CanvasViewModel(
     private val drawingParametersRepository: DrawingParametersRepository,
     private val canvasRepository: CanvasRepository,
-    private val gameSessionRepository:GameSessionRepository
+    private val gameSessionRepository:GameSessionRepository,
+    private val userRepository: UserRepository
 ) :
     ViewModel() {
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
+    fun getGameSession(): LiveData<GameSessionData> = gameSessionRepository.getGameSession()
+    fun getUserID():Double{
+        return userRepository.getUser().userId
+    }
 
     fun getDrawCommandHistory() = canvasRepository.getDrawCommandHistory()
 

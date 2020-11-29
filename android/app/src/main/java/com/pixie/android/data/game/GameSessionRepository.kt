@@ -126,7 +126,6 @@ class GameSessionRepository(
                     }
 
                     if (it.state == GameState.DRAWER_SELECTION) {
-                        Log.d("GameSessionRepository", it.currentDrawerId.toString() + " ")
                         if (it.currentDrawerId == userRepository.getUser().userId) {
                             shouldShowWord.postValue(
                                 ShowWordinGame(
@@ -138,10 +137,7 @@ class GameSessionRepository(
                         } else {
                             val currentDrawerList =
                                 it.players.filter { gameParticipant ->
-                                    Log.d(
-                                        "GameSessionRepository",
-                                        it.currentDrawerId.toString() + " " + gameParticipant.id
-                                    )
+
 
                                     gameParticipant.id == it.currentDrawerId
                                 }
@@ -164,10 +160,19 @@ class GameSessionRepository(
                                 it.currentWord
                             )
                         )
+                    } else if (it.state == GameState.SHOWING_WORD) {
+                        shouldShowWord.postValue(
+                            ShowWordinGame(
+                                true,
+                                ShowWordinGameType.ANSWER,
+                                it.currentWord
+                            )
+                        )
                     } else {
                         shouldShowWord.postValue(ShowWordinGame(false, ShowWordinGameType.NONE))
 
                     }
+
                     if (it.state == GameState.DRAWING && it.currentDrawerId == userRepository.getUser().userId) {
                         isCanvasLocked.postValue(false)
                     } else {

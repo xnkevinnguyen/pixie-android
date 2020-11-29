@@ -40,8 +40,9 @@ object InjectorUtils {
         val drawingParametersRepository = DrawingParametersRepository.getInstance()
         val drawCommandHistoryRepository = CanvasRepository.getInstance()
         val gameSessionRepository = GameSessionRepository.getInstance()
+        val userRepository = UserRepository.getInstance()
         return CanvasViewModelFactory(
-            drawingParametersRepository,drawCommandHistoryRepository,gameSessionRepository
+            drawingParametersRepository,drawCommandHistoryRepository,gameSessionRepository,userRepository
         )
     }
 
@@ -107,8 +108,8 @@ object InjectorUtils {
         val gameSessionRepository = GameSessionRepository.getInstance()
         val chatRepository = ChatRepository.getInstance()
         val gameRepository = GameRepository.getInstance()
-
-        return GameInformationViewModelFactory(gameSessionRepository,chatRepository,gameRepository)
+        val userRepository = UserRepository.getInstance()
+        return GameInformationViewModelFactory(gameSessionRepository,chatRepository,gameRepository,userRepository)
     }
     fun provideGameChatViewModelFactory():GameChatViewModelFactory{
         val chatRepository = ChatRepository.getInstance()

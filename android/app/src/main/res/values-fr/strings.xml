@@ -164,5 +164,6 @@
     <string name="ask_hint">Demander</string>
     <string name="number_player">Pas assez de joueurs</string>
     <string name="seconds">secondes</string>
+    <string name="answer_guess">Le mot à deviner était : %1$s</string>
 
 </resources>
