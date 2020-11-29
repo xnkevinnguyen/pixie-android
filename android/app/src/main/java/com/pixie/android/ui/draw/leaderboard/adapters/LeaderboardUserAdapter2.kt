@@ -68,21 +68,28 @@ class LeaderboardUserAdapter2(context: Context) : BaseAdapter() {
         participantValue.text = participant.value.toString()
 
         val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
+        var foregroundColor: Int? = null
+        if (!participant.avatarForeground.isNullOrEmpty()) {
+            foregroundColor = Color.parseColor(participant.avatarForeground)
+        }
+        if (foregroundColor == null) {
+            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
         avatarElement.setColorFilter(
-            Color.argb(
-                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
-                    256
-                )
-            )
+            foregroundColor
         )
 
+        var backgroundColor: Int? = null
+        if (!participant.avatarBackground.isNullOrEmpty()) {
+            backgroundColor = Color.parseColor(participant.avatarBackground)
+        }
+        if (backgroundColor == null) {
+            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+        }
         avatarElement.backgroundTintList = ColorStateList.valueOf(
-            Color.argb(
-                255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(
-                    256
-                )
-            )
+            backgroundColor
         )
+
         return rowView
     }
 }
