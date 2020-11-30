@@ -54,8 +54,8 @@
     <string name="game_play_info">User Game Play Informations</string>
     <string name="number_games">Number of games played: </string>
     <string name="percentage_victory">Percentage of victory: </string>
-    <string name="average_game">Average game time: </string>
-    <string name="total_game">Total play time: </string>
+    <string name="average_game">Average game time (sec): </string>
+    <string name="total_game">Total play time (sec): </string>
     <string name="best_score">Best score: </string>
     <string name="history_con_disc">Connections and Disconnections History</string>
     <string name="last_conn">Last connection: </string>
@@ -92,11 +92,11 @@
 
     <string name="select_game">Select Game Mode</string>
     <string name="mode1">Free for all</string>
-    <string name="mode1_explanation">\"Compete against others\"</string>
+    <string name="mode1_explanation">\"Compete with 2 to 4 others players!\"</string>
     <string name="mode2">Solo</string>
-    <string name="mode2_explanation">\"Compete by yourself\"</string>
+    <string name="mode2_explanation">\"Play alone!\"</string>
     <string name="mode3">Coop</string>
-    <string name="mode3_explanation">\"Compete together\"</string>
+    <string name="mode3_explanation">\"Collaborate with 2 to 4 others players!\"</string>
     <string name="difficulty_select">Difficulty</string>
     <string name="diff1">Easy</string>
     <string name="diff2">Medium</string>
@@ -109,7 +109,7 @@
     <string name="new_game">New Game</string>
     <string name="guess">Guess</string>
     <string name="message">Message</string>
-    <string name="guess_left">Guess left</string>
+    <string name="guess_left"> %1$s guess left...</string>
     <string name="kick">Kick player</string>
     <string name="leave">Leave game</string>
     <string name="not_available">Not Available</string>
@@ -166,4 +166,5 @@
     <string name="ask_hint">Ask Hint</string>
     <string name="number_player">Not enough players</string>
     <string name="seconds">seconds</string>
+    <string name="answer_guess">The word to guess was : %1$s</string>
 </resources>

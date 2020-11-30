@@ -54,8 +54,8 @@
     <string name="game_play_info">Informations de jeu de usager</string>
     <string name="number_games">Nombre de parties jouées: </string>
     <string name="percentage_victory">Pourcentage de victoire: </string>
-    <string name="average_game">Temps moyen de jeu: </string>
-    <string name="total_game">Temps total de jeu: </string>
+    <string name="average_game">Temps moyen de jeu (sec): </string>
+    <string name="total_game">Temps total de jeu (sec): </string>
     <string name="best_score">Meilleur pointage: </string>
     <string name="history_con_disc">Historique de Connexions et Déconnexions</string>
     <string name="last_conn">Dernière connexion: </string>
@@ -92,11 +92,11 @@
 
     <string name="select_game">Sélectionner Mode de Jeu</string>
     <string name="mode1">Mêlée générale</string>
-    <string name="mode1_explanation">\"Affrontez les autres\"</string>
+    <string name="mode1_explanation">\"Rivaliser avec 2 à 4 autres joueurs!\"</string>
     <string name="mode2">Solo</string>
-    <string name="mode2_explanation">\"Rivaliser par vous-même\"</string>
+    <string name="mode2_explanation">\"Jouer seul!\"</string>
     <string name="mode3">Coop</string>
-    <string name="mode3_explanation">\"Rivaliser ensemble\"</string>
+    <string name="mode3_explanation">\"Collaborez avec 2 à 4 autres joueurs!\"</string>
     <string name="difficulty_select">Difficulté</string>
     <string name="diff1">Facile</string>
     <string name="diff2">Moyen</string>
@@ -164,5 +164,6 @@
     <string name="ask_hint">Demander</string>
     <string name="number_player">Pas assez de joueurs</string>
     <string name="seconds">secondes</string>
+    <string name="answer_guess">Le mot à deviner était : %1$s</string>
 
 </resources>

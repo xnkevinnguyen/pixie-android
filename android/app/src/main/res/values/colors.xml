@@ -12,6 +12,6 @@
     <color name="history">#415a775d</color>
     <color name="blue">@android:color/holo_blue_light</color>
     <color name="dark_dark_grey">#777676</color>
-
+    <color name="white">#ffffff</color>
 
 </resources>

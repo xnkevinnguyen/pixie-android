@@ -24,7 +24,6 @@ subscription OnGameSessionChange($gameSessionId:Float!){
         }
         gameInfo{
             id
-
             players{
                 id
                 username
@@ -34,6 +33,14 @@ subscription OnGameSessionChange($gameSessionId:Float!){
                 avatarBackground
                 nHints
             }
+            winners{
+                id
+                username
+                isOnline
+                isVirtual
+                avatarForeground
+                avatarBackground
+            }
             scores{
                 id
                 user{
@@ -42,6 +49,7 @@ subscription OnGameSessionChange($gameSessionId:Float!){
                     isVirtual
                     isOnline
                 }
+                tries
                 value
 
             }

@@ -46,12 +46,18 @@ class GameSessionDataSource {
                     if (it.id == userID)
                         nHintsLeft = it.nHints
                 }
+                var guessesLeft: Int? = null
+
+                data.gameInfo.scores?.forEach {
+                    if(it.user.id == userID)
+                        guessesLeft = it.tries.toInt()
+                }
                 return GameSessionData(
                     data.id,
                     data.currentDrawerId,
                     data.currentWord,
                     data.currentRound,
-                    data.sprintTries,
+                    guessesLeft,
                     data.status,
                     data.gameHall.id,
                     players,
@@ -103,6 +109,12 @@ class GameSessionDataSource {
                         if (it.id == userID)
                             nHintsLeft = it.nHints
                     }
+                    var guessesLeft: Int? = null
+
+                    data.gameInfo.scores?.forEach {
+                        if(it.user.id == userID)
+                            guessesLeft = it.tries.toInt()
+                    }
                     val players = ArrayList(data.gameInfo.scores!!.map {
 
                         GameParticipant(
@@ -113,18 +125,29 @@ class GameSessionDataSource {
                             it.user.isVirtual!!
                         )
                     })
+
+                    val winners = ArrayList(data.gameInfo.winners!!.map {
+
+                        GameParticipant(
+                            it.id,
+                            it.username,
+                            it.isOnline,
+                            isVirtual = it.isVirtual!!
+                        )
+                    })
                     val gameSession = GameSessionData(
                         data.id,
                         data.currentDrawerId,
                         data.currentWord,
                         data.currentRound,
-                        data.sprintTries,
+                        guessesLeft,
                         data.status,
                         data.gameHall.id,
                         players,
                         data.gameInfo.mode,
                         data.gameState,
-                        nHintsLeft
+                        nHintsLeft,
+                        winners
                     )
                     onGameSessionChange(gameSession)
                 }
@@ -237,9 +260,13 @@ class GameSessionDataSource {
             if (colorStroke == null) {
                 colorStroke = Color.BLACK
             }
-
+            var opacity:Double = 255.0
+            if (data.opacity !=null){
+                opacity=data.opacity
+            }
 
             val paint = Paint().apply {
+                (opacity * 255).toInt()
                 color = colorStroke
                 style = Paint.Style.STROKE
                 strokeJoin = Paint.Join.ROUND

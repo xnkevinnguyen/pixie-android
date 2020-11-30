@@ -23,7 +23,7 @@ import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 
 
-class CreateGameFragment: Fragment() {
+class CreateGameFragment : Fragment() {
     private lateinit var preferencesGame: SharedPreferences
     private lateinit var editorGame: SharedPreferences.Editor
 
@@ -34,16 +34,20 @@ class CreateGameFragment: Fragment() {
     ): View? {
 
         val root = inflater.inflate(R.layout.create_game_fragment, container, false)
-        preferencesGame = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_GAME, Context.MODE_PRIVATE)
+        preferencesGame = requireContext().getSharedPreferences(
+            Constants.SHARED_PREFERENCES_GAME,
+            Context.MODE_PRIVATE
+        )
         editorGame = preferencesGame.edit()
 
         val factoryChat = InjectorUtils.provideChatViewModelFactory()
-        val chatViewModel = ViewModelProvider(this,factoryChat).get(ChatViewModel::class.java)
+        val chatViewModel = ViewModelProvider(this, factoryChat).get(ChatViewModel::class.java)
 
         val availableGamesFactory = InjectorUtils.provideAvailableGamesViewModelFactory()
-        val availableGamesViewModel = ViewModelProvider(this, availableGamesFactory).get(AvailableGamesViewModel::class.java)
+        val availableGamesViewModel =
+            ViewModelProvider(this, availableGamesFactory).get(AvailableGamesViewModel::class.java)
 
-        val spinnerLanguage =  root.findViewById<Spinner>(R.id.spinner_language_game)
+        val spinnerLanguage = root.findViewById<Spinner>(R.id.spinner_language_game)
         val difficulty = root.findViewById<TextView>(R.id.difficulty)
         val difString = "Difficulty: " + preferencesGame.getString(Constants.GAME_DIFF, "Medium")
         difficulty.text = difString
@@ -61,12 +65,27 @@ class CreateGameFragment: Fragment() {
         val createBtn = root.findViewById<TextView>(R.id.create)
         createBtn.setOnClickListener {
             // Forcing value in preferences to always be in English and not change because of the language change
-            val inputValue = if(spinnerLanguage.selectedItem.toString() == requireContext().resources.getString(R.string.eng)) "English"
-            else "French"
+            val inputValue =
+                if (spinnerLanguage.selectedItem.toString() == requireContext().resources.getString(
+                        R.string.eng
+                    )
+                ) "English"
+                else "French"
             editorGame.putString(Constants.GAME_LANGUAGE, inputValue)
             editorGame.apply()
 
-            val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
+            val gameData = availableGamesViewModel.createGame(
+                getGameMode(),
+                getGameDifficulty(),
+                getGameLanguage()
+            )
+
+            gameData?.channelID?.let { id ->
+                chatViewModel.setCurrentChannelID(
+                    id
+                )
+            }
+            //only used for solo
             if (gameData != null) {
                 //succesfully created game
                 chatViewModel.startGameSession(gameData.id) {
@@ -86,18 +105,39 @@ class CreateGameFragment: Fragment() {
     }
 
     private fun getGameMode(): GameMode {
-        return if (preferencesGame.getString(Constants.GAME_MODE, "Free for all")== "Free for all") GameMode.FREEFORALL
-        else if(preferencesGame.getString(Constants.GAME_MODE, "Free for all")== "Solo") GameMode.SOLO
+        return if (preferencesGame.getString(
+                Constants.GAME_MODE,
+                "Free for all"
+            ) == "Free for all"
+        ) GameMode.FREEFORALL
+        else if (preferencesGame.getString(
+                Constants.GAME_MODE,
+                "Free for all"
+            ) == "Solo"
+        ) GameMode.SOLO
         else GameMode.COOP
     }
+
     private fun getGameDifficulty(): GameDifficulty {
-        return if (preferencesGame.getString(Constants.GAME_DIFF, "Medium")== "Easy") GameDifficulty.EASY
-        else if(preferencesGame.getString(Constants.GAME_DIFF, "Medium")== "Medium") GameDifficulty.MEDIUM
+        return if (preferencesGame.getString(
+                Constants.GAME_DIFF,
+                "Medium"
+            ) == "Easy"
+        ) GameDifficulty.EASY
+        else if (preferencesGame.getString(
+                Constants.GAME_DIFF,
+                "Medium"
+            ) == "Medium"
+        ) GameDifficulty.MEDIUM
         else GameDifficulty.HARD
     }
 
     private fun getGameLanguage(): Language {
-        return if (preferencesGame.getString(Constants.GAME_LANGUAGE, "English")== "English") Language.ENGLISH
+        return if (preferencesGame.getString(
+                Constants.GAME_LANGUAGE,
+                "English"
+            ) == "English"
+        ) Language.ENGLISH
         else Language.FRENCH
     }
 }

@@ -63,6 +63,10 @@ class ListPlayerAdapter(context: Context) : BaseAdapter() {
         playerUsername.text = player.username
         playerScore.text = player.score.toInt().toString()
 
+        if(player.isVirtual){
+            playerScore.text ="-"
+        }
+
         if(drawerID == player.id){
             drawer.visibility = View.VISIBLE
         }

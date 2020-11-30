@@ -12,24 +12,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+
         android:orientation="vertical">
 
         <ListView
             android:id="@+id/messages_list"
             android:layout_width="match_parent"
             android:layout_height="580dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="2"
             android:divider="@android:color/white"
             android:transcriptMode="normal"
+
             />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingVertical="5dp"
             android:background="@android:color/white">
 
 

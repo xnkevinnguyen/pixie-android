@@ -38,12 +38,19 @@
                 android:layout_width="1000px"
                 android:layout_height="900px" />
 
-            <fragment
-                android:id="@+id/draw_tools_fragment"
-                android:name="com.pixie.android.ui.draw.drawTools.DrawToolsFragment"
-                android:layout_width="50dp"
+            <LinearLayout
+                android:id="@+id/tools_layout"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp" />
+                android:visibility="visible" >
+
+                <fragment
+                    android:id="@+id/draw_tools_fragment"
+                    android:name="com.pixie.android.ui.draw.drawTools.DrawToolsFragment"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/guess_area"

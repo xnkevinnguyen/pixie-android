@@ -33,6 +33,7 @@ mutation startGame($input: StartGameInput!){
                     isVirtual
                     isOnline
                 }
+                tries
                 value
 
             }
