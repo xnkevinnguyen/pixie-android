@@ -75,44 +75,50 @@ class PlayersFragment : Fragment() {
             // on channel change
             val participantList = playersViewModel.getCurrentChannelParticipants(id)
             val friendList = playersViewModel.getFriendList().value
-            var otherPlayersList = arrayListOf<ChannelParticipant>()
 
+            var otherPlayersList = arrayListOf<ChannelParticipant>()
+            var listOfFriends = arrayListOf<ChannelParticipant>()
             if (friendList != null) {
                 otherPlayersList = getListOfOtherPlayers(participantList, friendList)
-                friendAdapter.set(friendList)
+                listOfFriends = getListOfFriends(participantList, friendList)
+
             }
+            friendAdapter.set(listOfFriends)
             participantAdapter.set(otherPlayersList)
 
+            checkIfFriendSectionShouldBeVisible(otherPlayersList, otherSection, listOfFriends, friendSection)
         })
 
 
         val userChannels= playersViewModel.getUserChannels()
         userChannels.observe(viewLifecycleOwner, Observer {
             val participantList = playersViewModel.getCurrentChannelParticipants()
-
             val friendList = playersViewModel.getFriendList().value
+
             var otherPlayersList = arrayListOf<ChannelParticipant>()
+            var listOfFriends = arrayListOf<ChannelParticipant>()
 
             if (friendList != null) {
                 otherPlayersList = getListOfOtherPlayers(participantList, friendList)
-                friendAdapter.set(friendList)
+                listOfFriends = getListOfFriends(participantList, friendList)
             }
+            friendAdapter.set(listOfFriends)
             participantAdapter.set(otherPlayersList)
+
+            checkIfFriendSectionShouldBeVisible(otherPlayersList, otherSection, listOfFriends, friendSection)
         })
 
         // update list on new friend as well
         playersViewModel.getFriendList().observe(viewLifecycleOwner, Observer {
             val participantList = playersViewModel.getCurrentChannelParticipants()
-            Log.d("friend", "friend $it")
+
+            val listOfFriends = getListOfFriends(participantList, it)
             val otherPlayersList = getListOfOtherPlayers(participantList, it)
-            friendAdapter.set(it)
+
+            friendAdapter.set(listOfFriends)
             participantAdapter.set(otherPlayersList)
 
-//            if(it.size == 0){
-//                friendSection.visibility = View.GONE
-//            } else {
-//                friendSection.visibility = View.VISIBLE
-//            }
+            checkIfFriendSectionShouldBeVisible(otherPlayersList, otherSection, listOfFriends, friendSection)
         })
 
 
@@ -269,7 +275,7 @@ class PlayersFragment : Fragment() {
             ) {
                 println("Text [$s]")
                 participantAdapter.filter.filter(s.toString())
-                //friendAdapter.filter.filter(s.toString())
+                friendAdapter.filter.filter(s.toString())
             }
 
             override fun beforeTextChanged(
@@ -320,17 +326,6 @@ class PlayersFragment : Fragment() {
         avatarElement.backgroundTintList = ColorStateList.valueOf(
             backgroundColor
         )
-
-//        if(playersViewModel.getFriendList().value?.contains(participant)==true){
-//            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
-//        }else if(playersViewModel.getUser()?.userId == participant.id){
-//            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_BLUE))
-//
-//        }
-//        else{
-//            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
-//
-//        }
     }
 
     private fun getListOfOtherPlayers(participantList:ArrayList<ChannelParticipant>,
@@ -342,6 +337,32 @@ class PlayersFragment : Fragment() {
             }
         }
         return otherPlayerList
+    }
+
+    private fun getListOfFriends(participantList:ArrayList<ChannelParticipant>,
+                                      friendList:ArrayList<ChannelParticipant>): ArrayList<ChannelParticipant>{
+        val listOfFriends= arrayListOf<ChannelParticipant>()
+        for (participant in participantList){
+            if(friendList.contains(participant) && !isUser(participant)){
+                listOfFriends.add(participant)
+            }
+        }
+        return listOfFriends
+    }
+
+    private fun checkIfFriendSectionShouldBeVisible(participantList:ArrayList<ChannelParticipant>, otherPlayerSection:LinearLayout,
+                                                    friendList:ArrayList<ChannelParticipant>, friendSection:LinearLayout){
+        if(friendList.size == 0){
+            friendSection.visibility = View.GONE
+        } else {
+            friendSection.visibility = View.VISIBLE
+        }
+
+        if(participantList.size == 0 ){
+            otherPlayerSection.visibility = View.GONE
+        }else{
+            otherPlayerSection.visibility = View.VISIBLE
+        }
     }
 
 }

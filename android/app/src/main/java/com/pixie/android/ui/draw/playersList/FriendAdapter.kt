@@ -25,10 +25,6 @@ class FriendAdapter(context: Context) : BaseAdapter(), Filterable {
     private var listOfFriends = ArrayList<ChannelParticipant>()
     var filteredListOfFriend = ArrayList<ChannelParticipant>()
 
-    private val contextCopy = context
-    val factory = InjectorUtils.providePlayersViewModelFactory()
-    private val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
-
     fun add(channelParticipant: ChannelParticipant) {
         if (channelParticipant.isOnline == true) {
             this.listOfFriends.add(channelParticipant)
@@ -48,7 +44,6 @@ class FriendAdapter(context: Context) : BaseAdapter(), Filterable {
 
     fun set(participantList: ArrayList<ChannelParticipant>) {
         reset()
-        Log.d("friend", "friend adapter $participantList")
         participantList.sortByDescending { it.isOnline }
         listOfFriends = participantList
         filteredListOfFriend = participantList

@@ -128,17 +128,6 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
             backgroundColor
         )
 
-        val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
-        if(playersViewModel.getFriendList().value?.contains(participant)==true){
-            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
-        }else if(playersViewModel.getUser()?.userId == participant.id){
-            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_BLUE))
-
-        }
-        else{
-            ringElement.backgroundTintList = ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
-
-        }
         return rowView
 
     }
