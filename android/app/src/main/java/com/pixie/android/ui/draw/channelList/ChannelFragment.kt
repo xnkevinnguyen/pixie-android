@@ -101,11 +101,6 @@ class ChannelFragment : Fragment() {
             }
         })
 
-        val gameInfoFactory = InjectorUtils.provideGameInformationViewModelFactory()
-        val gameInfoViewModel =
-            ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
-
-
         //start game
         startGameBtn.setOnClickListener {
             val gameID = channelViewModel.getCurrentChannelInfo(currentChannelID.value)?.gameID

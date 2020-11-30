@@ -166,4 +166,7 @@
     <string name="seconds">secondes</string>
     <string name="answer_guess">Le mot à deviner était : %1$s</string>
 
+    <string name="friend">Amis</string>
+    <string name="other">Autre Joueurs</string>
+
 </resources>

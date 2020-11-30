@@ -5,6 +5,7 @@ import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
 import com.pixie.android.*
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.user.AvatarColorData
 import com.pixie.android.type.*
 
@@ -78,6 +79,21 @@ class UserDataSource {
             Log.d("apolloException", e.message.toString())
         }
         return AvatarColorData(null, null)
+    }
+
+    suspend fun getMe(userID: Double): ChannelParticipant?{
+        try{
+            val response = apolloClient(userID).query(GetMeQuery()).toDeferred().await().data
+            val colorQueryData = response?.me
+            if (colorQueryData != null) {
+                return ChannelParticipant(colorQueryData.id, colorQueryData.username,
+                    colorQueryData.isOnline, colorQueryData.isVirtual,
+                    colorQueryData.avatarForeground, colorQueryData.avatarBackground)
+            }
+        }catch(e:ApolloException){
+            Log.d("apolloException", e.message.toString())
+        }
+        return null
     }
 
     // Singleton
