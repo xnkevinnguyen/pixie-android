@@ -118,19 +118,19 @@ class DrawToolsFragment() : Fragment() {
 
         smallSize.setOnClickListener(){
             viewModel.modifyStrokeWidth(small.toFloat())
-            if(eraserOn) viewModel.setEraser(true)
+            if(eraserOn) viewModel.setEraser(true,small)
             else viewModel.setEraser(false)
             dialog.dismiss()
         }
         mediumSize.setOnClickListener(){
             viewModel.modifyStrokeWidth(medium.toFloat())
-            if(eraserOn) viewModel.setEraser(true)
+            if(eraserOn) viewModel.setEraser(true,medium)
             else viewModel.setEraser(false)
             dialog.dismiss()
         }
         largeSize.setOnClickListener(){
             viewModel.modifyStrokeWidth(large.toFloat())
-            if(eraserOn) viewModel.setEraser(true)
+            if(eraserOn) viewModel.setEraser(true,large)
             else viewModel.setEraser(false)
             dialog.dismiss()
         }

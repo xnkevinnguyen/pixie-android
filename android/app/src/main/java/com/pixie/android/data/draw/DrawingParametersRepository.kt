@@ -13,6 +13,7 @@ class DrawingParametersRepository {
     private var strokeWidth = MutableLiveData<Float>().apply { postValue(12F) }
     private var cellWidthGrid = MutableLiveData<Int>().apply { postValue(25) }
     private var erase = MutableLiveData<Boolean>().apply { postValue(false) }
+    private var eraseWidth = 1
     private var grid = MutableLiveData<Boolean>().apply { postValue(false) }
 
 
@@ -44,9 +45,16 @@ class DrawingParametersRepository {
     fun getErase(): LiveData<Boolean> {
         return erase;
     }
+    fun getEraseWidth():Int{
+        return eraseWidth
+    }
 
-    fun setErase(useErase: Boolean) {
+    fun setErase(useErase: Boolean, newEraseWidth:Int?) {
         erase.postValue(useErase)
+        if(newEraseWidth!=null){
+            eraseWidth=newEraseWidth
+
+        }
     }
 
     fun getGrid(): LiveData<Boolean> {
