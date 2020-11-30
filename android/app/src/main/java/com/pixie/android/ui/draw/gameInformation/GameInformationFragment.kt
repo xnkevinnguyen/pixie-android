@@ -1,35 +1,24 @@
 package com.pixie.android.ui.draw.gameInformation
 
-import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.pixie.android.R
 import com.pixie.android.type.GameMode
-import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
-import nl.dionsegijn.konfetti.KonfettiView
-import nl.dionsegijn.konfetti.models.Shape
-import nl.dionsegijn.konfetti.models.Size
-
 
 class GameInformationFragment : Fragment() {
 
@@ -134,8 +123,6 @@ class GameInformationFragment : Fragment() {
             Constants.SHARED_PREFERENCES_SETTING,
             Context.MODE_PRIVATE
         )
-        val soundOn: Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
-        val mediaPlayer = chatViewModel.createMediaPlayer(R.raw.end_game, requireContext())
 
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
             var roundString: String =
@@ -166,6 +153,7 @@ class GameInformationFragment : Fragment() {
             }
             listPlayerAdapter.set(it.players)
             listPlayerAdapter.setDrawer(it.currentDrawerId)
+
 
 
         })

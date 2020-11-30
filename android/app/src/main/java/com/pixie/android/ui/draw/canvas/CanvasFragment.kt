@@ -18,6 +18,7 @@ import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.data.game.ShowWordinGameType
 import com.pixie.android.model.draw.CommandType
+import com.pixie.android.model.game.GameParticipant
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
@@ -165,21 +166,28 @@ class CanvasFragment : Fragment() {
 
                 }
 
-                val viewKonfetti = display_end_game.findViewById<KonfettiView>(R.id.viewKonfetti)
-                viewKonfetti.build()
-                    .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
-                    .setDirection(0.0, 359.0)
-                    .setSpeed(1f, 5f)
-                    .setFadeOutEnabled(true)
-                    .setTimeToLive(2000L)
-                    .addShapes(Shape.Square, Shape.Circle)
-                    .addSizes(Size(12))
-                    .setPosition(-50f, 850 + 50f, -50f, -50f)
-                    .streamFor(300, 5000L)
+                var isUserAWinner = false
+                val winnersList = it.winners
+                if(winnersList != null){
+                    isUserAWinner = isUserAWinner(winnersList)
+                }
 
-                if (soundOn) chatViewModel.startMediaPlayer(mediaPlayer)
+                if(isUserAWinner) {
+                    val viewKonfetti =
+                        display_end_game.findViewById<KonfettiView>(R.id.viewKonfetti)
+                    viewKonfetti.build()
+                        .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                        .setDirection(0.0, 359.0)
+                        .setSpeed(1f, 5f)
+                        .setFadeOutEnabled(true)
+                        .setTimeToLive(2000L)
+                        .addShapes(Shape.Square, Shape.Circle)
+                        .addSizes(Size(12))
+                        .setPosition(-50f, 850 + 50f, -50f, -50f)
+                        .streamFor(300, 5000L)
+                }
+                if(soundOn)chatViewModel.startMediaPlayer(mediaPlayer)
                 else chatViewModel.releaseMediaPlayer(mediaPlayer)
-
 
             } else {
                 display_end_game.visibility = View.GONE
@@ -209,6 +217,17 @@ class CanvasFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
+    }
+
+    private fun isUserAWinner(listWinner:ArrayList<GameParticipant>):Boolean{
+        val preferences = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_LOGIN, Context.MODE_PRIVATE)
+        val userIDPreference = preferences.getString(Constants.USER_ID, null)
+        for (winner in listWinner) {
+            if (winner.id == userIDPreference.toDouble()){
+                return true
+            }
+        }
+        return false
     }
 
 

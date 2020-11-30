@@ -15,6 +15,7 @@ data class GameSessionData (
     var players:ArrayList<GameParticipant>,
     var mode: GameMode,
     var state:GameState?,
-    var hintsLeft:Int?=null
+    var hintsLeft:Int?=null,
+    var winners:ArrayList<GameParticipant>? = null
 
 )
