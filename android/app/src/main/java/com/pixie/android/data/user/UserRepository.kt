@@ -29,7 +29,6 @@ class UserRepository(val dataSource: UserDataSource) {
 
     private var avatarColor: AvatarColorData = AvatarColorData(null, null)
 
-
     fun getUser(): LoggedInUser {
         val userCopy = user
         if (userCopy != null) {
@@ -60,6 +59,10 @@ class UserRepository(val dataSource: UserDataSource) {
         return avatarColor
     }
 
+    fun getMe(): ChannelParticipant?{
+        return fetchMe()
+    }
+
     private fun fetchAvatarColor(){
         var colors: AvatarColorData
         runBlocking {
@@ -68,6 +71,13 @@ class UserRepository(val dataSource: UserDataSource) {
         avatarColor=colors
     }
 
+    private fun fetchMe(): ChannelParticipant?{
+        var me:ChannelParticipant?
+        runBlocking {
+            me = dataSource.getMe(getUser().userId)
+        }
+        return me
+    }
 
     fun logout() {
         // Logout should ALWAYS be called after exit operations

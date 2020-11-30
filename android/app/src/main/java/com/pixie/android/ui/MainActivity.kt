@@ -118,11 +118,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
-        preferencesLogin = getSharedPreferences(
-            Constants.SHARED_PREFERENCES_LOGIN,
-            Context.MODE_PRIVATE
-        )
-
         val avatar: ImageView = header.findViewById(R.id.imageView)
 
         val colors = profileViewModel.getAvatarColor()
