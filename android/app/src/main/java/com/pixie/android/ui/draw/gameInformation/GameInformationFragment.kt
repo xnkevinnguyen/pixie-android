@@ -155,6 +155,7 @@ class GameInformationFragment : Fragment() {
             listPlayerAdapter.setDrawer(it.currentDrawerId)
 
 
+
         })
 
 
