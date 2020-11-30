@@ -83,7 +83,7 @@ class GameAdapter (context: Context) : BaseAdapter() {
         }
 
         winner.text = winnerString
-        score.text= history.score.toString()
+        score.text= history.score?.toInt().toString()
         difficulty.text = history.difficulty
         mode.text = history.gameMode
 
@@ -115,7 +115,7 @@ class GameAdapter (context: Context) : BaseAdapter() {
             val factory = InjectorUtils.provideProfileViewModelFactory()
             val profileViewModel = ViewModelProvider(ViewModelStore(),factory).get(ProfileViewModel::class.java)
             if(score.username == profileViewModel.getUsername()){
-                return score.value.toString()
+                return score.value?.toInt().toString()
             }
         }
         return "0"
