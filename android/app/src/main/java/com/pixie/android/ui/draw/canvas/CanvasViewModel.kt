@@ -54,6 +54,46 @@ class CanvasViewModel(
         gameSessionRepository.leaveGame()
     }
 
+    fun captureEraseActionTouch(x: Float, y: Float) {
+        val eraserWidth = drawingParametersRepository.getEraseWidth().toFloat()
+        val xy1List = arrayListOf<Pair<Float, Float>>()
+        xy1List.add(Pair(x - eraserWidth, y - eraserWidth))
+        xy1List.add(Pair(x + eraserWidth, y - eraserWidth))
+        xy1List.add(Pair(x - eraserWidth, y + eraserWidth))
+        xy1List.add(Pair(x + eraserWidth, y + eraserWidth))
+        xy1List.add(Pair(x, y))
+
+        val commandHistory = canvasRepository.getDrawCommandHistory().value ?: return
+
+        commandHistory.forEach {
+            val pathDataPoints = it.value.pathDataPoints
+
+            if (it.value.type == CommandType.DRAW && !pathDataPoints.isNullOrEmpty() && !it.value.isErased) {
+                var isContact = false
+                for (n in 0 until pathDataPoints.size - 1) {
+                    //check if there is a point inside
+                    if (xy1List.get(0).first <= pathDataPoints[n].x && pathDataPoints[n].x <= xy1List.get(
+                            3
+                        ).first
+                        && xy1List.get(0).second <= pathDataPoints[n].y && pathDataPoints[n].y <= xy1List.get(
+                            3
+                        ).second
+                    )
+                        isContact = true
+
+
+                }
+                if (isContact) {
+                    canvasRepository.eraseCommand(it.key)
+                    gameSessionRepository.sendManualCommand(CommandType.ERASE, it.key)
+                }
+
+
+            }
+        }
+
+    }
+
     fun captureEraseAction(x1: Float, y1: Float, x2: Float, y2: Float) {
         val eraserWidth = drawingParametersRepository.getEraseWidth().toFloat()
         val xy1List = arrayListOf<Pair<Float, Float>>()
