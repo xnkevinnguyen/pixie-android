@@ -49,7 +49,7 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_free_mode"
-                android:layout_margin="15dp"/>
+                android:layout_margin="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                 android:text="@string/mode1_explanation"
                 android:textSize="@dimen/profile_text"
                 android:gravity="center"
-                android:layout_margin="10dp"/>
+                android:layout_margin="5dp"/>
 
             <ImageButton
                 android:id="@+id/free_for_all"
@@ -99,7 +99,7 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_solo_mode"
-                android:layout_margin="15dp"/>
+                android:layout_margin="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -108,7 +108,7 @@
                 android:maxWidth="200dp"
                 android:textSize="@dimen/profile_text"
                 android:gravity="center"
-                android:layout_margin="10dp"/>
+                android:layout_margin="5dp"/>
 
             <ImageButton
                 android:id="@+id/solo"
@@ -148,7 +148,7 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_coop_mode"
-                android:layout_margin="15dp"/>
+                android:layout_margin="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -156,7 +156,8 @@
                 android:text="@string/mode3_explanation"
                 android:textSize="@dimen/profile_text"
                 android:gravity="center"
-                android:layout_margin="10dp"/>
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"/>
 
             <ImageButton
                 android:id="@+id/coop"
