@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.graphics.alpha
 import com.pixie.android.R
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
@@ -25,6 +26,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     var drawColor: Int = 0 // Should be replaced at runtime with default BLACK value from repository
     private val backgroundColor = Color.TRANSPARENT
     private var erase = false
+    private var eraseWidth = 10
 
     private var canvas: Canvas? = null
     private lateinit var bitmap: Bitmap
@@ -38,16 +40,17 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var motionTouchEventY = 0f
     private var onDrawingMove: Boolean = false
     private var isCanvasLocked: Boolean = false
+    private var refCommandList:List<CanvasCommand>?=null
+
 
     fun setIsCanvasLocked(isLocked: Boolean) {
         isCanvasLocked = isLocked
     }
 
 
-    fun setErase(isErase: Boolean) {
+    fun setErase(isErase: Boolean,newEraseWidth:Int?) {
         erase = isErase
-        if (erase) paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-        else paint.xfermode = null
+        eraseWidth = newEraseWidth ?: 10
     }
 
     fun setViewModel(viewModel: CanvasViewModel) {
@@ -61,14 +64,17 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun generatePaint(): Paint = Paint().apply {
         color = drawColor
+        alpha = drawColor.alpha
         style = Paint.Style.STROKE
         strokeJoin = Paint.Join.ROUND
         strokeCap = Paint.Cap.ROUND
         strokeWidth =
             drawStroke
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC)
     }
 
     fun drawFromCommandList(canvasCommandList: List<CanvasCommand>) {
+        refCommandList=canvasCommandList
         if (canvas != null) {
             canvas?.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
             canvasCommandList.forEach {
@@ -170,6 +176,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> onEraseStart()
                     MotionEvent.ACTION_MOVE -> onEraseMove()
+                    MotionEvent.ACTION_UP->onEraseUp()
                 }
             }
         }
@@ -177,17 +184,65 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun onEraseStart() {
-//        canvasViewModel.captureEraseAction(motionTouchEventX,motionTouchEventY,)
+
+        paint.style= Paint.Style.STROKE
+        paint.color = Color.BLACK
+        paint.strokeWidth= 3f
+        canvasViewModel.captureEraseActionTouch(motionTouchEventX,motionTouchEventY)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
+
+
+        pathData.clear()
+        path.reset()
+        path.moveTo(motionTouchEventX, motionTouchEventY)
+
+        currentX = motionTouchEventX
+        currentY = motionTouchEventY
+        val tempPaint = Paint().apply {
+            style= Paint.Style.STROKE
+            color = Color.BLACK
+            strokeWidth= 3f
+        }
+
+        path.addRect(motionTouchEventX-eraseWidth, motionTouchEventY-eraseWidth,motionTouchEventX+eraseWidth,motionTouchEventY+eraseWidth,Path.Direction.CW)
+        canvas?.drawPath(path, tempPaint)
+
     }
 
     private fun onEraseMove() {
+        val ref = refCommandList?.toMutableList()
+        if(!ref.isNullOrEmpty()){
+            drawFromCommandList(ref)
+        }else{
+            drawFromCommandList(arrayListOf())
+        }
+        path.reset()
+        val tempPaint = Paint().apply {
+            style= Paint.Style.STROKE
+            color = Color.BLACK
+            strokeWidth= 3f
+        }
+
         canvasViewModel.captureEraseAction(currentX, currentY, motionTouchEventX, motionTouchEventY)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
-    }
 
+        path.addRect(motionTouchEventX-eraseWidth, motionTouchEventY-eraseWidth,motionTouchEventX+eraseWidth,motionTouchEventY+eraseWidth,Path.Direction.CW)
+
+        canvas?.drawPath(path, tempPaint)
+        invalidate()
+
+    }
+    private  fun onEraseUp(){
+        //erase erase border
+        val ref = refCommandList?.toMutableList()
+        if(!ref.isNullOrEmpty()){
+            drawFromCommandList(ref)
+        }else{
+            drawFromCommandList(arrayListOf())
+        }
+    }
     private fun onTouchStart() {
         pathData.clear()
         path.reset()
@@ -205,6 +260,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             )
         )
         onDrawingMove = true
+
     }
 
 
