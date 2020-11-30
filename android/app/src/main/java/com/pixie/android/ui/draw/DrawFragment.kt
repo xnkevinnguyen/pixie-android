@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.pixie.android.R
@@ -26,10 +29,29 @@ class DrawFragment : Fragment() {
     ): View? {
 
 
-        return inflater.inflate(
+        val root = inflater.inflate(
             R.layout.draw_fragment,
             container, false
         )
+
+        val gameInfoFactory = InjectorUtils.provideGameInformationViewModelFactory()
+
+        val gameInfoViewModel =
+            ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
+
+        val tools = root.findViewById<LinearLayout>(R.id.tools_layout)
+
+        gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
+            val isUserTheDrawer = gameInfoViewModel.isUserTheDrawer(it.currentDrawerId)
+
+            if(isUserTheDrawer) {
+                tools.visibility = View.VISIBLE
+            } else {
+                tools.visibility = View.GONE
+            }
+        })
+
+        return root
     }
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
