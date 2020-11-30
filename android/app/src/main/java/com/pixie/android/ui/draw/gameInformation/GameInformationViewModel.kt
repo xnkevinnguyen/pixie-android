@@ -22,6 +22,10 @@ private val userRepository: UserRepository):
     fun shouldDisplayHints(currentDrawerID:Double?,gameMode: GameMode):Boolean{
         return currentDrawerID != userRepository.getUser().userId || !gameMode.equals(GameMode.FREEFORALL)
     }
+
+    fun isUserTheDrawer(currentDrawerID:Double?):Boolean{
+        return currentDrawerID == userRepository.getUser().userId
+    }
     fun leaveGame(){
         gameSessionRepository.leaveGame()
     }
