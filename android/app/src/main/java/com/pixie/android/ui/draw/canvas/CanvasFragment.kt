@@ -208,7 +208,7 @@ class CanvasFragment : Fragment() {
         })
 
         canvasViewModel.getEraser().observe(viewLifecycleOwner, Observer {
-            my_canvas.setErase(it)
+            my_canvas.setErase(it.shouldErase,it.eraseWidth)
         })
 
         canvasViewModel.getGridVal().observe(viewLifecycleOwner, Observer {

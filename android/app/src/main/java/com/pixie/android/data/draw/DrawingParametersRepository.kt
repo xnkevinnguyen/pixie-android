@@ -3,6 +3,7 @@ package com.pixie.android.data.draw
 import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pixie.android.model.draw.EraseParameter
 
 class DrawingParametersRepository {
 
@@ -12,10 +13,8 @@ class DrawingParametersRepository {
         MutableLiveData<Color>().apply { postValue(Color.valueOf(Color.BLACK)) }
     private var strokeWidth = MutableLiveData<Float>().apply { postValue(12F) }
     private var cellWidthGrid = MutableLiveData<Int>().apply { postValue(25) }
-    private var erase = MutableLiveData<Boolean>().apply { postValue(false) }
-    private var eraseWidth = 1
+    private var erase = MutableLiveData<EraseParameter>().apply { postValue(EraseParameter(false)) }
     private var grid = MutableLiveData<Boolean>().apply { postValue(false) }
-
 
 
     fun getPrimaryDrawingColor(): LiveData<Color> {
@@ -42,19 +41,17 @@ class DrawingParametersRepository {
         strokeWidth.postValue(size)
     }
 
-    fun getErase(): LiveData<Boolean> {
+    fun getErase(): LiveData<EraseParameter> {
         return erase;
     }
-    fun getEraseWidth():Int{
-        return eraseWidth
+
+    fun getEraseWidth(): Int{
+        return erase.value?.eraseWidth ?:10
     }
 
-    fun setErase(useErase: Boolean, newEraseWidth:Int?) {
-        erase.postValue(useErase)
-        if(newEraseWidth!=null){
-            eraseWidth=newEraseWidth
+    fun setErase(useErase: Boolean, newEraseWidth: Int?) {
+        erase.postValue(EraseParameter(useErase, newEraseWidth))
 
-        }
     }
 
     fun getGrid(): LiveData<Boolean> {

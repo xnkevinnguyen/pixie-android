@@ -26,6 +26,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     var drawColor: Int = 0 // Should be replaced at runtime with default BLACK value from repository
     private val backgroundColor = Color.TRANSPARENT
     private var erase = false
+    private var eraseWidth = 10
 
     private var canvas: Canvas? = null
     private lateinit var bitmap: Bitmap
@@ -47,8 +48,9 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
 
-    fun setErase(isErase: Boolean) {
+    fun setErase(isErase: Boolean,newEraseWidth:Int?) {
         erase = isErase
+        eraseWidth = newEraseWidth ?: 10
     }
 
     fun setViewModel(viewModel: CanvasViewModel) {
@@ -203,7 +205,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             strokeWidth= 3f
         }
 
-        path.addRect(motionTouchEventX-5, motionTouchEventY-5,motionTouchEventX+5,motionTouchEventY+5,Path.Direction.CW)
+        path.addRect(motionTouchEventX-eraseWidth, motionTouchEventY-eraseWidth,motionTouchEventX+eraseWidth,motionTouchEventY+eraseWidth,Path.Direction.CW)
         canvas?.drawPath(path, tempPaint)
 
     }
@@ -226,7 +228,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         currentX = motionTouchEventX
         currentY = motionTouchEventY
 
-        path.addRect(motionTouchEventX-10, motionTouchEventY-10,motionTouchEventX+10,motionTouchEventY+10,Path.Direction.CW)
+        path.addRect(motionTouchEventX-eraseWidth, motionTouchEventY-eraseWidth,motionTouchEventX+eraseWidth,motionTouchEventY+eraseWidth,Path.Direction.CW)
 
         canvas?.drawPath(path, tempPaint)
         invalidate()

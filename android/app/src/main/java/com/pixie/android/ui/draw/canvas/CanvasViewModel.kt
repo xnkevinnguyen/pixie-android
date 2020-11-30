@@ -55,7 +55,7 @@ class CanvasViewModel(
     }
 
     fun captureEraseActionTouch(x: Float, y: Float) {
-        val eraserWidth = drawingParametersRepository.getEraseWidth().toFloat()
+        val eraserWidth = drawingParametersRepository.getEraseWidth()
         val xy1List = arrayListOf<Pair<Float, Float>>()
         xy1List.add(Pair(x - eraserWidth, y - eraserWidth))
         xy1List.add(Pair(x + eraserWidth, y - eraserWidth))
@@ -95,7 +95,7 @@ class CanvasViewModel(
     }
 
     fun captureEraseAction(x1: Float, y1: Float, x2: Float, y2: Float) {
-        val eraserWidth = drawingParametersRepository.getEraseWidth().toFloat()
+        val eraserWidth = drawingParametersRepository.getEraseWidth()
         val xy1List = arrayListOf<Pair<Float, Float>>()
         xy1List.add(Pair(x1 - eraserWidth, y1 - eraserWidth))
         xy1List.add(Pair(x1 + eraserWidth, y1 - eraserWidth))
@@ -117,13 +117,15 @@ class CanvasViewModel(
             val pathDataPoints = it.value.pathDataPoints
 
             if (it.value.type == CommandType.DRAW && !pathDataPoints.isNullOrEmpty() && !it.value.isErased) {
+                var bonusOffset =it.value.paint?.strokeWidth ?: 0f
+                bonusOffset /= 2f
                 var isContact = false
                 for (n in 0 until pathDataPoints.size - 1) {
                     for (i in 0..4) {
-                        val x1 = xy1List.get(i).first
-                        val y1 = xy1List.get(i).second
-                        val x2 = xy2List.get(i).first
-                        val y2 = xy2List.get(i).second
+                        val x1 = xy1List.get(i).first-bonusOffset
+                        val y1 = xy1List.get(i).second-bonusOffset
+                        val x2 = xy2List.get(i).first+bonusOffset
+                        val y2 = xy2List.get(i).second+bonusOffset
                         //calculate  t = (q − p) × s / (r × s) https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
                         val r = Pair(x2 - x1, y2 - y1) // P+t*R
                         val s = Pair(
