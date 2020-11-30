@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.graphics.alpha
 import com.pixie.android.R
 import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
@@ -39,6 +40,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var onDrawingMove: Boolean = false
     private var isCanvasLocked: Boolean = false
 
+
     fun setIsCanvasLocked(isLocked: Boolean) {
         isCanvasLocked = isLocked
     }
@@ -61,11 +63,13 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun generatePaint(): Paint = Paint().apply {
         color = drawColor
+        alpha = drawColor.alpha
         style = Paint.Style.STROKE
         strokeJoin = Paint.Join.ROUND
         strokeCap = Paint.Cap.ROUND
         strokeWidth =
             drawStroke
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC)
     }
 
     fun drawFromCommandList(canvasCommandList: List<CanvasCommand>) {
