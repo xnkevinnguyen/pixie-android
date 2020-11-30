@@ -141,8 +141,8 @@ class RegisterFragment : Fragment() {
                 val firstName = name.text.toString()
                 val lastName = surname.text.toString()
 
-                val foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-                val backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+                val foregroundColor = Color.argb(255,generateDarkColorInt(), generateDarkColorInt(), generateDarkColorInt())
+                val backgroundColor = Color.argb(255, generateLightColorInt(), generateLightColorInt(),generateLightColorInt())
                 val foregroundToString = ("#" + Integer.toHexString(foregroundColor).substring(2))
                 val backgroundToString = ("#" + Integer.toHexString(backgroundColor).substring(2))
 
@@ -188,6 +188,12 @@ class RegisterFragment : Fragment() {
         }
 
         super.onViewCreated(view, savedInstanceState)
+    }
+    private fun generateLightColorInt():Int{
+        return Math.floor((1.0+Random.nextDouble(1.0)) * (Math.pow(16.0,2.0)-1)/2).toInt()
+    }
+    private fun generateDarkColorInt():Int{
+        return Math.floor(Random.nextDouble(1.0) * (Math.pow(16.0,2.0)-1)/2).toInt()
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
