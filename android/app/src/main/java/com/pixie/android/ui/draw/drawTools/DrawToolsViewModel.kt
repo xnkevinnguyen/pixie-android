@@ -17,7 +17,11 @@ class DrawToolsViewModel(private val drawingParametersRepository: DrawingParamet
 
     fun modifyCellWidthGrid(width: Int) = drawingParametersRepository.setCellWidthGrid(width)
 
-    fun setEraser(erase: Boolean) = drawingParametersRepository.setErase(erase)
+    fun setEraser(erase: Boolean,eraseWidth:Int?=null) {
+        drawingParametersRepository.setErase(erase,eraseWidth)
+
+    }
+
 
     fun setGridValue(grid: Boolean) = drawingParametersRepository.setGrid(grid)
 

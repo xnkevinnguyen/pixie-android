@@ -260,9 +260,13 @@ class GameSessionDataSource {
             if (colorStroke == null) {
                 colorStroke = Color.BLACK
             }
-
+            var opacity:Double = 255.0
+            if (data.opacity !=null){
+                opacity=data.opacity
+            }
 
             val paint = Paint().apply {
+                (opacity * 255).toInt()
                 color = colorStroke
                 style = Paint.Style.STROKE
                 strokeJoin = Paint.Join.ROUND
