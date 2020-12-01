@@ -374,6 +374,9 @@ class GameSessionDataSource {
                             colorStroke.green,
                             colorStroke.blue
                         )
+                    }else if(!data.strokeColor.isNullOrEmpty()){
+                        colorStroke = Color.parseColor(data.strokeColor)
+
                     }
                     if (colorStroke == null) {
                         colorStroke = Color.BLACK
