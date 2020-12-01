@@ -179,4 +179,6 @@
     <string name="dismiss">Dismiss</string>
     <string name="leave_game_text">Leave your current game to join another one.</string>
 
+    <string name="game_invite_error">This game is not available anymore.</string>
+
 </resources>

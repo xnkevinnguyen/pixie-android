@@ -20,8 +20,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
@@ -222,7 +224,14 @@ class MainActivity : AppCompatActivity() {
                 val declineButtonElement = dialog.findViewById<Button>(R.id.decline_invitation)
 
                 acceptButtonElement.setOnClickListener{
-                    chatViewModel.acceptInvitation(gameInvitation.gameID)
+                    val accept = chatViewModel.acceptInvitation(gameInvitation.gameID, gameInvitation)
+                    if(!accept){
+                        Toast.makeText(
+                            this,
+                            resources.getString(R.string.game_invite_error),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     dialog.hide()
                     val navController =
                         Navigation.findNavController(this, R.id.nav_host_fragment)

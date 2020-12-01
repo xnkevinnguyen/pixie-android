@@ -3,8 +3,11 @@ package com.pixie.android.ui.chat
 import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.pixie.android.R
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.game.GameInviteRepository
 import com.pixie.android.data.game.GameRepository
@@ -18,6 +21,7 @@ import com.pixie.android.model.game.GameInvitation
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameStatus
 import com.pixie.android.type.Language
 
 class ChatViewModel(
@@ -129,7 +133,7 @@ class ChatViewModel(
     fun confirmInvitationBeenShown(){
         gameInviteRepository.confirmInvitationBeenShown()
     }
-    fun acceptInvitation(gameID: Double){
+    fun acceptInvitation(gameID: Double, gameInvite:GameInvitation):Boolean{
 
         // remove user from old game if they accept invitation
         if(isUserInAGame()){
@@ -139,7 +143,13 @@ class ChatViewModel(
                 gameInfo.gameID?.let { exitGame(it) }
             }
         }
-        val game= gameRepository.joinGame(gameID)
+
+        var game:GameSessionData? = null;
+        if(gameInvite.status == GameStatus.PENDING) {
+            game = gameRepository.joinGame(gameID)
+        } else{
+            return false
+        }
 
         if(game!=null) {
             gameSessionRepository.subscribeToGameSessionChange(game.id)
@@ -147,7 +157,7 @@ class ChatViewModel(
             setCurrentChannelID(game.channelID)
         }
 
-
+        return true
     }
 
     fun isUserInAGame():Boolean{
