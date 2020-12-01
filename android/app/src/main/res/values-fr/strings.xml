@@ -170,4 +170,5 @@
     <string name="got_to_leaderboard">Aller au classement</string>
     <string name="you_won">Vous avez gagné!</string>
     <string name="no_winners">Aucun gagnant!</string>
+    <string name="top_score">Meilleur Score:</string>
 </resources>

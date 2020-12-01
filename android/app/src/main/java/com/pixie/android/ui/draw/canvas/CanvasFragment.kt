@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -151,14 +152,14 @@ class CanvasFragment : Fragment() {
                     if (player.id == canvasViewModel.getUserID()
                     ) {
                         val scoreString =
-                            resources.getString(R.string.total_score) + ": " + player.score.toString()
+                            resources.getString(R.string.total_score) + ": " + player.score.toInt().toString()
                         score.text = scoreString
                     }
                 }
 
                 val gameData = it
 
-                val goToLeaderboard = display_end_game.findViewById<Button>(R.id.got_to_leaderboard)
+                val goToLeaderboard = display_end_game.findViewById<Button>(R.id.go_to_leaderboard)
 
                 goToLeaderboard.setOnClickListener {
                     chatViewModel.exitChannel(gameData.channelID)
@@ -193,8 +194,9 @@ class CanvasFragment : Fragment() {
                             winnerUsername.text = resources.getString(R.string.you_won)
                         } else{
                             winnerScore.visibility = View.VISIBLE
-                            winnerUsername.text = winnersList[0].username
-                            winnerScore.text = winnersList[0].score.toString()
+                            winnerUsername.text = resources.getString(R.string.winner) + " " + winnersList[0].username
+                            val score = getWinnerScore(winnersList[0].id, it.players)
+                            winnerScore.text = resources.getString(R.string.top_score) + " " + score
                         }
                     }
                 } else {
@@ -263,6 +265,14 @@ class CanvasFragment : Fragment() {
         return false
     }
 
+    private fun getWinnerScore(winnerId: Double, playersList: List<GameParticipant>):Int{
+        for (player in playersList){
+            if(player.id == winnerId){
+                return player.score.toInt()
+            }
+        }
+        return 0
+    }
 
     private fun showGrid(gridOn: Boolean) {
         if (gridOn) {

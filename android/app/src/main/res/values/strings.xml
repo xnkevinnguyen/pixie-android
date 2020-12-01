@@ -172,4 +172,5 @@
     <string name="got_to_leaderboard">Go to leaderboard</string>
     <string name="you_won">You have won!</string>
     <string name="no_winners">No winners!</string>
+    <string name="top_score">Top Score:</string>
 </resources>

@@ -108,7 +108,7 @@
             android:textSize="@dimen/profile_titles" />
 
         <Button
-            android:id="@+id/got_to_leaderboard"
+            android:id="@+id/go_to_leaderboard"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/got_to_leaderboard"
