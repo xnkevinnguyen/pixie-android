@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -48,6 +50,7 @@ class GameInformationFragment : Fragment() {
         val round = root.findViewById<TextView>(R.id.round_number)
         val listPlayer = root.findViewById<ListView>(R.id.players_in_game)
         val leaveGameBtn = root.findViewById<Button>(R.id.leave_game)
+        val timer = root.findViewById<ConstraintLayout>(R.id.timer)
 
         val gameID = gameInfoViewModel.getGameSession().value?.id
         val channelID = gameInfoViewModel.getGameSession().value?.channelID
@@ -133,6 +136,12 @@ class GameInformationFragment : Fragment() {
 
             round.text = roundString
 
+            if(gameInfoViewModel.isUserTheDrawer(it.currentDrawerId)){
+                timer.background.setTint(ContextCompat.getColor(requireContext(), R.color.dark_grey))
+            } else{
+                timer.background.setTint(ContextCompat.getColor(requireContext(), R.color.green))
+            }
+
             if (gameInfoViewModel.shouldDisplayHints(it.currentDrawerId, it.mode)) {
                 askHintButtonElement.visibility = View.VISIBLE
                 val hintsLeft = it.hintsLeft
@@ -153,6 +162,7 @@ class GameInformationFragment : Fragment() {
             }
             listPlayerAdapter.set(it.players)
             listPlayerAdapter.setDrawer(it.currentDrawerId)
+
 
 
 
