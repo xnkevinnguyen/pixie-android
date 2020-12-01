@@ -58,6 +58,35 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/winner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp">
+
+            <TextView
+                android:id="@+id/winner_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/profile_titles"
+                android:gravity="center"
+                android:textColor="?colorSecondaryVariant"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/winner_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/profile_titles"
+                android:gravity="center"
+                android:textColor="?colorSecondaryVariant"
+                android:layout_marginRight="20dp"/>
+
+
+
+        </LinearLayout>
         <TextView
             android:id="@+id/total_score"
             android:layout_width="match_parent"
@@ -77,6 +106,20 @@
             android:gravity="center"
             android:textColor="?colorSecondaryVariant"
             android:textSize="@dimen/profile_titles" />
+
+        <Button
+            android:id="@+id/got_to_leaderboard"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="@string/got_to_leaderboard"
+            android:background="@drawable/button_drawable"
+            android:textColor="?colorSecondaryVariant"
+            android:textSize="@dimen/profile_titles"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"/>
 
         <Button
             android:id="@+id/got_to_home"

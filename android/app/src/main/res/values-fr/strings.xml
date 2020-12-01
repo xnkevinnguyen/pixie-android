@@ -165,5 +165,9 @@
     <string name="number_player">Pas assez de joueurs</string>
     <string name="seconds">secondes</string>
     <string name="answer_guess">Le mot à deviner était : %1$s</string>
+    <string name="not_disconnected">Toujours Connecté</string>
 
+    <string name="got_to_leaderboard">Aller au classement</string>
+    <string name="you_won">Vous avez gagné!</string>
+    <string name="no_winners">Aucun gagnant!</string>
 </resources>
