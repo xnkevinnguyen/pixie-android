@@ -2,10 +2,8 @@ package com.pixie.android.data.game
 
 import android.graphics.Color
 import android.graphics.Color.argb
-import android.graphics.Color.valueOf
 import android.graphics.Paint
 import android.util.Log
-import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -21,7 +19,6 @@ import com.pixie.android.type.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
-import kotlin.random.Random
 
 class GameSessionDataSource {
     suspend fun startGame(gameID: Double, userID: Double): GameSessionData? {
@@ -289,13 +286,12 @@ class GameSessionDataSource {
         gameSessionID: Double,
         userID: Double,
         pathPointInput: ManualPathPointInput,
-        pathIDGenerator: Double,
+        pathUID: Double,
         pathOrderGenerator: Double
     ): Double? {
-        val pathUniqueID = 1000000 * userID + gameSessionID * 10000 + pathIDGenerator
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
-            pathUniqueID,
+            pathUID,
             DataPoints(
                 pathPointInput.x.toDouble(),
                 pathPointInput.y.toDouble(),
@@ -315,7 +311,7 @@ class GameSessionDataSource {
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data
             if (data != null) {
-                return pathUniqueID
+                return pathUID
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.toString())
@@ -387,7 +383,7 @@ class GameSessionDataSource {
                         "ManualDrawingReceive",
                         data.point.order.toString() + " - (" + data.point.x + "," + data.point.y + ")"
                     )
-                    if (drawPoint.x >= 0 && drawPoint.y >= 0)
+                    if(drawPoint.orderID >=0)
                         onDraw(drawPoint)
                 } else if (data?.commandStatus == CommandStatus.REDO && data.commandPathId != null) {
                     val serverDrawHistoryCommand =
