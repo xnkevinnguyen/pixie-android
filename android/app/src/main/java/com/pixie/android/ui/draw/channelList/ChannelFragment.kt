@@ -136,18 +136,7 @@ class ChannelFragment : Fragment() {
             }
         }
 
-        //handles if someone else started the game
-        val gameSession = chatViewModel.getGameSession()
-        gameSession.observe(viewLifecycleOwner, Observer {
-            if (it.status.equals(GameStatus.STARTED)) {
 
-                val navController =
-                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                navController.navigate(R.id.nav_drawing)
-
-
-            }
-        })
         //add players
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())

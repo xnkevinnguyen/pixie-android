@@ -45,8 +45,8 @@ class DrawingParametersRepository {
         return erase;
     }
 
-    fun getEraseWidth(): Int{
-        return erase.value?.eraseWidth ?:10
+    fun getEraseWidth(): Int {
+        return erase.value?.eraseWidth ?: 10
     }
 
     fun setErase(useErase: Boolean, newEraseWidth: Int?) {
@@ -61,6 +61,14 @@ class DrawingParametersRepository {
     fun setGrid(gridOn: Boolean) {
         grid.postValue(gridOn)
 
+    }
+
+    fun resetParameters() {
+        primaryDrawingColor.postValue(Color.valueOf(Color.BLACK))
+        strokeWidth.postValue(12F)
+        cellWidthGrid.postValue(25)
+        erase.postValue(EraseParameter(false))
+        grid.postValue(false)
     }
 
 

@@ -59,30 +59,7 @@ class DrawFragment : Fragment() {
         return root
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        val factory = InjectorUtils.provideGameInformationViewModelFactory()
-//        val gameInfoViewModel = ViewModelProvider(this,factory).get(GameInformationViewModel::class.java)
-//
-//        val chatFactory = InjectorUtils.provideChatViewModelFactory()
-//        val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
-//
-//        return when (item.itemId) {
-//            android.R.id.home ->{
-//                val gameID = gameInfoViewModel.getGameSession().value?.id
-//                val channelID = gameInfoViewModel.getGameSession().value?.channelID
-//                if (channelID != null) {
-//                    chatViewModel.exitChannel(channelID)
-//                }
-//                if (gameID != null) {
-//                    chatViewModel.exitGame(gameID)
-//                }
-//                val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-//                navController.navigate(R.id.nav_home)
-//                return true
-//            }
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
+
 
 
 }

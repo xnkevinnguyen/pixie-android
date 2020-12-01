@@ -1,6 +1,7 @@
 package com.pixie.android.ui
 
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -16,6 +17,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +27,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -34,6 +37,9 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
+import com.pixie.android.type.GameDifficulty
+import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
@@ -184,6 +190,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -192,6 +199,77 @@ class MainActivity : AppCompatActivity() {
         val factory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
         chatViewModel.startChannelsIfNecessary()
+
+        //handles if someone else started the game
+        val gameSession = chatViewModel.getGameSession()
+        gameSession.observe(this, androidx.lifecycle.Observer {
+            if (it.status.equals(GameStatus.STARTED)) {
+
+                val navController =
+                    Navigation.findNavController(this, R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_drawing)
+
+
+            }
+        })
+        chatViewModel.subscribeToGameInvitation()
+
+        chatViewModel.getGameInvitation().observe(this, androidx.lifecycle.Observer { gameInvitation->
+            if(!chatViewModel.getHasGameInvitationBeenShown()){
+                val dialog = Dialog(this)
+                dialog.setContentView(R.layout.game_invitation)
+                val acceptButtonElement = dialog.findViewById<Button>(R.id.accept_invitation)
+                val declineButtonElement = dialog.findViewById<Button>(R.id.decline_invitation)
+
+                acceptButtonElement.setOnClickListener{
+                    chatViewModel.acceptInvitation(gameInvitation.gameID)
+                    dialog.hide()
+                    val navController =
+                        Navigation.findNavController(this, R.id.nav_host_fragment)
+                    navController.navigate(R.id.nav_chat)
+                }
+                declineButtonElement.setOnClickListener {
+                    dialog.hide()
+                }
+                val invitationText = dialog.findViewById<TextView>(R.id.invite_title)
+                invitationText.text = String.format(resources.getString(R.string.game_invitation_title),gameInvitation.sender.username)
+
+                val mode = dialog.findViewById<TextView>(R.id.mode_title)
+                val img = dialog.findViewById<ImageView>(R.id.mode_picture)
+                mode.text = gameInvitation.gameMode.toString()
+
+                val languageElement  = dialog.findViewById<ImageView>(R.id.language_icon)
+
+                if(gameInvitation.language.rawValue == "ENGLISH") {
+                    languageElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_uk_flag) })
+                } else{
+                    languageElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_flag_of_france) })
+                }
+                val difficultyElement = dialog.findViewById<ImageView>(R.id.difficulty_icon)
+                if(gameInvitation.difficulty == GameDifficulty.EASY) {
+                    difficultyElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_easy_diff) })
+                    difficultyElement.setColorFilter(Color.GREEN)
+                } else if(gameInvitation.difficulty == GameDifficulty.MEDIUM){
+                    difficultyElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_medium_diff) })
+                    difficultyElement.setColorFilter(Color.YELLOW)
+                }else{
+                    difficultyElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_hard_diff) })
+                    difficultyElement.setColorFilter(Color.RED)
+                }
+
+                if(gameInvitation.gameMode == GameMode.SOLO)
+                    img.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_solo_mode))
+                else if(gameInvitation.gameMode == GameMode.COOP)
+                    img.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_coop_mode))
+                else
+                    img.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_free_mode))
+
+
+                dialog.show()
+                chatViewModel.confirmInvitationBeenShown()
+            }
+
+        })
         super.onPostCreate(savedInstanceState)
     }
 
@@ -255,7 +333,7 @@ class MainActivity : AppCompatActivity() {
             }
             android.R.id.home -> {
                 // leave the game if user is in a game
-                gameInfoViewModel.leaveGameIfNecessary()
+//                gameInfoViewModel.leaveGameIfNecessary()
                 super.onOptionsItemSelected(item)
             }
 

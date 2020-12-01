@@ -123,60 +123,7 @@ class ChatFragment : Fragment() {
             }
 
         })
-        chatViewModel.getGameInvitation().observe(viewLifecycleOwner, Observer {gameInvitation->
-            if(!chatViewModel.getHasGameInvitationBeenShown()){
-                val dialog = Dialog(requireContext())
-                dialog.setContentView(R.layout.game_invitation)
-                val acceptButtonElement = dialog.findViewById<Button>(R.id.accept_invitation)
-                val declineButtonElement = dialog.findViewById<Button>(R.id.decline_invitation)
 
-                acceptButtonElement.setOnClickListener{
-                    chatViewModel.acceptInvitation(gameInvitation.gameID)
-                    dialog.hide()
-                }
-                declineButtonElement.setOnClickListener {
-                    dialog.hide()
-                }
-                val invitationText = dialog.findViewById<TextView>(R.id.invite_title)
-                invitationText.text = String.format(resources.getString(R.string.game_invitation_title),gameInvitation.sender.username)
-
-                val mode = dialog.findViewById<TextView>(R.id.mode_title)
-                val img = dialog.findViewById<ImageView>(R.id.mode_picture)
-                mode.text = gameInvitation.gameMode.toString()
-
-                val languageElement  = dialog.findViewById<ImageView>(R.id.language_icon)
-
-                if(gameInvitation.language.rawValue == "ENGLISH") {
-                    languageElement.setImageDrawable(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_uk_flag) })
-                } else{
-                    languageElement.setImageDrawable(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_flag_of_france) })
-                }
-                val difficultyElement = dialog.findViewById<ImageView>(R.id.difficulty_icon)
-                if(gameInvitation.difficulty == GameDifficulty.EASY) {
-                    difficultyElement.setImageDrawable(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_easy_diff) })
-                    difficultyElement.setColorFilter(Color.GREEN)
-                } else if(gameInvitation.difficulty == GameDifficulty.MEDIUM){
-                    difficultyElement.setImageDrawable(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_medium_diff) })
-                    difficultyElement.setColorFilter(Color.YELLOW)
-                }else{
-                    difficultyElement.setImageDrawable(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_hard_diff) })
-                    difficultyElement.setColorFilter(Color.RED)
-                }
-
-                if(gameInvitation.gameMode == GameMode.SOLO)
-                    img.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_solo_mode))
-                else if(gameInvitation.gameMode == GameMode.COOP)
-                    img.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_coop_mode))
-                else
-                    img.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_free_mode))
-
-
-                dialog.show()
-                chatViewModel.confirmInvitationBeenShown()
-            }
-
-        })
-        chatViewModel.subscribeToGameInvitation()
 
 
 
