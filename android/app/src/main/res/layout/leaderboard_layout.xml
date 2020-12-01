@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabMode="fixed"
-        app:tabTextColor="?colorSecondaryVariant">
+        app:tabTextColor="?colorSecondaryVariant"
         android:layout_marginBottom="30dp">
 
         <com.google.android.material.tabs.TabItem

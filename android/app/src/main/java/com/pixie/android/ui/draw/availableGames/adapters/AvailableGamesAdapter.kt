@@ -72,22 +72,56 @@ class AvailableGamesAdapter(context:Context, activity: Activity): RecyclerView.A
 
         val chatFactory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(ViewModelStore(), chatFactory).get(ChatViewModel::class.java)
-        if(chatViewModel.isUserInAGame()){
-            viewHolder.joinBtn.isEnabled = false
-            viewHolder.joinBtn.alpha = 0.5f
-        }else{
-            viewHolder.joinBtn.isEnabled = true
-            viewHolder.joinBtn.alpha = 1.0f
-        }
+//        if(chatViewModel.isUserInAGame()){
+//            viewHolder.joinBtn.isEnabled = false
+//            viewHolder.joinBtn.alpha = 0.5f
+//        }else{
+//            viewHolder.joinBtn.isEnabled = true
+//            viewHolder.joinBtn.alpha = 1.0f
+//        }
         viewHolder.joinBtn.setOnClickListener {
-            val gameData = gameViewModel.joinGame(game.gameId)
-            gameData?.channelID?.let { id ->
-                chatViewModel.setCurrentChannelID(
-                    id
-                )
+            if(chatViewModel.isUserInAGame()) {
+                val dialog = Dialog(viewContext)
+                dialog.setContentView(R.layout.leave_game_dialog)
+                val dismissButton = dialog.findViewById<Button>(R.id.dismiss)
+                val leaveGameButton = dialog.findViewById<Button>(R.id.leave)
+
+                dismissButton.setOnClickListener {
+                    dialog.dismiss()
+                }
+
+                leaveGameButton.setOnClickListener {
+                    val gameData = chatViewModel.getUserGameData()
+                    if (gameData != null) {
+                        val gameId = gameData.gameID
+                        if (gameId != null) {
+                            chatViewModel.exitGame(gameId)
+                            chatViewModel.exitChannel(gameData.channelID)
+                        }
+                    }
+
+                    val game = gameViewModel.joinGame(game.gameId)
+                    game?.channelID?.let { id ->
+                        chatViewModel.setCurrentChannelID(
+                            id
+                        )
+                    }
+                    val navController = viewActivity.findNavController(R.id.nav_host_fragment)
+                    navController.navigate(R.id.nav_chat)
+
+                    dialog.dismiss()
+                }
+                dialog.show()
+            } else {
+                val gameData = gameViewModel.joinGame(game.gameId)
+                gameData?.channelID?.let { id ->
+                    chatViewModel.setCurrentChannelID(
+                        id
+                    )
+                }
+                val navController = viewActivity.findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_chat)
             }
-            val navController = viewActivity.findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_chat)
         }
     }
 
