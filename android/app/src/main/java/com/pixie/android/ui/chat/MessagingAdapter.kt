@@ -3,6 +3,7 @@ package com.pixie.android.ui.chat
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.view.LayoutInflater
@@ -70,6 +71,9 @@ class MessagingAdapter(context: Context) : BaseAdapter() {
             val timePosted = rowView.findViewById<TextView>(R.id.time)
             val time = message.timePosted.toLong()
             val timeFormatted = getDate(time, "HH:mm:ss")
+            if(message.isFromHost){
+                rowView.setBackgroundColor(Color.parseColor("#D4C48B"))
+            }
 
             txtTitle.text = message.text
             userName.text = message.userName

@@ -6,6 +6,9 @@ subscription OnNewMessage($channelId: Float!){
         sender{
             id
             username
+            isVirtual
+            avatarForeground
+            avatarBackground
         }
         hintAsker{
             id

@@ -304,7 +304,7 @@ class GameSessionDataSource {
                 pathOrderGenerator
             ),
             ("#" + Integer.toHexString(pathPointInput.paint.color).substring(2)).toInput(),
-            opacity.toString().toInput(),
+            opacity.toInput(),
             pathPointInput.paint.strokeWidth.toDouble().toInput(),
 
             pathPointInput.pathStatus
