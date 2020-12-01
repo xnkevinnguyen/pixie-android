@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.pixie.android.R
+import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
@@ -44,9 +45,13 @@ class DrawFragment : Fragment() {
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
             val isUserTheDrawer = gameInfoViewModel.isUserTheDrawer(it.currentDrawerId)
 
-            if(isUserTheDrawer) {
+            if(isUserTheDrawer ) {
                 tools.visibility = View.VISIBLE
             } else {
+                tools.visibility = View.GONE
+            }
+
+            if(it.status == GameStatus.ENDED){
                 tools.visibility = View.GONE
             }
         })

@@ -60,7 +60,7 @@ class ConnectionAdapter (context: Context) : BaseAdapter() {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 
         var dateConnection = context.resources.getString(R.string.not_available)
-        var dateDisconnection = context.resources.getString(R.string.not_available)
+        var dateDisconnection = context.resources.getString(R.string.not_disconnected)
         if(history.connection != "null") {
             dateConnection = getDate(format.parse(history.connection).time, "yyyy-MM-dd HH:mm:ss")
         }
