@@ -17,5 +17,5 @@ data class GameSessionData (
     var state:GameState?,
     var hintsLeft:Int?=null,
     var winners:ArrayList<GameParticipant>? = null
-
+    , var isFakeGameSession:Boolean = false
 )

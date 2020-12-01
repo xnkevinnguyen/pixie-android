@@ -1,7 +1,5 @@
 package com.pixie.android.data.game
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasRepository
@@ -192,6 +190,8 @@ class GameSessionRepository(
     fun sendManualDrawingPoint(pathPointInput: ManualPathPointInput) {
         //Only send a manual drawing if it's user's turn
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
+        val pathUID =   1000000 * userRepository.getUser().userId + getGameSessionID() * 10000 + pathIDGenerator
+
         if (gameSession.value?.mode == GameMode.FREEFORALL) {
             val order = pathOrderGenerator
             CoroutineScope(Dispatchers.IO).launch {
@@ -199,7 +199,7 @@ class GameSessionRepository(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
-                    pathIDGenerator,
+                    pathUID,
                     order
                 )
 
@@ -211,30 +211,32 @@ class GameSessionRepository(
     }
 
     fun sendManualDrawingFinalPoint(
-        pathPointInput: ManualPathPointInput,
-        onResult: (Double) -> Unit
-    ) {
+        pathPointInput: ManualPathPointInput
+    ):Double {
         //Only send a manual drawing if it's user's turn
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id !=null){
         if (gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id != null) {
+            val pathUID =   1000000 * userRepository.getUser().userId + getGameSessionID() * 10000 + pathIDGenerator
+
             CoroutineScope(Dispatchers.IO).launch {
                 val pathID = dataSource.sendManualDraw(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
-                    pathIDGenerator,
+                    pathUID,
                     pathOrderGenerator
                 )
                 if (pathID != null) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        onResult(pathID)
                         pathIDGenerator += 1
                         pathOrderGenerator = 0.0
                     }
 
                 }
             }
+            return pathUID
         }
+        return 0.0
     }
 
     fun sendManualCommand(
@@ -364,7 +366,20 @@ class GameSessionRepository(
         timerSubscription = null
         pathSubscription = null
         manualPathSubscription = null
-        gameSession = MutableLiveData()
+        gameSession.postValue(
+            GameSessionData(
+            0.0,
+                null,
+          "",
+                0.0,null,
+                GameStatus.PENDING,
+                0.0,
+                arrayListOf(),
+                GameMode.FREEFORALL,
+                null,null,null,
+                isFakeGameSession = true
+
+        ))
         drawingParametersRepository.resetParameters()
         // send leave request
     }
