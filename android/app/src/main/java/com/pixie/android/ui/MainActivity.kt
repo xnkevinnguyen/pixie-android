@@ -25,6 +25,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -34,6 +35,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
+import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
@@ -184,6 +186,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -192,6 +195,19 @@ class MainActivity : AppCompatActivity() {
         val factory = InjectorUtils.provideChatViewModelFactory()
         val chatViewModel = ViewModelProvider(this, factory).get(ChatViewModel::class.java)
         chatViewModel.startChannelsIfNecessary()
+
+        //handles if someone else started the game
+        val gameSession = chatViewModel.getGameSession()
+        gameSession.observe(this, androidx.lifecycle.Observer {
+            if (it.status.equals(GameStatus.STARTED)) {
+
+                val navController =
+                    Navigation.findNavController(this, R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_drawing)
+
+
+            }
+        })
         super.onPostCreate(savedInstanceState)
     }
 
