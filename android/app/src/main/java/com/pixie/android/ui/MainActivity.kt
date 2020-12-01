@@ -255,7 +255,7 @@ class MainActivity : AppCompatActivity() {
             }
             android.R.id.home -> {
                 // leave the game if user is in a game
-                gameInfoViewModel.leaveGameIfNecessary()
+//                gameInfoViewModel.leaveGameIfNecessary()
                 super.onOptionsItemSelected(item)
             }
 
