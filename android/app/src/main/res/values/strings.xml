@@ -168,6 +168,13 @@
     <string name="seconds">seconds</string>
     <string name="answer_guess">The word to guess was : %1$s</string>
 
+    <string name="not_disconnected">Still Connected</string>
+    <string name="got_to_leaderboard">Go to leaderboard</string>
+    <string name="you_won">You have won!</string>
+    <string name="no_winners">No winners!</string>
+    <string name="top_score">Top Score:</string>
+
     <string name="friend">Friends</string>
     <string name="other">Other Players</string>
+
 </resources>

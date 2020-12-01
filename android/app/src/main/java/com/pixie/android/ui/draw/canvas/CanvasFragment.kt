@@ -4,11 +4,13 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -150,12 +152,25 @@ class CanvasFragment : Fragment() {
                     if (player.id == canvasViewModel.getUserID()
                     ) {
                         val scoreString =
-                            resources.getString(R.string.total_score) + ": " + player.score.toString()
+                            resources.getString(R.string.total_score) + ": " + player.score.toInt().toString()
                         score.text = scoreString
                     }
                 }
-                val goToHome = display_end_game.findViewById<Button>(R.id.got_to_home)
+
                 val gameData = it
+
+                val goToLeaderboard = display_end_game.findViewById<Button>(R.id.go_to_leaderboard)
+
+                goToLeaderboard.setOnClickListener {
+                    chatViewModel.exitChannel(gameData.channelID)
+                    canvasViewModel.leaveGame()
+                    val navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.nav_leaderboard)
+                }
+
+                val goToHome = display_end_game.findViewById<Button>(R.id.got_to_home)
+
                 goToHome.setOnClickListener {
                     chatViewModel.exitChannel(gameData.channelID)
                     canvasViewModel.leaveGame()
@@ -166,14 +181,33 @@ class CanvasFragment : Fragment() {
 
                 }
 
+                val winnerUsername = display_end_game.findViewById<TextView>(R.id.winner_username)
+                val winnerScore = display_end_game.findViewById<TextView>(R.id.winner_score)
                 var isUserAWinner = false
                 val winnersList = it.winners
                 if(winnersList != null){
                     isUserAWinner = isUserAWinner(winnersList)
+
+                    if(gameData.mode == GameMode.FREEFORALL){
+                        if(isUserAWinner){
+                            winnerScore.visibility = View.GONE
+                            winnerUsername.text = resources.getString(R.string.you_won)
+                        } else{
+                            winnerScore.visibility = View.VISIBLE
+                            winnerUsername.text = resources.getString(R.string.winner) + " " + winnersList[0].username
+                            val score = getWinnerScore(winnersList[0].id, it.players)
+                            winnerScore.text = resources.getString(R.string.top_score) + " " + score
+                        }
+                    }
+                } else {
+                    if(gameData.mode == GameMode.FREEFORALL) {
+                        winnerScore.visibility = View.GONE
+                        winnerUsername.visibility = View.GONE
+                    }
                 }
 
                 if(isUserAWinner) {
-                    val viewKonfetti =
+                   val viewKonfetti =
                         display_end_game.findViewById<KonfettiView>(R.id.viewKonfetti)
                     viewKonfetti.build()
                         .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
@@ -186,6 +220,7 @@ class CanvasFragment : Fragment() {
                         .setPosition(-50f, 850 + 50f, -50f, -50f)
                         .streamFor(300, 5000L)
                 }
+
                 if(soundOn)chatViewModel.startMediaPlayer(mediaPlayer)
                 else chatViewModel.releaseMediaPlayer(mediaPlayer)
 
@@ -230,6 +265,14 @@ class CanvasFragment : Fragment() {
         return false
     }
 
+    private fun getWinnerScore(winnerId: Double, playersList: List<GameParticipant>):Int{
+        for (player in playersList){
+            if(player.id == winnerId){
+                return player.score.toInt()
+            }
+        }
+        return 0
+    }
 
     private fun showGrid(gridOn: Boolean) {
         if (gridOn) {
