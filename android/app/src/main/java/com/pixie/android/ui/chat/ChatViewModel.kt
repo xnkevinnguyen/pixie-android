@@ -135,17 +135,17 @@ class ChatViewModel(
     }
     fun acceptInvitation(gameID: Double, gameInvite:GameInvitation):Boolean{
 
-        // remove user from old game if they accept invitation
-        if(isUserInAGame()){
-            val gameInfo = getUserGameData()
-            if(gameInfo != null) {
-                exitChannel(gameInfo.channelID)
-                gameInfo.gameID?.let { exitGame(it) }
-            }
-        }
-
-        var game:GameSessionData? = null;
+        // remove user from old game if they accept invitation and game has not started
+        val game:GameSessionData?
+        Log.d("invite", "${gameInvite.status}")
         if(gameInvite.status == GameStatus.PENDING) {
+            if(isUserInAGame()){
+                val gameInfo = getUserGameData()
+                if(gameInfo != null) {
+                    exitChannel(gameInfo.channelID)
+                    gameInfo.gameID?.let { exitGame(it) }
+                }
+            }
             game = gameRepository.joinGame(gameID)
         } else{
             return false

@@ -224,6 +224,7 @@ class MainActivity : AppCompatActivity() {
                 val declineButtonElement = dialog.findViewById<Button>(R.id.decline_invitation)
 
                 acceptButtonElement.setOnClickListener{
+                    Log.d("invite", "main ${gameInvitation.status}")
                     val accept = chatViewModel.acceptInvitation(gameInvitation.gameID, gameInvitation)
                     if(!accept){
                         Toast.makeText(
