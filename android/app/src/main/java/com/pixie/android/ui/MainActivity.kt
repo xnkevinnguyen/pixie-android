@@ -129,9 +129,7 @@ class MainActivity : AppCompatActivity() {
             foregroundColorInt = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
 
-        avatar.setColorFilter(
-            foregroundColorInt
-        )
+
 
         var backgroundColorInt: Int? = null
         if (!colors.background.isNullOrEmpty()) {
@@ -140,9 +138,12 @@ class MainActivity : AppCompatActivity() {
         if (backgroundColorInt == null) {
             backgroundColorInt = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
+        avatar.setColorFilter(
+            backgroundColorInt
+        )
 
         avatar.backgroundTintList = ColorStateList.valueOf(
-            backgroundColorInt
+            foregroundColorInt
         )
 
         avatar.setOnClickListener {
@@ -217,9 +218,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         val drawable = ContextCompat.getDrawable(applicationContext,R.drawable.profile_layer) as LayerDrawable
-        drawable?.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
+        drawable?.setColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP)
         drawable?.setDrawableByLayerId(R.id.foreground_icon,ContextCompat.getDrawable(applicationContext,R.drawable.ic_profile_user))
-        drawable?.findDrawableByLayerId(R.id.foreground_icon).setColorFilter(foregroundColor,PorterDuff.Mode.SRC_ATOP)
+        drawable?.findDrawableByLayerId(R.id.foreground_icon).setColorFilter(backgroundColor,PorterDuff.Mode.SRC_ATOP)
 
         menu.findItem(R.id.action_settings).setIcon(drawable)
         return true

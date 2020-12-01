@@ -76,6 +76,8 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         val removeVirtualElement = rowView.findViewById<TextView>(R.id.remove_virtual_player)
         val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
 
+
+
         if(participant.isVirtual ==true){
             removeVirtualElement.visibility = View.VISIBLE
             removeVirtualElement.setOnClickListener {
@@ -113,9 +115,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
         if (foregroundColor == null) {
             foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
-        avatarElement.setColorFilter(
-            foregroundColor
-        )
+
 
         var backgroundColor: Int? = null
         if (!participant.avatarBackground.isNullOrEmpty()) {
@@ -125,6 +125,9 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
             backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
         avatarElement.backgroundTintList = ColorStateList.valueOf(
+            foregroundColor
+        )
+        avatarElement.setColorFilter(
             backgroundColor
         )
 

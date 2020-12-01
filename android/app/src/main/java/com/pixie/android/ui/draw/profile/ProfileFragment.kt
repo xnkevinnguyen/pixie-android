@@ -74,9 +74,6 @@ class ProfileFragment: Fragment() {
                 foregroundColor =
                     Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
             }
-            avatar.setColorFilter(
-                foregroundColor
-            )
 
             var backgroundColor: Int? = null
             if (!it.avatarBackground.isNullOrEmpty()) {
@@ -86,8 +83,12 @@ class ProfileFragment: Fragment() {
                 backgroundColor =
                     Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
             }
-            avatar.backgroundTintList = ColorStateList.valueOf(
+            avatar.setColorFilter(
                 backgroundColor
+            )
+
+            avatar.backgroundTintList = ColorStateList.valueOf(
+                foregroundColor
             )
         })
 
