@@ -174,5 +174,6 @@
 
     <string name="friend">Amis</string>
     <string name="other">Autre Joueurs</string>
-
+    <string name="dismiss">Annuler</string>
+    <string name="leave_game_text">Quittez votre partie actuelle pour en rejoindre une autre.</string>
 </resources>

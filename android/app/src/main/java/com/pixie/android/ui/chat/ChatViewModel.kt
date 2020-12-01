@@ -154,7 +154,7 @@ class ChatViewModel(
         return chatRepository.isUserInAGame()
     }
 
-    private fun getUserGameData():ChannelData?{
+    fun getUserGameData():ChannelData?{
         return chatRepository.getUserGameInfo()
     }
 
