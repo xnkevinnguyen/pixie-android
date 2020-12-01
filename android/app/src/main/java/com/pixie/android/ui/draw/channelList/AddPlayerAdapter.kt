@@ -96,9 +96,7 @@ class AddPlayerAdapter(context: Context) : BaseAdapter() {
         if (foregroundColor == null) {
             foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
-        avatarElement.setColorFilter(
-            foregroundColor
-        )
+
 
         var backgroundColor: Int? = null
         if (!participant.avatarBackground.isNullOrEmpty()) {
@@ -108,18 +106,13 @@ class AddPlayerAdapter(context: Context) : BaseAdapter() {
             backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
         avatarElement.backgroundTintList = ColorStateList.valueOf(
+            foregroundColor
+        )
+        avatarElement.setColorFilter(
             backgroundColor
         )
 
-        val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
-        if (playersViewModel.getFriendList().value?.contains(participant) == true) {
-            ringElement.backgroundTintList =
-                ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
-        } else {
-            ringElement.backgroundTintList =
-                ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
 
-        }
         return rowView
 
     }
