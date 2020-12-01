@@ -69,4 +69,8 @@ class PlayersViewModel(
         }
 
     }
+
+    fun getMe():ChannelParticipant?{
+        return userRepository.getMe()
+    }
 }

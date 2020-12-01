@@ -171,4 +171,8 @@
     <string name="you_won">Vous avez gagné!</string>
     <string name="no_winners">Aucun gagnant!</string>
     <string name="top_score">Meilleur Score:</string>
+
+    <string name="friend">Amis</string>
+    <string name="other">Autre Joueurs</string>
+
 </resources>

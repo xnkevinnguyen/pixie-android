@@ -1,68 +1,62 @@
-package com.pixie.android.ui.chat
+package com.pixie.android.ui.draw.playersList
 
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.ui.draw.channelList.PlayersViewModel
-import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
 import kotlin.random.Random
 
-
-class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
+class FriendAdapter(context: Context) : BaseAdapter(), Filterable {
 
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-    private var listOfParticipants = ArrayList<ChannelParticipant>()
-    var filteredListOfParticipants = ArrayList<ChannelParticipant>()
-
-    private val contextCopy = context
-    val factory = InjectorUtils.providePlayersViewModelFactory()
-    private val playersViewModel = ViewModelProvider(ViewModelStore(), factory).get(PlayersViewModel::class.java)
+    private var listOfFriends = ArrayList<ChannelParticipant>()
+    var filteredListOfFriend = ArrayList<ChannelParticipant>()
 
     fun add(channelParticipant: ChannelParticipant) {
         if (channelParticipant.isOnline == true) {
-            this.listOfParticipants.add(channelParticipant)
-            this.filteredListOfParticipants.add(channelParticipant)
+            this.listOfFriends.add(channelParticipant)
+            this.filteredListOfFriend.add(channelParticipant)
             notifyDataSetChanged()
         }
     }
 
     fun clear() {
-        filteredListOfParticipants.clear()
+        filteredListOfFriend.clear()
     }
 
     private fun reset() {
         clear()
-        listOfParticipants.clear()
+        listOfFriends.clear()
     }
 
     fun set(participantList: ArrayList<ChannelParticipant>) {
         reset()
         participantList.sortByDescending { it.isOnline }
-        listOfParticipants = participantList
-        filteredListOfParticipants = participantList
+        listOfFriends = participantList
+        filteredListOfFriend = participantList
         notifyDataSetChanged()
 
     }
 
     override fun getCount(): Int {
-        return filteredListOfParticipants.size
+        return filteredListOfFriend.size
     }
 
     override fun getItem(position: Int): Any {
-        return filteredListOfParticipants[position]
+        return filteredListOfFriend[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -70,35 +64,13 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val participant: ChannelParticipant = filteredListOfParticipants[position]
+        val participant: ChannelParticipant = filteredListOfFriend[position]
         val rowView = inflater.inflate(R.layout.participant_row, parent, false)
         val participantUserName = rowView.findViewById<TextView>(R.id.participant_username)
         val removeVirtualElement = rowView.findViewById<TextView>(R.id.remove_virtual_player)
         val avatarElement = rowView.findViewById<ImageView>(R.id.avatar_participant)
 
-        if(participant.isVirtual ==true){
-            removeVirtualElement.visibility = View.VISIBLE
-            removeVirtualElement.setOnClickListener {
-                playersViewModel.removeVirtualPlayer(participant.id){
-                    if(it.isSuccess){
-                        Toast.makeText(rowView.context,
-                            rowView.context.resources.getString(R.string.success),
-                            Toast.LENGTH_LONG).show()
-                    }else if(!it.isSuccess){
-                        Toast.makeText(rowView.context,
-                            rowView.context.resources.getString(R.string.error),
-                            Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-
-            //Change icon
-            avatarElement.background = ContextCompat.getDrawable(contextCopy, R.drawable.circle)
-            avatarElement.setImageResource(R.drawable.ic_profile_virtual)
-
-        }else{
-            removeVirtualElement.visibility = View.GONE
-        }
+        removeVirtualElement.visibility = View.GONE
         participantUserName.text = participant.username
 
         val onlineIconElement = rowView.findViewById<ImageView>(R.id.online_badge)
@@ -141,7 +113,7 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
                 if (results.count == 0) {
                     notifyDataSetInvalidated();
                 } else {
-                    filteredListOfParticipants = results.values as ArrayList<ChannelParticipant>
+                    filteredListOfFriend = results.values as ArrayList<ChannelParticipant>
                     notifyDataSetChanged()
                 }
             }
@@ -149,15 +121,15 @@ class ChannelParticipantAdapter(context: Context) : BaseAdapter(), Filterable {
             override fun performFiltering(constraint: CharSequence): FilterResults {
                 val filterString = constraint.toString().toLowerCase()
                 val results = FilterResults()
-                val count = listOfParticipants.size
+                val count = listOfFriends.size
                 var filterableString: ChannelParticipant
                 if (TextUtils.isEmpty(constraint)) {
-                    results.count = listOfParticipants.size
-                    results.values = listOfParticipants
+                    results.count = listOfFriends.size
+                    results.values = listOfFriends
                 } else {
                     val filteredResults = ArrayList<ChannelParticipant>()
                     for (i in 0 until count) {
-                        filterableString = listOfParticipants[i]
+                        filterableString = listOfFriends[i]
                         if (filterableString.username.toLowerCase().contains(filterString)) {
                             filteredResults.add(filterableString)
                         }

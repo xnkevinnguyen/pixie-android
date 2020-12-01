@@ -95,16 +95,6 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
             backgroundColor
         )
 
-
-        val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
-        if (playersViewModel.getFriendList().value?.contains(participant) == true) {
-            ringElement.backgroundTintList =
-                ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
-        } else {
-            ringElement.backgroundTintList =
-                ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
-
-        }
         return rowView
     }
 }
