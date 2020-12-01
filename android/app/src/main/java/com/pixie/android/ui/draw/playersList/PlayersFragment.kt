@@ -312,9 +312,7 @@ class PlayersFragment : Fragment() {
         if (foregroundColor == null) {
             foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
-        avatarElement.setColorFilter(
-            foregroundColor
-        )
+
 
         var backgroundColor: Int? = null
         if (!participant.avatarBackground.isNullOrEmpty()) {
@@ -324,6 +322,9 @@ class PlayersFragment : Fragment() {
             backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
         avatarElement.backgroundTintList = ColorStateList.valueOf(
+            foregroundColor
+        )
+        avatarElement.setColorFilter(
             backgroundColor
         )
     }
