@@ -49,7 +49,7 @@ class GameSessionDataSource {
                 var guessesLeft: Int? = null
 
                 data.gameInfo.scores?.forEach {
-                    if(it.user.id == userID)
+                    if (it.user.id == userID)
                         guessesLeft = it.tries.toInt()
                 }
                 return GameSessionData(
@@ -112,7 +112,7 @@ class GameSessionDataSource {
                     var guessesLeft: Int? = null
 
                     data.gameInfo.scores?.forEach {
-                        if(it.user.id == userID)
+                        if (it.user.id == userID)
                             guessesLeft = it.tries.toInt()
                     }
                     val players = ArrayList(data.gameInfo.scores!!.map {
@@ -254,19 +254,20 @@ class GameSessionDataSource {
             })
 
             var colorStroke: Int? = null
-            if (!data.strokeColor.isNullOrEmpty()) {
+            if (!data.strokeColor.isNullOrEmpty() && data.opacity != null) {
                 colorStroke = Color.parseColor(data.strokeColor)
+                colorStroke = argb(
+                    (data.opacity * 255).toInt(),
+                    colorStroke.red,
+                    colorStroke.green,
+                    colorStroke.blue
+                )
             }
             if (colorStroke == null) {
                 colorStroke = Color.BLACK
             }
-            var opacity:Double = 255.0
-            if (data.opacity !=null){
-                opacity=data.opacity
-            }
 
             val paint = Paint().apply {
-                (opacity * 255).toInt()
                 color = colorStroke
                 style = Paint.Style.STROKE
                 strokeJoin = Paint.Join.ROUND
@@ -293,6 +294,7 @@ class GameSessionDataSource {
         pathOrderGenerator: Double
     ): Double? {
         val pathUniqueID = 1000000 * userID + gameSessionID * 10000 + pathIDGenerator
+        val opacity:Double = pathPointInput.paint.alpha.toDouble()/255
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
             pathUniqueID,
@@ -302,7 +304,9 @@ class GameSessionDataSource {
                 pathOrderGenerator
             ),
             ("#" + Integer.toHexString(pathPointInput.paint.color).substring(2)).toInput(),
+            opacity.toString().toInput(),
             pathPointInput.paint.strokeWidth.toDouble().toInput(),
+
             pathPointInput.pathStatus
         )
         try {
@@ -360,10 +364,16 @@ class GameSessionDataSource {
                 val data = it.data?.onManualPlayerDrawing
 //                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
                 if (data?.commandStatus == CommandStatus.NONE && data?.point != null && data.strokeWidth != null) {
-                    // Handles adding a point
+
                     var colorStroke: Int? = null
-                    if (!data.strokeColor.isNullOrEmpty()) {
+                    if (!data.strokeColor.isNullOrEmpty() && data.strokeOpacity != null) {
                         colorStroke = Color.parseColor(data.strokeColor)
+                        colorStroke = argb(
+                            (data.strokeOpacity * 255).toInt(),
+                            colorStroke.red,
+                            colorStroke.green,
+                            colorStroke.blue
+                        )
                     }
                     if (colorStroke == null) {
                         colorStroke = Color.BLACK
