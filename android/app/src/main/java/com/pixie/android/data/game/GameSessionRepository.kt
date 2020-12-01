@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasRepository
+import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.draw.CommandType
@@ -23,7 +24,8 @@ class GameSessionRepository(
     private val dataSource: GameSessionDataSource,
     private val userRepository: UserRepository,
     private val canvasRepository: CanvasRepository,
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val drawingParametersRepository: DrawingParametersRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
 
@@ -363,6 +365,7 @@ class GameSessionRepository(
         pathSubscription = null
         manualPathSubscription = null
         gameSession = MutableLiveData()
+        drawingParametersRepository.resetParameters()
         // send leave request
     }
 
@@ -375,7 +378,8 @@ class GameSessionRepository(
         fun getInstance() = instance ?: synchronized(this) {
             instance ?: GameSessionRepository(
                 dataSource, UserRepository.getInstance(),
-                drawCommandHistoryRepository, ChatRepository.getInstance()
+                drawCommandHistoryRepository, ChatRepository.getInstance(),
+                drawingParametersRepository = DrawingParametersRepository.getInstance()
             ).also {
                 instance = it
             }
