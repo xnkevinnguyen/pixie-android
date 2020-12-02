@@ -129,17 +129,18 @@ class ChatViewModel(
     fun confirmInvitationBeenShown(){
         gameInviteRepository.confirmInvitationBeenShown()
     }
-    fun acceptInvitation(gameID: Double){
+    fun acceptInvitation(gameID: Double): GameSessionData?{
 
         // remove user from old game if they accept invitation
-        if(isUserInAGame()){
+        val game = gameRepository.joinGameInvitation(gameID)
+
+        if(isUserInAGame() && game!=null){
             val gameInfo = getUserGameData()
             if(gameInfo != null) {
                 exitChannel(gameInfo.channelID)
                 gameInfo.gameID?.let { exitGame(it) }
             }
         }
-        val game= gameRepository.joinGame(gameID)
 
         if(game!=null) {
             gameSessionRepository.subscribeToGameSessionChange(game.id)
@@ -147,7 +148,7 @@ class ChatViewModel(
             setCurrentChannelID(game.channelID)
         }
 
-
+        return game
     }
 
     fun isUserInAGame():Boolean{
