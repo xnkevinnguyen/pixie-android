@@ -41,6 +41,7 @@ import com.pixie.android.R
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameState
 import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
@@ -205,7 +206,8 @@ class MainActivity : AppCompatActivity() {
         //handles if someone else started the game
         val gameSession = chatViewModel.getGameSession()
         gameSession.observe(this, androidx.lifecycle.Observer {
-            if (it.status.equals(GameStatus.STARTED)) {
+            val gameState = it.state
+            if (it.status == GameStatus.STARTED && gameState !=null && gameState == GameState.START) {
 
                 val navController =
                     Navigation.findNavController(this, R.id.nav_host_fragment)
