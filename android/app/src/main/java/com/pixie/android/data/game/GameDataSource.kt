@@ -161,7 +161,7 @@ class GameDataSource() {
 
     }
 
-    suspend fun enterGame(gameID: Double, userId: Double, onSuccess: (ChannelData) -> Unit): GameSessionData? {
+    suspend fun enterGame(gameID: Double, userId: Double, onSuccess: (ChannelData, GameStatus) -> Unit): GameSessionData? {
         val enterGameInput = GameSessionInput(gameID)
         try {
             val response =
@@ -190,7 +190,7 @@ class GameDataSource() {
 
                 val gameData = GameSessionData(data.id, data.currentDrawerId,data.currentWord,data.currentRound,data.sprintTries!!.toInt(),data.status,
                     data.gameHall.id,playersList,data.gameInfo.mode,data.gameState)
-                onSuccess(gameChannelData)
+                onSuccess(gameChannelData, data.status)
                 return gameData
 
 

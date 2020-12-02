@@ -10,6 +10,7 @@ import com.pixie.android.model.game.CreatedGameData
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameStatus
 import com.pixie.android.type.Language
 import kotlinx.coroutines.*
 
@@ -95,14 +96,14 @@ class GameRepository(private val dataSource: GameDataSource,
         //enter game
         var gameData : GameSessionData?
         runBlocking {
-            gameData=dataSource.enterGame(gameID, userRepository.getUser().userId){
-                chatRepository.addUserChannelMessageSubscription(it)
+            gameData=dataSource.enterGame(gameID, userRepository.getUser().userId){ channelData, _ ->
+                chatRepository.addUserChannelMessageSubscription(channelData)
                 //suscribe to participant changes
-               chatRepository.addUserChannelParticipantSubscription(it)
+               chatRepository.addUserChannelParticipantSubscription(channelData)
 
-                chatRepository.addUserChannels(it)
-                chatRepository.enterChannel(it.channelID)
-                chatRepository.getChatHistory(it.channelID)
+                chatRepository.addUserChannels(channelData)
+                chatRepository.enterChannel(channelData.channelID)
+                chatRepository.getChatHistory(channelData.channelID)
 
             }
         }
@@ -110,6 +111,28 @@ class GameRepository(private val dataSource: GameDataSource,
         return gameData
     }
 
+    fun joinGameInvitation(gameID: Double):GameSessionData? {
+        //enter game
+        var gameData : GameSessionData?
+        runBlocking {
+            gameData = dataSource.enterGame(gameID, userRepository.getUser().userId) {channelData, gameStatus ->
+                if (gameStatus == GameStatus.PENDING) {
+                    chatRepository.addUserChannelMessageSubscription(channelData)
+                    //suscribe to participant changes
+                    chatRepository.addUserChannelParticipantSubscription(channelData)
+
+                    chatRepository.addUserChannels(channelData)
+                    chatRepository.enterChannel(channelData.channelID)
+                    chatRepository.getChatHistory(channelData.channelID)
+                }
+            }
+        }
+
+        if(gameData?.status == GameStatus.PENDING){
+            return gameData
+        }
+        return null
+    }
 
 
 

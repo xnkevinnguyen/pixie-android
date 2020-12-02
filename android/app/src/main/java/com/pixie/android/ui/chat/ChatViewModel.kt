@@ -3,11 +3,8 @@ package com.pixie.android.ui.chat
 import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.pixie.android.R
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.game.GameInviteRepository
 import com.pixie.android.data.game.GameRepository
@@ -21,7 +18,6 @@ import com.pixie.android.model.game.GameInvitation
 import com.pixie.android.model.game.GameSessionData
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
-import com.pixie.android.type.GameStatus
 import com.pixie.android.type.Language
 
 class ChatViewModel(
@@ -133,22 +129,17 @@ class ChatViewModel(
     fun confirmInvitationBeenShown(){
         gameInviteRepository.confirmInvitationBeenShown()
     }
-    fun acceptInvitation(gameID: Double, gameInvite:GameInvitation):Boolean{
+    fun acceptInvitation(gameID: Double): GameSessionData?{
 
-        // remove user from old game if they accept invitation and game has not started
-        val game:GameSessionData?
-        Log.d("invite", "${gameInvite.status}")
-        if(gameInvite.status == GameStatus.PENDING) {
-            if(isUserInAGame()){
-                val gameInfo = getUserGameData()
-                if(gameInfo != null) {
-                    exitChannel(gameInfo.channelID)
-                    gameInfo.gameID?.let { exitGame(it) }
-                }
+        // remove user from old game if they accept invitation
+        val game = gameRepository.joinGameInvitation(gameID)
+
+        if(isUserInAGame() && game!=null){
+            val gameInfo = getUserGameData()
+            if(gameInfo != null) {
+                exitChannel(gameInfo.channelID)
+                gameInfo.gameID?.let { exitGame(it) }
             }
-            game = gameRepository.joinGame(gameID)
-        } else{
-            return false
         }
 
         if(game!=null) {
@@ -157,7 +148,7 @@ class ChatViewModel(
             setCurrentChannelID(game.channelID)
         }
 
-        return true
+        return game
     }
 
     fun isUserInAGame():Boolean{
