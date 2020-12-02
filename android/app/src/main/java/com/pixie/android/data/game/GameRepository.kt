@@ -116,7 +116,7 @@ class GameRepository(private val dataSource: GameDataSource,
         var gameData : GameSessionData?
         runBlocking {
             gameData = dataSource.enterGame(gameID, userRepository.getUser().userId) {channelData, gameStatus ->
-                if (gameStatus == GameStatus.PENDING) {
+                if (gameStatus == GameStatus.PENDING || gameStatus ==GameStatus.READY) {
                     chatRepository.addUserChannelMessageSubscription(channelData)
                     //suscribe to participant changes
                     chatRepository.addUserChannelParticipantSubscription(channelData)
