@@ -1,7 +1,5 @@
 package com.pixie.android.ui.chat
 
-import android.app.Dialog
-import android.graphics.Color
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -9,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
-import com.pixie.android.type.GameDifficulty
-import com.pixie.android.type.GameMode
 import com.pixie.android.utilities.InjectorUtils
-import org.w3c.dom.Text
 
 
 class ChatFragment : Fragment() {
