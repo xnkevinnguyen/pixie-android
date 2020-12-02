@@ -8,6 +8,7 @@ import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.user.*
 import com.pixie.android.type.Language
+import com.pixie.android.type.Theme
 import com.pixie.android.utilities.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -137,10 +138,12 @@ class UserRepository(val dataSource: UserDataSource) {
         lastName: String,
         foreground:String,
         background:String,
+        language: Language,
+        theme: Theme,
         onLoginResult: (authResult: AuthResult) -> Unit
     ) {
         CoroutineScope(IO).launch {
-            val response = dataSource.register(username, password, firstName, lastName, foreground, background)
+            val response = dataSource.register(username, password, firstName, lastName, foreground, background, language, theme)
             lateinit var authResult: AuthResult
 
             if (response?.register?.user?.id != null) {// user needs to exist
