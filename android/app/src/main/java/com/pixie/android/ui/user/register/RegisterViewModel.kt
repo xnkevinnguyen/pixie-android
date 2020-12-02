@@ -7,6 +7,7 @@ import com.pixie.android.model.user.AuthResult
 import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoginFormState
 import com.pixie.android.type.Language
+import com.pixie.android.type.Theme
 
 class RegisterViewModel (private val userRepository: UserRepository) : ViewModel() {
 
@@ -17,9 +18,10 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
     }
 
     fun register(username: String, password: String, firstName: String, lastName: String, foreground:String, background:String,
+                 language:Language, theme: Theme,
                  onRegisterResult :(authResult: AuthResult)->Unit) {
 
-        userRepository.register(username, password, firstName, lastName, foreground, background, onRegisterResult)
+        userRepository.register(username, password, firstName, lastName, foreground, background, language, theme, onRegisterResult)
 
     }
     fun login(username: String, password: String,onLoginResult:(authResult:AuthResult)->Unit){

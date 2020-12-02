@@ -12,6 +12,7 @@ import com.pixie.android.type.AddMessageInput
 import com.pixie.android.type.CreateChannelInput
 import com.pixie.android.type.EnterChannelInput
 import com.pixie.android.type.ExitChannelInput
+import com.pixie.android.utilities.Constants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
@@ -29,7 +30,16 @@ class ChatDataSource() {
             if (channelQueryData != null) {
                 val channelData = ArrayList(channelQueryData.map {
                     var participantList =
-                        it.participants?.map { ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground) }
+                        it.participants?.map {
+                            ChannelParticipant(
+                                it.id,
+                                it.username,
+                                it.isOnline,
+                                it.isVirtual,
+                                it.avatarForeground,
+                                it.avatarBackground
+                            )
+                        }
                     if (participantList == null) {
                         participantList = arrayListOf()
                     }
@@ -54,9 +64,24 @@ class ChatDataSource() {
             val channelQueryData = response?.channel
             if (channelQueryData?.messages != null) {
                 onReceiveChannel(ArrayList(channelQueryData.messages.map {
-                    MessageData(it.content, userId == it.sender.id, it.sender.username,
-                        it.postedAt as String
+                    val channelParticipant = ChannelParticipant(
+                        it.sender.id,
+                        it.sender.username,
+                        it.sender.isOnline,
+                        it.sender.isVirtual,
+                        it.sender.avatarForeground,
+                        it.sender.avatarBackground
                     )
+                    val fromHost = channelParticipant.isVirtual == true && it.content.contains(
+                        Constants.HOST_NAME,
+                        ignoreCase = true
+                    )
+                    MessageData(
+                        it.content, userId == it.sender.id, it.sender.username,
+                        it.postedAt as String,false, fromHost,
+                        channelParticipant
+
+                        )
                 }))
             }
         } catch (e: ApolloException) {
@@ -113,7 +138,14 @@ class ChatDataSource() {
             if (data != null) {
 
                 var channelParticipant = data.participants?.map {
-                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
+                    ChannelParticipant(
+                        it.id,
+                        it.username,
+                        it.isOnline,
+                        it.isVirtual,
+                        it.avatarForeground,
+                        it.avatarBackground
+                    )
                 }
                 if (channelParticipant == null) {
                     channelParticipant = arrayListOf()
@@ -145,7 +177,14 @@ class ChatDataSource() {
             if (data != null) {
 
                 var channelParticipant = data.participants?.map {
-                    ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
+                    ChannelParticipant(
+                        it.id,
+                        it.username,
+                        it.isOnline,
+                        it.isVirtual,
+                        it.avatarForeground,
+                        it.avatarBackground
+                    )
                 }
                 if (channelParticipant == null) {
                     channelParticipant = arrayListOf()
@@ -189,24 +228,42 @@ class ChatDataSource() {
                 true
             }
             .collect {
+                val data = it.data?.onNewMessage
+                if (data != null) {
+                    val messageContent = it.data?.onNewMessage?.content
+                    val messageSenderUsername = it.data?.onNewMessage?.sender?.username
+                    val messageTimePosted = it.data?.onNewMessage?.postedAt
+                    val channelParticipant = ChannelParticipant(
+                        data.sender.id,
+                        data.sender.username,
+                        data.sender.isOnline,
+                        data.sender.isVirtual,
+                        data.sender.avatarForeground,
+                        data.sender.avatarBackground
+                    )
+                    val fromHost = channelParticipant.isVirtual == true && data.content.contains(
+                        Constants.HOST_NAME,
+                        ignoreCase = true
+                    )
+                    val shouldBeHidden = data.hintAsker != null && data.hintAsker.id != userID
 
-                val messageContent = it.data?.onNewMessage?.content
-                val messageSenderUsername = it.data?.onNewMessage?.sender?.username
-                val messageTimePosted = it.data?.onNewMessage?.postedAt
 
 
+                    if (messageContent != null && messageSenderUsername != null && messageTimePosted != null) {
+                        val messageData =
+                            MessageData(
+                                messageContent, null, messageSenderUsername,
+                                messageTimePosted as String,
+                                shouldBeHidden,
+                                isFromHost = fromHost,
+                                channelParticipant = channelParticipant
 
+                            )
 
-                if (messageContent != null && messageSenderUsername != null && messageTimePosted != null) {
-                    val messageData =
-                        MessageData(messageContent, null, messageSenderUsername,
-                            messageTimePosted as String
-                        )
-                    val hintAsker = it.data?.onNewMessage?.hintAsker
-                    if(hintAsker !=null && hintAsker.id != userID){
-                        messageData.shouldBeHidden = true
+                        onReceiveMessage(messageData)
                     }
-                    onReceiveMessage(messageData)
+                } else {
+                    Log.d("ApolloException", "Error onNewMessageSubscription")
                 }
             }
 
@@ -228,7 +285,14 @@ class ChatDataSource() {
                         subscriptionData.id,
                         subscriptionData.name,
                         subscriptionData.participants.map {
-                            ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
+                            ChannelParticipant(
+                                it.id,
+                                it.username,
+                                it.isOnline,
+                                it.isVirtual,
+                                it.avatarForeground,
+                                it.avatarBackground
+                            )
                         }, nParticipant = null
                     )
                     onChannelAdded(channelData)
@@ -248,7 +312,14 @@ class ChatDataSource() {
                         subscriptionData.id,
                         subscriptionData.name,
                         subscriptionData.participants.map {
-                            ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
+                            ChannelParticipant(
+                                it.id,
+                                it.username,
+                                it.isOnline,
+                                it.isVirtual,
+                                it.avatarForeground,
+                                it.avatarBackground
+                            )
                         }, nParticipant = null
                     )
                     onChannelRemoved(channelData)
@@ -276,7 +347,14 @@ class ChatDataSource() {
                 if (data != null) {
 
                     var channelParticipant = data.participants?.map {
-                        ChannelParticipant(it.id, it.username, it.isOnline,it.isVirtual, it.avatarForeground, it.avatarBackground)
+                        ChannelParticipant(
+                            it.id,
+                            it.username,
+                            it.isOnline,
+                            it.isVirtual,
+                            it.avatarForeground,
+                            it.avatarBackground
+                        )
                     }
                     if (channelParticipant == null) {
                         channelParticipant = arrayListOf()
