@@ -39,9 +39,13 @@ class GameSessionDataSource {
                     )
                 })
                 var nHintsLeft: Int? = null
-                data.gameInfo.players.forEach {
-                    if (it.id == userID)
-                        nHintsLeft = it.nHints
+                if (data.gameInfo.mode == GameMode.COOP && data.sprintHints != null) {
+                    nHintsLeft = data.sprintHints.toInt()
+                } else {
+                    data.gameInfo.players.forEach {
+                        if (it.id == userID)
+                            nHintsLeft = it.nHints
+                    }
                 }
                 var guessesLeft: Int? = null
 
@@ -102,9 +106,13 @@ class GameSessionDataSource {
                 val data = it.data?.onGameSessionChange
                 if (data != null && data.gameInfo.players != null) {
                     var nHintsLeft: Int? = null
-                    data.gameInfo.players.forEach {
-                        if (it.id == userID)
-                            nHintsLeft = it.nHints
+                    if (data.gameInfo.mode == GameMode.COOP && data.sprintHints != null) {
+                        nHintsLeft = data.sprintHints.toInt()
+                    } else {
+                        data.gameInfo.players.forEach {
+                            if (it.id == userID)
+                                nHintsLeft = it.nHints
+                        }
                     }
                     var guessesLeft: Int? = null
 
@@ -144,7 +152,8 @@ class GameSessionDataSource {
                         data.gameInfo.mode,
                         data.gameState,
                         nHintsLeft,
-                        winners
+                        winners,
+                        isCoopGuessSuccesful = data.sprintGuess?:false
                     )
                     onGameSessionChange(gameSession)
                 }
@@ -291,7 +300,7 @@ class GameSessionDataSource {
         pathOrderGenerator: Double
     ): Double? {
 
-        val opacity:Double = pathPointInput.paint.alpha.toDouble()/255
+        val opacity: Double = pathPointInput.paint.alpha.toDouble() / 255
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
             pathUID,
@@ -371,7 +380,7 @@ class GameSessionDataSource {
                             colorStroke.green,
                             colorStroke.blue
                         )
-                    }else if(!data.strokeColor.isNullOrEmpty()){
+                    } else if (!data.strokeColor.isNullOrEmpty()) {
                         colorStroke = Color.parseColor(data.strokeColor)
 
                     }
@@ -397,7 +406,7 @@ class GameSessionDataSource {
                         "ManualDrawingReceive",
                         data.point.order.toString() + " - (" + data.point.x + "," + data.point.y + ")"
                     )
-                    if(drawPoint.orderID >=0)
+                    if (drawPoint.orderID >= 0)
                         onDraw(drawPoint)
                 } else if (data?.commandStatus == CommandStatus.REDO && data.commandPathId != null) {
                     val serverDrawHistoryCommand =
