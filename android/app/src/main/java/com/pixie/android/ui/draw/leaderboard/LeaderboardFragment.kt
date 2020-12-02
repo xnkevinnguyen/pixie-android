@@ -1,14 +1,18 @@
 package com.pixie.android.ui.draw.leaderboard
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ListView
+import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 import com.pixie.android.R
 import com.pixie.android.ui.draw.leaderboard.adapters.*
@@ -33,6 +37,10 @@ class LeaderboardFragment: Fragment() {
         val freeLayout = root.findViewById<LinearLayout>(R.id.free_layout)
         val soloLayout = root.findViewById<LinearLayout>(R.id.solo_layout)
         val coopLayout = root.findViewById<LinearLayout>(R.id.coop_layout)
+
+        val tab1 = root.findViewById<TabItem>(R.id.tab1)
+        leaderboardTab.setSelectedTabIndicatorColor(Color.WHITE)
+
         leaderboardTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Do nothing
@@ -43,7 +51,6 @@ class LeaderboardFragment: Fragment() {
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-
                 if (tab?.position ==0){ // free
                     freeLayout.visibility= View.VISIBLE
                     soloLayout.visibility = View.INVISIBLE
@@ -59,6 +66,8 @@ class LeaderboardFragment: Fragment() {
                     soloLayout.visibility = View.INVISIBLE
                     coopLayout.visibility = View.VISIBLE
                 }
+                leaderboardTab.setSelectedTabIndicatorColor(Color.WHITE)
+
             }
 
         })
