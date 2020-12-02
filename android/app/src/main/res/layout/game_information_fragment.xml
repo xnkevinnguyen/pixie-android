@@ -35,6 +35,7 @@
             android:layout_gravity="center">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/timer"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:background="@drawable/game_timer">
