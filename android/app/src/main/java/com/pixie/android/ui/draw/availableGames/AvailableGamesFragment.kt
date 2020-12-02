@@ -1,5 +1,6 @@
 package com.pixie.android.ui.draw.availableGames
 
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -18,6 +19,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pixie.android.R
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
 import com.pixie.android.type.Language
@@ -86,13 +88,13 @@ class AvailableGamesFragment : Fragment() {
         )
         spinnerLanguage.adapter = adapterLang
 
-        if(chatViewModel.isUserInAGame()){
-            createBtn.isEnabled = false
-            createBtn.alpha = 0.5f
-        }else {
-            createBtn.isEnabled = true
-            createBtn.alpha = 1.0f
-        }
+//        if(chatViewModel.isUserInAGame()){
+//            createBtn.isEnabled = false
+//            createBtn.alpha = 0.5f
+//        }else {
+//            createBtn.isEnabled = true
+//            createBtn.alpha = 1.0f
+//        }
         createBtn.setOnClickListener {
             // Forcing value in preferences to always be in English and not change because of the language change
             val inputValue = if(spinnerLanguage.selectedItem.toString() == requireContext().resources.getString(R.string.eng)) "English"
@@ -100,19 +102,66 @@ class AvailableGamesFragment : Fragment() {
             editorGame.putString(Constants.GAME_LANGUAGE, inputValue)
             editorGame.apply()
 
-            val gameData = availableGamesViewModel.createGame(getGameMode(), getGameDifficulty(), getGameLanguage())
+            if(chatViewModel.isUserInAGame()){
+                val dialog = Dialog(requireContext())
+                dialog.setContentView(R.layout.leave_game_dialog)
+                val dismissButton = dialog.findViewById<Button>(R.id.dismiss)
+                val leaveGameButton = dialog.findViewById<Button>(R.id.leave)
 
-            if (gameData != null) {
-
-                gameData?.channelID?.let { id ->
-                    chatViewModel.setCurrentChannelID(
-                        id
-                    )
+                dismissButton.setOnClickListener {
+                    dialog.dismiss()
                 }
-            }
 
-            val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.nav_chat)
+                leaveGameButton.setOnClickListener {
+                    val gameData = chatViewModel.getUserGameData()
+                    if(gameData != null){
+                        val gameId = gameData.gameID
+                        if(gameId != null) {
+                            chatViewModel.exitGame(gameId)
+                            chatViewModel.exitChannel(gameData.channelID)
+                        }
+                    }
+
+                    val game = availableGamesViewModel.createGame(
+                        getGameMode(),
+                        getGameDifficulty(),
+                        getGameLanguage()
+                    )
+
+                    if(game != null) {
+
+                        game.channelID.let { id ->
+                            chatViewModel.setCurrentChannelID(
+                                id
+                            )
+                        }
+                    }
+
+                    val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+                    navController.navigate(R.id.nav_chat)
+
+                    dialog.dismiss()
+                }
+                dialog.show()
+            } else {
+                val gameData = availableGamesViewModel.createGame(
+                    getGameMode(),
+                    getGameDifficulty(),
+                    getGameLanguage()
+                )
+
+                if(gameData != null) {
+
+                    gameData.channelID.let { id ->
+                        chatViewModel.setCurrentChannelID(
+                            id
+                        )
+                    }
+                }
+
+                val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.nav_chat)
+            }
         }
         return root
     }
