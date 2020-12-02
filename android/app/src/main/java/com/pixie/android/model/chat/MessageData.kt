@@ -10,5 +10,6 @@ data class MessageData (
     val userName: String = "",
     val timePosted: String = "",
     var shouldBeHidden:Boolean = false,
-    var isFromHost:Boolean = false
+    var isFromHost:Boolean = false,
+    var channelParticipant: ChannelParticipant
 )
