@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -46,7 +44,7 @@ class GameChatFragment : Fragment() {
         val editText = root.findViewById<EditText>(R.id.editText)
 
 
-        val messageAdapter = MessagingAdapter(requireContext())
+        val messageAdapter = MessagingGameAdapter(requireContext())
         //val participantAdapter = ChannelParticipantAdapter(requireContext())
         val factory = InjectorUtils.provideGameChatViewModelFactory()
 
