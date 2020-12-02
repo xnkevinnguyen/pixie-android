@@ -109,7 +109,7 @@
     <string name="new_game">Nouvelle Partie</string>
     <string name="guess">Deviner</string>
     <string name="message">Message</string>
-    <string name="guess_left">Suppositions restantes</string>
+    <string name="guess_left">%1$s Suppositions restantes</string>
     <string name="kick">Retirer Joueur</string>
     <string name="leave">Quitter Partie</string>
     <string name="not_available">Indisponible</string>

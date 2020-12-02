@@ -128,7 +128,7 @@ class GameRepository(private val dataSource: GameDataSource,
             }
         }
 
-        if(gameData?.status == GameStatus.PENDING){
+        if(gameData?.status == GameStatus.PENDING || gameData?.status == GameStatus.READY){
             return gameData
         }
         return null
