@@ -6,6 +6,7 @@ subscription OnGameSessionChange($gameSessionId:Float!){
         currentRound
         status
         sprintTries
+        sprintHints
         sprintScore
         gameState
         gameHall{
