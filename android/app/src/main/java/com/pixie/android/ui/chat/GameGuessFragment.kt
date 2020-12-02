@@ -17,6 +17,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.pixie.android.R
+import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameState
 import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.utilities.Constants
 import com.pixie.android.utilities.InjectorUtils
@@ -36,7 +38,10 @@ class GameGuessFragment : Fragment() {
             container, false
         )
 
-        preferencesGame = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_GAME, Context.MODE_PRIVATE)
+        preferencesGame = requireContext().getSharedPreferences(
+            Constants.SHARED_PREFERENCES_GAME,
+            Context.MODE_PRIVATE
+        )
         editorGame = preferencesGame.edit()
 
         editorGame.putString(Constants.GAME_CHAT_VALUE, "message")
@@ -56,11 +61,17 @@ class GameGuessFragment : Fragment() {
 
 
         val factoryChat = InjectorUtils.provideChatViewModelFactory()
-        val chatViewModel = ViewModelProvider(ViewModelStore(),factoryChat).get(ChatViewModel::class.java)
-        val preferencesSettings = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
-        val soundOn:Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
-        val mediaPlayerCorrectAnswer = chatViewModel.createMediaPlayer(R.raw.correct, requireContext())
-        val mediaPlayerIncorrectAnswer = chatViewModel.createMediaPlayer(R.raw.incorrect, requireContext())
+        val chatViewModel =
+            ViewModelProvider(ViewModelStore(), factoryChat).get(ChatViewModel::class.java)
+        val preferencesSettings = requireContext().getSharedPreferences(
+            Constants.SHARED_PREFERENCES_SETTING,
+            Context.MODE_PRIVATE
+        )
+        val soundOn: Boolean = preferencesSettings.getBoolean(Constants.NOTIFICATION, true)
+        val mediaPlayerCorrectAnswer =
+            chatViewModel.createMediaPlayer(R.raw.correct, requireContext())
+        val mediaPlayerIncorrectAnswer =
+            chatViewModel.createMediaPlayer(R.raw.incorrect, requireContext())
         val gameInfoFactory = InjectorUtils.provideGameInformationViewModelFactory()
 
         val gameInfoViewModel =
@@ -70,7 +81,7 @@ class GameGuessFragment : Fragment() {
 
         val guessesLeft = gameInfoViewModel.getGameSession().value?.guessesLeft?.toInt()
 
-        guessEditText.hint = String.format(resources.getString(R.string.guess_left),guessesLeft)
+        guessEditText.hint = String.format(resources.getString(R.string.guess_left), guessesLeft)
         sendMessage.setOnClickListener {
             val message = guessEditText.text.toString()
             if (message.isNotBlank()) {
@@ -98,14 +109,32 @@ class GameGuessFragment : Fragment() {
 
         }
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
-            if(it.guessesLeft !=null){
-                guessEditText.hint = String.format(resources.getString(R.string.guess_left),it.guessesLeft?.toInt())
+            if (it.guessesLeft != null) {
+                guessEditText.hint =
+                    String.format(resources.getString(R.string.guess_left), it.guessesLeft?.toInt())
 
             }
-            if(gameInfoViewModel.shouldDisplayHints(it.currentDrawerId,it.mode)){
+            if (gameInfoViewModel.shouldDisplayHints(it.currentDrawerId, it.mode)) {
                 guessArea.visibility = View.VISIBLE
-            }else{
+            } else {
                 guessArea.visibility = View.INVISIBLE
+            }
+
+            if (it.mode == GameMode.COOP && it.isCoopGuessSuccesful && chatViewModel.getShouldPlayCoopSound()) {
+                if (soundOn)
+                    chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
+                else
+                    chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
+
+                chatViewModel.turnOffCoopSound()
+
+            }else if(it.mode == GameMode.COOP && !it.isCoopGuessSuccesful && chatViewModel.getShouldPlayCoopSound()){
+                if (soundOn)
+                    chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
+                else
+                    chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
+
+                chatViewModel.turnOffCoopSound()
             }
         })
 
@@ -113,21 +142,30 @@ class GameGuessFragment : Fragment() {
         guessEditText.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
                 if (event.action == KeyEvent.ACTION_DOWN &&
-                    keyCode == KeyEvent.KEYCODE_ENTER) {
+                    keyCode == KeyEvent.KEYCODE_ENTER
+                ) {
                     val message = guessEditText.text.toString()
                     if (message.isNotBlank()) {
-                        gameChatViewModel.sendGuess(message){
-                            if(it ==true){
-                                Toast.makeText(requireContext(),
+                        gameChatViewModel.sendGuess(message) {
+                            if (it == true) {
+                                Toast.makeText(
+                                    requireContext(),
                                     resources.getString(R.string.correct_guess),
-                                    Toast.LENGTH_LONG).show()
-                                if (soundOn) chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                if (soundOn) chatViewModel.startMediaPlayer(
+                                    mediaPlayerCorrectAnswer
+                                )
                                 else chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
-                            }else if( it==false){
-                                Toast.makeText(requireContext(),
+                            } else if (it == false) {
+                                Toast.makeText(
+                                    requireContext(),
                                     resources.getString(R.string.incorrect_guess),
-                                    Toast.LENGTH_LONG).show()
-                                if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                if (soundOn) chatViewModel.startMediaPlayer(
+                                    mediaPlayerIncorrectAnswer
+                                )
                                 else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
                             }
                         }
@@ -145,18 +183,24 @@ class GameGuessFragment : Fragment() {
                 val message = guessEditText.text.toString()
 
                 if (message.isNotBlank()) {
-                    gameChatViewModel.sendGuess(message){
-                        if(it ==true){
-                            Toast.makeText(requireContext(),
+                    gameChatViewModel.sendGuess(message) {
+                        if (it == true) {
+                            Toast.makeText(
+                                requireContext(),
                                 resources.getString(R.string.correct_guess),
-                                Toast.LENGTH_LONG).show()
-                            if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
+                                Toast.LENGTH_LONG
+                            ).show()
+                            if (soundOn) chatViewModel.startMediaPlayer(mediaPlayerCorrectAnswer)
                             else chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
-                        }else if( it==false){
-                            Toast.makeText(requireContext(),
+                        } else if (it == false) {
+                            Toast.makeText(
+                                requireContext(),
                                 resources.getString(R.string.incorrect_guess),
-                                Toast.LENGTH_LONG).show()
-                            if(soundOn)chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
+                                Toast.LENGTH_LONG
+                            ).show()
+                            if (soundOn) chatViewModel.startMediaPlayer(
+                                mediaPlayerIncorrectAnswer
+                            )
                             else chatViewModel.releaseMediaPlayer(mediaPlayerIncorrectAnswer)
                         }
                     }

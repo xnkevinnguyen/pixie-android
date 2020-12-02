@@ -29,6 +29,7 @@ class GameSessionRepository(
 
     // word is displayed to the user who is drawing
     private var shouldShowWord = MutableLiveData<ShowWordinGame>()
+    private var shouldPlayCoopGuessSound = false
     private var channelID: Double = 0.0
     private var gameSessionSubscription: Job? = null
     private var timerSubscription: Job? = null
@@ -47,6 +48,12 @@ class GameSessionRepository(
     fun getGameSession() = gameSession
 
     fun getIsCanvasLocked() = isCanvasLocked
+
+    fun shouldPlayCoopGuessSound () = shouldPlayCoopGuessSound
+
+    fun turnOffPlayCoopGuessSounds(){
+        shouldPlayCoopGuessSound = false
+    }
 
     // used for the current user to display current word to draw
     fun getShouldShowWord() = shouldShowWord
@@ -178,6 +185,14 @@ class GameSessionRepository(
                     } else {
                         isCanvasLocked.postValue(true)
                     }
+                    if(it.mode ==GameMode.COOP && it.isCoopGuessSuccesful && it.state ==GameState.NEW_ROUND)
+                        shouldPlayCoopGuessSound = true
+                    val previousGuessesLeft = gameSession.value?.guessesLeft
+                    val newGuessesLeft = it.guessesLeft
+                    if(it.mode == GameMode.COOP && previousGuessesLeft !=null && newGuessesLeft !=null && newGuessesLeft< previousGuessesLeft && it.state != GameState.START)
+                        shouldPlayCoopGuessSound = true
+
+
                     gameSession.postValue(it)
 
                 }

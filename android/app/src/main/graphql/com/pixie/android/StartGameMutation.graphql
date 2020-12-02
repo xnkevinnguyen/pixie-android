@@ -6,6 +6,7 @@ mutation startGame($input: StartGameInput!){
         currentRound
         status
         sprintTries
+        sprintHints
         gameState
         gameHall{
             id
