@@ -136,7 +136,7 @@ class ChatViewModel(
 
         if(isUserInAGame() && game!=null){
             val gameInfo = getUserGameData()
-            if(gameInfo != null) {
+            if(gameInfo != null && gameInfo.gameID!=game.id) {
                 exitChannel(gameInfo.channelID)
                 gameInfo.gameID?.let { exitGame(it) }
             }
@@ -157,6 +157,12 @@ class ChatViewModel(
 
     fun getUserGameData():ChannelData?{
         return chatRepository.getUserGameInfo()
+    }
+
+    fun getShouldPlayCoopSound():Boolean = gameSessionRepository.shouldPlayCoopGuessSound()
+
+    fun turnOffCoopSound(){
+        gameSessionRepository.turnOffPlayCoopGuessSounds()
     }
 
 }

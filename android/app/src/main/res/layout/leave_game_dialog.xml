@@ -34,7 +34,7 @@
             android:text="@string/dismiss"
             android:textAlignment="center"
             android:textSize="@dimen/profile_text"
-            android:backgroundTint="#fa4554"/>
+           />
 
         <Button
             android:id="@+id/leave"
@@ -44,6 +44,7 @@
             android:textColor="?colorSecondaryVariant"
             android:text="@string/leave_game"
             android:textAlignment="center"
-            android:textSize="@dimen/profile_text" />
+            android:textSize="@dimen/profile_text"
+            android:backgroundTint="#fa4554"/>
     </LinearLayout>
 </LinearLayout>
