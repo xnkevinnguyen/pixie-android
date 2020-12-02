@@ -8,6 +8,7 @@ subscription OnGameSessionChange($gameSessionId:Float!){
         sprintTries
         sprintHints
         sprintScore
+        sprintGuess
         gameState
         gameHall{
             id

@@ -159,4 +159,10 @@ class ChatViewModel(
         return chatRepository.getUserGameInfo()
     }
 
+    fun getShouldPlayCoopSound():Boolean = gameSessionRepository.shouldPlayCoopGuessSound()
+
+    fun turnOffCoopSound(){
+        gameSessionRepository.turnOffPlayCoopGuessSounds()
+    }
+
 }

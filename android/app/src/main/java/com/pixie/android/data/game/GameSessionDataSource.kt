@@ -152,7 +152,8 @@ class GameSessionDataSource {
                         data.gameInfo.mode,
                         data.gameState,
                         nHintsLeft,
-                        winners
+                        winners,
+                        isCoopGuessSuccesful = data.sprintGuess?:false
                     )
                     onGameSessionChange(gameSession)
                 }
