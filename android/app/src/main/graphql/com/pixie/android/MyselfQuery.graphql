@@ -1,0 +1,10 @@
+query getMe{
+    me{
+        id,
+        username,
+        isOnline,
+        isVirtual,
+        avatarForeground,
+        avatarBackground
+    }
+}

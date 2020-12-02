@@ -109,7 +109,7 @@
     <string name="new_game">Nouvelle Partie</string>
     <string name="guess">Deviner</string>
     <string name="message">Message</string>
-    <string name="guess_left">Suppositions restantes</string>
+    <string name="guess_left">%1$s Suppositions restantes</string>
     <string name="kick">Retirer Joueur</string>
     <string name="leave">Quitter Partie</string>
     <string name="not_available">Indisponible</string>
@@ -165,5 +165,17 @@
     <string name="number_player">Pas assez de joueurs</string>
     <string name="seconds">secondes</string>
     <string name="answer_guess">Le mot à deviner était : %1$s</string>
+    <string name="not_disconnected">Toujours Connecté</string>
 
+    <string name="got_to_leaderboard">Aller au classement</string>
+    <string name="you_won">Vous avez gagné!</string>
+    <string name="no_winners">Aucun gagnant!</string>
+    <string name="top_score">Meilleur Score:</string>
+
+    <string name="friend">Amis</string>
+    <string name="other">Autre Joueurs</string>
+    <string name="dismiss">Annuler</string>
+    <string name="leave_game_text">Quittez votre partie actuelle pour en rejoindre une autre.</string>
+
+    <string name="game_invite_error">Cette partie n est plus disponible.</string>
 </resources>

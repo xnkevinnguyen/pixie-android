@@ -2,10 +2,8 @@ package com.pixie.android.data.game
 
 import android.graphics.Color
 import android.graphics.Color.argb
-import android.graphics.Color.valueOf
 import android.graphics.Paint
 import android.util.Log
-import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -21,7 +19,6 @@ import com.pixie.android.type.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.retryWhen
-import kotlin.random.Random
 
 class GameSessionDataSource {
     suspend fun startGame(gameID: Double, userID: Double): GameSessionData? {
@@ -42,14 +39,18 @@ class GameSessionDataSource {
                     )
                 })
                 var nHintsLeft: Int? = null
-                data.gameInfo.players.forEach {
-                    if (it.id == userID)
-                        nHintsLeft = it.nHints
+                if (data.gameInfo.mode == GameMode.COOP && data.sprintHints != null) {
+                    nHintsLeft = data.sprintHints.toInt()
+                } else {
+                    data.gameInfo.players.forEach {
+                        if (it.id == userID)
+                            nHintsLeft = it.nHints
+                    }
                 }
                 var guessesLeft: Int? = null
 
                 data.gameInfo.scores?.forEach {
-                    if(it.user.id == userID)
+                    if (it.user.id == userID)
                         guessesLeft = it.tries.toInt()
                 }
                 return GameSessionData(
@@ -105,14 +106,18 @@ class GameSessionDataSource {
                 val data = it.data?.onGameSessionChange
                 if (data != null && data.gameInfo.players != null) {
                     var nHintsLeft: Int? = null
-                    data.gameInfo.players.forEach {
-                        if (it.id == userID)
-                            nHintsLeft = it.nHints
+                    if (data.gameInfo.mode == GameMode.COOP && data.sprintHints != null) {
+                        nHintsLeft = data.sprintHints.toInt()
+                    } else {
+                        data.gameInfo.players.forEach {
+                            if (it.id == userID)
+                                nHintsLeft = it.nHints
+                        }
                     }
                     var guessesLeft: Int? = null
 
                     data.gameInfo.scores?.forEach {
-                        if(it.user.id == userID)
+                        if (it.user.id == userID)
                             guessesLeft = it.tries.toInt()
                     }
                     val players = ArrayList(data.gameInfo.scores!!.map {
@@ -147,7 +152,8 @@ class GameSessionDataSource {
                         data.gameInfo.mode,
                         data.gameState,
                         nHintsLeft,
-                        winners
+                        winners,
+                        isCoopGuessSuccesful = data.sprintGuess?:false
                     )
                     onGameSessionChange(gameSession)
                 }
@@ -254,19 +260,20 @@ class GameSessionDataSource {
             })
 
             var colorStroke: Int? = null
-            if (!data.strokeColor.isNullOrEmpty()) {
+            if (!data.strokeColor.isNullOrEmpty() && data.opacity != null) {
                 colorStroke = Color.parseColor(data.strokeColor)
+                colorStroke = argb(
+                    (data.opacity * 255).toInt(),
+                    colorStroke.red,
+                    colorStroke.green,
+                    colorStroke.blue
+                )
             }
             if (colorStroke == null) {
                 colorStroke = Color.BLACK
             }
-            var opacity:Double = 255.0
-            if (data.opacity !=null){
-                opacity=data.opacity
-            }
 
             val paint = Paint().apply {
-                (opacity * 255).toInt()
                 color = colorStroke
                 style = Paint.Style.STROKE
                 strokeJoin = Paint.Join.ROUND
@@ -289,20 +296,23 @@ class GameSessionDataSource {
         gameSessionID: Double,
         userID: Double,
         pathPointInput: ManualPathPointInput,
-        pathIDGenerator: Double,
+        pathUID: Double,
         pathOrderGenerator: Double
     ): Double? {
-        val pathUniqueID = 1000000 * userID + gameSessionID * 10000 + pathIDGenerator
+
+        val opacity: Double = pathPointInput.paint.alpha.toDouble() / 255
         val input: ManualDrawingInput = ManualDrawingInput(
             gameSessionID,
-            pathUniqueID,
+            pathUID,
             DataPoints(
                 pathPointInput.x.toDouble(),
                 pathPointInput.y.toDouble(),
                 pathOrderGenerator
             ),
             ("#" + Integer.toHexString(pathPointInput.paint.color).substring(2)).toInput(),
+            opacity.toInput(),
             pathPointInput.paint.strokeWidth.toDouble().toInput(),
+
             pathPointInput.pathStatus
         )
         try {
@@ -315,7 +325,7 @@ class GameSessionDataSource {
                 apolloClient(userID).mutate(ManualDrawMutation(input)).toDeferred().await()
             val data = response.data
             if (data != null) {
-                return pathUniqueID
+                return pathUID
             }
         } catch (e: ApolloException) {
             Log.d("ApolloException", e.toString())
@@ -360,10 +370,19 @@ class GameSessionDataSource {
                 val data = it.data?.onManualPlayerDrawing
 //                if (data?.commandStatus == CommandStatus.NONE && data.point != null && data.strokeWidth != null && data.commandPathId != null) {
                 if (data?.commandStatus == CommandStatus.NONE && data?.point != null && data.strokeWidth != null) {
-                    // Handles adding a point
+
                     var colorStroke: Int? = null
-                    if (!data.strokeColor.isNullOrEmpty()) {
+                    if (!data.strokeColor.isNullOrEmpty() && data.strokeOpacity != null) {
                         colorStroke = Color.parseColor(data.strokeColor)
+                        colorStroke = argb(
+                            (data.strokeOpacity * 255).toInt(),
+                            colorStroke.red,
+                            colorStroke.green,
+                            colorStroke.blue
+                        )
+                    } else if (!data.strokeColor.isNullOrEmpty()) {
+                        colorStroke = Color.parseColor(data.strokeColor)
+
                     }
                     if (colorStroke == null) {
                         colorStroke = Color.BLACK
@@ -387,7 +406,7 @@ class GameSessionDataSource {
                         "ManualDrawingReceive",
                         data.point.order.toString() + " - (" + data.point.x + "," + data.point.y + ")"
                     )
-                    if (drawPoint.x >= 0 && drawPoint.y >= 0)
+                    if (drawPoint.orderID >= 0)
                         onDraw(drawPoint)
                 } else if (data?.commandStatus == CommandStatus.REDO && data.commandPathId != null) {
                     val serverDrawHistoryCommand =

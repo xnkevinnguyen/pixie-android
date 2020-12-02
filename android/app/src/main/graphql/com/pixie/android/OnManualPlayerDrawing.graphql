@@ -12,6 +12,7 @@ subscription onManualPlayerDrawing($gameSessionId:Float!){
         status
         commandPathId
         commandStatus
+        strokeOpacity
     }
 
 }

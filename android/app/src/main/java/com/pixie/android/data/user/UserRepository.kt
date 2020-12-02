@@ -8,6 +8,7 @@ import com.pixie.android.model.chat.ChannelData
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.user.*
 import com.pixie.android.type.Language
+import com.pixie.android.type.Theme
 import com.pixie.android.utilities.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,6 @@ class UserRepository(val dataSource: UserDataSource) {
     private var user: LoggedInUser? = null
 
     private var avatarColor: AvatarColorData = AvatarColorData(null, null)
-
 
     fun getUser(): LoggedInUser {
         val userCopy = user
@@ -60,6 +60,10 @@ class UserRepository(val dataSource: UserDataSource) {
         return avatarColor
     }
 
+    fun getMe(): ChannelParticipant?{
+        return fetchMe()
+    }
+
     private fun fetchAvatarColor(){
         var colors: AvatarColorData
         runBlocking {
@@ -68,6 +72,13 @@ class UserRepository(val dataSource: UserDataSource) {
         avatarColor=colors
     }
 
+    private fun fetchMe(): ChannelParticipant?{
+        var me:ChannelParticipant?
+        runBlocking {
+            me = dataSource.getMe(getUser().userId)
+        }
+        return me
+    }
 
     fun logout() {
         // Logout should ALWAYS be called after exit operations
@@ -127,10 +138,12 @@ class UserRepository(val dataSource: UserDataSource) {
         lastName: String,
         foreground:String,
         background:String,
+        language: Language,
+        theme: Theme,
         onLoginResult: (authResult: AuthResult) -> Unit
     ) {
         CoroutineScope(IO).launch {
-            val response = dataSource.register(username, password, firstName, lastName, foreground, background)
+            val response = dataSource.register(username, password, firstName, lastName, foreground, background, language, theme)
             lateinit var authResult: AuthResult
 
             if (response?.register?.user?.id != null) {// user needs to exist

@@ -12,27 +12,12 @@
         android:id="@+id/tv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:text="@string/register_title"
         android:textAlignment="center"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/error_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
-        android:visibility="gone"
-        android:text="@string/failed_login"
-        android:textColor= "@color/red"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_logo"/>
 
     <LinearLayout
         android:id="@+id/user_info_name"
@@ -41,14 +26,14 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/error_login">
+        app:layout_constraintTop_toBottomOf="@id/tv_logo">
 
         <EditText
             android:id="@+id/first_name"
             android:layout_width="240dp"
             android:layout_height="50dp"
             android:layout_marginLeft="80dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="28dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/ic_et_custom"
             android:hint="@string/name"
@@ -60,7 +45,7 @@
             android:id="@+id/last_name"
             android:layout_width="240dp"
             android:layout_height="50dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="28dp"
             android:layout_marginRight="80dp"
             android:background="@drawable/ic_et_custom"
             android:hint="@string/surname"
@@ -142,11 +127,81 @@
         app:layout_constraintTop_toBottomOf="@+id/et_password"
         app:layout_constraintRight_toRightOf="@id/et_repassword"/>
 
+    <LinearLayout
+        android:id="@+id/radio_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_repassword">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:textSize="@dimen/profile_text"
+            android:layout_marginRight="20dp"/>
+
+        <RadioGroup
+            android:id="@+id/language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_eng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_uk_flag"
+                android:layout_marginRight="25dp"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/radio_fr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_flag_of_france"/>
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radio_button">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/theme"
+            android:layout_marginRight="20dp"
+            android:textSize="@dimen/profile_text"/>
+
+        <Spinner
+            android:id="@+id/spinner_theme"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/spinner_register"
+            android:layout_weight="1"
+            android:spinnerMode="dropdown"/>
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="300dp"
         android:layout_height="0dp"
         android:layout_weight="1"
-
+        android:layout_marginTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.pixie.android.R
+import com.pixie.android.type.GameStatus
 import com.pixie.android.ui.chat.ChatViewModel
 import com.pixie.android.ui.draw.gameInformation.GameInformationViewModel
 import com.pixie.android.ui.draw.profile.ProfileViewModel
@@ -44,9 +45,13 @@ class DrawFragment : Fragment() {
         gameInfoViewModel.getGameSession().observe(viewLifecycleOwner, Observer {
             val isUserTheDrawer = gameInfoViewModel.isUserTheDrawer(it.currentDrawerId)
 
-            if(isUserTheDrawer) {
+            if(isUserTheDrawer ) {
                 tools.visibility = View.VISIBLE
             } else {
+                tools.visibility = View.GONE
+            }
+
+            if(it.status == GameStatus.ENDED){
                 tools.visibility = View.GONE
             }
         })
@@ -54,30 +59,7 @@ class DrawFragment : Fragment() {
         return root
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        val factory = InjectorUtils.provideGameInformationViewModelFactory()
-//        val gameInfoViewModel = ViewModelProvider(this,factory).get(GameInformationViewModel::class.java)
-//
-//        val chatFactory = InjectorUtils.provideChatViewModelFactory()
-//        val chatViewModel = ViewModelProvider(this, chatFactory).get(ChatViewModel::class.java)
-//
-//        return when (item.itemId) {
-//            android.R.id.home ->{
-//                val gameID = gameInfoViewModel.getGameSession().value?.id
-//                val channelID = gameInfoViewModel.getGameSession().value?.channelID
-//                if (channelID != null) {
-//                    chatViewModel.exitChannel(channelID)
-//                }
-//                if (gameID != null) {
-//                    chatViewModel.exitGame(gameID)
-//                }
-//                val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-//                navController.navigate(R.id.nav_home)
-//                return true
-//            }
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
+
 
 
 }

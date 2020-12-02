@@ -167,4 +167,18 @@
     <string name="number_player">Not enough players</string>
     <string name="seconds">seconds</string>
     <string name="answer_guess">The word to guess was : %1$s</string>
+
+    <string name="not_disconnected">Still Connected</string>
+    <string name="got_to_leaderboard">Go to leaderboard</string>
+    <string name="you_won">You have won!</string>
+    <string name="no_winners">No winners!</string>
+    <string name="top_score">Top Score:</string>
+
+    <string name="friend">Friends</string>
+    <string name="other">Other Players</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="leave_game_text">Leave your current game to join another one.</string>
+
+    <string name="game_invite_error">This game is not available anymore.</string>
+
 </resources>

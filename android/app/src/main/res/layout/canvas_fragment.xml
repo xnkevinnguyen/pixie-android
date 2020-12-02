@@ -11,17 +11,17 @@
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:visibility="gone" />
+
     <TextView
         android:id="@+id/display_word_canvas"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="5dp"
-        android:textSize="@dimen/regular_size"
-        android:textColor="@color/dark_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/dark_background"
+        android:textSize="@dimen/regular_size"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.pixie.android.ui.draw.canvas.CanvasView
         android:id="@+id/my_canvas"
@@ -47,16 +47,18 @@
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/display_end_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="@color/dark_background"
         android:background="@android:color/white"
+        android:backgroundTint="@color/dark_background"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
 
-        android:visibility="visible">
+        app:layout_constraintTop_toTopOf="parent">
+
         <nl.dionsegijn.konfetti.KonfettiView
             android:id="@+id/viewKonfetti"
             android:layout_width="match_parent"
@@ -65,82 +67,125 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:layout_centerHorizontal="true">
+            android:paddingTop="30dp"
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/game_result"
-                android:textSize="40dp"
-                android:textColor="?colorSecondaryVariant"
-                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
                 android:gravity="center"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="15dp"/>
+                android:text="@string/game_result"
+                android:textColor="?colorSecondaryVariant"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="200dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
                 android:background="?color"
                 android:gravity="center"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp">
+                android:orientation="vertical"
+                android:layout_marginVertical="20dp">
 
                 <TextView
                     android:id="@+id/mode_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
                     android:background="?colorSecondary"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/profile_titles"
                     android:gravity="center"
-                    android:layout_marginBottom="15dp"/>
+                    android:textSize="@dimen/profile_text"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/mode_picture"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:layout_margin="15dp"/>
+                    android:layout_margin="10dp" />
 
             </LinearLayout>
 
+
+            <TextView
+                android:id="@+id/winner_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="?colorSecondaryVariant"
+                android:textSize="@dimen/profile_text" />
+
+            <TextView
+                android:id="@+id/winner_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+
+                android:gravity="center"
+                android:text="hey"
+                android:textColor="?colorSecondaryVariant"
+                android:textSize="@dimen/profile_text" />
+
+
             <TextView
                 android:id="@+id/total_score"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/profile_titles"
-                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
                 android:textColor="?colorSecondaryVariant"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="15dp"/>
+                android:textSize="@dimen/profile_text" />
 
             <TextView
                 android:id="@+id/number_round"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="?colorSecondaryVariant"
+                android:textSize="@dimen/profile_text" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginStart="20dp"
-                android:gravity="center"
-                android:textColor="?colorSecondaryVariant"
-                android:textSize="@dimen/profile_titles" />
-
-            <Button
-                android:id="@+id/got_to_home"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:text="@string/goto_home"
-                android:background="@drawable/button_drawable"
-                android:textColor="?colorSecondaryVariant"
-                android:textSize="@dimen/profile_titles"
-                android:padding="10dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="20dp"/>
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/go_to_leaderboard"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/button_drawable"
+                    android:padding="5dp"
+                    android:text="@string/got_to_leaderboard"
+                    android:textColor="?colorSecondaryVariant"
+                    android:textSize="@dimen/profile_text" />
+
+                <Button
+                    android:id="@+id/got_to_home"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_drawable"
+                    android:padding="5dp"
+                    android:text="@string/goto_home"
+                    android:textColor="?colorSecondaryVariant"
+                    android:textSize="@dimen/profile_text" />
+            </LinearLayout>
+
         </LinearLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

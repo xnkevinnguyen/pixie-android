@@ -3,6 +3,7 @@ package com.pixie.android.ui.draw.availableGames.adapters
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,9 +80,7 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
         if (foregroundColor == null) {
             foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
-        avatarElement.setColorFilter(
-            foregroundColor
-        )
+
 
         var backgroundColor: Int? = null
         if (!participant.avatarBackground.isNullOrEmpty()) {
@@ -90,20 +89,14 @@ class PlayersInGameAdapter(context: Context) : BaseAdapter() {
         if (backgroundColor == null) {
             backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
-        avatarElement.backgroundTintList = ColorStateList.valueOf(
+
+        avatarElement.setColorFilter(
             backgroundColor
         )
+        avatarElement.backgroundTintList = ColorStateList.valueOf(
+            foregroundColor
+        )
 
-
-        val ringElement = rowView.findViewById<ImageView>(R.id.avatar_ring)
-        if (playersViewModel.getFriendList().value?.contains(participant) == true) {
-            ringElement.backgroundTintList =
-                ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_YELLOW))
-        } else {
-            ringElement.backgroundTintList =
-                ColorStateList.valueOf(Color.parseColor(Constants.AVATAR_RING_COLOR_SILVER))
-
-        }
         return rowView
     }
 }

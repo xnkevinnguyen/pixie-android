@@ -75,9 +75,7 @@ class LeaderboardUserAdapter3(context: Context) : BaseAdapter() {
         if (foregroundColor == null) {
             foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
-        avatarElement.setColorFilter(
-            foregroundColor
-        )
+
 
         var backgroundColor: Int? = null
         if (!participant.avatarBackground.isNullOrEmpty()) {
@@ -86,8 +84,12 @@ class LeaderboardUserAdapter3(context: Context) : BaseAdapter() {
         if (backgroundColor == null) {
             backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
-        avatarElement.backgroundTintList = ColorStateList.valueOf(
+        avatarElement.setColorFilter(
             backgroundColor
+        )
+
+        avatarElement.backgroundTintList = ColorStateList.valueOf(
+            foregroundColor
         )
 
         return rowView

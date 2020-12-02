@@ -7,6 +7,7 @@ import com.pixie.android.data.chat.ChatDataSource
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.chat.ChannelData
+import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.model.chat.MessageData
 import com.pixie.android.model.history.ConnectionHistory
 import com.pixie.android.model.history.GameHistory

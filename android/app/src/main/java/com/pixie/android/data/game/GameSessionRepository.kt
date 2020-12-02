@@ -1,10 +1,9 @@
 package com.pixie.android.data.game
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pixie.android.data.chat.ChatRepository
 import com.pixie.android.data.draw.CanvasRepository
+import com.pixie.android.data.draw.DrawingParametersRepository
 import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.RequestResult
 import com.pixie.android.model.draw.CommandType
@@ -23,12 +22,14 @@ class GameSessionRepository(
     private val dataSource: GameSessionDataSource,
     private val userRepository: UserRepository,
     private val canvasRepository: CanvasRepository,
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val drawingParametersRepository: DrawingParametersRepository
 ) {
     private var gameSession = MutableLiveData<GameSessionData>()
 
     // word is displayed to the user who is drawing
     private var shouldShowWord = MutableLiveData<ShowWordinGame>()
+    private var shouldPlayCoopGuessSound = false
     private var channelID: Double = 0.0
     private var gameSessionSubscription: Job? = null
     private var timerSubscription: Job? = null
@@ -47,6 +48,12 @@ class GameSessionRepository(
     fun getGameSession() = gameSession
 
     fun getIsCanvasLocked() = isCanvasLocked
+
+    fun shouldPlayCoopGuessSound () = shouldPlayCoopGuessSound
+
+    fun turnOffPlayCoopGuessSounds(){
+        shouldPlayCoopGuessSound = false
+    }
 
     // used for the current user to display current word to draw
     fun getShouldShowWord() = shouldShowWord
@@ -178,6 +185,8 @@ class GameSessionRepository(
                     } else {
                         isCanvasLocked.postValue(true)
                     }
+                    if(it.mode ==GameMode.COOP && it.isCoopGuessSuccesful && it.state ==GameState.NEW_ROUND)
+                        shouldPlayCoopGuessSound = true
                     gameSession.postValue(it)
 
                 }
@@ -190,6 +199,8 @@ class GameSessionRepository(
     fun sendManualDrawingPoint(pathPointInput: ManualPathPointInput) {
         //Only send a manual drawing if it's user's turn
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL){
+        val pathUID =   1000000 * userRepository.getUser().userId + getGameSessionID() * 10000 + pathIDGenerator
+
         if (gameSession.value?.mode == GameMode.FREEFORALL) {
             val order = pathOrderGenerator
             CoroutineScope(Dispatchers.IO).launch {
@@ -197,7 +208,7 @@ class GameSessionRepository(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
-                    pathIDGenerator,
+                    pathUID,
                     order
                 )
 
@@ -209,30 +220,32 @@ class GameSessionRepository(
     }
 
     fun sendManualDrawingFinalPoint(
-        pathPointInput: ManualPathPointInput,
-        onResult: (Double) -> Unit
-    ) {
+        pathPointInput: ManualPathPointInput
+    ):Double {
         //Only send a manual drawing if it's user's turn
 //        if(isUserDrawingTurn() && gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id !=null){
         if (gameSession.value?.mode == GameMode.FREEFORALL && gameSession.value?.id != null) {
+            val pathUID =   1000000 * userRepository.getUser().userId + getGameSessionID() * 10000 + pathIDGenerator
+
             CoroutineScope(Dispatchers.IO).launch {
                 val pathID = dataSource.sendManualDraw(
                     getGameSessionID(),
                     userRepository.getUser().userId,
                     pathPointInput,
-                    pathIDGenerator,
+                    pathUID,
                     pathOrderGenerator
                 )
                 if (pathID != null) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        onResult(pathID)
                         pathIDGenerator += 1
                         pathOrderGenerator = 0.0
                     }
 
                 }
             }
+            return pathUID
         }
+        return 0.0
     }
 
     fun sendManualCommand(
@@ -362,7 +375,21 @@ class GameSessionRepository(
         timerSubscription = null
         pathSubscription = null
         manualPathSubscription = null
-        gameSession = MutableLiveData()
+        gameSession.postValue(
+            GameSessionData(
+            0.0,
+                null,
+          "",
+                0.0,null,
+                GameStatus.PENDING,
+                0.0,
+                arrayListOf(),
+                GameMode.FREEFORALL,
+                null,null,null,
+                isFakeGameSession = true
+
+        ))
+        drawingParametersRepository.resetParameters()
         // send leave request
     }
 
@@ -375,7 +402,8 @@ class GameSessionRepository(
         fun getInstance() = instance ?: synchronized(this) {
             instance ?: GameSessionRepository(
                 dataSource, UserRepository.getInstance(),
-                drawCommandHistoryRepository, ChatRepository.getInstance()
+                drawCommandHistoryRepository, ChatRepository.getInstance(),
+                drawingParametersRepository = DrawingParametersRepository.getInstance()
             ).also {
                 instance = it
             }

@@ -3,6 +3,7 @@ package com.pixie.android.model.game
 import com.pixie.android.model.chat.ChannelParticipant
 import com.pixie.android.type.GameDifficulty
 import com.pixie.android.type.GameMode
+import com.pixie.android.type.GameStatus
 import com.pixie.android.type.Language
 
 data class GameInvitation (
@@ -11,5 +12,6 @@ data class GameInvitation (
     val channelID:Double,
     val gameMode: GameMode,
     val difficulty:GameDifficulty,
-    val language: Language
+    val language: Language,
+    val status: GameStatus
 )

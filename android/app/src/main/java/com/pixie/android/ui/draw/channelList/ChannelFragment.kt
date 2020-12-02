@@ -89,22 +89,22 @@ class ChannelFragment : Fragment() {
             userChannelAdapter.set(userChannelList)
             val currentChannelID = chatViewModel.getCurrentChannelID().value
             val currentChannel = channelViewModel.getCurrentChannelInfo(currentChannelID)
-            val nParticipant = currentChannel?.participantList?.size
+            val participants = currentChannel?.participantList
 
-            if (nParticipant != null && nParticipant >= 2) {
-
-                startGameBtn.isEnabled = true
-                startGameBtn.alpha = 1f
+            if (participants !=null && participants.size >= 2) {
+                val atLeast2ParticipantReel = areAtLeast2ParticipantReel(participants)
+                if(atLeast2ParticipantReel) {
+                    startGameBtn.isEnabled = true
+                    startGameBtn.alpha = 1f
+                }else{
+                    startGameBtn.isEnabled = false
+                    startGameBtn.alpha = 0.5f
+                }
             } else {
                 startGameBtn.isEnabled = false
                 startGameBtn.alpha = 0.5f
             }
         })
-
-        val gameInfoFactory = InjectorUtils.provideGameInformationViewModelFactory()
-        val gameInfoViewModel =
-            ViewModelProvider(this, gameInfoFactory).get(GameInformationViewModel::class.java)
-
 
         //start game
         startGameBtn.setOnClickListener {
@@ -136,18 +136,7 @@ class ChannelFragment : Fragment() {
             }
         }
 
-        //handles if someone else started the game
-        val gameSession = chatViewModel.getGameSession()
-        gameSession.observe(viewLifecycleOwner, Observer {
-            if (it.status.equals(GameStatus.STARTED)) {
 
-                val navController =
-                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                navController.navigate(R.id.nav_drawing)
-
-
-            }
-        })
         //add players
         addPlayerBtn.setOnClickListener {
             val dialog = Dialog(requireContext())
@@ -167,7 +156,8 @@ class ChannelFragment : Fragment() {
             dialog.setContentView(R.layout.add_player)
             val createVirtualPlayer = dialog.findViewById<Button>(R.id.add_virtual_player)
             val game = chatViewModel.getGameSession()
-            if(game.value?.mode == GameMode.COOP) {
+            val nbPlayers = game.value?.players?.size
+            if(game.value?.mode == GameMode.COOP || (nbPlayers != null && nbPlayers >= 8) ) {
                 createVirtualPlayer.isEnabled = false
                 createVirtualPlayer.alpha = 0.5f
             }
@@ -236,4 +226,20 @@ class ChannelFragment : Fragment() {
         return root
     }
 
+    fun areAtLeast2ParticipantReel(participants: List<ChannelParticipant>):Boolean{
+        var nbParticipant =0
+        for(participant in participants){
+            var isVirtual = participant.isVirtual
+            if(isVirtual!=null){
+                if(!isVirtual){
+                    nbParticipant++
+                }
+            }
+        }
+        if(nbParticipant>=2){
+            return true
+        }
+
+        return false
+    }
 }

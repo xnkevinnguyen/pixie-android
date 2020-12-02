@@ -42,11 +42,10 @@ class CanvasViewModel(
     ) {
         val manualPathPointInput = ManualPathPointInput(x, y, pathStatus, paint)
         //should return an id
-        gameSessionRepository.sendManualDrawingFinalPoint(manualPathPointInput) {
-            val command = CanvasCommand(CommandType.DRAW, paint, pathDataPoints)
+        val ID=gameSessionRepository.sendManualDrawingFinalPoint(manualPathPointInput)
+        val command = CanvasCommand(CommandType.DRAW, paint, pathDataPoints)
 
-            canvasRepository.addCanvasCommand(it, command)
-        }
+        canvasRepository.addCanvasCommand(ID, command)
 
     }
 
