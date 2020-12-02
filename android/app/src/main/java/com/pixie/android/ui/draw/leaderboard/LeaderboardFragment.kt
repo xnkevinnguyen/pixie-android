@@ -1,5 +1,6 @@
 package com.pixie.android.ui.draw.leaderboard
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
@@ -38,6 +39,8 @@ class LeaderboardFragment: Fragment() {
         val coopLayout = root.findViewById<LinearLayout>(R.id.coop_layout)
 
         val tab1 = root.findViewById<TabItem>(R.id.tab1)
+        leaderboardTab.setSelectedTabIndicatorColor(Color.WHITE)
+
         leaderboardTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Do nothing
@@ -63,6 +66,8 @@ class LeaderboardFragment: Fragment() {
                     soloLayout.visibility = View.INVISIBLE
                     coopLayout.visibility = View.VISIBLE
                 }
+                leaderboardTab.setSelectedTabIndicatorColor(Color.WHITE)
+
             }
 
         })
