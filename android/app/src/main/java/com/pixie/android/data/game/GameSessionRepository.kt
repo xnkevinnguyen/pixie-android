@@ -187,6 +187,12 @@ class GameSessionRepository(
                     }
                     if(it.mode ==GameMode.COOP && it.isCoopGuessSuccesful && it.state ==GameState.NEW_ROUND)
                         shouldPlayCoopGuessSound = true
+                    val previousGuessesLeft = gameSession.value?.guessesLeft
+                    val newGuessesLeft = it.guessesLeft
+                    if(it.mode == GameMode.COOP && previousGuessesLeft !=null && newGuessesLeft !=null && newGuessesLeft< previousGuessesLeft && it.state != GameState.START)
+                        shouldPlayCoopGuessSound = true
+
+
                     gameSession.postValue(it)
 
                 }
