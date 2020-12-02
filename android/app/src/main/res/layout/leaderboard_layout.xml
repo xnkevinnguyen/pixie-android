@@ -14,22 +14,23 @@
         android:layout_height="wrap_content"
         app:tabMode="fixed"
         app:tabTextColor="?colorSecondaryVariant"
-        android:layout_marginBottom="30dp">
+        android:layout_marginBottom="15dp">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mode1" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/mode_free" />
+            android:text="@string/mode2"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/mode_solo" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mode_coop" />
+            android:text="@string/mode3" />
     </com.google.android.material.tabs.TabLayout>
 
     <FrameLayout
@@ -51,8 +52,7 @@
                 android:textColor="?colorSecondaryVariant"
                 android:text="@string/mode_free"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:layout_marginTop="25dp"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,7 +68,8 @@
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_marginEnd="30dp">
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="25dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -161,8 +162,7 @@
                 android:textColor="?colorSecondaryVariant"
                 android:text="@string/mode_solo"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:layout_marginTop="25dp"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -242,8 +242,7 @@
                 android:textColor="?colorSecondaryVariant"
                 android:text="@string/mode_coop"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:layout_marginTop="25dp"/>
+                android:textStyle="bold" />
 
 
             <LinearLayout
