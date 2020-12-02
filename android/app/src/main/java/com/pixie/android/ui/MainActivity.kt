@@ -207,7 +207,8 @@ class MainActivity : AppCompatActivity() {
         val gameSession = chatViewModel.getGameSession()
         gameSession.observe(this, androidx.lifecycle.Observer {
             val gameState = it.state
-            if (it.status == GameStatus.STARTED && gameState !=null && gameState == GameState.START) {
+            Log.d("StartGameEvent",it.status.toString()+" "+it.state.toString())
+            if ( it.status ==GameStatus.STARTED && gameState !=null &&  (gameState ==GameState.DRAWER_SELECTION|| gameState == GameState.START)) {
 
                 val navController =
                     Navigation.findNavController(this, R.id.nav_host_fragment)
