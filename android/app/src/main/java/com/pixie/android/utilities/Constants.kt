@@ -27,7 +27,7 @@ class Constants {
         const val AVATAR_RING_COLOR_YELLOW = "#FFDF00"
         const val AVATAR_RING_COLOR_BLUE = "#004EFF"
         const val AVATAR_RING_COLOR_SILVER = "#C0C0C0"
-
+        const val HOST_NAME="host"
     }
 }
 

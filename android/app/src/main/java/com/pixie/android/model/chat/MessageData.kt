@@ -9,5 +9,7 @@ data class MessageData (
     var belongsToCurrentUser: Boolean?,
     val userName: String = "",
     val timePosted: String = "",
-    var shouldBeHidden:Boolean = false
+    var shouldBeHidden:Boolean = false,
+    var isFromHost:Boolean = false,
+    var channelParticipant: ChannelParticipant
 )
