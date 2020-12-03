@@ -10,17 +10,24 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="50dp"
         android:layout_marginBottom="15dp"
-        android:textSize="30dp"
+        android:textSize="35dp"
         android:textColor="?colorSecondaryVariant"
         android:text="@string/welcome_tutorial"
         android:gravity="center"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="320dp"
+        android:src="@drawable/logo"
+        android:layout_marginBottom="15px"
+        android:layout_gravity="center"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="25dp"
         android:textSize="30dp"
         android:textColor="?colorSecondaryVariant"
         android:text="@string/get_started_exp"

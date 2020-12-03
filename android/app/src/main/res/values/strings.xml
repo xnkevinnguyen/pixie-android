@@ -92,7 +92,7 @@
 
     <string name="select_game">Select Game Mode</string>
     <string name="mode1">Free for all</string>
-    <string name="mode1_explanation">\"Compete with 2 to 4 others players!\"</string>
+    <string name="mode1_explanation">\"Compete with 2 to 8 others players!\"</string>
     <string name="mode2">Solo</string>
     <string name="mode2_explanation">\"Play alone!\"</string>
     <string name="mode3">Coop</string>
@@ -130,7 +130,7 @@
     <string name="rank">Rank:</string>
     <string name="total_score">Total Score</string>
 
-    <string name="welcome_tutorial">Welcome to Pixie</string>
+    <string name="welcome_tutorial">Welcome to </string>
     <string name="get_started_exp">Get started quickly on the best drawing game with this mini tutorial.</string>
     <string name="get_started">Get Started</string>
     <string name="chat">Chat with your friends</string>

@@ -128,6 +128,13 @@ class GameGuessFragment : Fragment() {
 
                 chatViewModel.turnOffCoopSound()
 
+            }else if(it.mode == GameMode.COOP && !it.isCoopGuessSuccesful && chatViewModel.getShouldPlayCoopSound()){
+                if (soundOn)
+                    chatViewModel.startMediaPlayer(mediaPlayerIncorrectAnswer)
+                else
+                    chatViewModel.releaseMediaPlayer(mediaPlayerCorrectAnswer)
+
+                chatViewModel.turnOffCoopSound()
             }
         })
 

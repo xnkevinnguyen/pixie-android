@@ -61,8 +61,8 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var preferencesSettings: SharedPreferences
-    private lateinit var preferencesLogin:SharedPreferences
-    private lateinit var profileViewModel:ProfileViewModel
+    private lateinit var preferencesLogin: SharedPreferences
+    private lateinit var profileViewModel: ProfileViewModel
 
     override fun attachBaseContext(newBase: Context) {
         preferencesSettings = newBase.getSharedPreferences(
@@ -72,9 +72,9 @@ class MainActivity : AppCompatActivity() {
         val lang = preferencesSettings.getString(Constants.LANGUAGE, "English")
         var languageAc = "en"
         val langValue = "French"
-        languageAc = if(lang == langValue) "fr"
+        languageAc = if (lang == langValue) "fr"
         else "en"
-        Log.d("MainActivity","Load language")
+        Log.d("MainActivity", "Load language")
 
         super.attachBaseContext(MyContextWrapper(newBase).wrap(newBase, languageAc))
     }
@@ -87,12 +87,12 @@ class MainActivity : AppCompatActivity() {
         val lang = preferencesSettings.getString(Constants.LANGUAGE, "English")
         var languageAc = "en"
         val langValue = "French"
-        languageAc = if(lang == langValue) "fr"
+        languageAc = if (lang == langValue) "fr"
         else "en"
 
         val locale = Locale(languageAc)
         overrideConfiguration.setLocale(locale)
-        Log.d("MainActivity","Load language")
+        Log.d("MainActivity", "Load language")
         super.applyOverrideConfiguration(overrideConfiguration)
     }
 
@@ -102,10 +102,10 @@ class MainActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
         val theme = preferencesSettings.getString(Constants.THEME, "Dark")
-        if (theme == "Halloween" ) setTheme(R.style.AppBlueTheme_NoActionBar)
-        else if(theme == "Light") setTheme(R.style.AppLightTheme_NoActionBar)
+        if (theme == "Halloween") setTheme(R.style.AppBlueTheme_NoActionBar)
+        else if (theme == "Light") setTheme(R.style.AppLightTheme_NoActionBar)
         else if (theme == resources.getString(R.string.pink)) setTheme(R.style.AppPinkTheme_NoActionBar)
-        else if(theme == "Christmas") setTheme(R.style.AppGreenTheme_NoActionBar)
+        else if (theme == "Christmas") setTheme(R.style.AppGreenTheme_NoActionBar)
         else setTheme(R.style.AppTheme_NoActionBar)
 
         val profileFactory = InjectorUtils.provideProfileViewModelFactory()
@@ -121,7 +121,14 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_game_selection, R.id.nav_chat, R.id.nav_profile, R.id.nav_leaderboard), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.nav_game_selection,
+                R.id.nav_chat,
+                R.id.nav_profile,
+                R.id.nav_leaderboard
+            ), drawerLayout
+        )
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -135,9 +142,9 @@ class MainActivity : AppCompatActivity() {
             foregroundColorInt = Color.parseColor(colors.foreground)
         }
         if (foregroundColorInt == null) {
-            foregroundColorInt = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+            foregroundColorInt =
+                Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
-
 
 
         var backgroundColorInt: Int? = null
@@ -145,7 +152,8 @@ class MainActivity : AppCompatActivity() {
             backgroundColorInt = Color.parseColor(colors.background)
         }
         if (backgroundColorInt == null) {
-            backgroundColorInt = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+            backgroundColorInt =
+                Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
         avatar.setColorFilter(
             backgroundColorInt
@@ -185,13 +193,12 @@ class MainActivity : AppCompatActivity() {
         var value = -1 // or other values
         if (params != null) value = params.getInt("isNewUser")
 
-        if(value>0 && params!=null){
+        if (value > 0 && params != null) {
             params.putInt("isNewUser", -1); //Your id
             intent.putExtras(params)
             navController.navigate(R.id.nav_tutorial)
 
         }
-
 
 
     }
@@ -207,8 +214,8 @@ class MainActivity : AppCompatActivity() {
         val gameSession = chatViewModel.getGameSession()
         gameSession.observe(this, androidx.lifecycle.Observer {
             val gameState = it.state
-            Log.d("StartGameEvent",it.status.toString()+" "+it.state.toString())
-            if ( it.status ==GameStatus.STARTED && gameState !=null &&  (gameState ==GameState.DRAWER_SELECTION|| gameState == GameState.START)) {
+            Log.d("StartGameEvent", it.status.toString() + " " + it.state.toString())
+            if (it.status == GameStatus.STARTED && gameState != null && (gameState == GameState.DRAWER_SELECTION || gameState == GameState.START)) {
 
                 val navController =
                     Navigation.findNavController(this, R.id.nav_host_fragment)
@@ -219,69 +226,115 @@ class MainActivity : AppCompatActivity() {
         })
         chatViewModel.subscribeToGameInvitation()
 
-        chatViewModel.getGameInvitation().observe(this, androidx.lifecycle.Observer { gameInvitation->
-            if(!chatViewModel.getHasGameInvitationBeenShown()){
-                val dialog = Dialog(this)
-                dialog.setContentView(R.layout.game_invitation)
-                val acceptButtonElement = dialog.findViewById<Button>(R.id.accept_invitation)
-                val declineButtonElement = dialog.findViewById<Button>(R.id.decline_invitation)
+        chatViewModel.getGameInvitation()
+            .observe(this, androidx.lifecycle.Observer { gameInvitation ->
+                if (!chatViewModel.getHasGameInvitationBeenShown()) {
+                    val dialog = Dialog(this)
+                    dialog.setContentView(R.layout.game_invitation)
+                    val acceptButtonElement = dialog.findViewById<Button>(R.id.accept_invitation)
+                    val declineButtonElement = dialog.findViewById<Button>(R.id.decline_invitation)
 
-                acceptButtonElement.setOnClickListener{
-                    val accept = chatViewModel.acceptInvitation(gameInvitation.gameID)
-                    if(accept == null){
-                        Toast.makeText(
-                            this,
-                            resources.getString(R.string.game_invite_error),
-                            Toast.LENGTH_LONG
-                        ).show()
+                    acceptButtonElement.setOnClickListener {
+                        val accept = chatViewModel.acceptInvitation(gameInvitation.gameID)
+
+                        dialog.hide()
+                        if (accept == null) {
+                            Toast.makeText(
+                                this,
+                                resources.getString(R.string.game_invite_error),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            val navController =
+                                Navigation.findNavController(this, R.id.nav_host_fragment)
+                            navController.navigate(R.id.nav_chat)
+                        }
                     }
-                    dialog.hide()
-                    val navController =
-                        Navigation.findNavController(this, R.id.nav_host_fragment)
-                    navController.navigate(R.id.nav_chat)
+                    declineButtonElement.setOnClickListener {
+                        dialog.hide()
+                    }
+                    val invitationText = dialog.findViewById<TextView>(R.id.invite_title)
+                    invitationText.text = String.format(
+                        resources.getString(R.string.game_invitation_title),
+                        gameInvitation.sender.username
+                    )
+
+                    val mode = dialog.findViewById<TextView>(R.id.mode_title)
+                    val img = dialog.findViewById<ImageView>(R.id.mode_picture)
+                    mode.text = gameInvitation.gameMode.toString()
+
+                    val languageElement = dialog.findViewById<ImageView>(R.id.language_icon)
+
+                    if (gameInvitation.language.rawValue == "ENGLISH") {
+                        languageElement.setImageDrawable(this.let {
+                            ContextCompat.getDrawable(
+                                it,
+                                R.drawable.ic_uk_flag
+                            )
+                        })
+                    } else {
+                        languageElement.setImageDrawable(this.let {
+                            ContextCompat.getDrawable(
+                                it,
+                                R.drawable.ic_flag_of_france
+                            )
+                        })
+                    }
+                    val difficultyElement = dialog.findViewById<ImageView>(R.id.difficulty_icon)
+                    if (gameInvitation.difficulty == GameDifficulty.EASY) {
+                        difficultyElement.setImageDrawable(this.let {
+                            ContextCompat.getDrawable(
+                                it,
+                                R.drawable.ic_easy_diff
+                            )
+                        })
+                        difficultyElement.setColorFilter(Color.GREEN)
+                    } else if (gameInvitation.difficulty == GameDifficulty.MEDIUM) {
+                        difficultyElement.setImageDrawable(this.let {
+                            ContextCompat.getDrawable(
+                                it,
+                                R.drawable.ic_medium_diff
+                            )
+                        })
+                        difficultyElement.setColorFilter(Color.YELLOW)
+                    } else {
+                        difficultyElement.setImageDrawable(this.let {
+                            ContextCompat.getDrawable(
+                                it,
+                                R.drawable.ic_hard_diff
+                            )
+                        })
+                        difficultyElement.setColorFilter(Color.RED)
+                    }
+
+                    if (gameInvitation.gameMode == GameMode.SOLO)
+                        img.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                this,
+                                R.drawable.ic_solo_mode
+                            )
+                        )
+                    else if (gameInvitation.gameMode == GameMode.COOP)
+                        img.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                this,
+                                R.drawable.ic_coop_mode
+                            )
+                        )
+                    else
+                        img.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                this,
+                                R.drawable.ic_free_mode
+                            )
+                        )
+
+
+                    dialog.show()
+                    chatViewModel.confirmInvitationBeenShown()
                 }
-                declineButtonElement.setOnClickListener {
-                    dialog.hide()
-                }
-                val invitationText = dialog.findViewById<TextView>(R.id.invite_title)
-                invitationText.text = String.format(resources.getString(R.string.game_invitation_title),gameInvitation.sender.username)
 
-                val mode = dialog.findViewById<TextView>(R.id.mode_title)
-                val img = dialog.findViewById<ImageView>(R.id.mode_picture)
-                mode.text = gameInvitation.gameMode.toString()
-
-                val languageElement  = dialog.findViewById<ImageView>(R.id.language_icon)
-
-                if(gameInvitation.language.rawValue == "ENGLISH") {
-                    languageElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_uk_flag) })
-                } else{
-                    languageElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_flag_of_france) })
-                }
-                val difficultyElement = dialog.findViewById<ImageView>(R.id.difficulty_icon)
-                if(gameInvitation.difficulty == GameDifficulty.EASY) {
-                    difficultyElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_easy_diff) })
-                    difficultyElement.setColorFilter(Color.GREEN)
-                } else if(gameInvitation.difficulty == GameDifficulty.MEDIUM){
-                    difficultyElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_medium_diff) })
-                    difficultyElement.setColorFilter(Color.YELLOW)
-                }else{
-                    difficultyElement.setImageDrawable(this.let { ContextCompat.getDrawable(it, R.drawable.ic_hard_diff) })
-                    difficultyElement.setColorFilter(Color.RED)
-                }
-
-                if(gameInvitation.gameMode == GameMode.SOLO)
-                    img.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_solo_mode))
-                else if(gameInvitation.gameMode == GameMode.COOP)
-                    img.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_coop_mode))
-                else
-                    img.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_free_mode))
-
-
-                dialog.show()
-                chatViewModel.confirmInvitationBeenShown()
-            }
-
-        })
+            })
         super.onPostCreate(savedInstanceState)
     }
 
@@ -296,7 +349,8 @@ class MainActivity : AppCompatActivity() {
             foregroundColor = Color.parseColor(colors.foreground)
         }
         if (foregroundColor == null) {
-            foregroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+            foregroundColor =
+                Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
 
         var backgroundColor: Int? = null
@@ -304,13 +358,19 @@ class MainActivity : AppCompatActivity() {
             backgroundColor = Color.parseColor(colors.background)
         }
         if (backgroundColor == null) {
-            backgroundColor = Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+            backgroundColor =
+                Color.argb(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
         }
 
-        val drawable = ContextCompat.getDrawable(applicationContext,R.drawable.profile_layer) as LayerDrawable
+        val drawable =
+            ContextCompat.getDrawable(applicationContext, R.drawable.profile_layer) as LayerDrawable
         drawable?.setColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP)
-        drawable?.setDrawableByLayerId(R.id.foreground_icon,ContextCompat.getDrawable(applicationContext,R.drawable.ic_profile_user))
-        drawable?.findDrawableByLayerId(R.id.foreground_icon).setColorFilter(backgroundColor,PorterDuff.Mode.SRC_ATOP)
+        drawable?.setDrawableByLayerId(
+            R.id.foreground_icon,
+            ContextCompat.getDrawable(applicationContext, R.drawable.ic_profile_user)
+        )
+        drawable?.findDrawableByLayerId(R.id.foreground_icon)
+            .setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
 
         menu.findItem(R.id.action_settings).setIcon(drawable)
         return true
@@ -350,7 +410,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             else -> {
-                super.onOptionsItemSelected(item)}
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 
