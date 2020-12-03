@@ -19,6 +19,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/error_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        android:visibility="gone"
+        android:text="@string/failed_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor= "@color/red"
+        android:textSize="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_logo"/>
     <LinearLayout
         android:id="@+id/user_info_name"
         android:layout_width="wrap_content"
@@ -26,7 +40,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_logo">
+        app:layout_constraintTop_toBottomOf="@id/error_login">
 
         <EditText
             android:id="@+id/first_name"
