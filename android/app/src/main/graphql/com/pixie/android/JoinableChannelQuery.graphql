@@ -1,0 +1,8 @@
+query getJoinableChannels{
+    channelsUserHasNotJoined{
+        id
+        name
+       nParticipants
+
+    }
+}

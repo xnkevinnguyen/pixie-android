@@ -1,0 +1,7 @@
+query getAvatarColors{
+    me{
+        id,
+        avatarForeground,
+        avatarBackground,
+    }
+}

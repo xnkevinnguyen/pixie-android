@@ -10,15 +10,8 @@ import kotlinx.coroutines.runBlocking
 class LogoutService : IntentService("LogoutService") {
     override fun onHandleIntent(p0: Intent?) {
         Log.d("LogoutService","onHandleIntent")
-        val chatRepository = ChatRepository.getInstance()
-        val userRepository = UserRepository.getInstance()
-        chatRepository.clearChannels()
-        chatRepository.cancelMainChannelSubscriptions()
-        runBlocking {
-            userRepository.logout()
-        }
 
-        Thread.sleep(1000)
+
 
     }
 }

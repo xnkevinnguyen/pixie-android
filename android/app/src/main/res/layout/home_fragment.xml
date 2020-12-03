@@ -1,27 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?colorAccent"
+    android:id="@+id/home_fragment"
     tools:context=".ui.draw.home.HomeFragment">
 
-    <Button
-        android:id="@+id/logout_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/logout"
-        tools:ignore="MissingConstraints" />
-
+    <fragment
+        android:id="@+id/channel_fragment"
+        android:name="com.pixie.android.ui.draw.channelList.ChannelFragment"
+        android:layout_width="225dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/chat_fragment"/>
 
     <fragment
         android:id="@+id/chat_fragment"
         android:name="com.pixie.android.ui.chat.ChatFragment"
+        android:layout_width="700dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="300dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentEnd="true"/>
+
+    <fragment
+        android:id="@+id/player_fragment"
+        android:name="com.pixie.android.ui.draw.channelList.PlayersFragment"
         android:layout_width="275dp"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentEnd="true"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

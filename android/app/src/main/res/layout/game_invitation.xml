@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="700dp"
+    android:layout_height="match_parent"
+    android:background="?colorAccent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/invite_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:paddingVertical="25dp"
+        android:textColor="?colorSecondaryVariant"
+        android:textSize="@dimen/profile_titles"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:background="?color"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mode_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="?colorSecondary"
+            android:gravity="center"
+            android:textSize="@dimen/profile_titles"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/mode_picture"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/regular_size"
+                android:text="@string/language_2"
+                android:textSize="@dimen/regular_size"
+                android:textColor="?colorSecondaryVariant"
+                />
+
+            <ImageView
+                android:id="@+id/language_icon"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/regular_size"
+                android:text="@string/difficulty"
+                android:textSize="@dimen/regular_size"
+                android:textColor="?colorSecondaryVariant"
+                />
+
+            <ImageView
+                android:id="@+id/difficulty_icon"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/decline_invitation"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_drawable"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/decline"
+            android:textColor="?colorSecondaryVariant"
+            android:textSize="@dimen/regular_size" />
+
+        <Button
+            android:id="@+id/accept_invitation"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_drawable"
+            android:textColor="?colorSecondaryVariant"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/accept"
+            android:textSize="@dimen/regular_size" />
+    </LinearLayout>
+
+
+</LinearLayout>

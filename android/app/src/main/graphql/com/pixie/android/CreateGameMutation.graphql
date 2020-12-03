@@ -1,0 +1,36 @@
+mutation CreateGame($input: CreateGameInput!){
+    createGame(input:$input){
+        id
+        currentDrawerId
+        currentWord
+        currentRound
+        status
+        sprintTries
+        gameState
+        gameHall{
+            id,
+            name,
+            participants{
+                id
+                username
+                isOnline,
+                isVirtual,
+                avatarForeground,
+                avatarBackground
+            }
+        }
+        gameInfo{
+            id,
+            players{
+                id,
+                username,
+                isOnline,
+                isVirtual,
+                avatarForeground,
+                avatarBackground
+            }
+            mode,
+            language
+        }
+    }
+}

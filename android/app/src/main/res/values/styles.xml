@@ -1,11 +1,99 @@
 <resources>
-    <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:listDivider">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorTertiary</item>
+        <item name="colorPrimaryDark">@color/colorSecondary</item>
+        <item name="colorSecondary">@color/colorFourth</item>
+        <item name="color">@color/colorFifth</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:listDivider">@color/colorPrimary</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@drawable/menu_popup_selector</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
+        <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="AppLightTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorLightTertiary</item>
+        <item name="colorPrimaryDark">@color/colorLightSecondary</item>
+        <item name="colorSecondary">@color/colorLightFourth</item>
+        <item name="color">@color/colorLightFifth</item>
+        <item name="colorAccent">@color/colorLightPrimary</item>
+        <item name="android:listDivider">@color/colorLightPrimary</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@drawable/menu_popup_selector</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
+        <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/colorPaint</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyleLight</item>
+    </style>
+
+    <style name="AppGreenTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorGreenTertiary</item>
+        <item name="colorPrimaryDark">@color/colorGreenSecondary</item>
+        <item name="colorSecondary">@color/colorGreenFourth</item>
+        <item name="color">@color/colorGreenFifth</item>
+        <item name="colorAccent">@color/colorGreenPrimary</item>
+        <item name="android:listDivider">@color/colorGreenPrimary</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@drawable/menu_popup_selector</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
+        <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="AppPinkTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPinkTertiary</item>
+        <item name="colorPrimaryDark">@color/colorPinkSecondary</item>
+        <item name="colorSecondary">@color/colorPinkFourth</item>
+        <item name="color">@color/colorPinkFifth</item>
+        <item name="colorAccent">@color/colorPinkPrimary</item>
+        <item name="android:listDivider">@color/colorPinkPrimary</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@drawable/menu_popup_selector</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
+        <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+    </style>
+
+    <style name="AppBlueTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorBlueTertiary</item>
+        <item name="colorPrimaryDark">@color/colorBlueSecondary</item>
+        <item name="colorSecondary">@color/colorBlueFourth</item>
+        <item name="color">@color/colorBlueFifth</item>
+        <item name="colorAccent">@color/colorBluePrimary</item>
+        <item name="android:listDivider">@color/colorBluePrimary</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerStyle">@style/OverflowMenu</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@drawable/menu_popup_selector</item>
+        <item name="actionBarPopupTheme">@style/SubmenuLightHeaderStyle</item>
+        <item name="android:textColor">@color/colorPaint</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <!--Needed for navigation to work -->
@@ -14,7 +102,52 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppLightTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppGreenTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppPinkTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppBlueTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+
+    <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
+        <item name="android:overlapAnchor">false</item>
+        <item name="android:popupBackground">?color</item>
+    </style>
+
+    <style name="mySpinnerItemStyle" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:popupBackground">?color</item>
+    </style>
+
+    <style name="SubmenuLightHeaderStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/colorLightFourth</item>
+        <item name="android:textColor">@color/colorLightPrimary</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="DrawerArrowStyleLight" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/colorPaint</item>
+    </style>
+
 
 </resources>

@@ -8,18 +8,23 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.pixie.android.R
 import com.pixie.android.model.user.LoggedInUserView
+import com.pixie.android.type.Language
 import com.pixie.android.ui.MainActivity
 import com.pixie.android.utilities.Constants
+import com.pixie.android.utilities.Constants.Companion.LANGUAGE_ENGLISH
+import com.pixie.android.utilities.Constants.Companion.LANGUAGE_FRENCH
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.login_fragment.*
 
@@ -41,6 +46,8 @@ class LoginFragment : Fragment() {
             navController.navigate(R.id.nav_register)
         }
 
+        var color = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+        color = ContextCompat.getColor(requireContext(), R.color.colorFourth)
         val eye = root.findViewById<ImageView>(R.id.eye)
         eye.setOnClickListener {
             if(password.transformationMethod == PasswordTransformationMethod.getInstance()){
@@ -98,12 +105,29 @@ class LoginFragment : Fragment() {
                 )
             }
 
-
+        val preferencesSetting =    context.getSharedPreferences(Constants.SHARED_PREFERENCES_SETTING, Context.MODE_PRIVATE)
+        val editorSetting = preferencesSetting.edit()
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString()) {
                     loading.visibility = View.INVISIBLE
                     if (it.success != null && activity != null) {
+
+                        if(it.success.language!=null){
+                            if(it.success.language.equals(Language.ENGLISH)){
+                                editorSetting.putString(Constants.LANGUAGE, LANGUAGE_ENGLISH)
+
+                            }else{
+                                editorSetting.putString(Constants.LANGUAGE, LANGUAGE_FRENCH)
+
+                            }
+                        }
+                        if(it.success.theme !=null){
+                            editorSetting.putString(Constants.THEME, it.success.theme)
+
+                        }
+                        editorSetting.apply()
+                        Log.d("LoginFragment","Set User Language")
                         val intent = Intent(view?.context, MainActivity::class.java)
 
                         // Store for next time user opens application

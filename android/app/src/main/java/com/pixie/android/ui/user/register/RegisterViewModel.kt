@@ -6,6 +6,8 @@ import com.pixie.android.data.user.UserRepository
 import com.pixie.android.model.user.AuthResult
 import com.pixie.android.model.user.LoggedInUser
 import com.pixie.android.model.user.LoginFormState
+import com.pixie.android.type.Language
+import com.pixie.android.type.Theme
 
 class RegisterViewModel (private val userRepository: UserRepository) : ViewModel() {
 
@@ -15,9 +17,11 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
         userRepository.setLoggedInUser(LoggedInUser(userID,username))
     }
 
-    fun register(username: String, password: String, onRegisterResult :(authResult: AuthResult)->Unit) {
+    fun register(username: String, password: String, firstName: String, lastName: String, foreground:String, background:String,
+                 language:Language, theme: Theme,
+                 onRegisterResult :(authResult: AuthResult)->Unit) {
 
-        userRepository.register(username, password,onRegisterResult)
+        userRepository.register(username, password, firstName, lastName, foreground, background, language, theme, onRegisterResult)
 
     }
     fun login(username: String, password: String,onLoginResult:(authResult:AuthResult)->Unit){
@@ -25,8 +29,11 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
     }
 
 
-    fun registerDataChanged(username: String, password: String, reTypePassword:String) {
-        if (!username.isNotBlank()) {
+    fun registerDataChanged(name:String, surname: String, username: String, password: String, reTypePassword:String) {
+        if (!name.isNotBlank() || !surname.isNotBlank()){
+            userRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_name))
+        }
+        else if (!username.isNotBlank()) {
             userRepository.setLoginForm(LoginFormState(usernameError = R.string.invalid_username))
         }
         else if (!isPasswordValid(password)) {

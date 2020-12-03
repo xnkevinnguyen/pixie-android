@@ -1,0 +1,18 @@
+query getUserInformations{
+    me{
+        id,
+        firstName,
+        lastName,
+        username,
+        avatarForeground,
+        avatarBackground,
+        createdAt,
+        nGames,
+        winPercent,
+        playTimeAverage,
+        totalGameTime,
+        bestSprintCoopScore,
+        bestSprintSoloScore,
+        bestFreeForAllScore,
+    }
+}

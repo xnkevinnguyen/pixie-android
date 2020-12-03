@@ -5,21 +5,17 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.alpha
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pixie.android.R
-import com.pixie.android.apolloClient
 import com.pixie.android.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.draw_tools_fragment.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import top.defaults.colorpicker.ColorPickerPopup
-import java.lang.Exception
 
 class DrawToolsFragment() : Fragment() {
     override fun onCreateView(
@@ -53,14 +49,15 @@ class DrawToolsFragment() : Fragment() {
                 .showValue(true)
                 .build()
                 .show(view, object : ColorPickerPopup.ColorPickerObserver() {
+
                     override fun onColorPicked(color: Int) {
                         viewModel.modifyPrimaryColor(Color.valueOf(color))
                     }
                 })
         }
 
-        val unselectedColor = ContextCompat.getColor(requireContext(), R.color.unselectedButtonColor);
-        val selectedColor = ContextCompat.getColor(requireContext(), R.color.selectedButtonColor);
+        val unselectedColor = ContextCompat.getColor(requireContext(), R.color.grey);
+        val selectedColor = ContextCompat.getColor(requireContext(), R.color.dark_grey);
 
         pencil.setOnClickListener {
             pencil.setBackgroundColor(selectedColor)
@@ -110,8 +107,8 @@ class DrawToolsFragment() : Fragment() {
         if(window != null){
             val wlp = window.attributes
             wlp.gravity = Gravity.LEFT
-            wlp.y = -200
-            wlp.x = 150
+            wlp.y = -250
+            wlp.x = 530
         }
 
         dialog.setContentView(R.layout.size_chooser_layout)
@@ -121,19 +118,19 @@ class DrawToolsFragment() : Fragment() {
 
         smallSize.setOnClickListener(){
             viewModel.modifyStrokeWidth(small.toFloat())
-            if(eraserOn) viewModel.setEraser(true)
+            if(eraserOn) viewModel.setEraser(true,small)
             else viewModel.setEraser(false)
             dialog.dismiss()
         }
         mediumSize.setOnClickListener(){
             viewModel.modifyStrokeWidth(medium.toFloat())
-            if(eraserOn) viewModel.setEraser(true)
+            if(eraserOn) viewModel.setEraser(true,medium)
             else viewModel.setEraser(false)
             dialog.dismiss()
         }
         largeSize.setOnClickListener(){
             viewModel.modifyStrokeWidth(large.toFloat())
-            if(eraserOn) viewModel.setEraser(true)
+            if(eraserOn) viewModel.setEraser(true,large)
             else viewModel.setEraser(false)
             dialog.dismiss()
         }

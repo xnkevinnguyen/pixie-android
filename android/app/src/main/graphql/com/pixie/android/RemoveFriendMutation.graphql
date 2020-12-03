@@ -1,0 +1,3 @@
+mutation removeFriend($input:FriendInput!){
+    removeFriend(input:$input)
+}

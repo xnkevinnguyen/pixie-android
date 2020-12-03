@@ -1,0 +1,44 @@
+mutation startGame($input: StartGameInput!){
+    startGame(input:$input){
+        id
+        currentDrawerId
+        currentWord
+        currentRound
+        status
+        sprintTries
+        sprintHints
+        gameState
+        gameHall{
+            id
+            name
+            isLobby
+            participants{
+                username
+                isVirtual
+            }
+        }
+        gameInfo{
+            id
+            players{
+                id
+                username
+                isVirtual
+                nHints
+            }
+            mode
+            scores{
+                id
+                user{
+                    id
+                    username
+                    isVirtual
+                    isOnline
+                }
+                tries
+                value
+
+            }
+        }
+
+    }
+}

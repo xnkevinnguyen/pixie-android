@@ -1,8 +1,15 @@
 package com.pixie.android.model.chat
 
+data class ChannelMessageObject(
+    var messageList: ArrayList<MessageData>,
+    var isHistoryLoaded:Boolean = false
+)
 data class MessageData (
     val text: String,
-    val belongsToCurrentUser: Boolean,
+    var belongsToCurrentUser: Boolean?,
     val userName: String = "",
-    val timePosted: String = ""
+    val timePosted: String = "",
+    var shouldBeHidden:Boolean = false,
+    var isFromHost:Boolean = false,
+    var channelParticipant: ChannelParticipant
 )

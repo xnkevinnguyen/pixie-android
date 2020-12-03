@@ -1,0 +1,14 @@
+query getUserChannels{
+    userChannels{
+        id
+        name
+        participants{
+            id
+            username
+            isOnline
+            isVirtual
+            avatarForeground
+            avatarBackground
+        }
+    }
+}

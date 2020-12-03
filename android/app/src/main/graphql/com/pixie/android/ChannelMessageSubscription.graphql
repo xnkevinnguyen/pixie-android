@@ -1,3 +1,4 @@
+# Write your query or mutation here
 subscription OnNewMessage($channelId: Float!){
     onNewMessage(channelId:$channelId){
         id
@@ -5,6 +6,15 @@ subscription OnNewMessage($channelId: Float!){
         sender{
             id
             username
+            isVirtual
+            avatarForeground
+            avatarBackground
+            isOnline
+        }
+        hintAsker{
+            id
+            username
+
         }
         postedAt
     }

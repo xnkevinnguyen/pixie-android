@@ -4,30 +4,181 @@
     <string name="cell_hint">50</string>
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
+    <string name="ok">Ok</string>
     <string name="tutorial">Tutorial</string>
-    <string name="setting_desc">nav_setting_desc</string>
+    <string name="setting_desc" translatable="false">nav_setting_desc</string>
     <string name="username">Username</string>
     <string name="nav_header_desc">nav_header_desc</string>
     <string name="home">Home</string>
+    <string name="chat_title">Chat</string>
+    <string name="game_select">Game Selection</string>
+    <string name="available_games">Available Games</string>
     <string name="drawing">Drawing</string>
+    <string name="game_creation">Game Creation</string>
     <string name="action_settings">action settings</string>
-    <string name="chat_hint">Type here...</string>
+    <string name="chat_message_hint">Type message here...</string>
+    <string name="chat_guess_hint">Type guess here...</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_name">Not a valid name</string>
     <string name="invalid_password">Password must be minimum 6 characters</string>
     <string name="invalid_re_password">Passwords must be the same</string>
     <string name="login_failed">"Login failed"</string>
     <string name="register"><u>Register</u></string>
     <string name="failed_login">Username or password is incorrect</string>
     <string name="failed_registration">Registration Failed</string>
-    <string name="login_user_hint">UserName</string>
+    <string name="login_user_hint">Username</string>
     <string name="login_pass_hint">Enter password</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="register_title">Register</string>
-    <string name="email">email</string>
     <string name="retype_pass">Re-Enter your password</string>
     <string name="return_login">Return to login page</string>
-    <string name="active_users">Players</string>
+    <string name="load_chat_history">Show Full History</string>
     <string name="messages">Messages</string>
+    <string name="channel">Your Channels</string>
+    <string name="add_channel">Add Channel</string>
+    <string name="players">Players</string>
+    <string name="dropdown_1">Profile</string>
+    <string name="dropdown_2">Logout</string>
+    <string name="search_player">Search player</string>
+    <string name="follow">Add Friend</string>
+    <string name="unfollow">Remove Friend</string>
+    <string name="invite">Invite</string>
+
+    <string name="user_info">User Informations</string>
+    <string name="name">Last name: </string>
+    <string name="surname">First name: </string>
+    <string name="user_username">Username: </string>
+    <string name="show_list_friend">Show Friend List</string>
+    <string name="game_play_info">User Game Play Informations</string>
+    <string name="number_games">Number of games played: </string>
+    <string name="percentage_victory">Percentage of victory: </string>
+    <string name="average_game">Average game time (sec): </string>
+    <string name="total_game">Total play time (sec): </string>
+    <string name="best_score">Best score: </string>
+    <string name="history_con_disc">Connections and Disconnections History</string>
+    <string name="last_conn">Last connection: </string>
+    <string name="last_disc">Last disconnection: </string>
+    <string name="registration_date">Registration date: </string>
+    <string name="show_hist">Show History</string>
+    <string name="game_history">Games History</string>
+    <string name="last_game">Last game played</string>
+    <string name="date_game">Date: </string>
+    <string name="time_game">Time: </string>
+    <string name="your_points">Your points: </string>
+    <string name="winner">Winner: </string>
+    <string name="difficulty">Difficulty:</string>
+    <string name="game_mode">Game mode: </string>
+    <string name="conn">Connection:</string>
+    <string name="disc">Disconnection: </string>
+
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
+    <string name="language_2">Language:</string>
+    <string name="notif_sound">Notification sound</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+    <string name="pink">Barbie</string>
+    <string name="christmas">Christmas</string>
+    <string name="halloween">Halloween</string>
+    <string name="eng">English</string>
+    <string name="fr">French</string>
+    <string name="setting">Settings</string>
+
+    <string name="new_channel">Create new channel</string>
+    <string name="channel_name">Enter channel name...</string>
+    <string name="join_existing_channel">Join existing channels</string>
+
+    <string name="select_game">Select Game Mode</string>
+    <string name="mode1">Free for all</string>
+    <string name="mode1_explanation">\"Compete with 2 to 8 others players!\"</string>
+    <string name="mode2">Solo</string>
+    <string name="mode2_explanation">\"Play alone!\"</string>
+    <string name="mode3">Coop</string>
+    <string name="mode3_explanation">\"Collaborate with 2 to 4 others players!\"</string>
+    <string name="difficulty_select">Difficulty</string>
+    <string name="diff1">Easy</string>
+    <string name="diff2">Medium</string>
+    <string name="diff3">Hard</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="join">Join</string>
+    <string name="create">Create</string>
+    <string name="new_game">New Game</string>
+    <string name="guess">Guess</string>
+    <string name="message">Message</string>
+    <string name="guess_left"> %1$s guess left...</string>
+    <string name="kick">Kick player</string>
+    <string name="leave">Leave game</string>
+    <string name="not_available">Not Available</string>
+
+    <string name="start_game">Start Game</string>
+    <string name="leave_game">Leave Game</string>
+    <string name="add_players">Add Players</string>
+    <string name="add_virtual">Add Virtual Player</string>
+    <string name="create_game">Create New Game</string>
+    <string name="add">Add</string>
+    <string name="round">Round : 3</string>
+    <string name="round_turn">Round</string>
+    <string name="total_round">of 3</string>
+    <string name="rounds">rounds</string>
+
+    <string name="game_result">Game Result</string>
+    <string name="goto_home">Go To Home</string>
+    <string name="rank">Rank:</string>
+    <string name="total_score">Total Score</string>
+
+    <string name="welcome_tutorial">Welcome to </string>
+    <string name="get_started_exp">Get started quickly on the best drawing game with this mini tutorial.</string>
+    <string name="get_started">Get Started</string>
+    <string name="chat">Chat with your friends</string>
+    <string name="choose_game">Choose a game mode</string>
+    <string name="create_join">Create or Join a game</string>
+    <string name="three_modes">There are 3 modes of games you can play.</string>
+    <string name="play_game">Play the game</string>
+    <string name="play_game_expl">Have fun competing with your friends!</string>
+    <string name="finish">Finish</string>
+    <string name="view_profile">View your profile</string>
+    <string name="view_profile_expl">Find your connections and games history as well as your game statistics and user information.</string>
+    <string name="display_word_top">Your word is: %1$s </string>
+    <string name="next_drawer">Next drawer: %1$s</string>
+
+    <string name="success">Success</string>
+    <string name="error">Error</string>
+
+    <string name="leaderboard">Leaderboard</string>
+    <string name="mode_solo">Mode Solo</string>
+    <string name="mode_coop"> Mode Coop</string>
+    <string name="mode_free">Mode Free For All</string>
+    <string name="cumulative_score">Best cumulative score:</string>
+    <string name="most_games_won">Most games won:</string>
+
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+
+    <string name="game_invitation_title">%1$s has invited you</string>
+    <string name="correct_guess">Correct Answer!</string>
+    <string name="incorrect_guess">Incorrect Answer!</string>
+    <string name="your_word"> Your word: %1$s</string>
+    <string name="hints_left">Left</string>
+    <string name="ask_hint">Ask Hint</string>
+    <string name="number_player">Not enough players</string>
+    <string name="seconds">seconds</string>
+    <string name="answer_guess">The word to guess was : %1$s</string>
+
+    <string name="not_disconnected">Still Connected</string>
+    <string name="got_to_leaderboard">Go to leaderboard</string>
+    <string name="you_won">You have won!</string>
+    <string name="no_winners">No winners!</string>
+    <string name="top_score">Top Score:</string>
+
+    <string name="friend">Friends</string>
+    <string name="other">Other Players</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="leave_game_text">Leave your current game to join another one.</string>
+
+    <string name="game_invite_error">This game is not available anymore.</string>
+
 </resources>

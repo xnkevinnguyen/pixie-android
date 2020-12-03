@@ -1,0 +1,8 @@
+query getBestCumulativeScore($input: LeaderBoardInput!){
+    leaderboardCumulativeScore(input:$input){
+        username,
+        value,
+        avatarForeground,
+        avatarBackground
+    }
+}

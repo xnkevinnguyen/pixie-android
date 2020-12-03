@@ -1,0 +1,11 @@
+mutation addVirtualPlayer($input:AddVirtualPlayerInput!){
+
+    addVirtualPlayer(input:$input){
+        id
+        username
+        isOnline
+        virtualType
+        isVirtual
+
+    }
+}

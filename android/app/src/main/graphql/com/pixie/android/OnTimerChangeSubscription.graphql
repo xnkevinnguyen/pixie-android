@@ -1,0 +1,6 @@
+subscription OnTimerChange($gameSessionId:Float!){
+    onTimerChange(gameSessionId:$gameSessionId){
+        gameSessionId
+        currentValue
+    }
+}

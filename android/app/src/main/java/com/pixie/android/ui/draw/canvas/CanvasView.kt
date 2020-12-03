@@ -3,29 +3,32 @@ package com.pixie.android.ui.draw.canvas
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.MutableLiveData
+import androidx.core.graphics.alpha
 import com.pixie.android.R
-import com.pixie.android.model.draw.DrawCommand
-import com.pixie.android.model.draw.PathData
+import com.pixie.android.model.draw.CanvasCommand
 import com.pixie.android.model.draw.PathPoint
+import com.pixie.android.model.draw.PotraceCommand
+import com.pixie.android.model.draw.SinglePoint
+import com.pixie.android.type.PathStatus
 
 
-class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     // Holds the path you are currently drawing.
     private var path = Path()
     var drawStroke: Float = 12f
-    var completedCommand = MutableLiveData<DrawCommand>()
-    var pathData: PathData = PathData(arrayListOf())
+    var pathData = ArrayList<PathPoint>()
+    private lateinit var canvasViewModel: CanvasViewModel
 
 
     var drawColor: Int = 0 // Should be replaced at runtime with default BLACK value from repository
     private val backgroundColor = Color.TRANSPARENT
     private var erase = false
+    private var eraseWidth = 10
 
-    private lateinit var canvas: Canvas
+    private var canvas: Canvas? = null
     private lateinit var bitmap: Bitmap
 
     private var paint = generatePaint()
@@ -35,11 +38,23 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
+    private var onDrawingMove: Boolean = false
+    private var isCanvasLocked: Boolean = false
+    private var refCommandList:List<CanvasCommand>?=null
 
-    fun setErase(isErase: Boolean) {
+
+    fun setIsCanvasLocked(isLocked: Boolean) {
+        isCanvasLocked = isLocked
+    }
+
+
+    fun setErase(isErase: Boolean,newEraseWidth:Int?) {
         erase = isErase
-        if (erase) paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-        else paint.xfermode = null
+        eraseWidth = newEraseWidth ?: 10
+    }
+
+    fun setViewModel(viewModel: CanvasViewModel) {
+        canvasViewModel = viewModel
     }
 
     fun reinitializeDrawingParameters() {
@@ -49,20 +64,85 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun generatePaint(): Paint = Paint().apply {
         color = drawColor
+        alpha = drawColor.alpha
         style = Paint.Style.STROKE
         strokeJoin = Paint.Join.ROUND
         strokeCap = Paint.Cap.ROUND
         strokeWidth =
             drawStroke
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC)
     }
 
-    fun drawFromCommandList(drawCommandList: List<DrawCommand>) {
-
-        canvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
-        drawCommandList.forEach {
-            canvas.drawPath(it.path, it.paint)
+    fun drawFromCommandList(canvasCommandList: List<CanvasCommand>) {
+        refCommandList=canvasCommandList
+        if (canvas != null) {
+            canvas?.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
+            canvasCommandList.forEach {
+                if (it.paint != null && !it.pathDataPoints.isNullOrEmpty()) {
+                    val pathToDraw = Path()
+                    pathToDraw.moveTo(it.pathDataPoints.first().x, it.pathDataPoints.first().y)
+                    val length = it.pathDataPoints.size
+//                    it.pathDataPoints.forEach {
+//                        pathToDraw.quadTo(it.x1, it.y1, it.x2, it.y2)
+//
+//                    }
+                    if (length > 1) {
+                        for (n in 0 until length - 1) {
+                            pathToDraw.quadTo(
+                                it.pathDataPoints[n].x, it.pathDataPoints[n].y,
+                                it.pathDataPoints[n + 1].x, it.pathDataPoints[n + 1].y
+                            )
+                        }
+                    } else {
+                        pathToDraw.quadTo(
+                            it.pathDataPoints[0].x, it.pathDataPoints[0].y,
+                            it.pathDataPoints[0].x, it.pathDataPoints[0].y
+                        )
+                    }
+                    canvas?.drawPath(pathToDraw, it.paint)
+                }
+            }
+            invalidate()
+        } else {
+            Log.d("CanvasError", "Canvas is null")
         }
-        invalidate()
+    }
+
+    fun drawFromCommandListPotrace(canvasCommandList: List<CanvasCommand>) {
+        if (canvas != null) {
+            canvas?.drawColor(backgroundColor, PorterDuff.Mode.CLEAR)
+            canvasCommandList.forEach { command ->
+                if (command.paint != null && !command.potracePoints.isNullOrEmpty()) {
+
+                    val pathToDraw = Path()
+                    pathToDraw.fillType = Path.FillType.WINDING
+
+                    command.potracePoints.forEach {
+                        val secondaryCoordinates = it.secondaryCoordinates
+                        if (it.command.equals(PotraceCommand.M)) {
+                            pathToDraw.moveTo(it.primaryCoordinates.x, it.primaryCoordinates.y)
+                        } else if (it.command.equals(PotraceCommand.C) && secondaryCoordinates != null) {
+
+                            pathToDraw.cubicTo(
+                                secondaryCoordinates.x1,
+                                secondaryCoordinates.y1,
+                                secondaryCoordinates.x2,
+                                secondaryCoordinates.y2,
+                                it.primaryCoordinates.x,
+                                it.primaryCoordinates.y
+                            )
+                        } else if (it.command.equals(PotraceCommand.L)) {
+                            pathToDraw.lineTo(it.primaryCoordinates.x, it.primaryCoordinates.y)
+                        }
+
+                    }
+                    canvas?.drawPath(pathToDraw, command.paint)
+                }
+            }
+            invalidate()
+        } else {
+            Log.d("CanvasError", "Canvas is null")
+        }
     }
 
 
@@ -72,7 +152,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         if (::bitmap.isInitialized) bitmap.recycle()
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
-        canvas.drawColor(backgroundColor)
+        canvas?.drawColor(backgroundColor)
 
 
     }
@@ -83,43 +163,129 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        motionTouchEventX = event.x
-        motionTouchEventY = event.y
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> onTouchStart()
-            MotionEvent.ACTION_MOVE -> onTouchMove()
-            MotionEvent.ACTION_UP -> onTouchStop()
+        if (!isCanvasLocked) {
+            motionTouchEventX = event.x
+            motionTouchEventY = event.y
+            if (!erase) {//draw actions
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> onTouchStart()
+                    MotionEvent.ACTION_MOVE -> onTouchMove()
+                    MotionEvent.ACTION_UP -> onTouchStop()
+                }
+            } else if (erase) {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> onEraseStart()
+                    MotionEvent.ACTION_MOVE -> onEraseMove()
+                    MotionEvent.ACTION_UP->onEraseUp()
+                }
+            }
         }
         return true
     }
 
-    private fun onTouchStart() {
-        path.reset()
-        path.moveTo(motionTouchEventX, motionTouchEventY)
+    private fun onEraseStart() {
+
+        paint.style= Paint.Style.STROKE
+        paint.color = Color.BLACK
+        paint.strokeWidth= 3f
+        canvasViewModel.captureEraseActionTouch(motionTouchEventX,motionTouchEventY)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
+
+
+        pathData.clear()
+        path.reset()
+        path.moveTo(motionTouchEventX, motionTouchEventY)
+
+        currentX = motionTouchEventX
+        currentY = motionTouchEventY
+        val tempPaint = Paint().apply {
+            style= Paint.Style.STROKE
+            color = Color.BLACK
+            strokeWidth= 3f
+        }
+
+        path.addRect(motionTouchEventX-eraseWidth, motionTouchEventY-eraseWidth,motionTouchEventX+eraseWidth,motionTouchEventY+eraseWidth,Path.Direction.CW)
+        canvas?.drawPath(path, tempPaint)
+
     }
 
-    private fun onTouchMove() {
-        pathData.pointList.add(
+    private fun onEraseMove() {
+        val ref = refCommandList?.toMutableList()
+        if(!ref.isNullOrEmpty()){
+            drawFromCommandList(ref)
+        }else{
+            drawFromCommandList(arrayListOf())
+        }
+        path.reset()
+        val tempPaint = Paint().apply {
+            style= Paint.Style.STROKE
+            color = Color.BLACK
+            strokeWidth= 3f
+        }
+
+        canvasViewModel.captureEraseAction(currentX, currentY, motionTouchEventX, motionTouchEventY)
+        currentX = motionTouchEventX
+        currentY = motionTouchEventY
+
+        path.addRect(motionTouchEventX-eraseWidth, motionTouchEventY-eraseWidth,motionTouchEventX+eraseWidth,motionTouchEventY+eraseWidth,Path.Direction.CW)
+
+        canvas?.drawPath(path, tempPaint)
+        invalidate()
+
+    }
+    private  fun onEraseUp(){
+        //erase erase border
+        val ref = refCommandList?.toMutableList()
+        if(!ref.isNullOrEmpty()){
+            drawFromCommandList(ref)
+        }else{
+            drawFromCommandList(arrayListOf())
+        }
+    }
+    private fun onTouchStart() {
+        pathData.clear()
+        path.reset()
+        path.moveTo(motionTouchEventX, motionTouchEventY)
+
+        currentX = motionTouchEventX
+        currentY = motionTouchEventY
+        canvasViewModel.sendPoint(currentX, currentY, PathStatus.BEGIN, Paint(paint))
+        pathData.add(
             PathPoint(
                 currentX,
                 currentY,
-                (motionTouchEventX + currentX) / 2,
-                (motionTouchEventY + currentY) / 2
+                motionTouchEventX,
+                motionTouchEventY
+            )
+        )
+        onDrawingMove = true
+
+    }
+
+
+    private fun onTouchMove() {
+        pathData.add(
+            PathPoint(
+                currentX,
+                currentY,
+                motionTouchEventX,
+                motionTouchEventY
             )
         )
         path.quadTo(
             currentX,
             currentY,
-            (motionTouchEventX + currentX) / 2,
-            (motionTouchEventY + currentY) / 2
+            motionTouchEventX,
+            motionTouchEventY
         )
 
         currentX = motionTouchEventX
         currentY = motionTouchEventY
-        canvas.drawPath(path, paint)
+        canvas?.drawPath(path, paint)
+        // To prevent an even after ontouch stop
+        if (onDrawingMove)
+            canvasViewModel.sendPoint(currentX, currentY, PathStatus.ONGOING, Paint(paint))
 
         // Invalidate triggers onDraw from the view
         invalidate()
@@ -127,7 +293,25 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun onTouchStop() {
-        completedCommand.postValue(DrawCommand(Path(path), Paint(paint)))
+        onDrawingMove = false
+        if (!erase && !pathData.isNullOrEmpty()) {
+
+            var pathDataPoints =
+                arrayListOf<SinglePoint>(SinglePoint(pathData.first().x1, pathData.first().y1, 0.0))
+            pathData.forEachIndexed { index, pathPoint ->
+                pathDataPoints.add(SinglePoint(pathPoint.x2, pathPoint.y2, index.toDouble()))
+            }
+            // send point
+            canvasViewModel.sendFinalPoint(
+                currentX,
+                currentY,
+                PathStatus.END,
+                Paint(paint),
+                pathDataPoints
+            )
+//            canvasViewModel.addCommandToHistory(Paint(paint), ArrayList(pathData))
+        }
+        pathData.clear()
         path.reset()
     }
 }

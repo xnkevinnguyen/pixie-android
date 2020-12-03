@@ -1,0 +1,18 @@
+query getAvailableGamesWithoutCriteria{
+    availableGamesWithoutCriteria{
+        id,
+        gameInfo{
+            id,
+            players{
+                id,
+                username,
+                isOnline,
+                isVirtual,
+                avatarForeground,
+                avatarBackground
+            }
+            mode,
+            language
+        }
+    }
+}

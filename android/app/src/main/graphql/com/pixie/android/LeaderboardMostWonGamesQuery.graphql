@@ -1,0 +1,8 @@
+query getMostWonGames{
+    leaderboardMostWonGames{
+        username,
+        value,
+        avatarForeground,
+        avatarBackground
+    }
+}

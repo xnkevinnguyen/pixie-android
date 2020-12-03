@@ -1,5 +1,5 @@
-mutation logout($input:LogoutInput!){
-    logout(input:$input){
+mutation logout{
+    logout{
         user{
             id
             username

@@ -2,11 +2,11 @@ package com.pixie.android.ui.draw.drawTools
 
 import android.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.pixie.android.data.draw.DrawCommandHistoryRepository
 import com.pixie.android.data.draw.DrawingParametersRepository
-import kotlin.random.Random
+import com.pixie.android.data.game.GameSessionRepository
+import com.pixie.android.model.draw.CommandType
 
-class DrawToolsViewModel(private val drawingParametersRepository: DrawingParametersRepository, private val drawCommandHistoryRepository: DrawCommandHistoryRepository):ViewModel() {
+class DrawToolsViewModel(private val drawingParametersRepository: DrawingParametersRepository, private val gameSessionRepository: GameSessionRepository):ViewModel() {
 
     fun getPrimaryColor() = drawingParametersRepository.getPrimaryDrawingColor()
 
@@ -17,14 +17,18 @@ class DrawToolsViewModel(private val drawingParametersRepository: DrawingParamet
 
     fun modifyCellWidthGrid(width: Int) = drawingParametersRepository.setCellWidthGrid(width)
 
-    fun setEraser(erase: Boolean) = drawingParametersRepository.setErase(erase)
+    fun setEraser(erase: Boolean,eraseWidth:Int?=null) {
+        drawingParametersRepository.setErase(erase,eraseWidth)
+
+    }
+
 
     fun setGridValue(grid: Boolean) = drawingParametersRepository.setGrid(grid)
 
     fun undo(){
-        drawCommandHistoryRepository.popLastDrawCommandFromHistory()
+        gameSessionRepository.sendManualCommand(commandType = CommandType.UNDO)
     }
     fun redo(){
-        drawCommandHistoryRepository.popUndoneCommand()
+        gameSessionRepository.sendManualCommand(commandType = CommandType.REDO)
     }
 }

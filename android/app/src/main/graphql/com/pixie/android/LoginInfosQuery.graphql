@@ -1,0 +1,7 @@
+query getConnection{
+    logInfos{
+        id,
+        loginDate,
+        logOutDate
+    }
+}

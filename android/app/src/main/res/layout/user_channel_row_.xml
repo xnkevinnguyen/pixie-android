@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal"
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/unread_messages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/channel_id"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:scrollHorizontally="false"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?colorSecondaryVariant"
+                android:gravity="center_vertical"
+                android:textSize="15sp"
+                android:layout_margin="5dp"/>
+
+            <ImageView
+                android:id="@+id/chat_notification_badge"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/chat_notification_badge"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_margin="5dp"
+            android:id="@+id/channel_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/exit_channel"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_baseline_close"
+        android:gravity="center"
+        android:textSize="15dp" />
+</RelativeLayout>
