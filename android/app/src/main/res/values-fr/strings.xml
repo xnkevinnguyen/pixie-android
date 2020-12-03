@@ -92,7 +92,7 @@
 
     <string name="select_game">Sélectionner Mode de Jeu</string>
     <string name="mode1">Mêlée générale</string>
-    <string name="mode1_explanation">\"Rivaliser avec 2 à 4 autres joueurs!\"</string>
+    <string name="mode1_explanation">\"Rivaliser avec 2 à 8 autres joueurs!\"</string>
     <string name="mode2">Solo</string>
     <string name="mode2_explanation">\"Jouer seul!\"</string>
     <string name="mode3">Coop</string>

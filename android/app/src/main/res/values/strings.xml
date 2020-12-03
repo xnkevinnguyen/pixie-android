@@ -92,7 +92,7 @@
 
     <string name="select_game">Select Game Mode</string>
     <string name="mode1">Free for all</string>
-    <string name="mode1_explanation">\"Compete with 2 to 4 others players!\"</string>
+    <string name="mode1_explanation">\"Compete with 2 to 8 others players!\"</string>
     <string name="mode2">Solo</string>
     <string name="mode2_explanation">\"Play alone!\"</string>
     <string name="mode3">Coop</string>
